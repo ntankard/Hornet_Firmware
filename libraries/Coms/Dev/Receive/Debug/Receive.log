@@ -1,0 +1,90 @@
+﻿Build started 25/07/2015 9:54:37 PM.
+     1>Project "C:\Users\Nicholas\Documents\Projects\Hornet_Firmware\libraries\Coms\XBee\Dev\Receive\Receive.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I"C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino" /I"C:\Program Files (x86)\Arduino\hardware\arduino\avr\variants\mega" /IC:\Users\Nicholas\Documents\Projects\Hornet_Firmware\libraries\Coms\XBee\Dev\Receive /I"C:\Program Files (x86)\Arduino\libraries" /I"C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries" /I"C:\Program Files (x86)\Visual Micro\Visual Micro for Arduino\Micro Platforms\default\debuggers" /IC:\Users\Nicholas\Documents\Projects\Hornet_Firmware\libraries /I"C:\Program Files (x86)\Arduino\hardware\tools\avr/avr/include/" /I"C:\Program Files (x86)\Arduino\hardware\tools\avr//avr/include/avr/" /I"C:\Program Files (x86)\Arduino\hardware\tools\avr/lib\gcc\avr\4.8.1\include" /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D __AVR_ATmega2560__ /D F_CPU=16000000L /D ARDUINO=165 /D ARDUINO_AVR_ADK /D ARDUINO_ARCH_AVR /D __cplusplus /D _MBCS /X /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /FR"Debug\\" /Gd /TP /FI"C:\Users\Nicholas\Documents\Projects\Hornet_Firmware\libraries\Coms\Dev\Receive\Visual Micro\.Receive.vsarduino.h" /analyze- /errorReport:prompt ..\..\AtCommandRequest.cpp ..\..\AtCommandResponse.cpp ..\..\FrameIdResponse.cpp ..\..\ModemStatusResponse.cpp ..\..\PayloadRequest.cpp ..\..\RemoteAtCommandRequest.cpp ..\..\RemoteAtCommandResponse.cpp ..\..\Rx16IoSampleResponse.cpp ..\..\Rx16Response.cpp ..\..\Rx64IoSampleResponse.cpp ..\..\Rx64Response.cpp ..\..\RxDataResponse.cpp ..\..\RxIoSampleBaseResponse.cpp ..\..\RxResponse.cpp ..\..\Tx16Request.cpp ..\..\Tx64Request.cpp ..\..\TxStatusResponse.cpp ..\..\XBee.cpp ..\..\XBeeAddress.cpp ..\..\XBeeAddress64.cpp ..\..\XBeeRequest.cpp ..\..\XBeeResponse.cpp ..\..\ZBRxIoSampleResponse.cpp ..\..\ZBRxResponse.cpp ..\..\ZBTxRequest.cpp ..\..\ZBTxStatusResponse.cpp
+         ZBTxStatusResponse.cpp
+     1>c1xx : warning C4117: macro name '__cplusplus' is reserved, '#define' ignored
+     1>c:\users\nicholas\documents\projects\hornet_firmware\libraries\coms\xbee\zbtxstatusresponse.cpp : fatal error C1083: Cannot open include file: 'C:\Users\Nicholas\Documents\Projects\Hornet_Firmware\libraries\Coms\Dev\Receive\Visual Micro\.Receive.vsarduino.h': No such file or directory
+         ZBTxRequest.cpp
+     1>c1xx : warning C4117: macro name '__cplusplus' is reserved, '#define' ignored
+     1>c:\users\nicholas\documents\projects\hornet_firmware\libraries\coms\xbee\zbtxrequest.cpp : fatal error C1083: Cannot open include file: 'C:\Users\Nicholas\Documents\Projects\Hornet_Firmware\libraries\Coms\Dev\Receive\Visual Micro\.Receive.vsarduino.h': No such file or directory
+         ZBRxResponse.cpp
+     1>c1xx : warning C4117: macro name '__cplusplus' is reserved, '#define' ignored
+     1>c:\users\nicholas\documents\projects\hornet_firmware\libraries\coms\xbee\zbrxresponse.cpp : fatal error C1083: Cannot open include file: 'C:\Users\Nicholas\Documents\Projects\Hornet_Firmware\libraries\Coms\Dev\Receive\Visual Micro\.Receive.vsarduino.h': No such file or directory
+         ZBRxIoSampleResponse.cpp
+     1>c1xx : warning C4117: macro name '__cplusplus' is reserved, '#define' ignored
+     1>c:\users\nicholas\documents\projects\hornet_firmware\libraries\coms\xbee\zbrxiosampleresponse.cpp : fatal error C1083: Cannot open include file: 'C:\Users\Nicholas\Documents\Projects\Hornet_Firmware\libraries\Coms\Dev\Receive\Visual Micro\.Receive.vsarduino.h': No such file or directory
+         XBeeResponse.cpp
+     1>c1xx : warning C4117: macro name '__cplusplus' is reserved, '#define' ignored
+     1>c:\users\nicholas\documents\projects\hornet_firmware\libraries\coms\xbee\xbeeresponse.cpp : fatal error C1083: Cannot open include file: 'C:\Users\Nicholas\Documents\Projects\Hornet_Firmware\libraries\Coms\Dev\Receive\Visual Micro\.Receive.vsarduino.h': No such file or directory
+         XBeeRequest.cpp
+     1>c1xx : warning C4117: macro name '__cplusplus' is reserved, '#define' ignored
+     1>c:\users\nicholas\documents\projects\hornet_firmware\libraries\coms\xbee\xbeerequest.cpp : fatal error C1083: Cannot open include file: 'C:\Users\Nicholas\Documents\Projects\Hornet_Firmware\libraries\Coms\Dev\Receive\Visual Micro\.Receive.vsarduino.h': No such file or directory
+         XBeeAddress64.cpp
+     1>c1xx : warning C4117: macro name '__cplusplus' is reserved, '#define' ignored
+     1>c:\users\nicholas\documents\projects\hornet_firmware\libraries\coms\xbee\xbeeaddress64.cpp : fatal error C1083: Cannot open include file: 'C:\Users\Nicholas\Documents\Projects\Hornet_Firmware\libraries\Coms\Dev\Receive\Visual Micro\.Receive.vsarduino.h': No such file or directory
+         XBeeAddress.cpp
+     1>c1xx : warning C4117: macro name '__cplusplus' is reserved, '#define' ignored
+     1>c:\users\nicholas\documents\projects\hornet_firmware\libraries\coms\xbee\xbeeaddress.cpp : fatal error C1083: Cannot open include file: 'C:\Users\Nicholas\Documents\Projects\Hornet_Firmware\libraries\Coms\Dev\Receive\Visual Micro\.Receive.vsarduino.h': No such file or directory
+         XBee.cpp
+     1>c1xx : warning C4117: macro name '__cplusplus' is reserved, '#define' ignored
+     1>c:\users\nicholas\documents\projects\hornet_firmware\libraries\coms\xbee\xbee.cpp : fatal error C1083: Cannot open include file: 'C:\Users\Nicholas\Documents\Projects\Hornet_Firmware\libraries\Coms\Dev\Receive\Visual Micro\.Receive.vsarduino.h': No such file or directory
+         TxStatusResponse.cpp
+     1>c1xx : warning C4117: macro name '__cplusplus' is reserved, '#define' ignored
+     1>c:\users\nicholas\documents\projects\hornet_firmware\libraries\coms\xbee\txstatusresponse.cpp : fatal error C1083: Cannot open include file: 'C:\Users\Nicholas\Documents\Projects\Hornet_Firmware\libraries\Coms\Dev\Receive\Visual Micro\.Receive.vsarduino.h': No such file or directory
+         Tx64Request.cpp
+     1>c1xx : warning C4117: macro name '__cplusplus' is reserved, '#define' ignored
+     1>c:\users\nicholas\documents\projects\hornet_firmware\libraries\coms\xbee\tx64request.cpp : fatal error C1083: Cannot open include file: 'C:\Users\Nicholas\Documents\Projects\Hornet_Firmware\libraries\Coms\Dev\Receive\Visual Micro\.Receive.vsarduino.h': No such file or directory
+         Tx16Request.cpp
+     1>c1xx : warning C4117: macro name '__cplusplus' is reserved, '#define' ignored
+     1>c:\users\nicholas\documents\projects\hornet_firmware\libraries\coms\xbee\tx16request.cpp : fatal error C1083: Cannot open include file: 'C:\Users\Nicholas\Documents\Projects\Hornet_Firmware\libraries\Coms\Dev\Receive\Visual Micro\.Receive.vsarduino.h': No such file or directory
+         RxResponse.cpp
+     1>c1xx : warning C4117: macro name '__cplusplus' is reserved, '#define' ignored
+     1>c:\users\nicholas\documents\projects\hornet_firmware\libraries\coms\xbee\rxresponse.cpp : fatal error C1083: Cannot open include file: 'C:\Users\Nicholas\Documents\Projects\Hornet_Firmware\libraries\Coms\Dev\Receive\Visual Micro\.Receive.vsarduino.h': No such file or directory
+         RxIoSampleBaseResponse.cpp
+     1>c1xx : warning C4117: macro name '__cplusplus' is reserved, '#define' ignored
+     1>c:\users\nicholas\documents\projects\hornet_firmware\libraries\coms\xbee\rxiosamplebaseresponse.cpp : fatal error C1083: Cannot open include file: 'C:\Users\Nicholas\Documents\Projects\Hornet_Firmware\libraries\Coms\Dev\Receive\Visual Micro\.Receive.vsarduino.h': No such file or directory
+         RxDataResponse.cpp
+     1>c1xx : warning C4117: macro name '__cplusplus' is reserved, '#define' ignored
+     1>c:\users\nicholas\documents\projects\hornet_firmware\libraries\coms\xbee\rxdataresponse.cpp : fatal error C1083: Cannot open include file: 'C:\Users\Nicholas\Documents\Projects\Hornet_Firmware\libraries\Coms\Dev\Receive\Visual Micro\.Receive.vsarduino.h': No such file or directory
+         Rx64Response.cpp
+     1>c1xx : warning C4117: macro name '__cplusplus' is reserved, '#define' ignored
+     1>c:\users\nicholas\documents\projects\hornet_firmware\libraries\coms\xbee\rx64response.cpp : fatal error C1083: Cannot open include file: 'C:\Users\Nicholas\Documents\Projects\Hornet_Firmware\libraries\Coms\Dev\Receive\Visual Micro\.Receive.vsarduino.h': No such file or directory
+         Rx64IoSampleResponse.cpp
+     1>c1xx : warning C4117: macro name '__cplusplus' is reserved, '#define' ignored
+     1>c:\users\nicholas\documents\projects\hornet_firmware\libraries\coms\xbee\rx64iosampleresponse.cpp : fatal error C1083: Cannot open include file: 'C:\Users\Nicholas\Documents\Projects\Hornet_Firmware\libraries\Coms\Dev\Receive\Visual Micro\.Receive.vsarduino.h': No such file or directory
+         Rx16Response.cpp
+     1>c1xx : warning C4117: macro name '__cplusplus' is reserved, '#define' ignored
+     1>c:\users\nicholas\documents\projects\hornet_firmware\libraries\coms\xbee\rx16response.cpp : fatal error C1083: Cannot open include file: 'C:\Users\Nicholas\Documents\Projects\Hornet_Firmware\libraries\Coms\Dev\Receive\Visual Micro\.Receive.vsarduino.h': No such file or directory
+         Rx16IoSampleResponse.cpp
+     1>c1xx : warning C4117: macro name '__cplusplus' is reserved, '#define' ignored
+     1>c:\users\nicholas\documents\projects\hornet_firmware\libraries\coms\xbee\rx16iosampleresponse.cpp : fatal error C1083: Cannot open include file: 'C:\Users\Nicholas\Documents\Projects\Hornet_Firmware\libraries\Coms\Dev\Receive\Visual Micro\.Receive.vsarduino.h': No such file or directory
+         RemoteAtCommandResponse.cpp
+     1>c1xx : warning C4117: macro name '__cplusplus' is reserved, '#define' ignored
+     1>c:\users\nicholas\documents\projects\hornet_firmware\libraries\coms\xbee\remoteatcommandresponse.cpp : fatal error C1083: Cannot open include file: 'C:\Users\Nicholas\Documents\Projects\Hornet_Firmware\libraries\Coms\Dev\Receive\Visual Micro\.Receive.vsarduino.h': No such file or directory
+         Generating Code...
+         Compiling...
+         RemoteAtCommandRequest.cpp
+     1>c1xx : warning C4117: macro name '__cplusplus' is reserved, '#define' ignored
+     1>c:\users\nicholas\documents\projects\hornet_firmware\libraries\coms\xbee\remoteatcommandrequest.cpp : fatal error C1083: Cannot open include file: 'C:\Users\Nicholas\Documents\Projects\Hornet_Firmware\libraries\Coms\Dev\Receive\Visual Micro\.Receive.vsarduino.h': No such file or directory
+         PayloadRequest.cpp
+     1>c1xx : warning C4117: macro name '__cplusplus' is reserved, '#define' ignored
+     1>c:\users\nicholas\documents\projects\hornet_firmware\libraries\coms\xbee\payloadrequest.cpp : fatal error C1083: Cannot open include file: 'C:\Users\Nicholas\Documents\Projects\Hornet_Firmware\libraries\Coms\Dev\Receive\Visual Micro\.Receive.vsarduino.h': No such file or directory
+         ModemStatusResponse.cpp
+     1>c1xx : warning C4117: macro name '__cplusplus' is reserved, '#define' ignored
+     1>c:\users\nicholas\documents\projects\hornet_firmware\libraries\coms\xbee\modemstatusresponse.cpp : fatal error C1083: Cannot open include file: 'C:\Users\Nicholas\Documents\Projects\Hornet_Firmware\libraries\Coms\Dev\Receive\Visual Micro\.Receive.vsarduino.h': No such file or directory
+         FrameIdResponse.cpp
+     1>c1xx : warning C4117: macro name '__cplusplus' is reserved, '#define' ignored
+     1>c:\users\nicholas\documents\projects\hornet_firmware\libraries\coms\xbee\frameidresponse.cpp : fatal error C1083: Cannot open include file: 'C:\Users\Nicholas\Documents\Projects\Hornet_Firmware\libraries\Coms\Dev\Receive\Visual Micro\.Receive.vsarduino.h': No such file or directory
+         AtCommandResponse.cpp
+     1>c1xx : warning C4117: macro name '__cplusplus' is reserved, '#define' ignored
+     1>c:\users\nicholas\documents\projects\hornet_firmware\libraries\coms\xbee\atcommandresponse.cpp : fatal error C1083: Cannot open include file: 'C:\Users\Nicholas\Documents\Projects\Hornet_Firmware\libraries\Coms\Dev\Receive\Visual Micro\.Receive.vsarduino.h': No such file or directory
+         AtCommandRequest.cpp
+     1>c1xx : warning C4117: macro name '__cplusplus' is reserved, '#define' ignored
+     1>c:\users\nicholas\documents\projects\hornet_firmware\libraries\coms\xbee\atcommandrequest.cpp : fatal error C1083: Cannot open include file: 'C:\Users\Nicholas\Documents\Projects\Hornet_Firmware\libraries\Coms\Dev\Receive\Visual Micro\.Receive.vsarduino.h': No such file or directory
+         Generating Code...
+     1>Done Building Project "C:\Users\Nicholas\Documents\Projects\Hornet_Firmware\libraries\Coms\XBee\Dev\Receive\Receive.vcxproj" (Build target(s)) -- FAILED.
+
+Build FAILED.
+
+Time Elapsed 00:00:01.90
