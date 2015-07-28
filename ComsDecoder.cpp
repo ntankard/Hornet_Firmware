@@ -1,8 +1,10 @@
 #include "ComsDecoder.h"
 #include "Arduino.h"
 
-ComsDecoder::ComsDecoder()
+
+ComsDecoder::ComsDecoder(HornetManager* theManager)
 {
+	_theManager = theManager;
 }
 
 void ComsDecoder::processMessage(uint8_t *data, uint8_t dataLength)

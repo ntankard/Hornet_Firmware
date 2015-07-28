@@ -24,13 +24,19 @@
     <ClInclude Include="Coms.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ComsDecoder.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="APM_2_5_PINS.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Indicator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="HornetManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CONFIG.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ComsDecoder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -41,10 +47,13 @@
     <ClCompile Include="Coms.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ComsDecoder.cpp">
+    <ClCompile Include="Indicator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Indicator.cpp">
+    <ClCompile Include="HornetManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ComsDecoder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -1,6 +1,37 @@
-#include "Coms.h"
+//#include "Coms.h"
 #include "Arduino.h"
-#include "Indicator.h"
+//#include "Indicator.h"
+
+#include "HornetManager.h"
+#include "ComsDecoder.h"
+#include "Coms.h"
+
+HornetManager *manager;
+ComsDecoder *comsDecoder;
+Coms *coms;
+
+
+
+void setup()
+{
+	manager = new HornetManager();
+
+	// construct the coms
+	comsDecoder = new ComsDecoder(manager);
+	coms = new Coms(comsDecoder);
+	manager->attachComs(coms);
+}
+
+void loop()
+{
+	manager->run();
+}
+
+
+
+/*
+
+
 
 Coms com(Serial2);
 Indicator in;
@@ -20,7 +51,7 @@ uint8_t payload[] = { 1, 2 };
 void setup()
 {
 	//Serial2.begin(9600);
-  /* add setup code here */
+   add setup code here 
 	//Serial.begin(9600);
 Serial.begin(9600);
  Serial.print("hello");
@@ -42,7 +73,7 @@ void loop()
 {
 in.run();
 delay(10);
-
+*/
 	//com.run();
 	/*if (Serial3.available())
 	{
@@ -59,4 +90,3 @@ delay(10);
 	
   /* add main program code here */
 
-}

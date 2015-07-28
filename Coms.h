@@ -1,11 +1,12 @@
 #pragma once
 
 #include "XBee.h"
+#include "ComsDecoder.h"
 
 class Coms
 {
 public:
-	Coms(Stream &serial);
+	Coms(ComsDecoder* comsDecoder);
 
 	void run();
 
@@ -15,6 +16,7 @@ public:
 
 private:
 	XBee _xbee;
+	ComsDecoder* _comsDecoder;
 
 	// resuse to save time
 	Rx16Response _rx16;

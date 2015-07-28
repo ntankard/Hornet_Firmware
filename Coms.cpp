@@ -1,11 +1,20 @@
 #include "Coms.h"
 #include "ComsDecoder.h"
+#include "CONFIG.h"
 
-Coms::Coms(Stream &serial)
+Coms::Coms(ComsDecoder* comsDecoder)
 {
+	// setupt the object to notify on incoming messages
+	_comsDecoder = comsDecoder;
+
+	// create a resusable TX packet to save space
 	uint8_t *data = new uint8_t();
-	_xbee.begin(serial);
-	_tx16 = Tx16Request(0x0000, data, 1);
+	_tx16 = Tx16Request(C_COMMS_BSTATION_ADDRESS, data, 1);
+
+	// setup the conection to the XBEE
+	C_COMMS_XBEE.begin(C_COMMS_BAUD_RATE);
+	_xbee.begin(C_COMMS_XBEE);
+
 	_outstandingSent = false;
 }
 
@@ -35,7 +44,7 @@ void Coms::run()
 				// packet send failure, retry
 				_xbee.send(_tx16);
 				_resendCount++;
-				if (_resendCount >= 4)
+				if (_resendCount >= C_COMMS_MAX_RETRY)
 				{
 					ComsDecoder::sendFailure();
 					_outstandingSent = false;
