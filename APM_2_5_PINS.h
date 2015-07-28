@@ -1,5 +1,4 @@
-#ifndef APM_PINS_H
-#define APM_PINS_H
+#pragma once
 
 #define PWM_1 12
 #define PWM_2 11
@@ -14,4 +13,4 @@
 #define YELLOY_LED 26
 #define RED_LED 27
 
-#endif
+

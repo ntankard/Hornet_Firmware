@@ -4,34 +4,101 @@
 
 Indicator::Indicator()
 {
- blinkInterval =1000;
- gapInterval =1000;
+	_pin[0] = BLUE_LED;
+	_pin[1] = YELLOY_LED;
+	_pin[2] = RED_LED;
 
- blueBlinks =0;
-
-previousBlueMillis = millis();
- blueCount= 0;
-
- blueLedState =0;
- pinMode(BLUE_LED, OUTPUT); 
+	for (int i = 0; i < 3; i++)
+	{
+		_interval[i]=500;
+		_isOn[i] = false;
+		_blinks[i] = 3;
+		_pinState[i] = OFF;
+		pinMode(_pin[i], OUTPUT);
+		digitalWrite(_pin[i], _pinState[i]);
+	}
 }
 
 void Indicator::run()
 {
-unsigned long currentMillis = millis();
-  
-   if(currentMillis - previousBlueMillis > blinkInterval) {
-    // save the last time you blinked the LED 
-    previousBlueMillis = currentMillis;   
+	unsigned long currentMillis = millis();
 
-    // if the LED is off turn it on and vice-versa:
-    if (blueLedState == 0)
-      blueLedState = 1;
-    else
-      blueLedState = 0;
+	for (int i = 0; i < 3; i++)
+	{
+		if (_isOn[i])
+		{
+			if (_isBreak[i])
+			{
+				if (currentMillis >= (_pastTime[i] + (_interval[i] * 3)))
+				{
+					// end of a break
+					_pinState[i] = ON;
+					_pastTime[i] = currentMillis;
+					_isBreak[i] = false;
+					_doneBlinks[i] = 0;
+				}
+			}
+			else
+			{
+				if (currentMillis >= (_pastTime[i] + _interval[i]))
+				{
+					if (_pinState[i] == OFF)
+					{
+						// end of a regular gap
+						_pinState[i] = ON;
+						_pastTime[i] = currentMillis;
+					}
+					else
+					{
+						// end of a on period
+						_pinState[i] = OFF;
+						_pastTime[i] = currentMillis;
+						if (_blinks[i] != 1)
+						{
+							// pattern
+							_doneBlinks[i] ++;
+							if (_doneBlinks[i] >= _blinks[i])
+							{
+								// time for a long break
+								_isBreak[i] = true;
+							}
+						}
+					}
+				}
+			}
+		}
 
-    // set the LED with the ledState of the variable:
-    digitalWrite(BLUE_LED, blueLedState);
-  }
+		digitalWrite(_pin[i], _pinState[i]);
+	}
+
+
+}
+
+void Indicator::setOn(Color c, bool isOn)
+{
+
+	if (_isOn[c] != isOn)
+	{
+		if (isOn)
+		{
+			// reset
+			_isBreak[c] = false;
+			_doneBlinks[c] = 0;
+			_pastTime[c] = millis();
+		}
+		_isOn[c] = isOn;
+		_pinState[c] = OFF;
+		digitalWrite(_pin[c], _pinState[c]);
+	}
+}
+
+void Indicator::setBlinks(Color c, int b)
+{
+	_blinks[c] = b;
+}
+
+void Indicator::setBlinkRate(Color c, int r)
+{
+	_interval[c] = r;
 }
 

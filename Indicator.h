@@ -1,30 +1,43 @@
-#ifndef INDICATOR_H
-#define INDICATOR_H
+#pragma once
+
+#include "arduino.h"
 
 class Indicator {
-  public:
-Indicator();
+
+public:
+
+	enum Color{BLUE,YELLOW,RED};
+
+	Indicator();
   
     void run();
-    void setBlueBlinks(int b);
-    void setRedBlinks(int b);
-    void setYellowBlinks(int b);
+
+	void setOn(Color c, bool isOn);
+
+	void setBlinks(Color c,int b);
+
+	void setBlinkRate(Color c,int r);
+
+
     
-  private:
-long blinkInterval;
-long gapInterval;
+private:
 
-int blueBlinks;
+	//const int BLUE = 0;
+	//const int YELLOW = 1;
+	//const int RED = 2;
 
+	unsigned long _interval[3];
+	bool _isOn[3];
+	int _blinks[3];
+	int _pin[3];
+	int _pinState[3];
 
-int blueCount;
+	bool _isBreak[3];
+	int _doneBlinks[3];
+	unsigned long _pastTime[3];
 
-  
-long previousBlueMillis;
-
-int blueLedState; 
-
-
+	int ON = LOW;
+	int OFF = HIGH;
 };
 
-#endif
+

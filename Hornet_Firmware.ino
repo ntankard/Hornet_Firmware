@@ -22,10 +22,19 @@ void setup()
 	//Serial2.begin(9600);
   /* add setup code here */
 	//Serial.begin(9600);
- //Serial.begin(9600);
- //Serial.print("hello");
+Serial.begin(9600);
+ Serial.print("hello");
 	delay(1000);
 	//com.send(payload, sizeof(payload));
+	in.setOn(in.BLUE, true);
+	in.setOn(in.RED, true);
+	in.setOn(in.YELLOW, true);
+
+	in.setBlinks(in.RED, 2);
+	in.setBlinks(in.YELLOW, 1);
+
+	in.setBlinkRate(in.YELLOW, 100);
+	in.setBlinkRate(in.RED, 200);
 }
 
 
@@ -33,7 +42,7 @@ void loop()
 {
 in.run();
 delay(10);
-  
+
 	//com.run();
 	/*if (Serial3.available())
 	{
