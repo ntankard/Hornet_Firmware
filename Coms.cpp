@@ -29,7 +29,7 @@ void Coms::run()
 		{
 			// new message
 			_xbee.getResponse().getRx16Response(_rx16);
-			ComsDecoder::processMessage(_rx16.getData(), _rx16.getDataLength());
+			_comsDecoder->processMessage(_rx16.getData(), _rx16.getDataLength());
 		}
 		else if (_xbee.getResponse().getApiId() == TX_STATUS_RESPONSE)
 		{
@@ -46,14 +46,14 @@ void Coms::run()
 				_resendCount++;
 				if (_resendCount >= C_COMMS_MAX_RETRY)
 				{
-					ComsDecoder::sendFailure();
+					_comsDecoder->sendFailure();
 					_outstandingSent = false;
 				}
 			}
 		}
 		else
 		{
-			ComsDecoder::receiveFailure();
+			_comsDecoder->receiveFailure();
 		}
 	}
 }

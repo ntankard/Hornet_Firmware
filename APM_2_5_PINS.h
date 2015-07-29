@@ -1,5 +1,7 @@
 #pragma once
 
+#define ACC_CS 53
+
 #define PWM_1 12
 #define PWM_2 11
 #define PWM_3 8

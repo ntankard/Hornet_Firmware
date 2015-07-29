@@ -6,9 +6,10 @@ class ComsDecoder
 {
 public:
 	ComsDecoder(HornetManager *theManager);
-	static void processMessage(uint8_t *data, uint8_t dataLength);
-	static void sendFailure();
-	static void receiveFailure();
+	void processMessage(uint8_t *data, uint8_t dataLength);
+	void sendFailure();
+	void receiveFailure();
+
 private:
 	HornetManager *_theManager;
 };

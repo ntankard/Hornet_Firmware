@@ -2,6 +2,8 @@
 
 // forward declare to prevent circular dependancy
 class Coms;
+class ComsEncoder;
+class AccGyro;
 
 class HornetManager
 {
@@ -29,8 +31,14 @@ public:
 	 */
 	void attachComs(Coms* theComs);
 
+	void attachComsEncoder(ComsEncoder* theComsEncoder);
+
+	void attachAccGyro(AccGyro* theAccGyro);
+
 	void run();
 private:
 	Coms* _coms;
+	ComsEncoder* _comsEncoder;
+	AccGyro* _accGyro;
 };
 

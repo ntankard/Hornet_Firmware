@@ -5,10 +5,16 @@
 #include "HornetManager.h"
 #include "ComsDecoder.h"
 #include "Coms.h"
+#include "ComsEncoder.h"
+#include "AccGyro.h"
 
 HornetManager *manager;
-ComsDecoder *comsDecoder;
+
 Coms *coms;
+ComsDecoder *comsDecoder;
+ComsEncoder *comsEncoder;
+
+AccGyro *accGyro;
 
 
 
@@ -19,7 +25,16 @@ void setup()
 	// construct the coms
 	comsDecoder = new ComsDecoder(manager);
 	coms = new Coms(comsDecoder);
+	comsEncoder = new ComsEncoder(coms);
 	manager->attachComs(coms);
+	manager->attachComsEncoder(comsEncoder);
+
+	// construct thew accselerator and gyro
+	accGyro = new AccGyro(manager);
+	manager->attachAccGyro(accGyro);
+
+	// start all objest with threads
+	accGyro->start();
 }
 
 void loop()

@@ -13,15 +13,15 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Coms">
+      <UniqueIdentifier>{89d5c8d3-b731-4ac7-a565-5afa8576e8c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Acc">
+      <UniqueIdentifier>{8f468c04-5db1-4597-b50b-53f5cfc1c9e7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Visual Micro\.Hornet_Firmware.vsarduino.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="XBee.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Coms.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="APM_2_5_PINS.h">
@@ -36,24 +36,57 @@
     <ClInclude Include="CONFIG.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Coms.h">
+      <Filter>Coms</Filter>
+    </ClInclude>
     <ClInclude Include="ComsDecoder.h">
+      <Filter>Coms</Filter>
+    </ClInclude>
+    <ClInclude Include="ComsEncoder.h">
+      <Filter>Coms</Filter>
+    </ClInclude>
+    <ClInclude Include="XBee.h">
+      <Filter>Coms</Filter>
+    </ClInclude>
+    <ClInclude Include="vector2.h">
+      <Filter>Acc</Filter>
+    </ClInclude>
+    <ClInclude Include="vector3.h">
+      <Filter>Acc</Filter>
+    </ClInclude>
+    <ClInclude Include="AP_InertialSensor_MPU6000.h">
+      <Filter>Acc</Filter>
+    </ClInclude>
+    <ClInclude Include="SPI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AccGyro.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="XBee.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Coms.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Indicator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="HornetManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Coms.cpp">
+      <Filter>Coms</Filter>
+    </ClCompile>
     <ClCompile Include="ComsDecoder.cpp">
+      <Filter>Coms</Filter>
+    </ClCompile>
+    <ClCompile Include="ComsEncoder.cpp">
+      <Filter>Coms</Filter>
+    </ClCompile>
+    <ClCompile Include="AP_InertialSensor_MPU6000.cpp">
+      <Filter>Acc</Filter>
+    </ClCompile>
+    <ClCompile Include="XBee.cpp">
+      <Filter>Coms</Filter>
+    </ClCompile>
+    <ClCompile Include="AccGyro.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -12,6 +12,8 @@
 #define C_COMMS_BAUD_RATE 9600
 #define C_COMMS_BSTATION_ADDRESS 0x0000
 
+#define C_ACC_CS ACC_CS
+
 
 
 #endif
