@@ -20,6 +20,8 @@ AccGyro *accGyro;
 
 void setup()
 {
+	Serial.begin(115200);
+
 	manager = new HornetManager();
 
 	// construct the coms

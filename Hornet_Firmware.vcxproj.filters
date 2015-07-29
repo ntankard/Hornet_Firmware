@@ -57,10 +57,10 @@
     <ClInclude Include="AP_InertialSensor_MPU6000.h">
       <Filter>Acc</Filter>
     </ClInclude>
-    <ClInclude Include="SPI.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="AccGyro.h">
+      <Filter>Acc</Filter>
+    </ClInclude>
+    <ClInclude Include="SPI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -87,6 +87,9 @@
       <Filter>Coms</Filter>
     </ClCompile>
     <ClCompile Include="AccGyro.cpp">
+      <Filter>Acc</Filter>
+    </ClCompile>
+    <ClCompile Include="SPI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
