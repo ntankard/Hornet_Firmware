@@ -90,6 +90,10 @@ extern "C" void __cxa_pure_virtual() {;}
 #include <AccGyro.cpp>
 #include <AccGyro.h>
 #include <CONFIG.h>
+#include <CircularBuffer.cpp>
+#include <CircularBuffer.h>
+#include <CircularBuffer_Manager.cpp>
+#include <CircularBuffer_Manager.h>
 #include <Coms.cpp>
 #include <Coms.h>
 #include <ComsDecoder.cpp>

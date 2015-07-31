@@ -75,6 +75,8 @@
     <ClInclude Include="AP_InertialSensor_MPU6000.h">
       <FileType>CppHeader</FileType>
     </ClInclude>
+    <ClInclude Include="CircularBuffer.h" />
+    <ClInclude Include="CircularBuffer_Manager.h" />
     <ClInclude Include="Coms.h" />
     <ClInclude Include="ComsDecoder.h" />
     <ClInclude Include="ComsEncoder.h" />
@@ -96,6 +98,8 @@
   <ItemGroup>
     <ClCompile Include="AccGyro.cpp" />
     <ClCompile Include="AP_InertialSensor_MPU6000.cpp" />
+    <ClCompile Include="CircularBuffer.cpp" />
+    <ClCompile Include="CircularBuffer_Manager.cpp" />
     <ClCompile Include="Coms.cpp" />
     <ClCompile Include="ComsDecoder.cpp" />
     <ClCompile Include="ComsEncoder.cpp" />

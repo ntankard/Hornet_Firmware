@@ -132,7 +132,10 @@ bool AP_InertialSensor_MPU6000::update( void )
 	float count_scale;
 
 	// wait for at least 1 sample
-	while (_count == 0) /* nop */;
+	if (_count == 0)
+	{
+		return false;
+	}
 
 	// disable interrupts for mininum time
 	cli();

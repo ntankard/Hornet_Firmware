@@ -24,6 +24,11 @@ void HornetManager::attachAccGyro(AccGyro* theAccGyro)
 	_accGyro = theAccGyro;
 }
 
+
+void HornetManager::newAccGyro(float accel[3], float gyro[3])
+{
+	_comsEncoder->sendAccGyro(accel, gyro);
+}
 //-------------------------------------------------------------------------------------------------------------------------------------
 
 void HornetManager::run()

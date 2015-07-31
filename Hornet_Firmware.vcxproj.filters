@@ -61,6 +61,12 @@
       <Filter>Acc</Filter>
     </ClInclude>
     <ClInclude Include="SPI.h">
+      <Filter>Acc</Filter>
+    </ClInclude>
+    <ClInclude Include="CircularBuffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CircularBuffer_Manager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -90,6 +96,12 @@
       <Filter>Acc</Filter>
     </ClCompile>
     <ClCompile Include="SPI.cpp">
+      <Filter>Acc</Filter>
+    </ClCompile>
+    <ClCompile Include="CircularBuffer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CircularBuffer_Manager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

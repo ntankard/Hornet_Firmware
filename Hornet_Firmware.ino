@@ -8,6 +8,8 @@
 #include "ComsEncoder.h"
 #include "AccGyro.h"
 
+#include "CONFIG.h"
+
 HornetManager *manager;
 
 Coms *coms;
@@ -17,16 +19,15 @@ ComsEncoder *comsEncoder;
 AccGyro *accGyro;
 
 
-
 void setup()
 {
-	Serial.begin(115200);
-
+	Serial.begin(9600);
 	manager = new HornetManager();
 
 	// construct the coms
 	comsDecoder = new ComsDecoder(manager);
 	coms = new Coms(comsDecoder);
+
 	comsEncoder = new ComsEncoder(coms);
 	manager->attachComs(coms);
 	manager->attachComsEncoder(comsEncoder);
@@ -37,11 +38,30 @@ void setup()
 
 	// start all objest with threads
 	accGyro->start();
+	Serial.println("Start");
 }
 
 void loop()
 {
+	delay(500);
 	manager->run();
+	/*//Serial.println("Run");
+	uint8_t payload[] = { 'h','e','l'};
+
+	_tx16 = Tx16Request(C_COMMS_BSTATION_ADDRESS, payload, sizeof(payload));
+
+	coms->_xbee.send(_tx16);
+
+	delay(500);
+
+	if (coms->canSend())
+	{
+	coms->send(payload, sizeof(payload));
+	payload[0] = payload[0]++;
+	delay(1000);
+	}*/
+
+	
 }
 
 

@@ -13,6 +13,12 @@
 #include "WProgram.h"
 #endif
 
+
+#include <SoftwareSerial.h>
+
+SoftwareSerial softwareSerial(12, 11); // RX, TX
+
+
 /*
 This example is for Series 1 XBee (802.15.4)
 Receives either a RX16 or RX64 packet and sets a PWM value based on packet data.
@@ -54,6 +60,8 @@ void setup() {
 	Serial.begin(9600);
 	Serial.println("Begin");
 
+	//Serial2
+
 	// toXBee
 	Serial3.begin(9600);
 	xbee.setSerial(Serial3);
@@ -67,7 +75,7 @@ void loop() {
 	{
 		Serial.println(toHex(Serial3.read()));
 	}*/
-
+	Serial.println("Run");
 	xbee.send(tx);
 	delay(1000);
 	

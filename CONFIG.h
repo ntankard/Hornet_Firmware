@@ -7,6 +7,12 @@
 //#define MEGA
 #define APM_26
 
+// Select one
+//#define USE_XBEE
+#define USE_SERIAL
+
+#define C_COMS_SERIAL Serial
+
 #ifdef APM_26
 
 #define C_COMMS_XBEE Serial2

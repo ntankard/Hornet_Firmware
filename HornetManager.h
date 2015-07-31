@@ -35,6 +35,8 @@ public:
 
 	void attachAccGyro(AccGyro* theAccGyro);
 
+	void newAccGyro(float accel[3], float gyro[3]);
+
 	void run();
 private:
 	Coms* _coms;
