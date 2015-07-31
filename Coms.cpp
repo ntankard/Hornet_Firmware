@@ -11,17 +11,17 @@ Coms::Coms(ComsDecoder* comsDecoder)
 	_comsDecoder = comsDecoder;
 
 	// create a resusable TX packet to save space
+#if COM_MODE == COM_MODE_XBEE
 	uint8_t *data = new uint8_t();
 	_tx16 = Tx16Request(C_COMMS_BSTATION_ADDRESS, data, 1);
 
-#ifdef USE_XBEE
 	// setup the conection to the XBEE
-	C_COMMS_XBEE.begin(C_COMMS_BAUD_RATE);
-	_xbee.begin(C_COMMS_XBEE);
+	C_COMS_PORT.begin(C_COMS_BAUD_RATE);
+	_xbee.begin(C_COMS_PORT);
 #endif
 
-#ifdef USE_SERIAL
-	C_COMS_SERIAL.begin(C_COMMS_BAUD_RATE);
+#if COM_MODE == COM_MODE_SERIAL
+	C_COMS_PORT.begin(C_COMS_BAUD_RATE);
 #endif
 
 	_outstandingSent = false;
@@ -31,7 +31,7 @@ Coms::Coms(ComsDecoder* comsDecoder)
 
 void Coms::run()
 {
-#ifdef USE_XBEE
+#if COM_MODE == COM_MODE_XBEE
 	_xbee.readPacket();
 	if (_xbee.getResponse().isAvailable())
 	{
@@ -80,7 +80,7 @@ bool Coms::canSend()
 
 void Coms::send(uint8_t *data, uint8_t dataLength)
 {
-#ifdef USE_XBEE
+#if COM_MODE == COM_MODE_XBEE
 	if (!_outstandingSent)
 	{
 		_resendCount = 0;
@@ -92,12 +92,12 @@ void Coms::send(uint8_t *data, uint8_t dataLength)
 		_xbee.send(_tx16);
 	}
 #endif
-#ifdef USE_SERIAL
+#if COM_MODE == COM_MODE_SERIAL
 	for (int i = 0; i < dataLength; i++)
 	{
-		Serial.write(data[i]);
+		C_COMS_PORT.write(data[i]);
 	}
-	Serial.write("\n");
+	C_COMS_PORT.write("\n");
 	_outstandingSent = false;
 #endif
 }

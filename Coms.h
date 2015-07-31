@@ -16,9 +16,11 @@ public:
 
 private:
 	
-	XBee _xbee;
+	
 	ComsDecoder* _comsDecoder;
 
+#if COM_MODE == COM_MODE_XBEE
+	XBee _xbee;
 	// resuse to save time
 	Rx16Response _rx16;
 	Tx16Request _tx16;
@@ -27,5 +29,7 @@ private:
 	// last message info
 	int _resendCount;
 	bool _outstandingSent;
+#endif
+
 };
 
