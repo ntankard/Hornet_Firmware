@@ -5,6 +5,7 @@
 class Coms;
 class ComsEncoder;
 class AccGyro;
+class Monitor;
 
 enum State{Init,Connect};
 
@@ -48,6 +49,8 @@ public:
 
 	void attachAccGyro(AccGyro* theAccGyro);
 
+	void attachMonitor(Monitor* theMonitor);
+
 	void newAccGyro(float accel[3], float gyro[3]);
 
 	void run();
@@ -58,6 +61,6 @@ private:
 	Coms* _coms;
 	ComsEncoder* _comsEncoder;
 	AccGyro* _accGyro;
-	Error* _e;
+	Monitor* _monitor;
 };
 

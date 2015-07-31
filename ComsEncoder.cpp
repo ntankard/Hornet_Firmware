@@ -29,9 +29,8 @@ void ComsEncoder::sendAccGyro(float accel[3], float gyro[3])
 		//@TODO notify of overflow
 		return;
 	}
-
+	
 	int toAdd = _accGyro_man.add();
-
 	uint16_t buffer = (accel[0] * 1000);
 
 	_accGyro[toAdd][0] = C_COMS_CODE_ACCGYRO;

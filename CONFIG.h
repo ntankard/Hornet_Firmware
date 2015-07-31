@@ -31,7 +31,7 @@
 #endif 
 
 #if COM_MODE == COM_MODE_SERIAL
-	#define C_COMS_PORT Serial
+#define C_COMS_PORT Serial
 	#define C_COMS_BAUD_RATE 9600
 #endif
 
@@ -40,7 +40,7 @@
 // --------------------------------------------------- ERROR SETTINGS ---------------------------------------------------------
 // ----------------------------------------------------------------------------------------------------------------------------
 
-#define C_ERROR_BUFFER 10
+#define C_ERROR_BUFFER 100
 
 #define E_ILLEGAL_ACCESS 1
 
@@ -49,7 +49,7 @@
 // --------------------------------------------------- LOGGER SETTINGS --------------------------------------------------------
 // ----------------------------------------------------------------------------------------------------------------------------
 
-#define C_LOGGER_ACC_RATE 100
+#define C_LOGGER_ACC_RATE 10
 
 
 // pick wich componets are conected and active

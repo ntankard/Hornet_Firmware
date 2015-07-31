@@ -7,6 +7,7 @@
 #include "Coms.h"
 #include "ComsEncoder.h"
 #include "AccGyro.h"
+#include "Monitor.h"
 
 #include "CONFIG.h"
 
@@ -19,11 +20,13 @@ ComsEncoder *comsEncoder;
 
 AccGyro *accGyro;
 
+Monitor *monitor;
 
 void setup()
 {
 	Serial.begin(9600);
 	manager = new HornetManager();
+	error = new Error();
 
 	// construct the coms
 	comsDecoder = new ComsDecoder(manager);
@@ -37,31 +40,17 @@ void setup()
 	accGyro = new AccGyro(manager);
 	manager->attachAccGyro(accGyro);
 
+	// construct the monitor
+	monitor = new Monitor(comsEncoder);
+	manager->attachMonitor(monitor);
+
 	// start all objest with threads
 	manager->start();
 }
 
 void loop()
 {
-	delay(500);
-	manager->run();
-	/*//Serial.println("Run");
-	uint8_t payload[] = { 'h','e','l'};
-
-	_tx16 = Tx16Request(C_COMMS_BSTATION_ADDRESS, payload, sizeof(payload));
-
-	coms->_xbee.send(_tx16);
-
-	delay(500);
-
-	if (coms->canSend())
-	{
-	coms->send(payload, sizeof(payload));
-	payload[0] = payload[0]++;
-	delay(1000);
-	}*/
-
-	
+	manager->run();	
 }
 
 

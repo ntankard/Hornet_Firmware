@@ -1,5 +1,6 @@
 #pragma once
 #include "Error.h"
+#include "Arduino.h"
 
 /**
  * \class	CircularBuffer_Manager
