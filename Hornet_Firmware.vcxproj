@@ -75,16 +75,17 @@
     <ClInclude Include="AP_InertialSensor_MPU6000.h">
       <FileType>CppHeader</FileType>
     </ClInclude>
-    <ClInclude Include="CircularBuffer.h" />
     <ClInclude Include="CircularBuffer_Manager.h" />
     <ClInclude Include="Coms.h" />
     <ClInclude Include="ComsDecoder.h" />
     <ClInclude Include="ComsEncoder.h" />
     <ClInclude Include="CONFIG.h" />
+    <ClInclude Include="Error.h" />
     <ClInclude Include="HornetManager.h" />
     <ClInclude Include="Indicator.h">
       <FileType>CppCode</FileType>
     </ClInclude>
+    <ClInclude Include="resource.h" />
     <ClInclude Include="SPI.h" />
     <ClInclude Include="vector2.h">
       <FileType>CppHeader</FileType>
@@ -98,11 +99,10 @@
   <ItemGroup>
     <ClCompile Include="AccGyro.cpp" />
     <ClCompile Include="AP_InertialSensor_MPU6000.cpp" />
-    <ClCompile Include="CircularBuffer.cpp" />
-    <ClCompile Include="CircularBuffer_Manager.cpp" />
     <ClCompile Include="Coms.cpp" />
     <ClCompile Include="ComsDecoder.cpp" />
     <ClCompile Include="ComsEncoder.cpp" />
+    <ClCompile Include="Error.cpp" />
     <ClCompile Include="HornetManager.cpp" />
     <ClCompile Include="Indicator.cpp" />
     <ClCompile Include="SPI.cpp" />
@@ -112,6 +112,9 @@
     <None Include="Hornet_Firmware.ino">
       <FileType>CppCode</FileType>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Hornet_Firmware.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

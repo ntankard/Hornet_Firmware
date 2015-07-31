@@ -19,6 +19,27 @@
     <Filter Include="Acc">
       <UniqueIdentifier>{8f468c04-5db1-4597-b50b-53f5cfc1c9e7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Acc\Header File">
+      <UniqueIdentifier>{118ce714-da8b-42e0-8243-c55082364e77}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Acc\Source Files">
+      <UniqueIdentifier>{5cc1fad9-1c5e-4d34-9215-ff03ecadd523}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Coms\Source Files">
+      <UniqueIdentifier>{28d09798-b261-4744-86ba-cd8748d2f5b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Coms\Header File">
+      <UniqueIdentifier>{878e6359-d5f9-4d28-9db4-d6d7d71e610e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility">
+      <UniqueIdentifier>{b07ae0d6-bcb4-49af-81ea-aa6bb9bec209}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility\Header File">
+      <UniqueIdentifier>{a3d8c1f5-ffcf-41fd-9ac3-e714c92e25bd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility\Source Files">
+      <UniqueIdentifier>{a56fd643-e3ca-4a57-9e89-3861cb35cf87}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Visual Micro\.Hornet_Firmware.vsarduino.h">
@@ -36,38 +57,41 @@
     <ClInclude Include="CONFIG.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Coms.h">
-      <Filter>Coms</Filter>
-    </ClInclude>
-    <ClInclude Include="ComsDecoder.h">
-      <Filter>Coms</Filter>
-    </ClInclude>
-    <ClInclude Include="ComsEncoder.h">
-      <Filter>Coms</Filter>
-    </ClInclude>
-    <ClInclude Include="XBee.h">
-      <Filter>Coms</Filter>
-    </ClInclude>
-    <ClInclude Include="vector2.h">
-      <Filter>Acc</Filter>
-    </ClInclude>
-    <ClInclude Include="vector3.h">
-      <Filter>Acc</Filter>
-    </ClInclude>
-    <ClInclude Include="AP_InertialSensor_MPU6000.h">
-      <Filter>Acc</Filter>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="AccGyro.h">
-      <Filter>Acc</Filter>
+      <Filter>Acc\Header File</Filter>
+    </ClInclude>
+    <ClInclude Include="AP_InertialSensor_MPU6000.h">
+      <Filter>Acc\Header File</Filter>
     </ClInclude>
     <ClInclude Include="SPI.h">
-      <Filter>Acc</Filter>
+      <Filter>Acc\Header File</Filter>
     </ClInclude>
-    <ClInclude Include="CircularBuffer.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="vector2.h">
+      <Filter>Acc\Header File</Filter>
+    </ClInclude>
+    <ClInclude Include="vector3.h">
+      <Filter>Acc\Header File</Filter>
+    </ClInclude>
+    <ClInclude Include="Coms.h">
+      <Filter>Coms\Header File</Filter>
+    </ClInclude>
+    <ClInclude Include="ComsDecoder.h">
+      <Filter>Coms\Header File</Filter>
+    </ClInclude>
+    <ClInclude Include="ComsEncoder.h">
+      <Filter>Coms\Header File</Filter>
+    </ClInclude>
+    <ClInclude Include="XBee.h">
+      <Filter>Coms\Header File</Filter>
+    </ClInclude>
+    <ClInclude Include="Error.h">
+      <Filter>Utility\Header File</Filter>
     </ClInclude>
     <ClInclude Include="CircularBuffer_Manager.h">
-      <Filter>Header Files</Filter>
+      <Filter>Utility\Header File</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -77,35 +101,37 @@
     <ClCompile Include="HornetManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Coms.cpp">
-      <Filter>Coms</Filter>
-    </ClCompile>
-    <ClCompile Include="ComsDecoder.cpp">
-      <Filter>Coms</Filter>
-    </ClCompile>
-    <ClCompile Include="ComsEncoder.cpp">
-      <Filter>Coms</Filter>
+    <ClCompile Include="AccGyro.cpp">
+      <Filter>Acc\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="AP_InertialSensor_MPU6000.cpp">
-      <Filter>Acc</Filter>
-    </ClCompile>
-    <ClCompile Include="XBee.cpp">
-      <Filter>Coms</Filter>
-    </ClCompile>
-    <ClCompile Include="AccGyro.cpp">
-      <Filter>Acc</Filter>
+      <Filter>Acc\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SPI.cpp">
-      <Filter>Acc</Filter>
+      <Filter>Acc\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CircularBuffer.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Coms.cpp">
+      <Filter>Coms\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CircularBuffer_Manager.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="ComsDecoder.cpp">
+      <Filter>Coms\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ComsEncoder.cpp">
+      <Filter>Coms\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="XBee.cpp">
+      <Filter>Coms\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Error.cpp">
+      <Filter>Utility\Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Hornet_Firmware.ino" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Hornet_Firmware.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

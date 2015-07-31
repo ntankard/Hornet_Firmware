@@ -8,22 +8,19 @@ ComsEncoder::ComsEncoder(Coms* coms)
 	_coms = coms;
 }
 
-void ComsEncoder::run()
+void ComsEncoder::run(Error *e)
 {
 	if (_coms->canSend())
 	{
 		if (!_accGyro_man.isEmpty())
 		{
-			int remoe = _accGyro_man.remove();
-			Serial.print("remote = ");
-			Serial.println(remoe);
-			//Serial.print("send");
+			int remoe = _accGyro_man.remove(e);
 			_coms->send(_accGyro[remoe], 25);
 		}
 	}
 }
 
-void ComsEncoder::sendAccGyro(float accel[3], float gyro[3])
+void ComsEncoder::sendAccGyro(float accel[3], float gyro[3],Error *e)
 {
 
 	if (_accGyro_man.isFull())
@@ -32,7 +29,7 @@ void ComsEncoder::sendAccGyro(float accel[3], float gyro[3])
 		return;
 	}
 
-	int toAdd = _accGyro_man.add();
+	int toAdd = _accGyro_man.add(e);
 
 	uint16_t buffer = (accel[0] * 1000);
 
@@ -50,6 +47,4 @@ void ComsEncoder::sendAccGyro(float accel[3], float gyro[3])
 		_accGyro[toAdd][13 + i] = u_gyro[i];
 	}
 
-	Serial.print("Add = ");
-	Serial.println(toAdd);
 }

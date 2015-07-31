@@ -89,9 +89,6 @@ extern "C" void __cxa_pure_virtual() {;}
 #include <AccGyro.cpp>
 #include <AccGyro.h>
 #include <CONFIG.h>
-#include <CircularBuffer.cpp>
-#include <CircularBuffer.h>
-#include <CircularBuffer_Manager.cpp>
 #include <CircularBuffer_Manager.h>
 #include <Coms.cpp>
 #include <Coms.h>
@@ -99,6 +96,8 @@ extern "C" void __cxa_pure_virtual() {;}
 #include <ComsDecoder.h>
 #include <ComsEncoder.cpp>
 #include <ComsEncoder.h>
+#include <Error.cpp>
+#include <Error.h>
 #include <HornetManager.cpp>
 #include <HornetManager.h>
 #include <Indicator.cpp>
@@ -107,6 +106,7 @@ extern "C" void __cxa_pure_virtual() {;}
 #include <SPI.h>
 #include <XBee.cpp>
 #include <XBee.h>
+#include <resource.h>
 #include <vector2.h>
 #include <vector3.h>
 #endif

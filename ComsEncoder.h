@@ -1,16 +1,16 @@
 #pragma once
 #include "Coms.h"
-#include "CircularBuffer.h"
 #include "CircularBuffer_Manager.h"
+#include "Error.h"
 
 class ComsEncoder
 {
 public:
 	ComsEncoder(Coms* coms);
 
-	void run();
+	void run(Error *e);
 
-	void sendAccGyro(float accel[3], float gyro[3]);
+	void sendAccGyro(float accel[3], float gyro[3],Error *e);
 
 private:
 	Coms *_coms;

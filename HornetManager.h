@@ -1,4 +1,5 @@
 #pragma once
+#include "Error.h"
 
 // forward declare to prevent circular dependancy
 class Coms;
@@ -35,12 +36,13 @@ public:
 
 	void attachAccGyro(AccGyro* theAccGyro);
 
-	void newAccGyro(float accel[3], float gyro[3]);
+	void newAccGyro(float accel[3], float gyro[3], Error *e);
 
 	void run();
 private:
 	Coms* _coms;
 	ComsEncoder* _comsEncoder;
 	AccGyro* _accGyro;
+	Error* _e;
 };
 

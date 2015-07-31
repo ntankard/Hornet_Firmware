@@ -1,6 +1,7 @@
 #pragma once
 #include "HornetManager.h"
 #include "AP_InertialSensor_MPU6000.h"
+#include "Error.h"
 
 class AccGyro
 {
@@ -9,7 +10,7 @@ public:
 
 	void start();
 
-	void run();
+	void run(Error *e);
 
 private:
 	HornetManager* _hornetManager;

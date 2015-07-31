@@ -18,13 +18,13 @@ Coms::Coms(ComsDecoder* comsDecoder)
 	// setup the conection to the XBEE
 	C_COMS_PORT.begin(C_COMS_BAUD_RATE);
 	_xbee.begin(C_COMS_PORT);
+	_outstandingSent = false;
 #endif
 
 #if COM_MODE == COM_MODE_SERIAL
 	C_COMS_PORT.begin(C_COMS_BAUD_RATE);
 #endif
 
-	_outstandingSent = false;
 }
 
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -73,7 +73,10 @@ void Coms::run()
 
 bool Coms::canSend()
 {
+#if COM_MODE == COM_MODE_XBEE
 	return !_outstandingSent;
+#endif
+	return true;
 }
 
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -98,7 +101,6 @@ void Coms::send(uint8_t *data, uint8_t dataLength)
 		C_COMS_PORT.write(data[i]);
 	}
 	C_COMS_PORT.write("\n");
-	_outstandingSent = false;
 #endif
 }
 

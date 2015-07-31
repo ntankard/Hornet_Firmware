@@ -2,6 +2,7 @@
 #include "Coms.h"
 #include "ComsEncoder.h"
 #include "AccGyro.h"
+#include "Error.h"
 
 HornetManager::HornetManager()
 {
@@ -25,15 +26,15 @@ void HornetManager::attachAccGyro(AccGyro* theAccGyro)
 }
 
 
-void HornetManager::newAccGyro(float accel[3], float gyro[3])
+void HornetManager::newAccGyro(float accel[3], float gyro[3],Error *e)
 {
-	_comsEncoder->sendAccGyro(accel, gyro);
+	_comsEncoder->sendAccGyro(accel, gyro,e);
 }
 //-------------------------------------------------------------------------------------------------------------------------------------
 
 void HornetManager::run()
 {
 	_coms->run();
-	_comsEncoder->run();
-	_accGyro->run();
+	_comsEncoder->run(_e);
+	_accGyro->run(_e);
 }
