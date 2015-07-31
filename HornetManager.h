@@ -6,6 +6,8 @@ class Coms;
 class ComsEncoder;
 class AccGyro;
 
+enum State{Init,Connect};
+
 class HornetManager
 {
 public:
@@ -19,6 +21,16 @@ public:
 	 * \date	29/07/2015
 	 */
 	HornetManager();
+
+	/**
+	 * \fn	void HornetManager::start();
+	 *
+	 * \brief	Complets the construction after all object have been created and attached
+	 *
+	 * \author	Nicholas
+	 * \date	1/08/2015
+	 */
+	void start();
 
 	/**
 	 * \fn	void HornetManager::attachComs(Coms* theComs);
@@ -36,10 +48,13 @@ public:
 
 	void attachAccGyro(AccGyro* theAccGyro);
 
-	void newAccGyro(float accel[3], float gyro[3], Error *e);
+	void newAccGyro(float accel[3], float gyro[3]);
 
 	void run();
 private:
+
+	State _state;
+
 	Coms* _coms;
 	ComsEncoder* _comsEncoder;
 	AccGyro* _accGyro;

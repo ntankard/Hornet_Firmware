@@ -10,7 +10,7 @@ public:
 
 	void start();
 
-	void run(Error *e);
+	void run();
 
 private:
 	HornetManager* _hornetManager;

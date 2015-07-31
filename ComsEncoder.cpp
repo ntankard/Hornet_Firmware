@@ -3,24 +3,25 @@
 #define C_COMS_CODE_ACCGYRO 1
 
 
-ComsEncoder::ComsEncoder(Coms* coms)
+ComsEncoder::ComsEncoder(Coms* coms, Error *e) :_accGyro_man(e)
 {
+	_e = e;
 	_coms = coms;
 }
 
-void ComsEncoder::run(Error *e)
+void ComsEncoder::run()
 {
 	if (_coms->canSend())
 	{
 		if (!_accGyro_man.isEmpty())
 		{
-			int remoe = _accGyro_man.remove(e);
+			int remoe = _accGyro_man.remove();
 			_coms->send(_accGyro[remoe], 25);
 		}
 	}
 }
 
-void ComsEncoder::sendAccGyro(float accel[3], float gyro[3],Error *e)
+void ComsEncoder::sendAccGyro(float accel[3], float gyro[3])
 {
 
 	if (_accGyro_man.isFull())
@@ -29,7 +30,7 @@ void ComsEncoder::sendAccGyro(float accel[3], float gyro[3],Error *e)
 		return;
 	}
 
-	int toAdd = _accGyro_man.add(e);
+	int toAdd = _accGyro_man.add();
 
 	uint16_t buffer = (accel[0] * 1000);
 

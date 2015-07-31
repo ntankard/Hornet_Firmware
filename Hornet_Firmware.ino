@@ -11,6 +11,7 @@
 #include "CONFIG.h"
 
 HornetManager *manager;
+Error *error;
 
 Coms *coms;
 ComsDecoder *comsDecoder;
@@ -28,7 +29,7 @@ void setup()
 	comsDecoder = new ComsDecoder(manager);
 	coms = new Coms(comsDecoder);
 
-	comsEncoder = new ComsEncoder(coms);
+	comsEncoder = new ComsEncoder(coms, error);
 	manager->attachComs(coms);
 	manager->attachComsEncoder(comsEncoder);
 
@@ -37,8 +38,7 @@ void setup()
 	manager->attachAccGyro(accGyro);
 
 	// start all objest with threads
-	accGyro->start();
-	Serial.println("Start");
+	manager->start();
 }
 
 void loop()

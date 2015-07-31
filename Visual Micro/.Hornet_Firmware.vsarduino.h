@@ -102,6 +102,8 @@ extern "C" void __cxa_pure_virtual() {;}
 #include <HornetManager.h>
 #include <Indicator.cpp>
 #include <Indicator.h>
+#include <Monitor.cpp>
+#include <Monitor.h>
 #include <SPI.cpp>
 #include <SPI.h>
 #include <XBee.cpp>

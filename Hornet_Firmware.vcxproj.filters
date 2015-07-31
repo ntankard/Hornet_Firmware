@@ -93,6 +93,9 @@
     <ClInclude Include="CircularBuffer_Manager.h">
       <Filter>Utility\Header File</Filter>
     </ClInclude>
+    <ClInclude Include="Monitor.h">
+      <Filter>Utility\Header File</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Indicator.cpp">
@@ -123,6 +126,9 @@
       <Filter>Coms\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Error.cpp">
+      <Filter>Utility\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Monitor.cpp">
       <Filter>Utility\Source Files</Filter>
     </ClCompile>
   </ItemGroup>

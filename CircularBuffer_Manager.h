@@ -26,8 +26,9 @@ public:
 	 * \author	Nicholas
 	 * \date	1/08/2015
 	 */
-	CircularBuffer_Manager()
+	CircularBuffer_Manager(Error *e)
 	{
+		_e = e;
 		_start = 0;
 		_end = 0;
 	}
@@ -80,15 +81,15 @@ public:
 	 * \author	Nicholas
 	 * \date	1/08/2015
 	 *
-	 * \param [in,out]	e	E_ILLEGAL_ACCESS	If full
+	 * \throw	E_ILLEGAL_ACCESS	If full
 	 *
 	 * \return	The index to add the object
 	 */
-	int add(Error *e)
+	int add()
 	{
 		if (isFull())
 		{
-			e->add(E_ILLEGAL_ACCESS, "Attempting to add to a full buffer");
+			_e->add(E_ILLEGAL_ACCESS, "Attempting to add to a full buffer");
 			return -1;
 		}
 
@@ -111,15 +112,15 @@ public:
 	 * \author	Nicholas
 	 * \date	1/08/2015
 	 *
-	 * \param [in,out]	e	E_ILLEGAL_ACCESS	If empty
+	 * \throw	E_ILLEGAL_ACCESS	If full
 	 *
 	 * \return	The index of the object to remove
 	 */
-	int remove(Error *e)
+	int remove()
 	{
 		if (isEmpty())
 		{
-			e->add(E_ILLEGAL_ACCESS, "Attempting to remove from an empty buffer");
+			_e->add(E_ILLEGAL_ACCESS, "Attempting to remove from an empty buffer");
 			return -1;
 		}
 
@@ -142,5 +143,8 @@ private:
 
 	/** \brief	The index to remove from. */
 	int _end;
+
+	/** \brief	The systems error object */
+	Error *_e;
 };
 

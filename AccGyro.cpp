@@ -19,7 +19,7 @@ void AccGyro::start()
 	_ins.init();
 }
 
-void AccGyro::run(Error *e)
+void AccGyro::run()
 {
 	float accel[3];
 	float gyro[3];
@@ -28,7 +28,7 @@ void AccGyro::run(Error *e)
 		_ins.get_gyros(gyro);
 		_ins.get_accels(accel);
 
-		_hornetManager->newAccGyro(accel, gyro,e);
+		_hornetManager->newAccGyro(accel, gyro);
 	}
 }
 
