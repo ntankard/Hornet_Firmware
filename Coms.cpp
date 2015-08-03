@@ -23,6 +23,7 @@ Coms::Coms(ComsDecoder* comsDecoder)
 
 #if COM_MODE == COM_MODE_SERIAL
 	C_COMS_PORT.begin(C_COMS_BAUD_RATE);
+	_readData = 0;
 #endif
 
 }
@@ -64,6 +65,22 @@ void Coms::run()
 		else
 		{
 			_comsDecoder->receiveFailure();
+		}
+	}
+#endif
+#if COM_MODE == COM_MODE_SERIAL
+	while (C_COMS_PORT.available())
+	{
+		uint8_t read = C_COMS_PORT.read();
+		if (read == '\n')
+		{
+			_comsDecoder->processMessage(_buffer, _readData);
+			_readData = 0;
+		}
+		else
+		{
+			_buffer[_readData] = read;
+			_readData++;
 		}
 	}
 #endif

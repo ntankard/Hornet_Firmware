@@ -13,12 +13,23 @@ void ComsEncoder::run()
 {
 	if (_coms->canSend())
 	{
+		if (_connectRequest)
+		{
+			uint8_t toSend[] = { C_COMS_CODE_CONNECT_REQUEST };
+			_coms->send(toSend, 1);
+			_connectRequest = false;
+		}
 		if (!_accGyro_man.isEmpty())
 		{
 			int remoe = _accGyro_man.remove();
 			_coms->send(_accGyro[remoe], 25);
 		}
 	}
+}
+
+void ComsEncoder::sendConnectRequest()
+{
+	_connectRequest = true;
 }
 
 void ComsEncoder::sendAccGyro(float accel[3], float gyro[3])

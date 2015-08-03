@@ -7,7 +7,7 @@ class ComsEncoder;
 class AccGyro;
 class Monitor;
 
-enum State{Init,Connect};
+enum State{ Init, Connect, Idle };
 
 class HornetManager
 {
@@ -53,8 +53,12 @@ public:
 
 	void newAccGyro(float accel[3], float gyro[3]);
 
+	void comsConnectionCOnfirmed();
+
 	void run();
 private:
+
+	void runConnect();
 
 	State _state;
 
@@ -62,5 +66,7 @@ private:
 	ComsEncoder* _comsEncoder;
 	AccGyro* _accGyro;
 	Monitor* _monitor;
+
+	unsigned long _C_last;
 };
 

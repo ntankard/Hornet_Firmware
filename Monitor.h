@@ -61,10 +61,17 @@ public:
 	void newAccGyro(float accel[3], float gyro[3]);
 
 private:
+
+	/** \brief	The coms encoder. */
 	ComsEncoder *_comsEncoder;
 
+	/** \brief	The number of new acc events befor the base station is notifyed */
 	int _accRate;
+
+	/** \brief	The number of acc events so far. */
 	int _accCount;
+
+	/** \brief	Notify the base station? */
 	bool _isOn;
 };
 

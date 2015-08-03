@@ -1,6 +1,6 @@
 #include "ComsDecoder.h"
 #include "Arduino.h"
-
+#include "CONFIG.h"
 
 ComsDecoder::ComsDecoder(HornetManager* theManager)
 {
@@ -9,10 +9,14 @@ ComsDecoder::ComsDecoder(HornetManager* theManager)
 
 void ComsDecoder::processMessage(uint8_t *data, uint8_t dataLength)
 {
-	//Serial.println("New Message");
-	for (int i = 0; i < dataLength; i++)
+	switch (data[0])
 	{
-		//Serial.print((char)data[i]);
+	case C_COMS_CODE_CONNECT_CONFIRM:
+		_theManager->comsConnectionCOnfirmed();
+		break;
+	default:
+		//@TODO message error
+		break;
 	}
 }
 

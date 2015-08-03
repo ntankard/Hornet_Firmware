@@ -10,11 +10,16 @@ public:
 
 	void run();
 
+	void sendConnectRequest();
+
+
 	void sendAccGyro(float accel[3], float gyro[3]);
 
 private:
 	Coms *_coms;
 	Error *_e;
+
+	bool _connectRequest;
 
 	uint8_t _accGyro[10][25];
 	CircularBuffer_Manager<10> _accGyro_man;

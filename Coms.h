@@ -31,5 +31,10 @@ private:
 	bool _outstandingSent;
 #endif
 
+#if COM_MODE == COM_MODE_SERIAL
+	uint8_t _buffer[C_COMS_BUFFER];
+	int _readData;
+#endif
+
 };
 
