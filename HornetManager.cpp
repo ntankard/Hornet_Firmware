@@ -92,11 +92,14 @@ void HornetManager::run()
 	case Connect:
 		runConnect();
 		break;
+	case Idle:
+		_accGyro->run();
+		break;
 	default:
 		break;
 	}
 
-	_accGyro->run();
+
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------
