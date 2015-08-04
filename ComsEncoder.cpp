@@ -42,20 +42,27 @@ void ComsEncoder::sendAccGyro(float accel[3], float gyro[3])
 	}
 	
 	int toAdd = _accGyro_man.add();
-	uint16_t buffer = (accel[0] * 1000);
 
 	_accGyro[toAdd][0] = C_COMS_CODE_ACCGYRO;
 	
 	uint8_t *u_acc = reinterpret_cast<uint8_t *>(accel);
-	for (int i = 0; i < (3*4); i++)
+	int addCount = 1;
+	for (int i = 0; i < 3; i++)
 	{
-		_accGyro[toAdd][1 + i] = u_acc[i];
+		for (int j = 0; j < 4; j++)
+		{
+			_accGyro[toAdd][addCount] = u_acc[((4*(i+1))-1)-j];
+			addCount++;
+		}
 	}
 
 	uint8_t *u_gyro = reinterpret_cast<uint8_t *>(gyro);
-	for (int i = 0; i < (3 * 4); i++)
+	for (int i = 0; i < 3; i++)
 	{
-		_accGyro[toAdd][13 + i] = u_gyro[i];
+		for (int j = 0; j < 4; j++)
+		{
+			_accGyro[toAdd][addCount] = u_gyro[((4 * (i + 1)) - 1) - j];
+			addCount++;
+		}
 	}
-
 }
