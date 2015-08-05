@@ -14,6 +14,8 @@ public:
 
 private:
 	HornetManager* _hornetManager;
+#ifdef USE_ACC
 	AP_InertialSensor_MPU6000 _ins;
+#endif
 };
 
