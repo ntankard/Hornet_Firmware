@@ -8,6 +8,8 @@
 #include "ComsEncoder.h"
 #include "AccGyro.h"
 #include "Monitor.h"
+#include "Indicator.h"
+#include "Scheduler.h"
 
 #include "CONFIG.h"
 
@@ -19,8 +21,9 @@ ComsDecoder *comsDecoder;
 ComsEncoder *comsEncoder;
 
 AccGyro *accGyro;
-
 Monitor *monitor;
+Indicator *indicator;
+Scheduler *scheduler;
 
 void setup()
 {
@@ -44,13 +47,21 @@ void setup()
 	monitor = new Monitor(comsEncoder);
 	manager->attachMonitor(monitor);
 
+	// construct the indicator
+	indicator = new Indicator();
+	manager->attachIndicator(indicator);
+
+	// construct the scedulor
+	scheduler = new Scheduler(coms, comsEncoder, accGyro, indicator);
+	manager->attachScheduler(scheduler);
+
 	// start all objest with threads
 	manager->start();
 }
 
 void loop()
 {
-	manager->run();	
+	manager->run();
 }
 
 

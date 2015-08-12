@@ -6,8 +6,10 @@ class Coms;
 class ComsEncoder;
 class AccGyro;
 class Monitor;
+class Indicator;
+class Scheduler;
 
-enum State{ Init, Connect, Idle };
+enum State{ Init, Connect, Idle ,TakeOff,Flight,Land,Emergency,Crash};
 
 class HornetManager
 {
@@ -51,14 +53,46 @@ public:
 
 	void attachMonitor(Monitor* theMonitor);
 
+	void attachIndicator(Indicator* theIndicator);
+
+	void attachScheduler(Scheduler* theScheduler);
+
 	void newAccGyro(float accel[3], float gyro[3]);
 
-	void comsConnectionCOnfirmed();
+	void comsConnectionConfirmed();
 
 	void run();
 private:
 
 	void runConnect();
+
+
+	void S_enterInit();
+	void S_initToConnect();
+
+	void S_enterConnect();
+	void S_connectToIdle();
+
+	void S_enterIdle();
+	void S_idleToConnect();
+	void S_idleToInit();
+	void S_idleToTakeOff();
+
+	void S_enterTakeOff();
+	void S_takeOffToFlight();
+
+	void S_enterFlight();
+	void S_flightToLand();
+	void S_flightToEmergency();
+
+	void S_enterLand();
+	void S_landToIdle();
+
+	void S_enterEmergency();
+	void S_emergencyToCrash();
+
+	void S_enterCrash();
+	void S_crashToInit();
 
 	State _state;
 
@@ -66,6 +100,8 @@ private:
 	ComsEncoder* _comsEncoder;
 	AccGyro* _accGyro;
 	Monitor* _monitor;
+	Indicator* _indicator;
+	Scheduler* _scheduler;
 
 	unsigned long _C_last;
 };

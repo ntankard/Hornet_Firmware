@@ -3,6 +3,8 @@
 #include "ComsEncoder.h"
 #include "AccGyro.h"
 #include "Monitor.h"
+#include "Indicator.h"
+#include "Scheduler.h"
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // ---------------------------------------------------- CONSTRUCTION ----------------------------------------------------------
@@ -10,17 +12,7 @@
 
 HornetManager::HornetManager()
 {
-	_state = Init;
-}
-
-//-----------------------------------------------------------------------------------------------------------------------------
-
-void HornetManager::start()
-{
-	_accGyro->start();
-
-	_state = Connect;
-	_C_last = millis();
+	S_enterInit();
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------
@@ -52,6 +44,27 @@ void HornetManager::attachMonitor(Monitor* theMonitor)
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------
+
+void HornetManager::attachIndicator(Indicator* theIndicator)
+{
+	_indicator = theIndicator;
+}
+
+//-----------------------------------------------------------------------------------------------------------------------------
+
+void HornetManager::attachScheduler(Scheduler* theScheduler)
+{
+	_scheduler = theScheduler;
+}
+
+//-----------------------------------------------------------------------------------------------------------------------------
+
+void HornetManager::start()
+{
+	S_initToConnect();
+}
+
+//-----------------------------------------------------------------------------------------------------------------------------
 // --------------------------------------------------- NOTIFICATIONS ----------------------------------------------------------
 // ----------------------------------------------------------------------------------------------------------------------------
 
@@ -62,18 +75,14 @@ void HornetManager::newAccGyro(float accel[3], float gyro[3])
 
 //-----------------------------------------------------------------------------------------------------------------------------
 
-void HornetManager::comsConnectionCOnfirmed()
+void HornetManager::comsConnectionConfirmed()
 {
-	if (_state == Connect)
-	{
-		_state = Idle;
-		_monitor->on();
-	}
-	else
-	{
-		//@TODO add error
-	}
+	S_connectToIdle();
 }
+
+//-----------------------------------------------------------------------------------------------------------------------------
+// ------------------------------------------------------- STATES -------------------------------------------------------------
+// ----------------------------------------------------------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // ----------------------------------------------------- MAIN LOOP ------------------------------------------------------------
@@ -81,19 +90,16 @@ void HornetManager::comsConnectionCOnfirmed()
 
 void HornetManager::run()
 {	
-	// run coms no matter what
-	_coms->run();
-	_comsEncoder->run();
+	if (_state != Init)
+	{
+		_scheduler->run();
+	}
 
+	// special state case @TODO replace this
 	switch (_state)
 	{
-	case Init:
-		break;
 	case Connect:
 		runConnect();
-		break;
-	case Idle:
-		_accGyro->run();
 		break;
 	default:
 		break;
@@ -116,3 +122,83 @@ void HornetManager::runConnect()
 
 }
 
+void HornetManager::S_enterInit()
+{
+	_state = Init;
+}
+void HornetManager::S_initToConnect()
+{
+	if (_state == Init)
+	{
+		_accGyro->start();
+		_C_last = millis();
+		S_enterConnect();
+	}
+	else
+	{
+		//@TODO throw
+	}
+}
+
+
+void HornetManager::S_enterConnect()
+{
+	// threads
+	_scheduler->setAccPriority(0);
+	_scheduler->setIndicatorPriority(2);
+
+	// extra systems
+	_monitor->off();
+	_indicator->on();
+	_indicator->setDisplay(C_STATE_CONNECT);
+
+	// state indicator
+	_state = Connect;
+}
+void HornetManager::S_connectToIdle()
+{
+	if (_state == Connect)
+	{
+		_state = Idle;
+		_monitor->on();
+		S_enterIdle();
+	}
+	else
+	{
+		//@TODO throw
+	}
+}
+
+void HornetManager::S_enterIdle()
+{
+	// threads
+	_scheduler->setAccPriority(2);
+	_scheduler->setIndicatorPriority(10);
+
+	// extra systems
+	_monitor->on();
+	_indicator->on();
+	_indicator->setDisplay(C_STATE_IDLE);
+
+	// state indicator
+	_state = Idle;
+}
+void HornetManager::S_idleToConnect(){}
+void HornetManager::S_idleToInit(){}
+void HornetManager::S_idleToTakeOff(){}
+
+void HornetManager::S_enterTakeOff(){}
+void HornetManager::S_takeOffToFlight(){}
+
+void HornetManager::S_enterFlight(){}
+void HornetManager::S_flightToLand(){}
+void HornetManager::S_flightToEmergency(){}
+
+void HornetManager::S_enterLand(){}
+void HornetManager::S_landToIdle(){}
+
+void HornetManager::S_enterEmergency(){}
+void HornetManager::S_emergencyToCrash(){}
+
+void HornetManager::S_enterCrash(){}
+void HornetManager::S_crashToInit(){}

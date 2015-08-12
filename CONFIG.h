@@ -76,6 +76,9 @@
 
 #define C_CONNECT_PULSE_TIME 1000
 
+#define C_STATE_CONNECT Indicator::MAGENTA,1,500
+#define C_STATE_IDLE Indicator::PURPLE,2,100
+
 // Select one
 
 //#define MEGA
