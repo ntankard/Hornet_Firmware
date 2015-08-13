@@ -14,6 +14,8 @@ void ComsDecoder::processMessage(uint8_t *data, uint8_t dataLength)
 	case C_COMS_CODE_CONNECT_CONFIRM:
 		_theManager->comsConnectionConfirmed();
 		break;
+	case C_COMS_CODE_RESET:
+		_theManager->reset();
 	default:
 		//@TODO message error
 		break;

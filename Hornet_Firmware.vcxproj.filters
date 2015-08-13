@@ -1,14 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
-    </Filter>
     <Filter Include="Resource Files">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
@@ -22,44 +14,8 @@
     <Filter Include="Utility">
       <UniqueIdentifier>{b07ae0d6-bcb4-49af-81ea-aa6bb9bec209}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Utility\Header File">
-      <UniqueIdentifier>{a3d8c1f5-ffcf-41fd-9ac3-e714c92e25bd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Utility\Source Files">
-      <UniqueIdentifier>{a56fd643-e3ca-4a57-9e89-3861cb35cf87}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Visual Micro\.Hornet_Firmware.vsarduino.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="APM_2_5_PINS.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Indicator.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="HornetManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CONFIG.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="resource.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Error.h">
-      <Filter>Utility\Header File</Filter>
-    </ClInclude>
-    <ClInclude Include="CircularBuffer_Manager.h">
-      <Filter>Utility\Header File</Filter>
-    </ClInclude>
-    <ClInclude Include="Monitor.h">
-      <Filter>Utility\Header File</Filter>
-    </ClInclude>
-    <ClInclude Include="Scheduler.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="AccGyro.h">
       <Filter>Acc</Filter>
     </ClInclude>
@@ -87,23 +43,24 @@
     <ClInclude Include="XBee.h">
       <Filter>Coms</Filter>
     </ClInclude>
+    <ClInclude Include="Monitor.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="CircularBuffer_Manager.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Error.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Visual Micro\.Hornet_Firmware.vsarduino.h" />
+    <ClInclude Include="APM_2_5_PINS.h" />
+    <ClInclude Include="CONFIG.h" />
+    <ClInclude Include="HornetManager.h" />
+    <ClInclude Include="Indicator.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="Scheduler.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Indicator.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="HornetManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Error.cpp">
-      <Filter>Utility\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Monitor.cpp">
-      <Filter>Utility\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Scheduler.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="SPI.cpp">
       <Filter>Acc</Filter>
     </ClCompile>
@@ -125,6 +82,15 @@
     <ClCompile Include="XBee.cpp">
       <Filter>Coms</Filter>
     </ClCompile>
+    <ClCompile Include="Monitor.cpp">
+      <Filter>Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Error.cpp">
+      <Filter>Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="HornetManager.cpp" />
+    <ClCompile Include="Indicator.cpp" />
+    <ClCompile Include="Scheduler.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Hornet_Firmware.ino" />

@@ -61,7 +61,26 @@ void setup()
 
 void loop()
 {
-	manager->run();
+	if (manager->run())
+	{
+
+	}
+	else
+	{
+		delete manager;
+		delete error;
+		delete coms;
+		delete comsDecoder;
+		delete comsEncoder;
+		delete accGyro;
+		delete monitor;
+		delete indicator;
+		delete scheduler;
+
+		setup();
+	}
+
+
 }
 
 

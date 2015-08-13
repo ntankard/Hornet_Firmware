@@ -61,7 +61,9 @@ public:
 
 	void comsConnectionConfirmed();
 
-	void run();
+	bool run();
+
+	void reset();
 private:
 
 	void runConnect();
@@ -104,5 +106,7 @@ private:
 	Scheduler* _scheduler;
 
 	unsigned long _C_last;
+
+	bool isReset;
 };
 
