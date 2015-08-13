@@ -1,4 +1,5 @@
 //#include "Coms.h"
+#include <Servo.h>
 #include "Arduino.h"
 //#include "Indicator.h"
 

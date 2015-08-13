@@ -59,6 +59,8 @@ public:
 
 	void newAccGyro(float accel[3], float gyro[3]);
 
+	void newThrottle(int t);
+
 	void comsConnectionConfirmed();
 
 	bool run();

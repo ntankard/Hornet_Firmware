@@ -5,6 +5,8 @@
 #include "Monitor.h"
 #include "Indicator.h"
 #include "Scheduler.h"
+#include <Arduino.h>
+#include "Servo.h"
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // ---------------------------------------------------- CONSTRUCTION ----------------------------------------------------------
@@ -72,6 +74,11 @@ void HornetManager::start()
 void HornetManager::newAccGyro(float accel[3], float gyro[3])
 {
 	_monitor->newAccGyro(accel, gyro);
+}
+
+void HornetManager::newThrottle(int t)
+{
+
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------

@@ -16,6 +16,10 @@ void ComsDecoder::processMessage(uint8_t *data, uint8_t dataLength)
 		break;
 	case C_COMS_CODE_RESET:
 		_theManager->reset();
+		break;
+	case C_COMS_CODE_THROTTLE:
+		_theManager->newThrottle((int)data[1]);
+		break;
 	default:
 		//@TODO message error
 		break;

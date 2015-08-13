@@ -14,6 +14,9 @@
     <Filter Include="Utility">
       <UniqueIdentifier>{b07ae0d6-bcb4-49af-81ea-aa6bb9bec209}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Servo">
+      <UniqueIdentifier>{eda163c3-0daa-4468-822e-eb81d9371253}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AccGyro.h">
@@ -59,6 +62,15 @@
     <ClInclude Include="Indicator.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Scheduler.h" />
+    <ClInclude Include="Servo\Servo.h">
+      <Filter>Servo</Filter>
+    </ClInclude>
+    <ClInclude Include="Servo\sam\ServoTimers.h">
+      <Filter>Servo</Filter>
+    </ClInclude>
+    <ClInclude Include="Servo\avr\ServoTimers.h">
+      <Filter>Servo</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SPI.cpp">
