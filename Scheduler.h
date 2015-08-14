@@ -3,15 +3,18 @@
 #include "ComsEncoder.h"
 #include "AccGyro.h"
 #include "Indicator.h"
+#include "Lidar.h"
 
 class Scheduler
 {
 public:
-	Scheduler(Coms* theComs, ComsEncoder* theComsEncoder, AccGyro* theAccGyro, Indicator* theIndicator);
+	Scheduler(Coms* theComs, ComsEncoder* theComsEncoder, AccGyro* theAccGyro, Indicator* theIndicator, Lidar* theLidar);
 
 	void setAccPriority(int p);
 
 	void setIndicatorPriority(int p);
+
+	void setLidarPriority(int p);
 
 	void run();
 
@@ -28,5 +31,8 @@ private:
 	int _indicatorRunCount;
 	Indicator* _indicator;
 
+	int _lidarPriority;
+	int _lidarRunCount;
+	Lidar* _lidar;
 };
 

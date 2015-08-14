@@ -10,7 +10,7 @@
 #define BOARD_TYPE_MEGA 2
 
 // Pick wich board to use
-#define BOARD_TYPE BOARD_TYPE_APM
+#define BOARD_TYPE BOARD_TYPE_MEGA
 
 #if BOARD_TYPE == BOARD_TYPE_APM
 	#define USE_ACC
@@ -30,12 +30,13 @@
 #define COM_MODE_XBEE 2
 
 // pick wich com system to use
-#define COM_MODE COM_MODE_SERIAL
+#define COM_MODE COM_MODE_XBEE
 
 #if COM_MODE == COM_MODE_XBEE
-	#define C_COMS_PORT Serial2
+	#define C_COMS_PORT Serial1
 	#define C_COMS_BAUD_RATE 9600
 	#define C_COMMS_BSTATION_ADDRESS 0x0000
+	#define C_COMMS_MAX_RETRY 3
 #endif 
 
 #if COM_MODE == COM_MODE_SERIAL
@@ -109,3 +110,16 @@
 */
 
 #define C_ACC_CS ACC_CS
+
+//-----------------------------------------------------------------------------------------------------------------------------
+// ---------------------------------------------------- LIDAR SETTINGS ---------------------------------------------------------
+// ----------------------------------------------------------------------------------------------------------------------------
+
+#if BOARD_TYPE == BOARD_TYPE_APM
+
+#endif
+
+#if BOARD_TYPE == BOARD_TYPE_MEGA
+#define C_LIDAR_MOTOCTL 3
+#define C_LIDAR_SERIAL Serial2
+#endif

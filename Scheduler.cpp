@@ -1,7 +1,7 @@
 #include "Scheduler.h"
 
 
-Scheduler::Scheduler(Coms* theComs, ComsEncoder* theComsEncoder, AccGyro* theAccGyro, Indicator* theIndicator)
+Scheduler::Scheduler(Coms* theComs, ComsEncoder* theComsEncoder, AccGyro* theAccGyro, Indicator* theIndicator, Lidar* theLidar)
 {
 	_coms = theComs;
 	_comsEncoder = theComsEncoder;
@@ -13,6 +13,10 @@ Scheduler::Scheduler(Coms* theComs, ComsEncoder* theComsEncoder, AccGyro* theAcc
 	_indicator = theIndicator;
 	_indicatorPriority = 1;
 	_indicatorRunCount = 0;
+
+	_lidar = theLidar;
+	_lidarPriority = 1;
+	_lidarRunCount = 0;
 }
 
 void Scheduler::setAccPriority(int p)
@@ -23,6 +27,11 @@ void Scheduler::setAccPriority(int p)
 void Scheduler::setIndicatorPriority(int p)
 {
 	_indicatorPriority = p;
+}
+
+void Scheduler::setLidarPriority(int p)
+{
+	_lidarPriority = p;
 }
 
 
@@ -60,6 +69,21 @@ void Scheduler::run()
 	else
 	{
 		_indicatorRunCount = 0;
+	}
+
+	//lidar
+	if (_lidarPriority != 0)
+	{
+		_lidarRunCount++;
+		if (_lidarRunCount >= _lidarPriority)
+		{
+			_lidar->run();
+			_lidarRunCount = 0;
+		}
+	}
+	else
+	{
+		_lidarRunCount = 0;
 	}
 	
 

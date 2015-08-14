@@ -1,3 +1,4 @@
+#include <RPLidar.h>
 //#include "Coms.h"
 #include <Servo.h>
 #include "Arduino.h"
@@ -11,6 +12,7 @@
 #include "Monitor.h"
 #include "Indicator.h"
 #include "Scheduler.h"
+#include "Lidar.h"
 
 #include "CONFIG.h"
 
@@ -25,6 +27,7 @@ AccGyro *accGyro;
 Monitor *monitor;
 Indicator *indicator;
 Scheduler *scheduler;
+Lidar *lidar;
 
 void setup()
 {
@@ -52,8 +55,12 @@ void setup()
 	indicator = new Indicator();
 	manager->attachIndicator(indicator);
 
+	// construct the lidar
+	lidar = new Lidar(manager);
+	manager->attachLidar(lidar);
+
 	// construct the scedulor
-	scheduler = new Scheduler(coms, comsEncoder, accGyro, indicator);
+	scheduler = new Scheduler(coms, comsEncoder, accGyro, indicator, lidar);
 	manager->attachScheduler(scheduler);
 
 	// start all objest with threads

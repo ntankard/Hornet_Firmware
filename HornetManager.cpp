@@ -60,6 +60,11 @@ void HornetManager::attachScheduler(Scheduler* theScheduler)
 	_scheduler = theScheduler;
 }
 
+void HornetManager::attachLidar(Lidar* theLidar)
+{
+	_lidar = theLidar;
+}
+
 //-----------------------------------------------------------------------------------------------------------------------------
 
 void HornetManager::start()
@@ -162,6 +167,7 @@ void HornetManager::S_enterConnect()
 	// threads
 	_scheduler->setAccPriority(0);
 	_scheduler->setIndicatorPriority(2);
+	_scheduler->setLidarPriority(0);
 
 	// extra systems
 	_monitor->off();
@@ -178,6 +184,7 @@ void HornetManager::S_connectToIdle()
 		_state = Idle;
 		_monitor->on();
 		S_enterIdle();
+		_lidar->start();
 	}
 	else
 	{
@@ -192,6 +199,7 @@ void HornetManager::S_enterIdle()
 	// threads
 	_scheduler->setAccPriority(2);
 	_scheduler->setIndicatorPriority(10);
+	_scheduler->setLidarPriority(2);
 
 	// extra systems
 	_monitor->on();

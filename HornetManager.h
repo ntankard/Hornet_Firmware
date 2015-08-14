@@ -8,6 +8,7 @@ class AccGyro;
 class Monitor;
 class Indicator;
 class Scheduler;
+class Lidar;
 
 enum State{ Init, Connect, Idle ,TakeOff,Flight,Land,Emergency,Crash};
 
@@ -56,6 +57,8 @@ public:
 	void attachIndicator(Indicator* theIndicator);
 
 	void attachScheduler(Scheduler* theScheduler);
+
+	void attachLidar(Lidar* theLidar);
 
 	void newAccGyro(float accel[3], float gyro[3]);
 
@@ -106,6 +109,7 @@ private:
 	Monitor* _monitor;
 	Indicator* _indicator;
 	Scheduler* _scheduler;
+	Lidar* _lidar;
 
 	unsigned long _C_last;
 
