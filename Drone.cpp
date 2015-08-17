@@ -37,6 +37,18 @@ void Drone::disarm()
 	_isArmed = false;
 }
 
+void Drone::setThrottle(int p)
+{
+	double range = MAX - IDLE;
+
+	double setting = range*((double)p / 100.0);
+
+	_frontLeft.write(setting + IDLE);
+	_frontRight.write(setting + IDLE);
+	_backLeft.write(setting + IDLE);
+	_backRight.write(setting + IDLE);
+}
+
 Drone::~Drone()
 {
 }

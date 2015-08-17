@@ -49,7 +49,10 @@ void HornetManager::ND_AccGyro(float accel[3], float gyro[3])
 
 void HornetManager::ND_Throttle(int t)
 {
-
+	if (_state == Flight)
+	{
+		_drone->setThrottle(t);
+	}
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------
@@ -76,12 +79,14 @@ void HornetManager::M_ArmDisarm()
 	if (_state == Idle)
 	{
 		S_idleToTakeOff();
+		return;
 	}
 
 	if (_state == Flight)
 	{
 		//@TODO add can land check to prevent crash
 		S_flightToLand();
+		return;
 	}
 }
 
@@ -145,6 +150,7 @@ void HornetManager::S_initToConnect()
 	if (_state == Init)
 	{
 		_accGyro->start();
+		_drone->start();
 		_C_last = millis();
 		S_enterConnect();
 	}
@@ -236,7 +242,7 @@ void HornetManager::S_enterFlight()
 	_indicator->setDisplay(C_STATE_INDICATE_FLIGHT);
 
 	// state indicator
-	_state = Idle;
+	_state = Flight;
 }
 void HornetManager::S_flightToLand()
 {

@@ -22,6 +22,7 @@ void ComsDecoder::processMessage(uint8_t *data, uint8_t dataLength)
 		break;
 	case C_COMS_CODE_ARM_DISARM:
 		_theManager->M_ArmDisarm();
+		break;
 	default:
 		//@TODO message error
 		break;
