@@ -9,6 +9,7 @@ class Monitor;
 class Indicator;
 class Scheduler;
 class Lidar;
+class Drone;
 
 enum State{ Init, Connect, Idle ,TakeOff,Flight,Land,Emergency,Crash};
 
@@ -47,24 +48,21 @@ public:
 	 * \param [in,out]	theComs	If non-null, the coms.
 	 */
 	void attachComs(Coms* theComs);
-
 	void attachComsEncoder(ComsEncoder* theComsEncoder);
-
 	void attachAccGyro(AccGyro* theAccGyro);
-
 	void attachMonitor(Monitor* theMonitor);
-
 	void attachIndicator(Indicator* theIndicator);
-
-	void attachScheduler(Scheduler* theScheduler);
-
 	void attachLidar(Lidar* theLidar);
+	void attachDrone(Drone* theDrone);
+	void attachScheduler(Scheduler* theScheduler);
 
 	void ND_AccGyro(float accel[3], float gyro[3]);
 
 	void ND_Throttle(int t);
 
 	void M_ConnectionConfirmed();
+
+	void M_ArmDisarm();
 
 	bool run();
 
@@ -110,6 +108,7 @@ private:
 	Indicator* _indicator;
 	Scheduler* _scheduler;
 	Lidar* _lidar;
+	Drone* _drone;
 
 	Error *_e;
 

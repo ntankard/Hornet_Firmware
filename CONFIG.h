@@ -48,6 +48,7 @@
 #define C_COMS_CODE_CONNECT_CONFIRM 'b'
 #define C_COMS_CODE_RESET 'r'
 #define C_COMS_CODE_THROTTLE 't'
+#define C_COMS_CODE_ARM_DISARM 'd'
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // --------------------------------------------------- ERROR SETTINGS ---------------------------------------------------------
@@ -69,6 +70,7 @@
 
 #define C_STATE_INDICATE_CONNECT Indicator::MAGENTA,1,500
 #define C_STATE_INDICATE_IDLE Indicator::PURPLE,2,100
+#define C_STATE_INDICATE_FLIGHT Indicator::BLUE,2,100
 
 #define C_ACC_CS ACC_CS
 

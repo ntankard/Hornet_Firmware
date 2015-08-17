@@ -7,6 +7,7 @@
 #include "Scheduler.h"
 #include <Arduino.h>
 #include "Servo.h"
+#include "Drone.h"
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // ---------------------------------------------------- CONSTRUCTION ----------------------------------------------------------
@@ -27,6 +28,7 @@ void HornetManager::attachAccGyro(AccGyro* theAccGyro){	_accGyro = theAccGyro;}
 void HornetManager::attachMonitor(Monitor* theMonitor){	_monitor = theMonitor;}
 void HornetManager::attachIndicator(Indicator* theIndicator){	_indicator = theIndicator;}
 void HornetManager::attachLidar(Lidar* theLidar){ _lidar = theLidar; }
+void HornetManager::attachDrone(Drone* theDrone){ _drone = theDrone; }
 void HornetManager::attachScheduler(Scheduler* theScheduler){	_scheduler = theScheduler;}
 
 //-----------------------------------------------------------------------------------------------------------------------------
@@ -59,7 +61,28 @@ void HornetManager::M_ConnectionConfirmed()
 
 void HornetManager::M_Reset()
 {
-	_isReset = true;	//@TODO add saftey check
+	if (_state == Idle)
+	{
+		_isReset = true;	//@TODO add saftey check
+	}
+	else
+	{
+		//@TODO notify the base station that eh reset has been rejected for saftey reasons
+	}
+}
+
+void HornetManager::M_ArmDisarm()
+{
+	if (_state == Idle)
+	{
+		S_idleToTakeOff();
+	}
+
+	if (_state == Flight)
+	{
+		//@TODO add can land check to prevent crash
+		S_flightToLand();
+	}
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------
@@ -99,7 +122,7 @@ void HornetManager::runConnect()
 	if (_C_last + C_CONNECT_PULSE_TIME <= current)
 	{
 		_C_last = current;
-		_comsEncoder->sendConnectRequest();
+		_comsEncoder->sendChar(C_COMS_CODE_CONNECT_REQUEST);
 	}
 
 }
@@ -185,17 +208,51 @@ void HornetManager::S_enterIdle()
 }
 void HornetManager::S_idleToConnect(){}
 void HornetManager::S_idleToInit(){}
-void HornetManager::S_idleToTakeOff(){}
+void HornetManager::S_idleToTakeOff()
+{
+	_drone->arm();
+	S_enterTakeOff();
+}
 
-void HornetManager::S_enterTakeOff(){}
-void HornetManager::S_takeOffToFlight(){}
+void HornetManager::S_enterTakeOff()
+{
+	S_takeOffToFlight();	//@do nothing
+}
+void HornetManager::S_takeOffToFlight()
+{
+	S_enterFlight();
+}
 
-void HornetManager::S_enterFlight(){}
-void HornetManager::S_flightToLand(){}
+void HornetManager::S_enterFlight()
+{
+	// threads
+	_scheduler->setAccPriority(2);
+	_scheduler->setIndicatorPriority(10);
+	_scheduler->setLidarPriority(2);
+
+	// extra systems
+	_monitor->on();
+	_indicator->on();
+	_indicator->setDisplay(C_STATE_INDICATE_FLIGHT);
+
+	// state indicator
+	_state = Idle;
+}
+void HornetManager::S_flightToLand()
+{
+	S_enterLand();
+}
 void HornetManager::S_flightToEmergency(){}
 
-void HornetManager::S_enterLand(){}
-void HornetManager::S_landToIdle(){}
+void HornetManager::S_enterLand()
+{
+	S_landToIdle();
+}
+void HornetManager::S_landToIdle()
+{
+	_drone->disarm();
+	S_enterIdle();
+}
 
 void HornetManager::S_enterEmergency(){}
 void HornetManager::S_emergencyToCrash(){}

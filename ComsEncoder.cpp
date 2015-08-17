@@ -3,7 +3,7 @@
 #define C_COMS_CODE_ACCGYRO 1
 
 
-ComsEncoder::ComsEncoder(Coms* coms, Error *e) :_accGyro_man(e)
+ComsEncoder::ComsEncoder(Coms* coms, Error *e) :_accGyro_man(e), _messageBuffer_man(e)
 {
 	_e = e;
 	_coms = coms;
@@ -13,23 +13,33 @@ void ComsEncoder::run()
 {
 	if (_coms->canSend())
 	{
-		if (_connectRequest)
+		// priority 1 (messages)
+		if (!_messageBuffer_man.isEmpty())
 		{
-			uint8_t toSend[] = { C_COMS_CODE_CONNECT_REQUEST };
+			uint8_t toSend[] = { _messageBuffer[_messageBuffer_man.remove()] };
 			_coms->send(toSend, 1);
-			_connectRequest = false;
+			return;
 		}
+
+		//priority 2 (non critical nav data)
 		if (!_accGyro_man.isEmpty())
 		{
 			int remoe = _accGyro_man.remove();
 			_coms->send(_accGyro[remoe], 25);
+			return;
 		}
 	}
 }
 
-void ComsEncoder::sendConnectRequest()
+void ComsEncoder::sendChar(uint8_t message)
 {
-	_connectRequest = true;
+	if (_messageBuffer_man.isFull())
+	{
+		//@TODO notify of overflow
+		return;
+	}
+
+	_messageBuffer[_messageBuffer_man.add()] = message;
 }
 
 void ComsEncoder::sendAccGyro(float accel[3], float gyro[3])

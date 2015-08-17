@@ -14,9 +14,6 @@
     <Filter Include="Utility">
       <UniqueIdentifier>{b07ae0d6-bcb4-49af-81ea-aa6bb9bec209}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Servo">
-      <UniqueIdentifier>{eda163c3-0daa-4468-822e-eb81d9371253}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Lidar">
       <UniqueIdentifier>{686735f6-ffe3-4331-aad8-d615bad79c01}</UniqueIdentifier>
     </Filter>
@@ -60,14 +57,17 @@
     </ClInclude>
     <ClInclude Include="Visual Micro\.Hornet_Firmware.vsarduino.h" />
     <ClInclude Include="APM_2_5_PINS.h" />
-    <ClInclude Include="CONFIG.h" />
     <ClInclude Include="HornetManager.h" />
-    <ClInclude Include="Indicator.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Scheduler.h" />
     <ClInclude Include="Lidar.h">
       <Filter>Lidar</Filter>
     </ClInclude>
+    <ClInclude Include="Indicator.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Drone.h" />
+    <ClInclude Include="CONFIG.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SPI.cpp">
@@ -98,11 +98,14 @@
       <Filter>Utility</Filter>
     </ClCompile>
     <ClCompile Include="HornetManager.cpp" />
-    <ClCompile Include="Indicator.cpp" />
     <ClCompile Include="Scheduler.cpp" />
     <ClCompile Include="Lidar.cpp">
       <Filter>Lidar</Filter>
     </ClCompile>
+    <ClCompile Include="Indicator.cpp">
+      <Filter>Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Drone.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Hornet_Firmware.ino" />

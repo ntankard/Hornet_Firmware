@@ -1,7 +1,7 @@
 // hardware libreys (do not remove)
-#include <RPLidar.h>
 #include <Servo.h>
-#include "Arduino.h"
+#include <RPLidar.h>
+
 
 // local components
 #include "HornetManager.h"
@@ -13,6 +13,7 @@
 #include "Indicator.h"
 #include "Scheduler.h"
 #include "Lidar.h"
+#include "Drone.h"
 
 #include "CONFIG.h"
 
@@ -30,8 +31,15 @@ AccGyro *accGyro;
 Monitor *monitor;
 Indicator *indicator;
 Lidar *lidar;
+Drone *drone;
 
 Scheduler *scheduler;
+
+Servo _frontLeft;
+Servo _frontRight;
+Servo _backLeft;
+Servo _backRight;
+
 
 void setup()
 {
@@ -62,6 +70,9 @@ void setup()
 	// construct the lidar
 	lidar = new Lidar(manager);
 	manager->attachLidar(lidar);
+
+	drone= new Drone();
+	manager->attachDrone(drone);
 
 	// construct the scedulor
 	scheduler = new Scheduler(coms, comsEncoder, accGyro, indicator, lidar);

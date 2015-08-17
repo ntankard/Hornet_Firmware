@@ -1,6 +1,7 @@
 #include "Indicator.h"
 #include "Arduino.h"
 #include "APM_2_5_PINS.h"
+#include "CONFIG.h"
 
 #ifdef USE_INDICATOR
 
