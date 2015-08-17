@@ -24,7 +24,7 @@ public:
 	 * \author	Nicholas
 	 * \date	29/07/2015
 	 */
-	HornetManager();
+	HornetManager(Error *theError);
 
 	/**
 	 * \fn	void HornetManager::start();
@@ -60,15 +60,15 @@ public:
 
 	void attachLidar(Lidar* theLidar);
 
-	void newAccGyro(float accel[3], float gyro[3]);
+	void ND_AccGyro(float accel[3], float gyro[3]);
 
-	void newThrottle(int t);
+	void ND_Throttle(int t);
 
-	void comsConnectionConfirmed();
+	void M_ConnectionConfirmed();
 
 	bool run();
 
-	void reset();
+	void M_Reset();
 private:
 
 	void runConnect();
@@ -111,8 +111,10 @@ private:
 	Scheduler* _scheduler;
 	Lidar* _lidar;
 
+	Error *_e;
+
 	unsigned long _C_last;
 
-	bool isReset;
+	bool _isReset;
 };
 

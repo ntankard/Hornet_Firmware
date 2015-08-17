@@ -43,7 +43,7 @@ void AccGyro::run()
 		_ins.get_gyros(gyro);
 		_ins.get_accels(accel);
 
-		_hornetManager->newAccGyro(accel, gyro);
+		_hornetManager->ND_AccGyro(accel, gyro);
 	}
 #endif
 }

@@ -8,6 +8,7 @@ Lidar::Lidar(HornetManager* theManager)
 
 void Lidar::start()
 {
+#ifdef USE_LIDAR
 	_lidar.begin(C_LIDAR_SERIAL);
 	pinMode(C_LIDAR_MOTOCTL, OUTPUT);
 
@@ -26,17 +27,19 @@ void Lidar::start()
 	{
 		//@TODO add throw here
 	}
+#endif
 }
 
 void Lidar::run()
 {
+#ifdef USE_LIDAR
 	if (IS_OK(_lidar.waitPoint())) {
 		float distance = _lidar.getCurrentPoint().distance; //distance value in mm unit
 		float angle = _lidar.getCurrentPoint().angle; //angle value in degree
 		bool  startBit = _lidar.getCurrentPoint().startBit; //whether this point is belong to a new scan
 		byte  quality = _lidar.getCurrentPoint().quality; //quality of the current measurement
 
-		Serial.println(distance);
-
+		//@TODO add notification
 	}
+#endif
 }

@@ -1,9 +1,9 @@
+// hardware libreys (do not remove)
 #include <RPLidar.h>
-//#include "Coms.h"
 #include <Servo.h>
 #include "Arduino.h"
-//#include "Indicator.h"
 
+// local components
 #include "HornetManager.h"
 #include "ComsDecoder.h"
 #include "Coms.h"
@@ -16,24 +16,28 @@
 
 #include "CONFIG.h"
 
+// core componenets
 HornetManager *manager;
 Error *error;
 
+// coms systems
 Coms *coms;
 ComsDecoder *comsDecoder;
 ComsEncoder *comsEncoder;
 
+// periferal systerms
 AccGyro *accGyro;
 Monitor *monitor;
 Indicator *indicator;
-Scheduler *scheduler;
 Lidar *lidar;
+
+Scheduler *scheduler;
 
 void setup()
 {
-	Serial.begin(9600);
-	manager = new HornetManager();
+	Serial.begin(9600);				//@TODO remove
 	error = new Error();
+	manager = new HornetManager(error);
 
 	// construct the coms
 	comsDecoder = new ComsDecoder(manager);

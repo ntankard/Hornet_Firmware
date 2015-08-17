@@ -2,6 +2,8 @@
 #include "Arduino.h"
 #include "APM_2_5_PINS.h"
 
+#ifdef USE_INDICATOR
+
 Indicator::Indicator()
 {
 	_isOn = false;
@@ -30,6 +32,7 @@ Indicator::Indicator()
 		pinMode(_pin[i], OUTPUT);
 		digitalWrite(_pin[i], _pinState[i]);
 	}*/
+
 }
 
 void Indicator::run()
@@ -154,4 +157,15 @@ void Indicator::setBlinkRate(Color c, int r)
 {
 	_interval[c] = r;
 }*/
+#else
 
+Indicator::Indicator(){}
+void Indicator::run(){}
+void Indicator::on(){}
+void Indicator::off(){}
+void Indicator::setDisplay(Color c, int blinks, unsigned long rate){}
+void Indicator::setOn(Color c, bool isOn){}
+void Indicator::setBlinks(Color c, int b){}
+void Indicator::setBlinkRate(Color c, int r){}
+
+#endif

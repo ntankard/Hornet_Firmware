@@ -12,58 +12,22 @@
 // ---------------------------------------------------- CONSTRUCTION ----------------------------------------------------------
 // ----------------------------------------------------------------------------------------------------------------------------
 
-HornetManager::HornetManager()
+HornetManager::HornetManager(Error *theError)
 {
+	_e = theError;
 	S_enterInit();
-	isReset = false;
+	_isReset = false;
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------
 
-void HornetManager::attachComs(Coms* theComs)
-{
-	_coms = theComs;
-}
-
-//-----------------------------------------------------------------------------------------------------------------------------
-
-void HornetManager::attachComsEncoder(ComsEncoder* theComsEncoder)
-{
-	_comsEncoder = theComsEncoder;
-}
-
-//-----------------------------------------------------------------------------------------------------------------------------
-
-void HornetManager::attachAccGyro(AccGyro* theAccGyro)
-{
-	_accGyro = theAccGyro;
-}
-
-//-----------------------------------------------------------------------------------------------------------------------------
-
-void HornetManager::attachMonitor(Monitor* theMonitor)
-{
-	_monitor = theMonitor;
-}
-
-//-----------------------------------------------------------------------------------------------------------------------------
-
-void HornetManager::attachIndicator(Indicator* theIndicator)
-{
-	_indicator = theIndicator;
-}
-
-//-----------------------------------------------------------------------------------------------------------------------------
-
-void HornetManager::attachScheduler(Scheduler* theScheduler)
-{
-	_scheduler = theScheduler;
-}
-
-void HornetManager::attachLidar(Lidar* theLidar)
-{
-	_lidar = theLidar;
-}
+void HornetManager::attachComs(Coms* theComs){_coms = theComs;}
+void HornetManager::attachComsEncoder(ComsEncoder* theComsEncoder){_comsEncoder = theComsEncoder;}
+void HornetManager::attachAccGyro(AccGyro* theAccGyro){	_accGyro = theAccGyro;}
+void HornetManager::attachMonitor(Monitor* theMonitor){	_monitor = theMonitor;}
+void HornetManager::attachIndicator(Indicator* theIndicator){	_indicator = theIndicator;}
+void HornetManager::attachLidar(Lidar* theLidar){ _lidar = theLidar; }
+void HornetManager::attachScheduler(Scheduler* theScheduler){	_scheduler = theScheduler;}
 
 //-----------------------------------------------------------------------------------------------------------------------------
 
@@ -76,26 +40,26 @@ void HornetManager::start()
 // --------------------------------------------------- NOTIFICATIONS ----------------------------------------------------------
 // ----------------------------------------------------------------------------------------------------------------------------
 
-void HornetManager::newAccGyro(float accel[3], float gyro[3])
+void HornetManager::ND_AccGyro(float accel[3], float gyro[3])
 {
 	_monitor->newAccGyro(accel, gyro);
 }
 
-void HornetManager::newThrottle(int t)
+void HornetManager::ND_Throttle(int t)
 {
 
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------
 
-void HornetManager::comsConnectionConfirmed()
+void HornetManager::M_ConnectionConfirmed()
 {
 	S_connectToIdle();
 }
 
-void HornetManager::reset()
+void HornetManager::M_Reset()
 {
-	isReset = true;
+	_isReset = true;	//@TODO add saftey check
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------
@@ -104,22 +68,26 @@ void HornetManager::reset()
 
 bool HornetManager::run()
 {	
+	// run the threads
 	if (_state != Init)
 	{
 		_scheduler->run();
 	}
 
-	// special state case @TODO replace this
-	switch (_state)
+	// check for special logic
+	if (_state == Connect)
 	{
-	case Connect:
 		runConnect();
-		break;
-	default:
-		break;
 	}
 
-	return !isReset;
+	// catch exeption
+	if (_e->isError())
+	{
+		//@TODO add error handeling here
+	}
+
+	// end if reset
+	return !_isReset;
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------
@@ -146,6 +114,9 @@ void HornetManager::S_enterInit()
 {
 	_state = Init;
 }
+
+//-----------------------------------------------------------------------------------------------------------------------------
+
 void HornetManager::S_initToConnect()
 {
 	if (_state == Init)
@@ -156,7 +127,7 @@ void HornetManager::S_initToConnect()
 	}
 	else
 	{
-		//@TODO throw
+		_e->add(E_STATE_ERROR, "S_initToConnect called from a non init state");
 	}
 }
 
@@ -172,11 +143,14 @@ void HornetManager::S_enterConnect()
 	// extra systems
 	_monitor->off();
 	_indicator->on();
-	_indicator->setDisplay(C_STATE_CONNECT);
+	_indicator->setDisplay(C_STATE_INDICATE_CONNECT);
 
 	// state indicator
 	_state = Connect;
 }
+
+//-----------------------------------------------------------------------------------------------------------------------------
+
 void HornetManager::S_connectToIdle()
 {
 	if (_state == Connect)
@@ -188,7 +162,7 @@ void HornetManager::S_connectToIdle()
 	}
 	else
 	{
-		//@TODO throw
+		_e->add(E_STATE_ERROR, "S_connectToIdle called from a non Connect state");
 	}
 }
 
@@ -204,7 +178,7 @@ void HornetManager::S_enterIdle()
 	// extra systems
 	_monitor->on();
 	_indicator->on();
-	_indicator->setDisplay(C_STATE_IDLE);
+	_indicator->setDisplay(C_STATE_INDICATE_IDLE);
 
 	// state indicator
 	_state = Idle;
