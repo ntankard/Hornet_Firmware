@@ -116,6 +116,10 @@ extern "C" void __cxa_pure_virtual() {;}
 #include <SPI.h>
 #include <Scheduler.cpp>
 #include <Scheduler.h>
+#include <Test.cpp>
+#include <Test.h>
+#include <Test_CircularBuffer.cpp>
+#include <Test_CircularBuffer.h>
 #include <XBee.cpp>
 #include <XBee.h>
 #include <resource.h>

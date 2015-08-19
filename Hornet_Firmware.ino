@@ -1,9 +1,7 @@
 #define FOR_HARDWARE 1
 #define FOR_TEST 2
 
-#define BUILD_TYPE FOR_HARDWARE
-
-#if BUILD_TYPE == FOR_HARDWARE
+#define BUILD_TYPE FOR_TEST
 
 // hardware libreys (do not remove)
 #include <Servo.h>
@@ -23,6 +21,8 @@
 #include "Drone.h"
 
 #include "CONFIG.h"
+
+#if BUILD_TYPE == FOR_HARDWARE
 
 // core componenets
 HornetManager *manager;
@@ -122,7 +122,10 @@ void setup()
 	Hornet_Firmware_Test();
 }
 
-void run();
+void loop()
+{
+	delay(10);
+}
 
 #endif
 
