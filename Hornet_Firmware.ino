@@ -63,7 +63,7 @@ void setup()
 	manager->attachComsEncoder(comsEncoder);
 
 	// construct thew accselerator and gyro
-	accGyro = new AccGyro(manager);
+	accGyro = new AccGyro(manager, error);
 	manager->attachAccGyro(accGyro);
 
 	// construct the monitor

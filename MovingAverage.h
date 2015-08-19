@@ -42,6 +42,6 @@ public:
 private:
 	CircularBuffer<T, Size> _window;
 	T _sum;
-	Errorr *_e;
+	Error *_e;
 };
 

@@ -58,7 +58,9 @@ public:
 	 * \param	accel	The accel.
 	 * \param	gyro 	The gyro.
 	 */
-	void newAccGyro(float accel[3], float gyro[3]);
+	void newRawAccGyro(float accel[3], float gyro[3]);
+
+	void newPitchRoll(float pitch, float roll);
 
 private:
 
@@ -66,12 +68,16 @@ private:
 	ComsEncoder *_comsEncoder;
 
 	/** \brief	The number of new acc events befor the base station is notifyed */
-	int _accRate;
+	int _rawAccRate;
 
 	/** \brief	The number of acc events so far. */
-	int _accCount;
+	int _rawAccCount;
 
 	/** \brief	Notify the base station? */
 	bool _isOn;
+
+	int _pitchRollRate;
+
+	float _pitchRollCount;
 };
 

@@ -12,7 +12,9 @@ public:
 
 	void sendChar(uint8_t message);
 
-	void sendAccGyro(float accel[3], float gyro[3]);
+	void sendRawAccGyro(float accel[3], float gyro[3]);
+
+	void sendPitchRoll(float pitch, float roll);
 
 private:
 	Coms *_coms;
@@ -22,7 +24,10 @@ private:
 	uint8_t _messageBuffer[20];
 	CircularBuffer_Manager<20> _messageBuffer_man;
 
-	uint8_t _accGyro[10][25];
-	CircularBuffer_Manager<10> _accGyro_man;
+	uint8_t _rawAccGyro[10][25];
+	CircularBuffer_Manager<10> _rawAccGyro_man;
+
+	uint8_t _pitchRoll[10][9];
+	CircularBuffer_Manager<10> _pitchRoll_man;
 };
 

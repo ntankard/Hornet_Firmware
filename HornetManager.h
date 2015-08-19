@@ -56,13 +56,15 @@ public:
 	void attachDrone(Drone* theDrone);
 	void attachScheduler(Scheduler* theScheduler);
 
-	void ND_AccGyro(float accel[3], float gyro[3]);
-
+	void ND_RawAccGyro(float accel[3], float gyro[3]);
+	
 	void ND_Throttle(int t);
 
 	void M_ConnectionConfirmed();
 
 	void M_ArmDisarm();
+
+	void ND_PitchRoll(float pitch, float roll);
 
 	bool run();
 

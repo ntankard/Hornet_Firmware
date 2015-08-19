@@ -5,9 +5,10 @@
 
 #ifdef USE_ACC
 
-AccGyro::AccGyro(HornetManager* theManager) :_ins(C_ACC_CS)
+AccGyro::AccGyro(HornetManager* theManager, Error* e) :_ins(C_ACC_CS), _pitchBuffer(e), _rollBuffer(e)
 {
 	_hornetManager = theManager;
+	_e = e;
 }
 
 void AccGyro::start()
@@ -32,7 +33,13 @@ void AccGyro::run()
 		_ins.get_gyros(gyro);
 		_ins.get_accels(accel);
 
-		_hornetManager->ND_AccGyro(accel, gyro);
+		// Calculate pitch and roll
+		double g = sqrt(pow(accel[0], 2) + pow(accel[1], 2) + pow(accel[2], 2));
+		float roll = (float)(asin(accel[0] / g));
+		float pitch = (float)((asin(accel[1] / g)));
+
+		_hornetManager->ND_RawAccGyro(accel, gyro);
+		_hornetManager->ND_PitchRoll(_pitchBuffer.add(pitch), _rollBuffer.add(roll));
 	}
 
 }

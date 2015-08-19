@@ -88,7 +88,7 @@ public:
 			_start = 0;
 		}
 
-		return _buffer[toRemove];
+		_buffer[toRemove] = toAdd;
 	}
 
 	/**
@@ -108,7 +108,7 @@ public:
 		if (isEmpty())
 		{
 			_e->add(E_ILLEGAL_ACCESS, "Attempting to remove from an empty buffer");
-			return;
+			return 0;
 		}
 
 		int toRemove = _end;

@@ -42,9 +42,9 @@ void HornetManager::start()
 // --------------------------------------------------- NOTIFICATIONS ----------------------------------------------------------
 // ----------------------------------------------------------------------------------------------------------------------------
 
-void HornetManager::ND_AccGyro(float accel[3], float gyro[3])
+void HornetManager::ND_RawAccGyro(float accel[3], float gyro[3])
 {
-	_monitor->newAccGyro(accel, gyro);
+	_monitor->newRawAccGyro(accel, gyro);
 }
 
 void HornetManager::ND_Throttle(int t)
@@ -53,6 +53,11 @@ void HornetManager::ND_Throttle(int t)
 	{
 		_drone->setThrottle(t);
 	}
+}
+
+void HornetManager::ND_PitchRoll(float pitch, float roll)
+{
+	_monitor->newPitchRoll(pitch, roll);
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------

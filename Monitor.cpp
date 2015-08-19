@@ -4,9 +4,11 @@
 Monitor::Monitor(ComsEncoder* theComsEncoder)
 {
 	_comsEncoder = theComsEncoder;
-	_accRate = C_LOGGER_ACC_RATE;
-	_accCount = 0;
+	_rawAccRate = C_LOGGER_ACC_RATE;
+	_rawAccCount = 0;
 	_isOn = false;
+	_pitchRollRate = C_LOGGER_PITCH_ROLL_RATE;
+	_pitchRollCount = 0;
 }
 
 void Monitor::on()
@@ -19,15 +21,28 @@ void Monitor::off()
 	_isOn = false;
 }
 
-void Monitor::newAccGyro(float accel[3], float gyro[3])
+void Monitor::newRawAccGyro(float accel[3], float gyro[3])
 {
 	if (_isOn)
 	{
-		_accCount++;
-		if (_accCount > _accRate)
+		_rawAccCount++;
+		if (_rawAccCount > _rawAccRate)
 		{
-			_accCount = 0;
-			_comsEncoder->sendAccGyro(accel, gyro);
+			_rawAccCount = 0;
+			_comsEncoder->sendRawAccGyro(accel, gyro);
+		}
+	}
+}
+
+void Monitor::newPitchRoll(float pitch, float roll)
+{
+	if (_isOn)
+	{
+		_pitchRollCount++;
+		if (_pitchRollCount > _pitchRollRate)
+		{
+			_pitchRollCount = 0;
+			_comsEncoder->sendPitchRoll(pitch, roll);
 		}
 	}
 }
