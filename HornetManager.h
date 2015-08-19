@@ -66,6 +66,8 @@ public:
 
 	void ND_PitchRoll(float pitch, float roll);
 
+	void ND_LidarData(float yaw, float distance, float pitch);
+
 	bool run();
 
 	void M_Reset();

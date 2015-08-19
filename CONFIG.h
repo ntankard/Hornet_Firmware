@@ -52,6 +52,7 @@
 
 #define C_COMS_CODE_ACCGYRO 'g'
 #define C_COMS_CODE_PITCH_ROLL 'p'
+#define C_COMS_CODE_LIDAR_DATA 'l'
 
 
 //-----------------------------------------------------------------------------------------------------------------------------

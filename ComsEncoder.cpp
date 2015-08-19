@@ -1,6 +1,6 @@
 #include "ComsEncoder.h"
 
-ComsEncoder::ComsEncoder(Coms* coms, Error *e) :_rawAccGyro_man(e), _messageBuffer_man(e), _pitchRoll_man(e)
+ComsEncoder::ComsEncoder(Coms* coms, Error *e) :_rawAccGyro_man(e), _messageBuffer_man(e), _pitchRoll_man(e), _lidarData_man(e)
 {
 	_e = e;
 	_coms = coms;
@@ -30,6 +30,13 @@ void ComsEncoder::run()
 		{
 			int remove = _pitchRoll_man.remove();
 			_coms->send(_pitchRoll[remove], 9);
+			return;
+		}
+		
+		if (!_lidarData_man.isEmpty())
+		{
+			int remove = _lidarData_man.remove();
+			_coms->send(_lidarData[remove], 13);
 			return;
 		}
 
@@ -113,3 +120,41 @@ void ComsEncoder::sendPitchRoll(float pitch, float roll)
 		}
 	}
 
+void ComsEncoder::sendLidarData(float yaw, float distance, float pitch)
+{
+
+	if (_lidarData_man.isFull())
+	{
+		//@TODO notify of overflow
+		return;
+	}
+
+	int toAdd = _lidarData_man.add();
+
+	_lidarData[toAdd][0] = C_COMS_CODE_LIDAR_DATA;
+
+	uint8_t *u_lidarYaw = reinterpret_cast<uint8_t *>(&yaw);
+	int addCount = 1;
+
+	for (int j = 0; j < 4; j++)
+	{
+		_lidarData[toAdd][addCount] = u_lidarYaw[j];
+		addCount++;
+	}
+
+	uint8_t *u_lidarDistance = reinterpret_cast<uint8_t *>(&distance);
+
+	for (int j = 0; j < 4; j++)
+	{
+		_lidarData[toAdd][addCount] = u_lidarDistance[j];
+		addCount++;
+	}
+	uint8_t *u_lidarPitch = reinterpret_cast<uint8_t *>(&pitch);
+
+	for (int j = 0; j < 4; j++)
+	{
+		_lidarData[toAdd][addCount] = u_lidarPitch[j];
+		addCount++;
+	}
+
+}

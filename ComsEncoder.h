@@ -16,6 +16,8 @@ public:
 
 	void sendPitchRoll(float pitch, float roll);
 
+	void sendLidarData(float yaw, float distance, float pitch);
+
 private:
 	Coms *_coms;
 	Error *_e;
@@ -29,5 +31,8 @@ private:
 
 	uint8_t _pitchRoll[10][9];
 	CircularBuffer_Manager<10> _pitchRoll_man;
+
+	uint8_t _lidarData[10][13];
+	CircularBuffer_Manager<10> _lidarData_man;
 };
 

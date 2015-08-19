@@ -60,6 +60,11 @@ void HornetManager::ND_PitchRoll(float pitch, float roll)
 	_monitor->newPitchRoll(pitch, roll);
 }
 
+void HornetManager::ND_LidarData(float yaw, float distance, float pitch)
+{
+	_monitor->newLidarData(yaw, distance, pitch);
+}
+
 //-----------------------------------------------------------------------------------------------------------------------------
 
 void HornetManager::M_ConnectionConfirmed()

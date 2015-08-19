@@ -62,6 +62,8 @@ public:
 
 	void newPitchRoll(float pitch, float roll);
 
+	void newLidarData(float yaw, float distance, float pitch);
+
 private:
 
 	/** \brief	The coms encoder. */
@@ -79,5 +81,9 @@ private:
 	int _pitchRollRate;
 
 	float _pitchRollCount;
+
+	int _lidarDataRate;
+
+	float _lidarDataCount;
 };
 
