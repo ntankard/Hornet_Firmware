@@ -122,7 +122,6 @@
     <ClCompile Include="Monitor.cpp" />
     <ClCompile Include="Scheduler.cpp" />
     <ClCompile Include="SPI.cpp" />
-    <ClCompile Include="Test.cpp" />
     <ClCompile Include="Test_CircularBuffer.cpp" />
     <ClCompile Include="XBee.cpp" />
   </ItemGroup>

@@ -1,3 +1,5 @@
+#if BUILD_TYPE == FOR_TEST
+
 #pragma once
 #include "Test.h"
 #include <Arduino.h>
@@ -15,3 +17,4 @@ public:
 	void cleanUp();
 };
 
+#endif
