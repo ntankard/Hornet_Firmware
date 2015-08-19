@@ -13,7 +13,11 @@ public:
 	{
 		if (_window.isFull())
 		{
-			
+			_sum -= _window.remove();
+			_sum += toAdd;
+			_window.add(toAdd);
+
+			return _sum / ((float)_window.size());
 		}
 		else
 		{
@@ -22,6 +26,7 @@ public:
 				// first time
 				_sum = toAdd;
 				_window.add(toAdd);
+				return toAdd;
 			}
 			else
 			{
@@ -29,7 +34,7 @@ public:
 				_sum += toAdd;
 				_window.add(toAdd);
 
-				return _sum;
+				return _sum/((float)_window.size());
 			}
 		}
 	}
