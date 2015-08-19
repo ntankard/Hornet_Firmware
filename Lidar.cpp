@@ -40,6 +40,8 @@ void Lidar::run()
 		byte  quality = _lidar.getCurrentPoint().quality; //quality of the current measurement
 
 		//@TODO add notification
+
+		_hornetManager->ND_LidarData(angle, distance, 0); // pitch is 0 at the moment
 	}
 #endif
 }
