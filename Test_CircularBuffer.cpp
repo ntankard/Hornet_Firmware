@@ -12,21 +12,58 @@
 
 #define POW2_UNUSED(x) do { (void)(x);return "Hello"; } while(0)  
 
+
 void Test_CircularBuffer::setup()
 {
-
+	_e = new Error();
+	_testBuffer = new CircularBuffer<int, 10>(_e);
 }
 
 String Test_CircularBuffer::run()
 {
-	ASSERT_ISEQUAL(1,1);
+	// check to see that the buffer starts empty
+	ASSERT_ISTRUE(_testBuffer->isEmpty());
+	ASSERT_ISFALSE(_testBuffer->isFull());
+	ASSERT_ISEQUAL(_testBuffer->size(), 0);
 
-	return "HELLO";
+	// check to see if the buffer can be filled to capacity
+	for (int i = 0; i < 9; i++)
+	{
+		_testBuffer->add(i);
+		ASSERT_ISFALSE(_testBuffer->isEmpty());
+		ASSERT_ISFALSE(_testBuffer->isFull());
+		ASSERT_ISEQUAL(_testBuffer->size(), i+1);
+	}
+
+	// check to see if size stays corect as the buffer movfes around its barier
+	delete _testBuffer;
+	_testBuffer = new CircularBuffer<int, 10>(_e);
+	for (int i = 0; i < 5; i++)
+	{
+		_testBuffer->add(i);
+
+		ASSERT_ISFALSE(_testBuffer->isEmpty());
+		ASSERT_ISFALSE(_testBuffer->isFull());
+		ASSERT_ISEQUAL(_testBuffer->size(), i + 1);
+	}
+
+	for (int i = 0; i < 100; i++)
+	{
+		_testBuffer->remove();
+		_testBuffer->add(1);
+
+		ASSERT_ISFALSE(_testBuffer->isEmpty());
+		ASSERT_ISFALSE(_testBuffer->isFull());
+		ASSERT_ISEQUAL(_testBuffer->size(),5);
+	}
+
+	return "Pass";
 }
 
 void Test_CircularBuffer::cleanUp()
 {
-
+	delete _testBuffer;
+	delete _e;
 }
 
 #endif
