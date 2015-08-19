@@ -20,6 +20,7 @@ public:
 		_e = e;
 		_start = 0;
 		_end = 0;
+		_size = 0;
 	}
 
 	/**
@@ -34,7 +35,11 @@ public:
 	*/
 	bool isEmpty()
 	{
-		return _start == _end;
+		if (_size == 0)
+		{
+			return true;
+		}
+		return false;
 	}
 
 	/**
@@ -49,27 +54,16 @@ public:
 	*/
 	bool isFull()
 	{
-		if (_end == 0 && (_start - 1) == Size)
+		if (_size == 10)
 		{
 			return true;
 		}
-
-		if (_start == (_end - 1))
-		{
-			return true;
-		}
-
 		return false;
 	}
 
 	int size()
 	{
-		if (_start >= _end)
-		{
-			return (_start - _end);
-		}
-
-		return _start + (Size - _end);
+		return _size;
 	}
 
 	void add(T toAdd)
@@ -79,6 +73,8 @@ public:
 			_e->add(E_ILLEGAL_ACCESS, "Attempting to add to a full buffer");
 			return;
 		}
+
+		_size++;
 
 		int toRemove = _start;
 
@@ -111,6 +107,8 @@ public:
 			return 0;
 		}
 
+		_size--;
+
 		int toRemove = _end;
 
 		_end++;
@@ -133,6 +131,8 @@ private:
 
 	/** \brief	The systems error object */
 	Error *_e;
+
+	int _size;
 
 	T _buffer[Size];
 };

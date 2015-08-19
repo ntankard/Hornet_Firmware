@@ -77,12 +77,6 @@
     <ClInclude Include="MovingAverage.h">
       <Filter>Utility</Filter>
     </ClInclude>
-    <ClInclude Include="Hornet_Firmware_Test.h">
-      <Filter>Tests</Filter>
-    </ClInclude>
-    <ClInclude Include="Test.h">
-      <Filter>Tests</Filter>
-    </ClInclude>
     <ClInclude Include="Test_CircularBuffer.h">
       <Filter>Tests</Filter>
     </ClInclude>
@@ -124,12 +118,6 @@
       <Filter>Utility</Filter>
     </ClCompile>
     <ClCompile Include="Drone.cpp" />
-    <ClCompile Include="Hornet_Firmware_Test.cpp">
-      <Filter>Tests</Filter>
-    </ClCompile>
-    <ClCompile Include="Test_CircularBuffer.cpp">
-      <Filter>Tests</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Hornet_Firmware.ino" />
