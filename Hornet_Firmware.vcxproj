@@ -47,7 +47,7 @@
       <AdditionalIncludeDirectories>C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino;C:\Program Files (x86)\Arduino\hardware\arduino\avr\variants\mega;C:\Users\Nicholas\Documents\Project\Hornet_Firmware;C:\Users\Nicholas\Documents\Arduino\libraries\RPLidarDriver;C:\Users\Nicholas\Documents\Arduino\libraries\RPLidarDriver\utility;C:\Program Files (x86)\Arduino\libraries\Servo\src;C:\Program Files (x86)\Arduino\libraries\Servo\src\utility;C:\Program Files (x86)\Arduino\libraries;C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries;C:\Program Files (x86)\Visual Micro\Visual Micro for Arduino\Micro Platforms\default\debuggers;C:\Users\Nicholas\Documents\Arduino\libraries;C:\Program Files (x86)\Arduino\hardware\tools\avr/avr/include/;C:\Program Files (x86)\Arduino\hardware\tools\avr//avr/include/avr/;C:\Program Files (x86)\Arduino\hardware\tools\avr/lib\gcc\avr\4.8.1\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ForcedIncludeFiles>C:\Users\Nicholas\Documents\Project\Hornet_Firmware\Visual Micro\.Hornet_Firmware.vsarduino.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
       <IgnoreStandardIncludePath>true</IgnoreStandardIncludePath>
-      <PreprocessorDefinitions>__AVR_ATmega2560__;_VMDEBUG=1;F_CPU=16000000L;ARDUINO=165;ARDUINO_AVR_MEGA2560;ARDUINO_ARCH_AVR;__cplusplus;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>__AVR_ATmega2560__;F_CPU=16000000L;ARDUINO=165;ARDUINO_AVR_MEGA2560;ARDUINO_ARCH_AVR;__cplusplus;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -75,6 +75,7 @@
     <ClInclude Include="AP_InertialSensor_MPU6000.h">
       <FileType>CppHeader</FileType>
     </ClInclude>
+    <ClInclude Include="CircularBuffer.h" />
     <ClInclude Include="CircularBuffer_Manager.h" />
     <ClInclude Include="Coms.h" />
     <ClInclude Include="ComsDecoder.h" />
@@ -83,6 +84,7 @@
     <ClInclude Include="Drone.h" />
     <ClInclude Include="Error.h" />
     <ClInclude Include="HornetManager.h" />
+    <ClInclude Include="Hornet_Firmware_Test.h" />
     <ClInclude Include="Indicator.h">
       <FileType>CppCode</FileType>
     </ClInclude>
@@ -90,6 +92,7 @@
       <FileType>CppCode</FileType>
     </ClInclude>
     <ClInclude Include="Monitor.h" />
+    <ClInclude Include="MovingAverage.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Scheduler.h" />
     <ClInclude Include="SPI.h" />
@@ -111,6 +114,7 @@
     <ClCompile Include="Drone.cpp" />
     <ClCompile Include="Error.cpp" />
     <ClCompile Include="HornetManager.cpp" />
+    <ClCompile Include="Hornet_Firmware_Test.cpp" />
     <ClCompile Include="Indicator.cpp" />
     <ClCompile Include="Lidar.cpp" />
     <ClCompile Include="Monitor.cpp" />

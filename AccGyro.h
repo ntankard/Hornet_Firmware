@@ -2,6 +2,7 @@
 #include "HornetManager.h"
 #include "AP_InertialSensor_MPU6000.h"
 #include "Error.h"
+#include "CircularBuffer.h"
 
 class AccGyro
 {
@@ -14,6 +15,8 @@ public:
 
 private:
 	HornetManager* _hornetManager;
+	//CircularBuffer<int,5> _rollBuffer;
+
 #ifdef USE_ACC
 	AP_InertialSensor_MPU6000 _ins;
 #endif

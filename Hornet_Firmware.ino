@@ -1,3 +1,10 @@
+#define FOR_HARDWARE 1
+#define FOR_TEST 2
+
+#define BUILD_TYPE FOR_TEST
+
+#if BUILD_TYPE == FOR_HARDWARE
+
 // hardware libreys (do not remove)
 #include <Servo.h>
 #include <RPLidar.h>
@@ -106,7 +113,18 @@ void loop()
 
 }
 
+#else
 
+#include "Hornet_Firmware_Test.h"
+
+void setup()
+{
+	Hornet_Firmware_Test();
+}
+
+void run();
+
+#endif
 
 /*
 

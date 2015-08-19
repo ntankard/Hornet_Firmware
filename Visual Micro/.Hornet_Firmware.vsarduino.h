@@ -11,7 +11,6 @@
 #ifndef _VSARDUINO_H_
 #define _VSARDUINO_H_
 #define __AVR_ATmega2560__
-#define _VMDEBUG 1
 #define F_CPU 16000000L
 #define ARDUINO 165
 #define ARDUINO_AVR_MEGA2560
@@ -90,6 +89,7 @@ extern "C" void __cxa_pure_virtual() {;}
 #include <AccGyro.cpp>
 #include <AccGyro.h>
 #include <CONFIG.h>
+#include <CircularBuffer.h>
 #include <CircularBuffer_Manager.h>
 #include <Coms.cpp>
 #include <Coms.h>
@@ -103,12 +103,15 @@ extern "C" void __cxa_pure_virtual() {;}
 #include <Error.h>
 #include <HornetManager.cpp>
 #include <HornetManager.h>
+#include <Hornet_Firmware_Test.cpp>
+#include <Hornet_Firmware_Test.h>
 #include <Indicator.cpp>
 #include <Indicator.h>
 #include <Lidar.cpp>
 #include <Lidar.h>
 #include <Monitor.cpp>
 #include <Monitor.h>
+#include <MovingAverage.h>
 #include <SPI.cpp>
 #include <SPI.h>
 #include <Scheduler.cpp>

@@ -17,6 +17,9 @@
     <Filter Include="Lidar">
       <UniqueIdentifier>{686735f6-ffe3-4331-aad8-d615bad79c01}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Tests">
+      <UniqueIdentifier>{c8f78d0f-69f3-444b-8085-b2107ea0e54a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AccGyro.h">
@@ -68,6 +71,15 @@
     </ClInclude>
     <ClInclude Include="Drone.h" />
     <ClInclude Include="CONFIG.h" />
+    <ClInclude Include="CircularBuffer.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="MovingAverage.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Hornet_Firmware_Test.h">
+      <Filter>Tests</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SPI.cpp">
@@ -106,6 +118,9 @@
       <Filter>Utility</Filter>
     </ClCompile>
     <ClCompile Include="Drone.cpp" />
+    <ClCompile Include="Hornet_Firmware_Test.cpp">
+      <Filter>Tests</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Hornet_Firmware.ino" />
