@@ -8,6 +8,8 @@
 
 #define BUILD_TYPE FOR_HARDWARE
 
+#if BUILD_TYPE == FOR_HARDWARE
+
 // local components
 #include "HornetManager.h"
 #include "ComsDecoder.h"
@@ -21,8 +23,6 @@
 #include "Drone.h"
 
 #include "CONFIG.h"
-
-#if BUILD_TYPE == FOR_HARDWARE
 
 // core componenets
 HornetManager *manager;
@@ -42,15 +42,8 @@ Drone *drone;
 
 Scheduler *scheduler;
 
-Servo _frontLeft;
-Servo _frontRight;
-Servo _backLeft;
-Servo _backRight;
-
-
 void setup()
 {
-	Serial.begin(9600);				//@TODO remove
 	error = new Error();
 	manager = new HornetManager(error);
 
@@ -91,31 +84,30 @@ void setup()
 
 void loop()
 {
-	if (manager->run())
-	{
-
-	}
-	else
+	if (!manager->run())
 	{
 		delete manager;
 		delete error;
 		delete coms;
 		delete comsDecoder;
 		delete comsEncoder;
+
 		delete accGyro;
 		delete monitor;
 		delete indicator;
+		delete lidar;
+		delete drone;
+
 		delete scheduler;
 
 		setup();
 	}
-
-
 }
 
 #else
 
 #include "Test_CircularBuffer.h"
+#include "Test_LidarNavigation.h"
 
 void setup()
 {

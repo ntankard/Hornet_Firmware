@@ -1,5 +1,9 @@
+#pragma once
+
 #if BUILD_TYPE == FOR_TEST
 
+#include "Error.h"
+#include "CircularBuffer.h"
 
 test(CircularBuffer_Setup)
 {
@@ -31,26 +35,5 @@ test(CircularBuffer_Size)
 	assertEqual(_testBuffer.size(), 10);
 }
 
-/*
-#pragma once
-#include "Test.h"
-#include <Arduino.h>
-#include "CircularBuffer.h"
 
-
-class Test_CircularBuffer :public Test
-{
-public:
-
-
-	void setup();
-
-	String run();
-
-	void cleanUp();
-
-private:
-	CircularBuffer<int, 10> *_testBuffer;
-};
-*/
 #endif
