@@ -60,9 +60,14 @@ void HornetManager::ND_PitchRoll(float pitch, float roll)
 	_monitor->newPitchRoll(pitch, roll);
 }
 
-void HornetManager::ND_LidarData(float yaw, float distance, float pitch)
+void HornetManager::ND_LidarPoint(float angle, float distance)
 {
-	_monitor->newLidarData(yaw, distance, pitch);
+	_monitor->newLidarPoint(angle, distance);
+}
+
+void HornetManager::ND_LidarEOSweep(float pitch, float roll, float yaw)
+{
+	_monitor->newLidarEOSweep(pitch, roll, yaw);
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------

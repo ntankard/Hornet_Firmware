@@ -49,7 +49,7 @@ void Monitor::newPitchRoll(float pitch, float roll)
 	}
 }
 
-void Monitor::newLidarData(float yaw, float distance, float pitch)
+void Monitor::newLidarPoint(float angle, float distance)
 {
 	if (_isOn)
 	{
@@ -57,7 +57,15 @@ void Monitor::newLidarData(float yaw, float distance, float pitch)
 		if (_lidarDataCount >= _lidarDataRate)
 		{
 			_lidarDataCount = 0;
-			_comsEncoder->sendLidarData(yaw, distance, pitch);
+			_comsEncoder->sendLidarPoint(angle, distance);
 		}
+	}
+}
+
+void Monitor::newLidarEOSweep(float pitch, float roll, float yaw)
+{
+	if (_isOn)
+	{
+		_comsEncoder->sendLidarEOSweep(pitch, roll, yaw);
 	}
 }

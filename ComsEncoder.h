@@ -16,7 +16,9 @@ public:
 
 	void sendPitchRoll(float pitch, float roll);
 
-	void sendLidarData(float yaw, float distance, float pitch);
+	void sendLidarPoint(float angle, float distance);
+
+	void sendLidarEOSweep(float pitch, float roll, float yaw);
 
 private:
 	Coms *_coms;
@@ -32,7 +34,7 @@ private:
 	uint8_t _pitchRoll[10][9];
 	CircularBuffer_Manager<10> _pitchRoll_man;
 
-	uint8_t _lidarData[10][13];
+	uint8_t _lidarData[10][9];
 	CircularBuffer_Manager<10> _lidarData_man;
 };
 

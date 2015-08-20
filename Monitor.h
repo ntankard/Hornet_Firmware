@@ -62,7 +62,9 @@ public:
 
 	void newPitchRoll(float pitch, float roll);
 
-	void newLidarData(float yaw, float distance, float pitch);
+	void newLidarPoint(float angle, float distance);
+
+	void newLidarEOSweep(float pitch, float roll, float yaw);
 
 private:
 
