@@ -68,6 +68,10 @@ public:
 
 	void ND_LidarData(float yaw, float distance, float pitch);
 
+	void ND_LidarPoint(float angle, float distance);
+
+	void ND_LidarEOSweep(float pitch, float roll, float yaw);
+
 	bool run();
 
 	void M_Reset();

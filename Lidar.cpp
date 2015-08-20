@@ -40,8 +40,17 @@ void Lidar::run()
 		byte  quality = _lidar.getCurrentPoint().quality; //quality of the current measurement
 
 		//@TODO add notification
-
-		_hornetManager->ND_LidarData(angle, distance, 0); // pitch is 0 at the moment
+		if (startBit)
+		{
+			// Notify sweep complete
+			_hornetManager->ND_LidarPoint(angle, distance);
+			_hornetManager->ND_LidarEOSweep(0, 0, 0); //@TODO add data
+		}
+		else
+		{
+			// Notify normal point
+			_hornetManager->ND_LidarPoint(angle, distance);
+		}
 	}
 #endif
 }

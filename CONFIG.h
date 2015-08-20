@@ -14,7 +14,7 @@
 // uncoment all the features to use (unavalible features are not shown under certain boards)
 #if BOARD_TYPE == BOARD_TYPE_APM
 	#define USE_ACC
-	//#define USE_LIDAR
+	#define USE_LIDAR
 	#define USE_INDICATOR
 #endif
 #if BOARD_TYPE == BOARD_TYPE_MEGA
@@ -52,8 +52,9 @@
 
 #define C_COMS_CODE_ACCGYRO 'g'
 #define C_COMS_CODE_PITCH_ROLL 'p'
-#define C_COMS_CODE_LIDAR_DATA 'l'
-
+#define C_COMS_CODE_LIDAR_POINT 'l'
+#define C_COMS_CODE_LIDAR_EOS1 'e'
+#define C_COMS_CODE_LIDAR_EOS2 'f'
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // --------------------------------------------------- ERROR SETTINGS ---------------------------------------------------------
@@ -82,6 +83,7 @@
 #define C_PITCH_ROLL_WINDOW_AVE_WIDTH 10
 
 #define C_LOGGER_PITCH_ROLL_RATE 10
+
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // ---------------------------------------------------- LIDAR SETTINGS ---------------------------------------------------------

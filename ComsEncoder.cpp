@@ -36,7 +36,7 @@ void ComsEncoder::run()
 		if (!_lidarData_man.isEmpty())
 		{
 			int remove = _lidarData_man.remove();
-			_coms->send(_lidarData[remove], 13);
+			_coms->send(_lidarData[remove], 9);
 			return;
 		}
 
@@ -120,7 +120,8 @@ void ComsEncoder::sendPitchRoll(float pitch, float roll)
 		}
 	}
 
-void ComsEncoder::sendLidarData(float yaw, float distance, float pitch)
+
+void ComsEncoder::sendLidarPoint(float angle, float distance)
 {
 
 	if (_lidarData_man.isFull())
@@ -131,14 +132,14 @@ void ComsEncoder::sendLidarData(float yaw, float distance, float pitch)
 
 	int toAdd = _lidarData_man.add();
 
-	_lidarData[toAdd][0] = C_COMS_CODE_LIDAR_DATA;
+	_lidarData[toAdd][0] = C_COMS_CODE_LIDAR_POINT;
 
-	uint8_t *u_lidarYaw = reinterpret_cast<uint8_t *>(&yaw);
+	uint8_t *u_lidarAngle = reinterpret_cast<uint8_t *>(&angle);
 	int addCount = 1;
 
 	for (int j = 0; j < 4; j++)
 	{
-		_lidarData[toAdd][addCount] = u_lidarYaw[j];
+		_lidarData[toAdd][addCount] = u_lidarAngle [j];
 		addCount++;
 	}
 
@@ -149,11 +150,49 @@ void ComsEncoder::sendLidarData(float yaw, float distance, float pitch)
 		_lidarData[toAdd][addCount] = u_lidarDistance[j];
 		addCount++;
 	}
+}
+
+void ComsEncoder::sendLidarEOSweep(float pitch, float roll, float yaw)
+{
+
+	if (_lidarData_man.isFull())
+	{
+		//@TODO add size check
+		//@TODO notify of overflow
+
+		return;
+	}
+
+	int toAdd = _lidarData_man.add();
+
+	_lidarData[toAdd][0] = C_COMS_CODE_LIDAR_EOS1;
+
 	uint8_t *u_lidarPitch = reinterpret_cast<uint8_t *>(&pitch);
+	int addCount = 1;
 
 	for (int j = 0; j < 4; j++)
 	{
 		_lidarData[toAdd][addCount] = u_lidarPitch[j];
+		addCount++;
+	}
+
+	uint8_t *u_lidarRoll = reinterpret_cast<uint8_t *>(&roll);
+
+	for (int j = 0; j < 4; j++)
+	{
+		_lidarData[toAdd][addCount] = u_lidarRoll[j];
+		addCount++;
+	}
+
+	toAdd = _lidarData_man.add();
+	_lidarData[toAdd][0] = C_COMS_CODE_LIDAR_EOS2;
+
+	uint8_t *u_lidarYaw = reinterpret_cast<uint8_t *>(&yaw);
+	addCount = 1;
+
+	for (int j = 0; j < 4; j++)
+	{
+		_lidarData[toAdd][addCount] = u_lidarYaw[j];
 		addCount++;
 	}
 
