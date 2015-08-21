@@ -5,7 +5,7 @@
 #include "Error.h"
 #include "Point.h"
 
-test(Point_)
+test(Point_Setup)
 {
 	Error e;
 	Point point(100, 30);
