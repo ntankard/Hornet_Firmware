@@ -6,7 +6,7 @@
 #define FOR_HARDWARE 1
 #define FOR_TEST 2
 
-#define BUILD_TYPE FOR_HARDWARE
+#define BUILD_TYPE FOR_TEST
 
 #if BUILD_TYPE == FOR_HARDWARE
 

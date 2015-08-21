@@ -44,7 +44,7 @@ void AccGyro::run()
 
 }
 #else
-AccGyro::AccGyro(HornetManager* theManager){}
+AccGyro::AccGyro(HornetManager* theManager, Error* e){}
 
 void AccGyro::start(){}
 

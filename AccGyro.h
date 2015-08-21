@@ -17,13 +17,13 @@ public:
 private:
 	HornetManager* _hornetManager;
 	//CircularBuffer<int,5> _rollBuffer;
-	MovingAverage<float, C_PITCH_ROLL_WINDOW_AVE_WIDTH> _pitchBuffer;
-	MovingAverage<float, C_PITCH_ROLL_WINDOW_AVE_WIDTH> _rollBuffer;
-	Error* _e;
 
 
 #ifdef USE_ACC
 	AP_InertialSensor_MPU6000 _ins;
+	MovingAverage<float, C_PITCH_ROLL_WINDOW_AVE_WIDTH> _pitchBuffer;
+	MovingAverage<float, C_PITCH_ROLL_WINDOW_AVE_WIDTH> _rollBuffer;
+	Error* _e;
 #endif
 };
 

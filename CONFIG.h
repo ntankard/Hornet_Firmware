@@ -9,7 +9,7 @@
 #define BOARD_TYPE_MEGA 2
 
 // Pick wich board to use
-#define BOARD_TYPE BOARD_TYPE_APM
+#define BOARD_TYPE BOARD_TYPE_MEGA
 
 // uncoment all the features to use (unavalible features are not shown under certain boards)
 #if BOARD_TYPE == BOARD_TYPE_APM
