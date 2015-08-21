@@ -2,77 +2,136 @@
 #include "APM_2_5_PINS.h"
 
 //-----------------------------------------------------------------------------------------------------------------------------
-// ---------------------------------------------------- BOARD SETTINGS ---------------------------------------------------------
+// ------------------------------------------------------ BASE TYPES ----------------------------------------------------------
 // ----------------------------------------------------------------------------------------------------------------------------
 
 #define BOARD_TYPE_APM 1
 #define BOARD_TYPE_MEGA 2
-
-// Pick wich board to use
-#define BOARD_TYPE BOARD_TYPE_APM
-
-// uncoment all the features to use (unavalible features are not shown under certain boards)
-#if BOARD_TYPE == BOARD_TYPE_APM
-	#define USE_ACC
-	#define USE_LIDAR
-	#define USE_INDICATOR
-#endif
-#if BOARD_TYPE == BOARD_TYPE_MEGA
-	#define USE_LIDAR
-#endif
-
-//-----------------------------------------------------------------------------------------------------------------------------
-// ---------------------------------------------------- COMM SETTINGS ---------------------------------------------------------
-// ----------------------------------------------------------------------------------------------------------------------------
+#define BOARD_TYPE_DUO 3
+#define BOARD_TYPE_UNO 4
 
 #define COM_MODE_SERIAL 1
 #define COM_MODE_XBEE 2
 
-// pick wich com system to use
+#define ON 1
+#define OFF 2
+
+//-----------------------------------------------------------------------------------------------------------------------------
+// ----------------------------------------------------- BUILD CONFIG ---------------------------------------------------------
+// ----------------------------------------------------------------------------------------------------------------------------
+
+// Pick wich board to use
+#define BOARD_TYPE BOARD_TYPE_APM
+
+// Pick wich coms to use (XBEE not avalible for uno, will default to SERIAL)
 #define COM_MODE COM_MODE_SERIAL
+
+// Enable relevent systems (some will be automaticaly disabled for certain board)
+#define ENABLE_ACC			OFF
+#define ENABLE_LIDAR		OFF
+#define ENABLE_INDICATOR	OFF
+
+//-----------------------------------------------------------------------------------------------------------------------------
+// ---------------------------------------------------- BOARD FEATURES --------------------------------------------------------
+// ----------------------------------------------------------------------------------------------------------------------------
+
+#if BOARD_TYPE == BOARD_TYPE_UNO
+	//UNO overrride components that are not suported
+	#define ENABLE_ACC			OFF
+	#define ENABLE_LIDAR		OFF
+	#define ENABLE_INDICATOR	OFF
+	#define COM_MODE			COM_MODE_SERIAL
+#endif
+
+#if BOARD_TYPE == BOARD_TYPE_APM
+	#define ENABLE_LIDAR		OFF
+#endif
+
+#if BOARD_TYPE == BOARD_TYPE_MEGA
+	#define ENABLE_ACC			OFF
+	#define ENABLE_INDICATOR	OFF
+#endif
+
+#if BOARD_TYPE == BOARD_TYPE_DUO
+	#define ENABLE_ACC			OFF
+	#define ENABLE_LIDAR		OFF
+	#define ENABLE_INDICATOR	OFF
+#endif
+
+//-----------------------------------------------------------------------------------------------------------------------------
+// ------------------------------------------------------ COMPONENTS ----------------------------------------------------------
+// ----------------------------------------------------------------------------------------------------------------------------
+
+#if ENABLE_ACC == ON
+	#if BOARD_TYPE == BOARD_TYPE_APM
+		#define USE_MPU6000
+	#endif
+#endif
+
+//-----------------------------------------------------------------------------------------------------------------------------
+// ----------------------------------------------------- PIN SETTINGS ---------------------------------------------------------
+// ----------------------------------------------------------------------------------------------------------------------------
 
 #if COM_MODE == COM_MODE_XBEE
 	#define C_COMS_PORT Serial1
+#endif
+#if COM_MODE == COM_MODE_SERIAL
+	#define C_COMS_PORT Serial
+#endif
+
+#if ENABLE_LIDAR == ON
+	#if BOARD_TYPE == BOARD_TYPE_APM
+		#define C_LIDAR_MOTOCTL 3
+		#define C_LIDAR_SERIAL Serial2
+	#else
+		#define C_LIDAR_MOTOCTL 3
+		#define C_LIDAR_SERIAL Serial2
+	#endif
+#endif
+
+
+//-----------------------------------------------------------------------------------------------------------------------------
+// ------------------------------------------------------ COMM CODES ----------------------------------------------------------
+// ----------------------------------------------------------------------------------------------------------------------------
+
+#define C_COMS_CODE_CONNECT_REQUEST 'a'
+#define C_COMS_CODE_CONNECT_CONFIRM 'b'
+#define C_COMS_CODE_RESET			'r'
+#define C_COMS_CODE_THROTTLE		't'
+#define C_COMS_CODE_ARM_DISARM		'd'
+#define C_COMS_CODE_ACCGYRO			'g'
+#define C_COMS_CODE_PITCH_ROLL		'p'
+#define C_COMS_CODE_LIDAR_POINT		'l'
+#define C_COMS_CODE_LIDAR_EOS1		'e'
+#define C_COMS_CODE_LIDAR_EOS2		'f'
+
+//-----------------------------------------------------------------------------------------------------------------------------
+// ----------------------------------------------------- ERROR CODES ----------------------------------------------------------
+// ----------------------------------------------------------------------------------------------------------------------------
+
+#define E_ILLEGAL_ACCESS 1
+#define E_STATE_ERROR 2
+
+//-----------------------------------------------------------------------------------------------------------------------------
+// --------------------------------------------------- GENERAL SETTINGS --------------------------------------------------------
+// ----------------------------------------------------------------------------------------------------------------------------
+
+
+#define C_ERROR_BUFFER 100
+#define C_LOGGER_ACC_RATE 10
+#define C_CONNECT_PULSE_TIME 1000
+
+#if COM_MODE == COM_MODE_XBEE
 	#define C_COMS_BAUD_RATE 9600
 	#define C_COMMS_BSTATION_ADDRESS 0x0000
 	#define C_COMMS_MAX_RETRY 3
 #endif 
 
 #if COM_MODE == COM_MODE_SERIAL
-	#define C_COMS_PORT Serial
 	#define C_COMS_BAUD_RATE 9600
 	#define C_COMS_BUFFER 100
 #endif
 
-#define C_COMS_CODE_CONNECT_REQUEST 'a'
-#define C_COMS_CODE_CONNECT_CONFIRM 'b'
-#define C_COMS_CODE_RESET 'r'
-#define C_COMS_CODE_THROTTLE 't'
-#define C_COMS_CODE_ARM_DISARM 'd'
-
-#define C_COMS_CODE_ACCGYRO 'g'
-#define C_COMS_CODE_PITCH_ROLL 'p'
-#define C_COMS_CODE_LIDAR_POINT 'l'
-#define C_COMS_CODE_LIDAR_EOS1 'e'
-#define C_COMS_CODE_LIDAR_EOS2 'f'
-
-//-----------------------------------------------------------------------------------------------------------------------------
-// --------------------------------------------------- ERROR SETTINGS ---------------------------------------------------------
-// ----------------------------------------------------------------------------------------------------------------------------
-
-#define C_ERROR_BUFFER 100
-
-#define E_ILLEGAL_ACCESS 1
-#define E_STATE_ERROR 2
-
-
-//-----------------------------------------------------------------------------------------------------------------------------
-// --------------------------------------------------- GENERAL SETTINGS --------------------------------------------------------
-// ----------------------------------------------------------------------------------------------------------------------------
-
-#define C_LOGGER_ACC_RATE 10
-
-#define C_CONNECT_PULSE_TIME 1000
 
 #define C_STATE_INDICATE_CONNECT Indicator::MAGENTA,1,500
 #define C_STATE_INDICATE_IDLE Indicator::PURPLE,2,100
@@ -89,12 +148,6 @@
 // ---------------------------------------------------- LIDAR SETTINGS ---------------------------------------------------------
 // ----------------------------------------------------------------------------------------------------------------------------
 
-#if BOARD_TYPE == BOARD_TYPE_APM
-#define C_LIDAR_MOTOCTL 3
-#define C_LIDAR_SERIAL Serial2
-#endif
-
-#if BOARD_TYPE == BOARD_TYPE_MEGA
-#define C_LIDAR_MOTOCTL 3
-#define C_LIDAR_SERIAL Serial2
-#endif
+//-----------------------------------------------------------------------------------------------------------------------------
+// ---------------------------------------------------- COMM SETTINGS ---------------------------------------------------------
+// ----------------------------------------------------------------------------------------------------------------------------

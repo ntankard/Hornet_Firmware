@@ -1,9 +1,13 @@
 #pragma once
 #include "HornetManager.h"
-#include "AP_InertialSensor_MPU6000.h"
 #include "Error.h"
+#include "CONFIG.h"
+
+#if ENABLE_ACC == ON
+
 #include "CircularBuffer.h"
 #include "MovingAverage.h"
+#include "AP_InertialSensor_MPU6000.h"
 
 class AccGyro
 {
@@ -22,8 +26,18 @@ private:
 	Error* _e;
 
 
-#ifdef USE_ACC
+
 	AP_InertialSensor_MPU6000 _ins;
-#endif
+
+};
+#else
+
+class AccGyro
+{
+public:
+	AccGyro(HornetManager* theManager, Error* e){}
+	void start(){}
+	void run(){}
 };
 
+#endif

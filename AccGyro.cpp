@@ -1,9 +1,9 @@
 #include "AccGyro.h"
-#include "CONFIG.h"
-#include "SPI.h"
-#include "Arduino.h"
 
 #ifdef USE_ACC
+
+#include "SPI.h"
+#include "Arduino.h"
 
 AccGyro::AccGyro(HornetManager* theManager, Error* e) :_ins(C_ACC_CS), _pitchBuffer(e), _rollBuffer(e)
 {
@@ -43,12 +43,6 @@ void AccGyro::run()
 	}
 
 }
-#else
-AccGyro::AccGyro(HornetManager* theManager){}
-
-void AccGyro::start(){}
-
-void AccGyro::run(){}
 
 #endif
 
