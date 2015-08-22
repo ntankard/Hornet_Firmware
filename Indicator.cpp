@@ -3,7 +3,7 @@
 #include "APM_2_5_PINS.h"
 #include "CONFIG.h"
 
-#ifdef USE_INDICATOR
+#if ENABLE_INDICATOR == ENABLED
 
 Indicator::Indicator()
 {
@@ -158,15 +158,6 @@ void Indicator::setBlinkRate(Color c, int r)
 {
 	_interval[c] = r;
 }*/
-#else
 
-Indicator::Indicator(){}
-void Indicator::run(){}
-void Indicator::on(){}
-void Indicator::off(){}
-void Indicator::setDisplay(Color c, int blinks, unsigned long rate){}
-void Indicator::setOn(Color c, bool isOn){}
-void Indicator::setBlinks(Color c, int b){}
-void Indicator::setBlinkRate(Color c, int r){}
 
 #endif

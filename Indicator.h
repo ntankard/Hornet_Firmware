@@ -2,6 +2,8 @@
 
 #include "arduino.h"
 
+#if ENABLE_INDICATOR == ENABLED
+
 class Indicator {
 
 public:
@@ -66,5 +68,21 @@ private:
 	const int ON = LOW;
 	const int OFF = HIGH;
 };
+
+#else
+class Indicator {
+
+public:
+	enum Color{ BLUE, YELLOW, RED, PURPLE, ORANGE, MAGENTA };
+	Indicator(){}
+	void run(){}
+	void on(){}
+	void off(){}
+	void setDisplay(Color c, int blinks, unsigned long rate){}
+	void setOn(Color c, bool isOn){}
+	void setBlinks(Color c, int b){}
+	void setBlinkRate(Color c, int r){}
+};
+#endif
 
 

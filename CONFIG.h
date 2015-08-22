@@ -13,23 +13,23 @@
 #define COM_MODE_SERIAL 1
 #define COM_MODE_XBEE 2
 
-#define ON 1
-#define OFF 2
+#define ENABLED 1
+#define DISABLED 2
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // ----------------------------------------------------- BUILD CONFIG ---------------------------------------------------------
 // ----------------------------------------------------------------------------------------------------------------------------
 
 // Pick wich board to use
-#define BOARD_TYPE BOARD_TYPE_APM
+#define BOARD_TYPE BOARD_TYPE_UNO
 
 // Pick wich coms to use (XBEE not avalible for uno, will default to SERIAL)
 #define COM_MODE COM_MODE_SERIAL
 
 // Enable relevent systems (some will be automaticaly disabled for certain board)
-#define ENABLE_ACC			OFF
-#define ENABLE_LIDAR		OFF
-#define ENABLE_INDICATOR	OFF
+#define ENABLE_ACC			DISABLED
+#define ENABLE_LIDAR		DISABLED
+#define ENABLE_INDICATOR	DISABLED
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // ---------------------------------------------------- BOARD FEATURES --------------------------------------------------------
@@ -37,32 +37,32 @@
 
 #if BOARD_TYPE == BOARD_TYPE_UNO
 	//UNO overrride components that are not suported
-	#define ENABLE_ACC			OFF
-	#define ENABLE_LIDAR		OFF
-	#define ENABLE_INDICATOR	OFF
+	#define ENABLE_ACC			DISABLED
+	#define ENABLE_LIDAR		DISABLED
+	#define ENABLE_INDICATOR	DISABLED
 	#define COM_MODE			COM_MODE_SERIAL
 #endif
 
 #if BOARD_TYPE == BOARD_TYPE_APM
-	#define ENABLE_LIDAR		OFF
+	#define ENABLE_LIDAR		DISABLED
 #endif
 
 #if BOARD_TYPE == BOARD_TYPE_MEGA
-	#define ENABLE_ACC			OFF
-	#define ENABLE_INDICATOR	OFF
+	#define ENABLE_ACC			DISABLED
+	#define ENABLE_INDICATOR	DISABLED
 #endif
 
 #if BOARD_TYPE == BOARD_TYPE_DUO
-	#define ENABLE_ACC			OFF
-	#define ENABLE_LIDAR		OFF
-	#define ENABLE_INDICATOR	OFF
+	#define ENABLE_ACC			DISABLED
+	#define ENABLE_LIDAR		DISABLED
+	#define ENABLE_INDICATOR	DISABLED
 #endif
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // ------------------------------------------------------ COMPONENTS ----------------------------------------------------------
 // ----------------------------------------------------------------------------------------------------------------------------
 
-#if ENABLE_ACC == ON
+#if ENABLE_ACC == DISABLED
 	#if BOARD_TYPE == BOARD_TYPE_APM
 		#define USE_MPU6000
 	#endif
@@ -79,7 +79,7 @@
 	#define C_COMS_PORT Serial
 #endif
 
-#if ENABLE_LIDAR == ON
+#if ENABLE_LIDAR == DISABLED
 	#if BOARD_TYPE == BOARD_TYPE_APM
 		#define C_LIDAR_MOTOCTL 3
 		#define C_LIDAR_SERIAL Serial2

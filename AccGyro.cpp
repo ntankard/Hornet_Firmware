@@ -1,6 +1,6 @@
 #include "AccGyro.h"
 
-#ifdef USE_ACC
+#if ENABLE_ACC == ENABLED
 
 #include "SPI.h"
 #include "Arduino.h"

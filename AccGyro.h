@@ -3,7 +3,7 @@
 #include "Error.h"
 #include "CONFIG.h"
 
-#if ENABLE_ACC == ON
+#if ENABLE_ACC == ENABLED
 
 #include "CircularBuffer.h"
 #include "MovingAverage.h"
