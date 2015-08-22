@@ -5,7 +5,6 @@
 #include "DoublyLinkedNode.h"
 #include "DoublyLinkedNodeIterator.h"
 #include "Point.h"
-using namespace std;
 
 test(DoublyLinkedNodeIterator_Setup)
 {
