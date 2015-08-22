@@ -7,7 +7,9 @@
 
 test(DoublyLinkedNodeIterator_Setup)
 {
-	//test with ints
+	//-----------------------------------------------------------------------------------------------------------------------------
+	// ----------------------------------------------------- TEST INTS ------------------------------------------------------------
+	// ----------------------------------------------------------------------------------------------------------------------------
 	typedef DoublyLinkedNode<int>::Node IntNode;
 
 	int p1 = 1;
@@ -59,5 +61,36 @@ test(DoublyLinkedNodeIterator_Setup)
 
 	//Are you at the second node?
 	assertEqual(*iter, 2);
+
+
+
+
+	//-----------------------------------------------------------------------------------------------------------------------------
+	// ----------------------------------------------------- TEST POINTS ----------------------------------------------------------
+	// ----------------------------------------------------------------------------------------------------------------------------
+	/*typedef DoublyLinkedNode<Point>::Node PointNode;
+
+	Point p1 = Point(1, 100);
+	Point p2 = Point(2, 200);
+	Point p3 = Point(3, 300);
+	Point p4 = Point(4, 400);
+	Point p5 = Point(5, 500);
+	Point p6 = Point(6, 600);
+
+	PointNode n1(p1);
+	PointNode n2(p2);
+	PointNode n3(p3);
+	PointNode n4(p4);
+	PointNode n5(p5);
+	PointNode n6(p6);
+
+	n1.insertAfter(n6);
+	n1.insertAfter(n5);
+	n1.insertAfter(n4);
+	n1.insertAfter(n3);
+	n1.insertAfter(n2);
+
+	DoublyLinkedNodeIterator<Point> iter(n1);*/
+
 }
 #endif
