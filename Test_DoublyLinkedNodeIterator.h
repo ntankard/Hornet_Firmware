@@ -57,8 +57,8 @@ test(DoublyLinkedNodeIterator_Setup)
 
 	}
 	//assert that it's at right end
-	assertEquals(*iter.getAngle(), 6);
-	assertEquals(*iter.getDistance(), 600);
+	assertEqual(*iter.getAngle(), 6);
+	assertEqual(*iter.getDistance(), 600);
 
 
 	//Backward Iteration
@@ -67,8 +67,8 @@ test(DoublyLinkedNodeIterator_Setup)
 
 	}
 	//assert that it's at left end
-	assertEquals(*iter.getAngle(), 1);
-	assertEquals(*iter.getDistance(), 100);
+	assertEqual(*iter.getAngle(), 1);
+	assertEqual(*iter.getDistance(), 100);
 
 
 	//Second Node
@@ -77,8 +77,8 @@ test(DoublyLinkedNodeIterator_Setup)
 		iter++;
 	}
 	//assert that it's at second node
-	assertEquals(*iter.getAngle(), 2);
-	assertEquals(*iter.getDistance(), 200);
+	assertEqual(*iter.getAngle(), 2);
+	assertEqual(*iter.getDistance(), 200);
 	*/
 }
 #endif
