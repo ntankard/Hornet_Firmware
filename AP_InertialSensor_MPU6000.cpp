@@ -5,7 +5,7 @@
 
 #ifdef USE_MPU6000
 
-#include "SPI.h"
+#include <SPI.h>
 #if defined(ARDUINO) && ARDUINO >= 100
 	#include "Arduino.h"
 #else

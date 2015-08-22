@@ -1,4 +1,5 @@
 // hardware libreys (do not remove)
+#include <SPI.h>
 #include <Servo.h>
 #include <RPLidar.h>
 #include <ArduinoUnit.h>
