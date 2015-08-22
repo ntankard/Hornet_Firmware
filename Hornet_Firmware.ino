@@ -22,6 +22,7 @@
 #include "Scheduler.h"
 #include "Lidar.h"
 #include "Drone.h"
+#include "SPIManager.h"
 
 #include "CONFIG.h"
 
@@ -33,6 +34,8 @@ Error *error;
 Coms *coms;
 ComsDecoder *comsDecoder;
 ComsEncoder *comsEncoder;
+
+SPIManager *spiManager;
 
 // periferal systerms
 AccGyro *accGyro;
@@ -51,10 +54,11 @@ void setup()
 	// construct the coms
 	comsDecoder = new ComsDecoder(manager);
 	coms = new Coms(comsDecoder);
-
 	comsEncoder = new ComsEncoder(coms, error);
 	manager->attachComs(coms);
 	manager->attachComsEncoder(comsEncoder);
+
+	spiManager = new SPIManager();
 
 	// construct thew accselerator and gyro
 	accGyro = new AccGyro(manager, error);
@@ -92,6 +96,7 @@ void loop()
 		delete coms;
 		delete comsDecoder;
 		delete comsEncoder;
+		delete spiManager;
 
 		delete accGyro;
 		delete monitor;

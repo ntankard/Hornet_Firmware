@@ -8,6 +8,7 @@
 #include "CircularBuffer.h"
 #include "MovingAverage.h"
 #include "AP_InertialSensor_MPU6000.h"
+#include "AP_InertialSensor_MPU6050.h"
 
 class AccGyro
 {
@@ -26,8 +27,13 @@ private:
 	Error* _e;
 
 
-
+#ifdef USE_MPU6000
 	AP_InertialSensor_MPU6000 _ins;
+#endif
+
+#ifdef USE_MPU6050
+	AP_InertialSensor_MPU6050 _ins;
+#endif
 
 };
 #else

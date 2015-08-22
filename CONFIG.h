@@ -21,15 +21,15 @@
 // ----------------------------------------------------------------------------------------------------------------------------
 
 // Pick wich board to use
-#define BOARD_TYPE BOARD_TYPE_APM
+#define BOARD_TYPE BOARD_TYPE_UNO
 
 // Pick wich coms to use (XBEE not avalible for uno, will default to SERIAL)
 #define COM_MODE COM_MODE_SERIAL
 
 // Enable relevent systems (some will be automaticaly disabled for certain board)
-#define ENABLE_ACC			DISABLED
-#define ENABLE_LIDAR		DISABLED
-#define ENABLE_INDICATOR	DISABLED
+#define ENABLE_ACC			ENABLED
+#define ENABLE_LIDAR		ENABLED
+#define ENABLE_INDICATOR	ENABLED
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // ---------------------------------------------------- BOARD FEATURES --------------------------------------------------------
@@ -37,7 +37,6 @@
 
 #if BOARD_TYPE == BOARD_TYPE_UNO
 	//UNO overrride components that are not suported
-	#define ENABLE_ACC			DISABLED
 	#define ENABLE_LIDAR		DISABLED
 	#define ENABLE_INDICATOR	DISABLED
 	#define COM_MODE			COM_MODE_SERIAL
@@ -48,12 +47,10 @@
 #endif
 
 #if BOARD_TYPE == BOARD_TYPE_MEGA
-	#define ENABLE_ACC			DISABLED
 	#define ENABLE_INDICATOR	DISABLED
 #endif
 
 #if BOARD_TYPE == BOARD_TYPE_DUO
-	#define ENABLE_ACC			DISABLED
 	#define ENABLE_LIDAR		DISABLED
 	#define ENABLE_INDICATOR	DISABLED
 #endif
@@ -62,9 +59,11 @@
 // ------------------------------------------------------ COMPONENTS ----------------------------------------------------------
 // ----------------------------------------------------------------------------------------------------------------------------
 
-#if ENABLE_ACC == DISABLED
+#if ENABLE_ACC == ENABLED
 	#if BOARD_TYPE == BOARD_TYPE_APM
 		#define USE_MPU6000
+	#else
+		#define USE_MPU6050
 	#endif
 #endif
 
