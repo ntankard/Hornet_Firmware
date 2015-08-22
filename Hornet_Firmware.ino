@@ -108,6 +108,7 @@ void loop()
 
 #include "Test_CircularBuffer.h"
 #include "Test_LidarNavigation.h"
+#include "Test_DoublyLinkedNodeIterator.h"
 
 void setup()
 {

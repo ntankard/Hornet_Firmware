@@ -5,7 +5,6 @@
 #include "DoublyLinkedNode.h"
 #include "DoublyLinkedNodeIterator.h"
 #include "Point.h"
-#include <iostream>
 using namespace std;
 
 test(DoublyLinkedNodeIterator_Setup)
@@ -30,36 +29,35 @@ test(DoublyLinkedNodeIterator_Setup)
 	DoublyLinkedNodeIterator<Point> iter(n1);
 
 	iter--;
-
-
-	cout << "Forward iteration I:" << endl;
+	/**
+	//Forward Iteration
 	for (iter++; iter != iter.rightEnd(); iter++)
 	{
-		cout << *iter << endl;
+
 	}
 	//assert that it's at right end
-	assertEquals(*iter->getAngle(), 6)
-	assertEquals(*iter->getDistance(), 600)
+	assertEquals(*iter.getAngle(), 6);
+	assertEquals(*iter.getDistance(), 600);
 
 
-	cout << "Backward iteration I:" << endl;
+	//Backward Iteration
 	for (iter--; iter != iter.leftEnd(); iter--)
 	{
-		cout << *iter << endl;
+
 	}
 	//assert that it's at left end
-	assertEquals(*iter->getAngle(), 1)
-	assertEquals(*iter->getDistance(), 100)
+	assertEquals(*iter.getAngle(), 1);
+	assertEquals(*iter.getDistance(), 100);
 
 
-	cout << "Get Values of second node:" << endl;
+	//Second Node
 	if (iter != iter.rightEnd())
 	{
-		iter++; //move one space left
+		iter++;
 	}
 	//assert that it's at second node
-	assertEquals(*iter->getAngle(), 2)
-	assertEquals(*iter->getDistance(), 200)
-
+	assertEquals(*iter.getAngle(), 2);
+	assertEquals(*iter.getDistance(), 200);
+	*/
 }
 #endif
