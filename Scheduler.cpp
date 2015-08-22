@@ -77,7 +77,7 @@ void Scheduler::run()
 		_lidarRunCount++;
 		if (_lidarRunCount >= _lidarPriority)
 		{
-			_lidar->run();
+			//_lidar->run();
 			_lidarRunCount = 0;
 		}
 	}

@@ -3,6 +3,8 @@
 
 #include "AP_InertialSensor_MPU6000.h"
 
+#ifdef USE_MPU6000
+
 #include "SPI.h"
 #if defined(ARDUINO) && ARDUINO >= 100
 	#include "Arduino.h"
@@ -327,3 +329,5 @@ float AP_InertialSensor_MPU6000::_temp_to_celsius ( uint16_t regval )
     /* TODO */
     return 20.0;
 }
+
+#endif

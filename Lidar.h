@@ -3,6 +3,8 @@
 #include "Arduino.h"
 #include <RPLidar.h>
 
+#if ENABLE_LIDAR == ENABLED
+
 class Lidar
 {
 public:
@@ -15,3 +17,15 @@ private:
 	RPLidar _lidar;
 
 };
+
+#else
+
+class Lidar
+{
+public:
+	Lidar(HornetManager* theManager){}
+	void start(){}
+	void run(){}
+};
+
+#endif

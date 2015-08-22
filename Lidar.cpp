@@ -1,6 +1,8 @@
 #include "Lidar.h"
 #include "CONFIG.h"
 
+#if ENABLE_LIDAR == ENABLED
+
 Lidar::Lidar(HornetManager* theManager)
 {
 	_hornetManager = theManager;
@@ -8,7 +10,6 @@ Lidar::Lidar(HornetManager* theManager)
 
 void Lidar::start()
 {
-#ifdef USE_LIDAR
 	_lidar.begin(C_LIDAR_SERIAL);
 	pinMode(C_LIDAR_MOTOCTL, OUTPUT);
 
@@ -27,12 +28,10 @@ void Lidar::start()
 	{
 		//@TODO add throw here
 	}
-#endif
 }
 
 void Lidar::run()
 {
-#ifdef USE_LIDAR
 	if (IS_OK(_lidar.waitPoint())) {
 		float distance = _lidar.getCurrentPoint().distance; //distance value in mm unit
 		float angle = _lidar.getCurrentPoint().angle; //angle value in degree
@@ -52,5 +51,7 @@ void Lidar::run()
 			_hornetManager->ND_LidarPoint(angle, distance);
 		}
 	}
-#endif
+
 }
+
+#endif

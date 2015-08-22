@@ -1,7 +1,7 @@
-/// -*- tab-width: 4; Mode: C++; c-basic-offset: 4; indent-tabs-mode: nil -*-
+#pragma once
+#include "CONFIG.h"
 
-#ifndef __AP_INERTIAL_SENSOR_MPU6000_H__
-#define __AP_INERTIAL_SENSOR_MPU6000_H__
+#ifdef USE_MPU6000
 
 #include <string.h>
 #include <stdint.h>
@@ -72,4 +72,4 @@ class AP_InertialSensor_MPU6000 //: public AP_InertialSensor
   unsigned _initialised:1;
 };
 
-#endif // __AP_INERTIAL_SENSOR_MPU6000_H__
+#endif
