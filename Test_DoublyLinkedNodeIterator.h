@@ -2,9 +2,8 @@
 
 #if BUILD_TYPE == FOR_TEST
 
-#include "DoublyLinkedNode.h"
-#include "DoublyLinkedNodeIterator.h"
 #include "Point.h"
+#include "DoublyLinkedNodeIterator.h"
 
 test(DoublyLinkedNodeIterator_Setup)
 {
@@ -18,7 +17,6 @@ test(DoublyLinkedNodeIterator_Setup)
 	int p5 = 5;
 	int p6 = 6;
 
-
 	IntNode n1(p1);
 	IntNode n2(p2);
 	IntNode n3(p3);
@@ -26,59 +24,40 @@ test(DoublyLinkedNodeIterator_Setup)
 	IntNode n5(p5);
 	IntNode n6(p6);
 
+	n1.insertAfter(n6);
+	n1.insertAfter(n5);
+	n1.insertAfter(n4);
+	n1.insertAfter(n3);
+	n1.insertAfter(n2);
+
 	DoublyLinkedNodeIterator<int> iter(n1);
 
 	iter--;
-	/**
-	typedef DoublyLinkedNode<Point>::Node PointNode;
 
-	Point p1 = Point(1, 100);
-	Point p2 = Point(2, 200);
-	Point p3 = Point(3, 300);
-	Point p4 = Point(4, 400);
-	Point p5 = Point(5, 500);
-	Point p6 = Point(6, 600);
-
-
-	PointNode n1(p1);
-	PointNode n2(p2);
-	PointNode n3(p3);
-	PointNode n4(p4);
-	PointNode n5(p5);
-	PointNode n6(p6);
-
-	DoublyLinkedNodeIterator<Point> iter(n1);
-
-	iter--;
-	
-	//Forward Iteration
 	for (iter++; iter != iter.rightEnd(); iter++)
 	{
 
 	}
-	//assert that it's at right end
-	assertEqual(*iter.getAngle(), 6);
-	assertEqual(*iter.getDistance(), 600);
 
+	//Are you at the right side?
+	iter--; //we minus one to get on the value because we were on END NODE
+	assertEqual(*iter, 6);
 
-	//Backward Iteration
 	for (iter--; iter != iter.leftEnd(); iter--)
 	{
 
 	}
-	//assert that it's at left end
-	assertEqual(*iter.getAngle(), 1);
-	assertEqual(*iter.getDistance(), 100);
 
+	//Are you at the left side?
+	iter++; //we add one to get on the value because we were on START NODE
+	assertEqual(*iter, 1);
 
-	//Second Node
 	if (iter != iter.rightEnd())
 	{
-		iter++;
+		iter++; //go to the second node
 	}
-	//assert that it's at second node
-	assertEqual(*iter.getAngle(), 2);
-	assertEqual(*iter.getDistance(), 200);
-	*/
+
+	//Are you at the second node?
+	assertEqual(*iter, 2);
 }
 #endif
