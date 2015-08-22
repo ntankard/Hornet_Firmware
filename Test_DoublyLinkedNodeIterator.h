@@ -9,6 +9,28 @@ using namespace std;
 
 test(DoublyLinkedNodeIterator_Setup)
 {
+	//test with ints
+	typedef DoublyLinkedNode<int>::Node IntNode;
+
+	int p1 = 1;
+	int p2 = 2;
+	int p3 = 3;
+	int p4 = 4;
+	int p5 = 5;
+	int p6 = 6;
+
+
+	IntNode n1(p1);
+	IntNode n2(p2);
+	IntNode n3(p3);
+	IntNode n4(p4);
+	IntNode n5(p5);
+	IntNode n6(p6);
+
+	DoublyLinkedNodeIterator<int> iter(n1);
+
+	iter--;
+	/**
 	typedef DoublyLinkedNode<Point>::Node PointNode;
 
 	Point p1 = Point(1, 100);
@@ -29,7 +51,7 @@ test(DoublyLinkedNodeIterator_Setup)
 	DoublyLinkedNodeIterator<Point> iter(n1);
 
 	iter--;
-	/**
+	
 	//Forward Iteration
 	for (iter++; iter != iter.rightEnd(); iter++)
 	{

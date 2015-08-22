@@ -78,4 +78,5 @@ public:
 };
 
 template<class DataType>
+
 DoublyLinkedNode<DataType> DoublyLinkedNode<DataType>::NIL;
