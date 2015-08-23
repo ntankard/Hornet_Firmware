@@ -276,7 +276,6 @@ test(DoublyLinkedNodeIterator_PointsPointer)
 	//lets delete point objects and remove nodes for 2,3,4,5
 
 	iter++; //go to second node
-	//lets keep a reference to the object so we can check if it's been deleted
 	delete *iter;
 	iter.getNode()->dropNode();
 	iter++; //go to third node

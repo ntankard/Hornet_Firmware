@@ -18,6 +18,10 @@ private:
 
 	HornetManager *_hornetManager;
 	Error *_e;
+
+	typedef DoublyLinkedNode<Point*>::Node PointNode;
+	DoublyLinkedNodeIterator<Point*> *iter = NULL;
+
 };
 
 
