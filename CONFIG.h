@@ -21,7 +21,7 @@
 // ----------------------------------------------------------------------------------------------------------------------------
 
 // Pick wich board to use
-#define BOARD_TYPE BOARD_TYPE_UNO
+#define BOARD_TYPE BOARD_TYPE_APM
 
 // Pick wich coms to use (XBEE not avalible for uno, will default to SERIAL)
 #define COM_MODE COM_MODE_SERIAL
@@ -110,6 +110,7 @@
 
 #define E_ILLEGAL_ACCESS 1
 #define E_STATE_ERROR 2
+#define E_BUS_FAIL 3
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // --------------------------------------------------- GENERAL SETTINGS --------------------------------------------------------
