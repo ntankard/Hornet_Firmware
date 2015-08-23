@@ -1,5 +1,3 @@
-#pragma once
-
 #include "DoublyLinkedNode.h"
 
 template<class DataType>
