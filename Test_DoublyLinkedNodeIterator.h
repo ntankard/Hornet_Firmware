@@ -63,6 +63,39 @@ test(DoublyLinkedNodeIterator_Ints)
 	assertEqual(*iter, 2);
 }
 
+test(DoublyLinkedNodeIterator_size)
+{
+	//-----------------------------------------------------------------------------------------------------------------------------
+	// ----------------------------------------------------- TEST SIZE ------------------------------------------------------------
+	// ----------------------------------------------------------------------------------------------------------------------------
+	typedef DoublyLinkedNode<int>::Node IntNode;
+
+	int p1 = 1;
+	int p2 = 2;
+	int p3 = 3;
+	int p4 = 4;
+	int p5 = 5;
+	int p6 = 6;
+
+	IntNode n1(p1);
+	IntNode n2(p2);
+	IntNode n3(p3);
+	IntNode n4(p4);
+	IntNode n5(p5);
+	IntNode n6(p6);
+
+	n1.insertAfter(n6);
+	n1.insertAfter(n5);
+	n1.insertAfter(n4);
+	n1.insertAfter(n3);
+	n1.insertAfter(n2);
+
+	DoublyLinkedNodeIterator<int> iter(n1);
+
+	assertEqual(iter.size(), 6);
+
+}
+
 test(DoublyLinkedNodeIterator_Points)
 {
 
