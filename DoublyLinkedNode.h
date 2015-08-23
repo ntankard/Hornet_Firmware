@@ -49,6 +49,7 @@ public:
 		fPrevious =  &aNode;
 	}
 
+	//CANNOT DROP FIRST AND LAST NODES THAT ARE LINKED TO START AND FINISH
 	void dropNode()
 	{
 		if (fPrevious != &NIL)
@@ -67,11 +68,11 @@ public:
 		return *fValue;
 	}
 
-	const Node& getNext() const
+	Node& getNext() const
 	{
 		return *fNext;
 	}
-	const Node& getPrevious() const
+	Node& getPrevious() const
 	{
 		return *fPrevious;
 	}

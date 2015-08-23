@@ -2,6 +2,8 @@
 
 #include "HornetManager.h"
 #include "Error.h"
+#include "DoublyLinkedNodeIterator.h"
+#include "Point.h"
 
 class LidarNavigation
 {
@@ -16,8 +18,6 @@ private:
 
 	HornetManager *_hornetManager;
 	Error *_e;
-	
-
 };
 
 

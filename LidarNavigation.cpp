@@ -10,6 +10,8 @@ LidarNavigation::LidarNavigation(HornetManager *theHornetManager, Error *theErro
 void LidarNavigation::newLidarPoint(float angle, float distance)
 {
 	// feature recognition here
+	Point* point = new Point(angle, distance);
+
 }
 
 void LidarNavigation::EOSweep(float pitch, float roll, float yaw)

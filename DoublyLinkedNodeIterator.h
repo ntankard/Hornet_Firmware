@@ -10,20 +10,20 @@ private:
 
 	typedef DoublyLinkedNode<DataType> Node;
 	
-	const Node* fLeftmost;
-	const Node* fRightmost;
-	const Node* fCurrent;
+	Node* fLeftmost;
+	Node* fRightmost;
+	Node* fCurrent;
 public:
 	typedef DoublyLinkedNodeIterator<DataType> Iterator;
 
-	DoublyLinkedNodeIterator(const Node& aList)
+	DoublyLinkedNodeIterator(Node& aList)
 	{
-		for (const Node* lNode = &aList; lNode != &Node::NIL; lNode = &lNode->getNext())
+		for (Node* lNode = &aList; lNode != &Node::NIL; lNode = &lNode->getNext())
 		{
 			fRightmost = lNode;
 		}
 
-		for (const Node* lNode = &aList; lNode != &Node::NIL; lNode = &lNode->getPrevious())
+		for (Node* lNode = &aList; lNode != &Node::NIL; lNode = &lNode->getPrevious())
 		{
 			fLeftmost = lNode;
 		}
@@ -136,4 +136,10 @@ public:
 		Iterator lIterator = ++(last());
 		return lIterator;
 	}
+
+	Node* getNode()
+	{
+		return fCurrent;
+	}
+
 };
