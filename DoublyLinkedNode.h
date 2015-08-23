@@ -1,4 +1,3 @@
-
 template<class DataType>
 class DoublyLinkedNode
 {
