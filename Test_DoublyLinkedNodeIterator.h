@@ -5,7 +5,7 @@
 #include "Point.h"
 #include "DoublyLinkedNodeIterator.h"
 
-test(DoublyLinkedNodeIterator_Setup)
+test(DoublyLinkedNodeIterator_Ints)
 {
 	//-----------------------------------------------------------------------------------------------------------------------------
 	// ----------------------------------------------------- TEST INTS ------------------------------------------------------------
@@ -61,15 +61,18 @@ test(DoublyLinkedNodeIterator_Setup)
 
 	//Are you at the second node?
 	assertEqual(*iter, 2);
+}
 
-
-
+test(DoublyLinkedNodeIterator_Points)
+{
 
 	//-----------------------------------------------------------------------------------------------------------------------------
 	// ----------------------------------------------------- TEST POINTS ----------------------------------------------------------
 	// ----------------------------------------------------------------------------------------------------------------------------
-	/*typedef DoublyLinkedNode<Point>::Node PointNode;
 
+	typedef DoublyLinkedNode<Point>::Node PointNode;
+
+	//Point(angle, distance)
 	Point p1 = Point(1, 100);
 	Point p2 = Point(2, 200);
 	Point p3 = Point(3, 300);
@@ -90,7 +93,38 @@ test(DoublyLinkedNodeIterator_Setup)
 	n1.insertAfter(n3);
 	n1.insertAfter(n2);
 
-	DoublyLinkedNodeIterator<Point> iter(n1);*/
+	DoublyLinkedNodeIterator<Point> iter(n1);
 
+	iter--;
+
+	for (iter++; iter != iter.rightEnd(); iter++) //go to the right side
+	{
+
+	}
+
+	//Are you at the right side?
+	iter--; //we minus one to get on the value because we were on END NODE
+	assertEqual((*iter).getAngle(), 6);
+	assertEqual((*iter).getDistance(), 600);
+
+	for (iter--; iter != iter.leftEnd(); iter--)
+	{
+
+	}
+
+	//Are you at the left side?
+	iter++; //we add one to get on the value because we were on START NODE
+	assertEqual((*iter).getAngle(), 1);
+	assertEqual((*iter).getDistance(), 100);
+
+	if (iter != iter.rightEnd())
+	{
+		iter++; //go to the second node
+	}
+
+	//Are you at the second node?
+	assertEqual((*iter).getAngle(), 2);
+	assertEqual((*iter).getDistance(), 200);
 }
+
 #endif

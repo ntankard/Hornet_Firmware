@@ -1,4 +1,5 @@
 #pragma once 
+#include "Arduino.h"
 
 class Point
 {
@@ -10,12 +11,12 @@ public:
 		_distance = distance;
 	}
 
-	float getAngle()
+	const float getAngle() const //returns a copy of _angle
 	{
 		return _angle;
 	}
 
-	float getDistance()
+	const float getDistance() const  //returns a copy of _distance
 	{
 		return _distance;
 	}

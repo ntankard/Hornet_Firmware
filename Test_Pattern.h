@@ -5,13 +5,9 @@
 #include "Error.h"
 #include "Point.h"
 
-test(Pattern_Starts_Empty)
+test()
 {
-	Error e;
-	Pattern pattern();
-
-	//Check point is made correctly
-	assertTrue(pattren.isEmpty());
+	
 }
 
 #endif;
