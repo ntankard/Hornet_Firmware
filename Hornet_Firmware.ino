@@ -1,4 +1,5 @@
 // hardware libreys (do not remove)
+#include <Wire.h>
 #include <SPI.h>
 #include <Servo.h>
 #include <RPLidar.h>
@@ -23,6 +24,7 @@
 #include "Lidar.h"
 #include "Drone.h"
 #include "SPIManager.h"
+#include "I2CManager.h"
 
 #include "CONFIG.h"
 
@@ -36,6 +38,7 @@ ComsDecoder *comsDecoder;
 ComsEncoder *comsEncoder;
 
 SPIManager *spiManager;
+I2CManager *i2cManager;
 
 // periferal systerms
 AccGyro *accGyro;
@@ -58,12 +61,24 @@ void setup()
 	manager->attachComs(coms);
 	manager->attachComsEncoder(comsEncoder);
 
-	spiManager = new SPIManager();
+	// set up conection infurstructor for the sensors
+	spiManager = new SPIManager(error);
+	i2cManager = new I2CManager(error);
 
 	// construct thew accselerator and gyro
-	accGyro = new AccGyro(manager, error);
-	manager->attachAccGyro(accGyro);
+	#if ENABLE_ACC == ENABLED
+		#ifdef USE_MPU6000
+				accGyro = new AccGyro(manager,error,spiManager,MPU6000_CS,MPU6000_INTERRUPT);
+		#endif
+		#ifdef USE_MPU6050
+				accGyro = new AccGyro(manager,error,i2cManager,MPU6050_INTERRUPT);
+		#endif
+	#else
+		accGyro = new AccGyro();
+	#endif
 
+
+manager->attachAccGyro(accGyro);
 	// construct the monitor
 	monitor = new Monitor(comsEncoder);
 	manager->attachMonitor(monitor);

@@ -11,7 +11,7 @@ I2CManager::I2CManager(Error *theError) :SharedBusManager(theError)
 void I2CManager::read(uint8_t address, uint8_t start, uint8_t *buffer, int size)
 {
 	int  error;
-	Wire.beginTransmission(MPU6050_I2C_ADDRESS);
+	Wire.beginTransmission(address);
 
 	// set the read address
 	if (Wire.write(start) != 1)
@@ -30,7 +30,7 @@ void I2CManager::read(uint8_t address, uint8_t start, uint8_t *buffer, int size)
 	}
 
 	// read all the values
-	if (Wire.requestFrom(MPU6050_I2C_ADDRESS, size, true) != size)
+	if (Wire.requestFrom((uint8_t)address, (uint8_t)size, (uint8_t)true) != size)
 	{
 		_e->add(E_BUS_FAIL, "I2C bus read failed, not all the bytes were read ");
 		return;

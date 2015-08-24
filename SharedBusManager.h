@@ -18,7 +18,7 @@ public:
 	* \author	Nicholas
 	* \date	1/08/2015
 	*/
-	SharedBusManager(Error *theError){ _e = theError; }
+	SharedBusManager(Error *theError);
 
 	/**
 	* \brief	Reads a sequence of bytes from a slave periferal device
