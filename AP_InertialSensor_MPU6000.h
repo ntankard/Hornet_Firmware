@@ -5,6 +5,7 @@
 
 #include <string.h>
 #include <stdint.h>
+#include "SPIManager.h"
 
 #include "vector2.h"
 #include "vector3.h"
@@ -17,7 +18,7 @@ class AP_InertialSensor_MPU6000 //: public AP_InertialSensor
 {
   public:
 
-  AP_InertialSensor_MPU6000( uint8_t cs_pin );
+	  AP_InertialSensor_MPU6000(uint8_t cs_pin, SPIManager* theSPIManager);
 
   void init();
 
@@ -70,6 +71,8 @@ class AP_InertialSensor_MPU6000 //: public AP_InertialSensor
 
   // ensure we can't initialise twice
   unsigned _initialised:1;
+
+  SPIManager* _SPIManager;
 };
 
 #endif

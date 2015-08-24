@@ -96,17 +96,19 @@ const uint8_t AP_InertialSensor_MPU6000::_temp_data_index = 3;
 
 static volatile uint8_t _new_data;
 
-AP_InertialSensor_MPU6000::AP_InertialSensor_MPU6000( uint8_t cs_pin )
+AP_InertialSensor_MPU6000::AP_InertialSensor_MPU6000(uint8_t cs_pin, SPIManager* theSPIManager)
 {
-  _cs_pin = cs_pin; /* can't use initializer list,  is static */
-  _gyro.x = 0;
-  _gyro.y = 0;
-  _gyro.z = 0;
-  _accel.x = 0;
-  _accel.y = 0;
-  _accel.z = 0;
-  _temp = 0;
-  _initialised = 0;
+	_SPIManager = theSPIManager;
+
+	_cs_pin = cs_pin; /* can't use initializer list,  is static */
+	_gyro.x = 0;
+	_gyro.y = 0;
+	_gyro.z = 0;
+	_accel.x = 0;
+	_accel.y = 0;
+	_accel.z = 0;
+	_temp = 0;
+	_initialised = 0;
 }
 
 void AP_InertialSensor_MPU6000::init()
