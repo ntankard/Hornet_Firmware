@@ -34,6 +34,35 @@ void LidarNavigation::newLidarPoint(float angle, float distance)
 	iter.getNode()->insertBefore(*node);
 }
 
+void LidarNavigation::removePoint()
+{
+	// delete point and node at the start of the linked nodes
+	// should check if there is actually data to delete so you don't accidentally
+	// delete head and tail, however this function is only called under certain condition
+	// therefore another check will be a waste of time
+	DoublyLinkedNodeIterator<Point> iter = DoublyLinkedNodeIterator<Point>(*head);
+	iter++;
+	const PointNode* node = iter.getNode(); //get a reference to the Node we are deleting
+	const Point* point = &(*iter); //get a reference to the Point we are deleting
+	iter.getNode()->dropNode();
+	delete node;
+	delete point;
+}
+
+int LidarNavigation::getSize()
+{
+	int count = 0;
+	DoublyLinkedNodeIterator<Point> iter = DoublyLinkedNodeIterator<Point>(*head); //head
+	iter++; //first data member
+	DoublyLinkedNodeIterator<Point> iterEnd = DoublyLinkedNodeIterator<Point>(*head);
+	iterEnd = iterEnd.last(); //tail
+	for (count; iter != iterEnd; count++)
+	{
+		iter++;
+	}
+	return count;
+}
+
 void LidarNavigation::EOSweep(float pitch, float roll, float yaw)
 {
 	// compare sweeps, look for ancors

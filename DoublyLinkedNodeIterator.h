@@ -143,22 +143,4 @@ public:
 	{
 		return fCurrent;
 	}
-
-	int size()
-	{
-		int size = 1;
-		Iterator lIterator = Iterator(*fLeftmost);
-		if (lIterator.fCurrent == fRightmost)
-		{
-			return size;
-		}
-		else
-		{
-			for (lIterator; lIterator.fCurrent != fRightmost; lIterator++)
-			{
-				size++;
-			}
-		}
-		return size;
-	}
 };

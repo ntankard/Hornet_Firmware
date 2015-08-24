@@ -20,6 +20,10 @@ public:
 
 	PointNode* getHead();
 
+	void removePoint(); //removes a point from the start of the linkednodes, ONLY gets called when list is full
+
+	int getSize(); //gets the size of the doublylinkednodes *excludes head and tail
+
 private:
 
 	HornetManager *_hornetManager;

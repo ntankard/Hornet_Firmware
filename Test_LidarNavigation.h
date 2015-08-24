@@ -41,6 +41,34 @@ test(LidarNavigation_MultipleNewLidarPoint)
 	}
 }
 
-//@TODO: removePoint() which deletes the new Point and PointNode 
+test(LidarNavigation_Size)
+{
+	LidarNavigation* l = new LidarNavigation();
+	assertEqual(l->getSize(), 0);
+	for (int i = 1; i < 7; i++)
+	{
+		l->newLidarPoint(i, i * 100);
+	}
+	assertEqual(l->getSize(), 6);
+}
+
+test(LidarNavifation_RemovePoint)
+{
+	LidarNavigation* l = new LidarNavigation();
+	assertEqual(l->getSize(), 0);
+	for (int i = 1; i < 7; i++)
+	{
+		l->newLidarPoint(i, i * 100);
+	}
+	assertEqual(l->getSize(), 6);
+	l->removePoint();
+	assertEqual(l->getSize(), 5);
+	l->removePoint();
+	l->removePoint();
+	l->removePoint();
+	l->removePoint();
+	l->removePoint();
+	assertEqual(l->getSize(), 0);
+}
 
 #endif;
