@@ -23,6 +23,50 @@ PointNode* LidarNavigation::getHead()
 	return head;
 }
 
+void LidarNavigation::processLidarData(float angle, float distance)
+{
+	if (getSize() >= L_POINTS_IN_PATTERN)
+	{
+		removePoint();
+	}
+	newLidarPoint(angle, distance);
+
+	if (getSize() == 10) //you have enough to start looks for patterns/features/anchors
+	{
+		if (isPattern())
+		{
+			//copy DoublyLinkedNodes and assign type as Pattern
+		}
+		if (isFeature())
+		{
+
+		}
+		if (isAnchor())
+		{
+
+		}
+	}
+}
+
+bool LidarNavigation::isPattern()
+{
+	//if all your points drawn into lines have an average angle offset less than or equal to
+	//the L_LINE_TO_LINE_OFFSET then you can return true otherwise return false
+}
+
+bool LidarNavigation::isFeature()
+{
+	//if you have 2 patterns at 90 degree
+	L_PATTERNS_IN_CORNER_FEATURE;
+	return true;
+}
+
+bool LidarNavigation::isAnchor()
+{
+	//if you have have a recurring feature over..
+	L_FEATURE_RECURRENCE_IN_ANCHOR;
+	return true;
+}
 
 void LidarNavigation::newLidarPoint(float angle, float distance)
 {

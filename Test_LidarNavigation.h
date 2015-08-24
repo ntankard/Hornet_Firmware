@@ -60,15 +60,59 @@ test(LidarNavifation_RemovePoint)
 	{
 		l->newLidarPoint(i, i * 100);
 	}
+
 	assertEqual(l->getSize(), 6);
 	l->removePoint();
 	assertEqual(l->getSize(), 5);
 	l->removePoint();
 	l->removePoint();
+	PointNode* node = l->getHead();
+	DoublyLinkedNodeIterator<Point> iter = DoublyLinkedNodeIterator<Point>(*node);
+	iter++;
+	assertEqual((*iter).getAngle(), 4); //make sure that it's deleting from the start of the list
 	l->removePoint();
 	l->removePoint();
 	l->removePoint();
 	assertEqual(l->getSize(), 0);
 }
+
+test(LidarNavifation_ProcessData_LotsofPoints)
+{
+	LidarNavigation* l = new LidarNavigation();
+	for (int i = 1; i < L_POINTS_IN_PATTERN * 2; i++)
+	{
+		l->processLidarData(i, i * 100);
+	}
+	assertEqual(l->getSize(), L_POINTS_IN_PATTERN);
+}
+
+test(LidarNavifation_ProcessData_CorrectOrder)
+{
+	//checks if new Points are added to the tail, then removed at the head
+	LidarNavigation* l = new LidarNavigation();
+	for (int i = 1; i < L_POINTS_IN_PATTERN; i++)
+	{
+		l->newLidarPoint(i, i * 100);
+	}
+	PointNode* node = l->getHead();
+	for (int i = 1; i < L_POINTS_IN_PATTERN; i++)
+	{
+		DoublyLinkedNodeIterator<Point> iter = DoublyLinkedNodeIterator<Point>(*node);
+		iter++;
+		assertEqual((*iter).getAngle(), i);
+		assertEqual((*iter).getDistance(), i*100);
+		l->removePoint();
+	}
+}
+
+/*test(X_memoryLeak)
+{
+	LidarNavigation* l = new LidarNavigation();
+	while (true)
+	{
+		l->processLidarData(5, 500);
+		Serial.println("running");
+	}
+}*/
 
 #endif;
