@@ -5,6 +5,8 @@
 #include "DoublyLinkedNodeIterator.h"
 #include "Point.h"
 
+typedef DoublyLinkedNode<Point>::Node PointNode;
+
 class LidarNavigation
 {
 public:
@@ -16,16 +18,13 @@ public:
 
 	void EOSweep(float pitch, float roll, float yaw);
 
-	DoublyLinkedNodeIterator<Point*> getIter();
+	PointNode* getHead();
 
 private:
 
 	HornetManager *_hornetManager;
 	Error *_e;
-
-	typedef DoublyLinkedNode<Point*>::Node PointNode;
-	DoublyLinkedNodeIterator<Point*> *iter = NULL;
-
+	PointNode* head;
 };
 
 
