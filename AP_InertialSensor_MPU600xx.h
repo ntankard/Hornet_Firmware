@@ -15,6 +15,8 @@ public:
 
 	void getData();
 
+	void update();
+
 private:
 	static void data_interrupt(void);
 

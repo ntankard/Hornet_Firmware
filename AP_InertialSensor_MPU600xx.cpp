@@ -151,12 +151,13 @@ uint8_t AP_InertialSensor_MPU600xx::register_read(uint8_t reg)
 
 void AP_InertialSensor_MPU600xx::getData()
 {
+	//cli();
 	uint8_t addr = MPUREG_ACCEL_XOUT_H | 0x80;
 
 	_sharedBusManager->read(_address, addr, _data, 14);	//@TODO magic number
 	_readNum++;
 
-	int32_t _sum[7];
+	/*int32_t _sum[7];
 	uint8_t byte_H, byte_L;
 
 
@@ -170,5 +171,16 @@ void AP_InertialSensor_MPU600xx::getData()
 		_sum[i] = (((int16_t)byte_H) << 8) | byte_L;
 	}
 
-	Serial.print(_sum[0]);
+	Serial.println(_sum[0]);
+
+	delay(1000);
+
+	sei();*/
+}
+
+void AP_InertialSensor_MPU600xx::update()
+{
+	cli();
+	Serial.println(_data[0]);
+	sei();
 }

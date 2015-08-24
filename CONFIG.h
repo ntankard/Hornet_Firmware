@@ -28,7 +28,7 @@
 
 // Enable relevent systems (some will be automaticaly disabled for certain board)
 #define ENABLE_ACC			ENABLED
-#define ENABLE_LIDAR		ENABLED
+#define ENABLE_LIDAR		DISABLED
 #define ENABLE_INDICATOR	ENABLED
 
 //-----------------------------------------------------------------------------------------------------------------------------

@@ -32,13 +32,14 @@
 HornetManager *manager;
 Error *error;
 
+// bus
+SPIManager *spiManager;
+I2CManager *i2cManager;
+
 // coms systems
 Coms *coms;
 ComsDecoder *comsDecoder;
 ComsEncoder *comsEncoder;
-
-SPIManager *spiManager;
-I2CManager *i2cManager;
 
 // periferal systerms
 AccGyro *accGyro;
@@ -51,6 +52,8 @@ Scheduler *scheduler;
 
 void setup()
 {
+	Serial.begin(9600);	//@TODO this should be in the USB serial
+
 	error = new Error();
 	manager = new HornetManager(error);
 
@@ -77,8 +80,8 @@ void setup()
 		accGyro = new AccGyro();
 	#endif
 
+	manager->attachAccGyro(accGyro);
 
-manager->attachAccGyro(accGyro);
 	// construct the monitor
 	monitor = new Monitor(comsEncoder);
 	manager->attachMonitor(monitor);
@@ -112,6 +115,7 @@ void loop()
 		delete comsDecoder;
 		delete comsEncoder;
 		delete spiManager;
+		delete i2cManager;
 
 		delete accGyro;
 		delete monitor;

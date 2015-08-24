@@ -30,6 +30,8 @@ void AccGyro::run()
 	float accel[3];
 	float gyro[3];
 
+	_ins.update();
+
 	/*
 
 #ifdef USE_MPU6000
