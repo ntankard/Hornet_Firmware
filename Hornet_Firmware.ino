@@ -12,6 +12,7 @@
 
 #if BUILD_TYPE == FOR_HARDWARE
 
+
 // local components
 #include "HornetManager.h"
 #include "ComsDecoder.h"
@@ -79,7 +80,6 @@ void setup()
 	#else
 		accGyro = new AccGyro();
 	#endif
-
 	manager->attachAccGyro(accGyro);
 
 	// construct the monitor

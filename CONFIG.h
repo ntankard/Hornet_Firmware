@@ -8,7 +8,6 @@
 #define BOARD_TYPE_APM 1
 #define BOARD_TYPE_MEGA 2
 #define BOARD_TYPE_DUO 3
-#define BOARD_TYPE_UNO 4
 
 #define COM_MODE_SERIAL 1
 #define COM_MODE_XBEE 2
@@ -21,7 +20,7 @@
 // ----------------------------------------------------------------------------------------------------------------------------
 
 // Pick wich board to use
-#define BOARD_TYPE BOARD_TYPE_APM
+#define BOARD_TYPE BOARD_TYPE_MEGA
 
 // Pick wich coms to use (XBEE not avalible for uno, will default to SERIAL)
 #define COM_MODE COM_MODE_SERIAL
@@ -35,18 +34,12 @@
 // ---------------------------------------------------- BOARD FEATURES --------------------------------------------------------
 // ----------------------------------------------------------------------------------------------------------------------------
 
-#if BOARD_TYPE == BOARD_TYPE_UNO
-	//UNO overrride components that are not suported
-	#define ENABLE_LIDAR		DISABLED
-	#define ENABLE_INDICATOR	DISABLED
-	#define COM_MODE			COM_MODE_SERIAL
-#endif
-
 #if BOARD_TYPE == BOARD_TYPE_APM
 	#define ENABLE_LIDAR		DISABLED
 #endif
 
 #if BOARD_TYPE == BOARD_TYPE_MEGA
+	#define ENABLE_LIDAR		DISABLED
 	#define ENABLE_INDICATOR	DISABLED
 #endif
 
@@ -78,7 +71,7 @@
 	#define C_COMS_PORT Serial
 #endif
 
-#if ENABLE_LIDAR == DISABLED
+#if ENABLE_LIDAR == ENABLED
 	#if BOARD_TYPE == BOARD_TYPE_APM
 		#define C_LIDAR_MOTOCTL 3
 		#define C_LIDAR_SERIAL Serial2

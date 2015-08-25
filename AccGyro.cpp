@@ -20,6 +20,8 @@ AccGyro::AccGyro(HornetManager* theManager, Error* e, SPIManager *theSPIManager,
 	_e = e;
 }
 
+//-----------------------------------------------------------------------------------------------------------------------------
+
 void AccGyro::start()
 {
 	_ins.init();
