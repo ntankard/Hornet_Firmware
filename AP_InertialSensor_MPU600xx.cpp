@@ -61,11 +61,9 @@
 #define BIT_I2C_IF_DIS              0x10
 #define BIT_INT_STATUS_DATA   0x01
 
-// interupt stuff
-//static int sReadNum;
+AP_InertialSensor_MPU600xx *self;	//@TODO evil!
 
-AP_InertialSensor_MPU600xx *self;
-
+//-----------------------------------------------------------------------------------------------------------------------------
 
 AP_InertialSensor_MPU600xx::AP_InertialSensor_MPU600xx(SPIManager *theSPIManager, uint8_t cs_pin, uint8_t interruptPin)
 {
@@ -79,6 +77,7 @@ AP_InertialSensor_MPU600xx::AP_InertialSensor_MPU600xx(SPIManager *theSPIManager
 	_readNum = 0;
 }
 
+//-----------------------------------------------------------------------------------------------------------------------------
 
 AP_InertialSensor_MPU600xx::AP_InertialSensor_MPU600xx(I2CManager *theI2CManager, uint8_t interruptPin)
 {
@@ -89,6 +88,7 @@ AP_InertialSensor_MPU600xx::AP_InertialSensor_MPU600xx(I2CManager *theI2CManager
 	_readNum = 0;
 }
 
+//-----------------------------------------------------------------------------------------------------------------------------
 
 bool AP_InertialSensor_MPU600xx::init()
 {
@@ -133,54 +133,87 @@ bool AP_InertialSensor_MPU600xx::init()
 	return true;
 }
 
-// MPU6000 new data interrupt on INT6
+//-----------------------------------------------------------------------------------------------------------------------------
+
 void AP_InertialSensor_MPU600xx::data_interrupt(void)
 {
 	self->getData();
 }
+
+//-----------------------------------------------------------------------------------------------------------------------------
 
 void AP_InertialSensor_MPU600xx::register_write(uint8_t reg, uint8_t val)
 {
 	_sharedBusManager->write_reg(_address,reg, val);
 }
 
+//-----------------------------------------------------------------------------------------------------------------------------
+
 uint8_t AP_InertialSensor_MPU600xx::register_read(uint8_t reg)
 {
 	return _sharedBusManager->read_reg(_address, reg);
 }
 
+//-----------------------------------------------------------------------------------------------------------------------------
+
 void AP_InertialSensor_MPU600xx::getData()
 {
-	//cli();
 	uint8_t addr = MPUREG_ACCEL_XOUT_H | 0x80;
-
-	_sharedBusManager->read(_address, addr, _data, 14);	//@TODO magic number
+	_sharedBusManager->read(_address, addr, (uint8_t*)(&_data), sizeof(_data));
 	_readNum++;
-
-	/*int32_t _sum[7];
-	uint8_t byte_H, byte_L;
-
-
-	int j = 0;
-	for (int i = 0; i < 7; i++)
-	{
-		byte_H = _data[j];
-		j++;
-		byte_L = _data[j];
-		j++;
-		_sum[i] = (((int16_t)byte_H) << 8) | byte_L;
-	}
-
-	Serial.println(_sum[0]);
-
-	delay(1000);
-
-	sei();*/
 }
 
-void AP_InertialSensor_MPU600xx::update()
+//-----------------------------------------------------------------------------------------------------------------------------
+
+bool AP_InertialSensor_MPU600xx::update()
 {
+	if (_readNum == 0)
+	{
+		return false;
+	}
+
 	cli();
-	Serial.println(_data[0]);
+
+	_safeData = _data;
+	_missedReadings = (_readNum - 1);
+	_readNum =0;
+
 	sei();
+
+	uint8_t swap;
+	#define SWAP(x,y) swap = x; x = y; y = swap
+
+	// data comes oput backwards, fix that
+	SWAP(_data.reg.x_accel_h, _data.reg.x_accel_l);
+	SWAP(_data.reg.y_accel_h, _data.reg.y_accel_l);
+	SWAP(_data.reg.z_accel_h, _data.reg.z_accel_l);
+	SWAP(_data.reg.t_h, _data.reg.t_l);
+	SWAP(_data.reg.x_gyro_h, _data.reg.x_gyro_l);
+	SWAP(_data.reg.y_gyro_h, _data.reg.y_gyro_l);
+	SWAP(_data.reg.z_gyro_h, _data.reg.z_gyro_l);
+
+	_safeData = _data;
+
+
+
+
+	return true;
+}
+
+//-----------------------------------------------------------------------------------------------------------------------------
+
+void AP_InertialSensor_MPU600xx::get_gyros(float* gyro)
+{
+	gyro[0] = _safeData.value.x_gyro;
+	gyro[1] = _safeData.value.y_gyro;
+	gyro[2] = _safeData.value.z_gyro;
+}
+
+//-----------------------------------------------------------------------------------------------------------------------------
+
+void AP_InertialSensor_MPU600xx::get_accels(float* accel)
+{
+	accel[0] = _safeData.value.x_accel;
+	accel[1] = _safeData.value.y_accel;
+	accel[2] = _safeData.value.z_accel;
 }

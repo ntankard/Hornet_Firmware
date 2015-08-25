@@ -30,7 +30,13 @@ void AccGyro::run()
 	float accel[3];
 	float gyro[3];
 
-	_ins.update();
+	if (_ins.update())
+	{
+		_ins.get_gyros(gyro);
+		_ins.get_accels(accel);
+
+		_hornetManager->ND_RawAccGyro(accel, gyro);
+	}
 
 	/*
 
