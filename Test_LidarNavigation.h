@@ -105,7 +105,11 @@ test(LidarNavifation_ProcessData_CorrectOrder)
 	}
 }
 
-/*test(X_memoryLeak)
+#endif
+
+#if BUILD_TYPE == FOR_MEMORY_TEST
+
+test(X_memoryLeak)
 {
 	LidarNavigation* l = new LidarNavigation();
 	while (true)
@@ -113,6 +117,6 @@ test(LidarNavifation_ProcessData_CorrectOrder)
 		l->processLidarData(5, 500);
 		Serial.println("running");
 	}
-}*/
+}
 
 #endif;

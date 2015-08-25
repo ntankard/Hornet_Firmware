@@ -5,6 +5,7 @@
 
 #define FOR_HARDWARE 1
 #define FOR_TEST 2
+#define FOR_MEMORY_TEST 3
 
 #define BUILD_TYPE FOR_TEST
 
