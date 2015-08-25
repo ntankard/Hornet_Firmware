@@ -81,7 +81,7 @@ test(LidarNavifation_ProcessData_LotsofPoints)
 	LidarNavigation* l = new LidarNavigation();
 	for (int i = 1; i < L_POINTS_IN_PATTERN * 2; i++)
 	{
-		l->processLidarData(i, i * 100);
+		l->processLidarData(10+i, 100);
 	}
 	assertEqual(l->getSize(), L_POINTS_IN_PATTERN);
 }

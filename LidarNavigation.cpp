@@ -52,6 +52,28 @@ bool LidarNavigation::isPattern()
 {
 	//if all your points drawn into lines have an average angle offset less than or equal to
 	//the L_LINE_TO_LINE_OFFSET then you can return true otherwise return false
+	float angleOfBestFit = 0;
+	float nextAngle;
+	float x1;
+	float x2;
+	float y1;
+	float y2;
+	DoublyLinkedNodeIterator<Point> iter = DoublyLinkedNodeIterator<Point>(*head);
+	iter++;
+	for (int i = 1; i < L_POINTS_IN_PATTERN; i++)
+	{
+		x1 = (*iter).getX();
+		y1 = (*iter).getY();
+		iter++;
+		x2 = (*iter).getX();
+		y2 = (*iter).getY();
+
+		nextAngle = atan((y2 - y1) / (x2 - x1)) * 180 / PI;
+		angleOfBestFit = ((angleOfBestFit * (i-1)) + nextAngle) / i;
+		Serial.println(nextAngle);
+		
+	}Serial.println(angleOfBestFit);
+	return true;
 }
 
 bool LidarNavigation::isFeature()
