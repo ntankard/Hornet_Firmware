@@ -34,7 +34,7 @@ public:
 		fState = DATA;
 	}
 
-	const DataType& operator*() const
+	DataType& operator*()
 	{
 		return fCurrent->getValue();
 	}

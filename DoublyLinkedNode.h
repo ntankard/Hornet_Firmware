@@ -5,11 +5,11 @@ public:
 	typedef DoublyLinkedNode<DataType> Node;
 
 private:
-	const DataType* fValue;
+	DataType* fValue;
 	Node* fNext;
 	Node* fPrevious;
 
-	DoublyLinkedNode(): fValue((const DataType*)0),
+	DoublyLinkedNode(): fValue((DataType*)0),
 						fNext(&NIL),
 						fPrevious(&NIL)
 	{}
@@ -17,7 +17,7 @@ private:
 public:
 	static Node NIL;
 
-	DoublyLinkedNode(const DataType& aValue)
+	DoublyLinkedNode(DataType& aValue)
 	{
 		fValue = &aValue;
 		fNext = &NIL;
@@ -62,7 +62,7 @@ public:
 		}
 	}
 
-	const DataType& getValue() const
+	DataType& getValue() const
 	{
 		return *fValue;
 	}

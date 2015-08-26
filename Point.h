@@ -2,6 +2,8 @@
 #include "Arduino.h"
 #include "math.h"
 
+enum PointState { HEAD, TAIL, NULLPOINT, DATA };
+
 class Point
 {
 public:
@@ -14,28 +16,53 @@ public:
 		_coorY = distance * sin(angle * PI / 180);
 	}
 
-	const float getAngle() const //returns a copy of _angle
+	Point(PointState state)
+	{
+		_angle = 0;
+		_distance = 0;
+		_state = state;
+	}
+
+	void setPoint(float angle, float distance)
+	{
+		_angle = angle;
+		_distance = distance;
+	}
+
+	void setPoint(float angle, float distance, PointState state)
+	{
+		_angle = angle;
+		_distance = distance;
+		_state = state;
+	}
+
+	PointState getState() const
+	{
+		return _state;
+	}
+
+	float getAngle() const //returns a copy of _angle
 	{
 		return _angle;
 	}
 
-	const float getDistance() const  //returns a copy of _distance
+	float getDistance() const  //returns a copy of _distance
 	{
 		return _distance;
 	}
 
-	const float getX() const  //returns a copy of _coorX
+	float getX() const  //returns a copy of _coorX
 	{
 		return _coorX;
 	}
 
-	const float getY() const  //returns a copy of coorY
+	float getY() const  //returns a copy of coorY
 	{
 		return _coorY;
 	}
 
 private:
-
+	PointState _state;
 	float _angle;
 	float _distance;
 	float _coorX;

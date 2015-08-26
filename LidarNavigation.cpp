@@ -9,43 +9,71 @@ LidarNavigation::LidarNavigation(HornetManager *theHornetManager, Error *theErro
 	_hornetManager = theHornetManager;
 }
 
-LidarNavigation::LidarNavigation() 
+LidarNavigation::LidarNavigation()
 {
-	Point* headPoint = new Point(2000, 10000);
+	Point* headPoint = new Point(HEAD);
 	head = new PointNode(*headPoint);
-	Point* tailPoint = new Point(10000, 2000);
+	Point* tailPoint = new Point(TAIL);
 	PointNode* tail = new PointNode(*tailPoint);
 	head->insertAfter(*tail);
+	for (int i = 0; i < L_POINTS_IN_PATTERN; i++)
+	{
+		Point* point = new Point(NULLPOINT);
+		PointNode* node = new PointNode(*point);
+		head->insertAfter(*node);
+	}
 }
 
-PointNode* LidarNavigation::getHead()
+void LidarNavigation::setupPoints(float angle, float distance)
 {
-	return head;
+	DoublyLinkedNodeIterator<Point> iter = DoublyLinkedNodeIterator<Point>(*head);
+	iter = iter.last();
+	iter--;
+	if ((*iter).getState() == DATA)
+	{
+		_setup = true;
+		newLidarPoint(angle, distance); //call here so we don't lose a point
+	}
+	else
+	{
+		iter = iter.first();
+		for (iter; (*iter).getState() != NULLPOINT; iter++)
+		{
+			//goes to the next NULLPOINT
+		}
+		(*iter).setPoint(angle, distance, DATA);
+	}
 }
 
 void LidarNavigation::processLidarData(float angle, float distance)
 {
-	if (getSize() >= L_POINTS_IN_PATTERN)
+	if (!_setup) 
 	{
-		removePoint();
+		setupPoints(angle, distance);
 	}
-	newLidarPoint(angle, distance);
-
-	if (getSize() == 10) //you have enough to start looks for patterns/features/anchors
+	else
 	{
-		if (isPattern())
-		{
-			//copy DoublyLinkedNodes and assign type as Pattern
-		}
-		if (isFeature())
-		{
-
-		}
-		if (isAnchor())
-		{
-
-		}
+		newLidarPoint(angle, distance);
 	}
+}
+
+void LidarNavigation::newLidarPoint(float angle, float distance)
+{
+	DoublyLinkedNodeIterator<Point> iter = DoublyLinkedNodeIterator<Point>(*head);
+	iter++;
+	PointNode* node = iter.getNode();
+	iter.getNode()->dropNode();
+	iter = iter.last();
+	iter.getNode()->insertBefore(*node);
+	iter = iter.last();
+	iter--;
+	(*iter).setPoint(angle, distance);
+}
+
+
+PointNode* LidarNavigation::getHead()
+{
+	return head;
 }
 
 bool LidarNavigation::isPattern()
@@ -90,7 +118,22 @@ bool LidarNavigation::isAnchor()
 	return true;
 }
 
-void LidarNavigation::newLidarPoint(float angle, float distance)
+
+int LidarNavigation::getSize()
+{
+	int count = 0;
+	DoublyLinkedNodeIterator<Point> iter = DoublyLinkedNodeIterator<Point>(*head); //head
+	iter++; //first data member
+	DoublyLinkedNodeIterator<Point> iterEnd = DoublyLinkedNodeIterator<Point>(*head);
+	iterEnd = iterEnd.last(); //tail
+	for (count; iter != iterEnd; count++)
+	{
+		iter++;
+	}
+	return count;
+}
+
+/*void LidarNavigation::newLidarPoint(float angle, float distance)
 {
 	// add point to a node at the end of the linked nodes
 	Point* point = new Point(angle, distance);
@@ -98,6 +141,40 @@ void LidarNavigation::newLidarPoint(float angle, float distance)
 	DoublyLinkedNodeIterator<Point> iter = DoublyLinkedNodeIterator<Point>(*head);
 	iter = iter.last();
 	iter.getNode()->insertBefore(*node);
+}
+
+void LidarNavigation::processLidarData(float angle, float distance)
+{
+	if (getSize() >= L_POINTS_IN_PATTERN)
+	{
+		removePoint();
+	}
+	newLidarPoint(angle, distance);
+
+	if (getSize() == 10) //you have enough to start looks for patterns/features/anchors
+	{
+		if (isPattern())
+		{
+			//copy DoublyLinkedNodes and assign type as Pattern
+		}
+		if (isFeature())
+		{
+
+		}
+		if (isAnchor())
+		{
+
+		}
+	}
+}
+
+LidarNavigation::LidarNavigation()
+{
+Point* headPoint = new Point(2000, 10000);
+head = new PointNode(*headPoint);
+Point* tailPoint = new Point(10000, 2000);
+PointNode* tail = new PointNode(*tailPoint);
+head->insertAfter(*tail);
 }
 
 void LidarNavigation::removePoint()
@@ -113,21 +190,7 @@ void LidarNavigation::removePoint()
 	iter.getNode()->dropNode();
 	delete node;
 	delete point;
-}
-
-int LidarNavigation::getSize()
-{
-	int count = 0;
-	DoublyLinkedNodeIterator<Point> iter = DoublyLinkedNodeIterator<Point>(*head); //head
-	iter++; //first data member
-	DoublyLinkedNodeIterator<Point> iterEnd = DoublyLinkedNodeIterator<Point>(*head);
-	iterEnd = iterEnd.last(); //tail
-	for (count; iter != iterEnd; count++)
-	{
-		iter++;
-	}
-	return count;
-}
+}*/
 
 void LidarNavigation::EOSweep(float pitch, float roll, float yaw)
 {

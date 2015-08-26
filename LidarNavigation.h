@@ -14,6 +14,8 @@ public:
 
 	LidarNavigation();//used for testing
 
+	void setupPoints(float angle, float distance);
+
 	void processLidarData(float angle, float distance);
 
 	void newLidarPoint(float angle, float distance);
@@ -33,7 +35,7 @@ public:
 	bool isAnchor();
 
 private:
-
+	bool _setup = false;
 	HornetManager *_hornetManager;
 	Error *_e;
 	PointNode* head;

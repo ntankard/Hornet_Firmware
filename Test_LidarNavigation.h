@@ -4,7 +4,75 @@
 
 #if BUILD_TYPE == FOR_TEST
 
-test(LidarNavigation_newLidarNavigation)
+test(LidarNavigation_Setup)
+{
+	//Checks if a setup is working
+	LidarNavigation* l = new LidarNavigation();
+	PointNode* node = l->getHead();
+	DoublyLinkedNodeIterator<Point> iter = DoublyLinkedNodeIterator<Point>(*node);
+	assertEqual(l->getSize(), L_POINTS_IN_PATTERN);
+	assertEqual((*iter).getState(), HEAD);
+	iter++;
+	for (int i = 0; i < L_POINTS_IN_PATTERN; i++)
+	{
+		assertEqual((*iter).getState(), NULLPOINT);
+		iter++;
+	}
+	assertEqual((*iter).getState(), TAIL);
+}
+
+test(LidarNavifation_ProcessData_SetupPoints)
+{
+	LidarNavigation* l = new LidarNavigation();
+	for (int i = 0; i < L_POINTS_IN_PATTERN; i++)
+	{
+		l->setupPoints(i+1, i+1);
+	}
+	PointNode* node = l->getHead();
+	DoublyLinkedNodeIterator<Point> iter = DoublyLinkedNodeIterator<Point>(*node);
+	assertEqual((*iter).getState(), HEAD);
+	assertEqual((*iter).getAngle(), 0);
+	iter++;
+	for (int i = 0; i < L_POINTS_IN_PATTERN; i++)
+	{
+		assertEqual((*iter).getState(), DATA);
+		assertEqual((*iter).getAngle(), i + 1);
+		iter++;
+	}
+	assertEqual((*iter).getState(), TAIL);
+	assertEqual((*iter).getAngle(), 0);
+}
+
+test(LidarNavifation_ProcessData_RunTimePoints)
+{
+	LidarNavigation* l = new LidarNavigation();
+	for (int i = 0; i < L_POINTS_IN_PATTERN*2; i++)
+	{
+		l->processLidarData(i + 1, i + 1);
+	}
+	assertEqual(l->getSize(), L_POINTS_IN_PATTERN);
+	PointNode* node = l->getHead();
+	DoublyLinkedNodeIterator<Point> iter = DoublyLinkedNodeIterator<Point>(*node);
+	assertEqual((*iter).getState(), HEAD);
+	assertEqual((*iter).getAngle(), 0);
+	iter++;
+	for (int i = 10; i < L_POINTS_IN_PATTERN*2; i++)
+	{
+		assertEqual((*iter).getState(), DATA);
+		assertEqual((*iter).getAngle(), i + 1);
+		iter++;
+	}
+	assertEqual((*iter).getState(), TAIL);
+	assertEqual((*iter).getAngle(), 0);
+}
+
+test(LidarNavigation_Size)
+{
+	LidarNavigation* l = new LidarNavigation();
+	assertEqual(l->getSize(), L_POINTS_IN_PATTERN);
+}
+
+/*test(LidarNavigation_newLidarNavigation)
 {
 	LidarNavigation* l = new LidarNavigation();
 	PointNode* node = l->getHead();
@@ -117,6 +185,6 @@ test(X_memoryLeak)
 		l->processLidarData(5, 500);
 		Serial.println("running");
 	}
-}
+}*/
 
 #endif;
