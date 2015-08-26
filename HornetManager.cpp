@@ -168,6 +168,7 @@ void HornetManager::S_initToConnect()
 		_drone->start();
 		_C_last = millis();
 		S_enterConnect();
+		
 	}
 	else
 	{

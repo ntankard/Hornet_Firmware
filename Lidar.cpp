@@ -10,11 +10,13 @@ Lidar::Lidar(HornetManager* theManager)
 
 void Lidar::start()
 {
-	_lidar.begin(C_LIDAR_SERIAL);
+	/*_lidar.begin(C_LIDAR_SERIAL);
 	pinMode(C_LIDAR_MOTOCTL, OUTPUT);
 
 	analogWrite(C_LIDAR_MOTOCTL, 0); //stop the rplidar motor
-
+	
+	Serial.println("Start");
+	
 	// try to detect RPLIDAR... 
 	rplidar_response_device_info_t info;
 	if (IS_OK(_lidar.getDeviceInfo(info, 100))) {
@@ -23,16 +25,23 @@ void Lidar::start()
 
 		// start motor rotating at max allowed speed
 		analogWrite(C_LIDAR_MOTOCTL, 255);
+		Serial.println("Lidar Running");
 	}
 	else
 	{
+		Serial.println("Lidar Error");
 		//@TODO add throw here
-	}
+	}*/
+
+	_lidar.begin(C_LIDAR_SERIAL);
+
+	// set pin modes
+	pinMode(C_LIDAR_MOTOCTL, OUTPUT);
 }
 
 void Lidar::run()
 {
-	if (IS_OK(_lidar.waitPoint())) {
+	/*if (IS_OK(_lidar.waitPoint())) {
 		float distance = _lidar.getCurrentPoint().distance; //distance value in mm unit
 		float angle = _lidar.getCurrentPoint().angle; //angle value in degree
 		bool  startBit = _lidar.getCurrentPoint().startBit; //whether this point is belong to a new scan
@@ -50,7 +59,29 @@ void Lidar::run()
 			// Notify normal point
 			_hornetManager->ND_LidarPoint(angle, distance);
 		}
+	}*/
+	if (IS_OK(_lidar.waitPoint())) {
+		float distance = _lidar.getCurrentPoint().distance; //distance value in mm unit
+		float angle = _lidar.getCurrentPoint().angle; //anglue value in degree
+		bool  startBit = _lidar.getCurrentPoint().startBit; //whether this point is belong to a new scan
+		byte  quality = _lidar.getCurrentPoint().quality; //quality of the current measurement
+
+		Serial.println(distance);
 	}
+	else {
+		analogWrite(C_LIDAR_MOTOCTL, 0); //stop the rplidar motor
+
+		// try to detect RPLIDAR... 
+		rplidar_response_device_info_t info;
+		if (IS_OK(_lidar.getDeviceInfo(info, 100))) {
+			// detected...
+			_lidar.startScan();
+
+			// start motor rotating at max allowed speed
+			analogWrite(C_LIDAR_MOTOCTL, 255); //255 is 5.5 Hz?
+		}
+	}
+
 
 }
 

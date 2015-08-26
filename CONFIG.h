@@ -21,14 +21,14 @@
 // ----------------------------------------------------------------------------------------------------------------------------
 
 // Pick wich board to use
-#define BOARD_TYPE BOARD_TYPE_UNO
+#define BOARD_TYPE BOARD_TYPE_MEGA
 
 // Pick wich coms to use (XBEE not avalible for uno, will default to SERIAL)
 #define COM_MODE COM_MODE_SERIAL
 
 // Enable relevent systems (some will be automaticaly disabled for certain board)
 #define ENABLE_ACC			DISABLED
-#define ENABLE_LIDAR		DISABLED
+#define ENABLE_LIDAR		ENABLED
 #define ENABLE_INDICATOR	DISABLED
 
 //-----------------------------------------------------------------------------------------------------------------------------
@@ -79,8 +79,8 @@
 	#define C_COMS_PORT Serial
 #endif
 
-#if ENABLE_LIDAR == DISABLED
-	#if BOARD_TYPE == BOARD_TYPE_APM
+#if ENABLE_LIDAR == ENABLED
+	#if BOARD_TYPE == BOARD_TYPE_MEGA
 		#define C_LIDAR_MOTOCTL 3
 		#define C_LIDAR_SERIAL Serial2
 	#else

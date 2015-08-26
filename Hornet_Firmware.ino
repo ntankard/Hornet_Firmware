@@ -24,6 +24,8 @@
 
 #include "CONFIG.h"
 
+int i = 0;
+
 // core componenets
 HornetManager *manager;
 Error *error;
@@ -84,6 +86,9 @@ void setup()
 
 void loop()
 {
+	Serial.println((String)(i));
+	i++;
+
 	if (!manager->run())
 	{
 		delete manager;
