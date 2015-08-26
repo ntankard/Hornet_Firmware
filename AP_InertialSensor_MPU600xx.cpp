@@ -1,4 +1,7 @@
 #include "AP_InertialSensor_MPU600xx.h"
+
+#if ENABLE_ACC == ENABLED
+
 #include "Arduino.h"
 
 
@@ -115,24 +118,7 @@ void AP_InertialSensor_MPU600xx::getData()
 	SWAP(_data.reg.z_gyro_h, _data.reg.z_gyro_l);
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#endif
 
 // Interupt version
 

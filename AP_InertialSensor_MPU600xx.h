@@ -1,4 +1,7 @@
 #pragma once
+#include "CONFIG.h"
+
+#if ENABLE_ACC == ENABLED
 
 #include "I2CManager.h"
 #include "SPIManager.h"
@@ -159,4 +162,6 @@ private:
 	/** \brief	Last valid data */
 	MPU60xx_Data_Packet _data;
 };
+
+#endif
 
