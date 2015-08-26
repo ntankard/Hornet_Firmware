@@ -22,9 +22,9 @@ AccGyro::AccGyro(HornetManager* theManager, Error* e, SPIManager *theSPIManager,
 
 //-----------------------------------------------------------------------------------------------------------------------------
 
-void AccGyro::start()
+bool AccGyro::start()
 {
-	_ins.init();
+	return _ins.init();
 }
 
 void AccGyro::run()

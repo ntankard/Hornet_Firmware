@@ -1,16 +1,16 @@
 #pragma once
-#include "HornetManager.h"
-#include "Error.h"
-#include "SPIManager.h"
 #include "CONFIG.h"
 
 #if ENABLE_ACC == ENABLED
 
-#include "CircularBuffer.h"
-#include "MovingAverage.h"
-//#include "AP_InertialSensor_MPU6000.h"
-//#include "AP_InertialSensor_MPU6050.h"
+#include "HornetManager.h"
+#include "Error.h"
+#include "SPIManager.h"
+#include "I2CManager.h"
+#include <stdint.h>
+
 #include "AP_InertialSensor_MPU600xx.h"
+#include "MovingAverage.h"
 
 class AccGyro
 {
@@ -19,7 +19,7 @@ public:
 
 	AccGyro(HornetManager* theManager, Error* e, SPIManager *theSPIManager, uint8_t cs_pin, uint8_t interruptPin);
 
-	void start();
+	bool start();
 
 	void run();
 
