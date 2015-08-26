@@ -2,7 +2,6 @@
 #include <stdint.h>
 #include "Error.h"
 
-
 /**
 * \brief	A abstract object to represent a bus with slave devices (SPI and I2C for example)
 */
