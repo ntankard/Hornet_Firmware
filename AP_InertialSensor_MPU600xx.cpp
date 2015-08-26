@@ -2,6 +2,145 @@
 #include "Arduino.h"
 
 
+#define MPUREG_I2C_ADDRESS 0x68
+#define MPUREG_WHOAMI 0x75 
+#define MPUREG_PWR_MGMT_1 0x6B 
+#define MPUREG_ACCEL_XOUT_H 0x3B 
+
+
+//-----------------------------------------------------------------------------------------------------------------------------
+
+AP_InertialSensor_MPU600xx::AP_InertialSensor_MPU600xx(Error *e,SPIManager *theSPIManager, uint8_t cs_pin, uint8_t interruptPin)
+{
+	// bus settings
+	_sharedBusManager = theSPIManager;
+	_address = cs_pin;
+	_interruptPin = interruptPin;
+	
+	// SPI chip seelct
+	pinMode(cs_pin, OUTPUT);
+	digitalWrite(cs_pin, HIGH);
+
+	_e = e;
+}
+
+//-----------------------------------------------------------------------------------------------------------------------------
+
+AP_InertialSensor_MPU600xx::AP_InertialSensor_MPU600xx(Error *e, I2CManager *theI2CManager, uint8_t interruptPin)
+{
+	// bus settings
+	_sharedBusManager = theI2CManager;
+	_address = MPUREG_I2C_ADDRESS;
+	_interruptPin = interruptPin;
+
+	_e = e;
+}
+
+//-----------------------------------------------------------------------------------------------------------------------------
+
+bool AP_InertialSensor_MPU600xx::init()
+{
+	Could_Throw(register_write(MPUREG_PWR_MGMT_1, 0), false);
+	delay(100);
+
+	Could_Throw(
+		if (register_read(MPUREG_WHOAMI) == MPUREG_I2C_ADDRESS)
+		{
+			return true;
+		}
+	,false);
+
+	return false;
+}
+
+//-----------------------------------------------------------------------------------------------------------------------------
+
+bool AP_InertialSensor_MPU600xx::update()
+{
+	Could_Throw(getData(), false);
+
+	return true;
+}
+
+//-----------------------------------------------------------------------------------------------------------------------------
+
+void AP_InertialSensor_MPU600xx::get_accels(float* accel)
+{
+	accel[0] = _data.value.x_accel;
+	accel[1] = _data.value.y_accel;
+	accel[2] = _data.value.z_accel;
+}
+
+//-----------------------------------------------------------------------------------------------------------------------------
+
+void AP_InertialSensor_MPU600xx::get_gyros(float* gyro)
+{
+	gyro[0] = _data.value.x_gyro;
+	gyro[1] = _data.value.y_gyro;
+	gyro[2] = _data.value.z_gyro;
+}
+
+//-----------------------------------------------------------------------------------------------------------------------------
+
+void AP_InertialSensor_MPU600xx::register_write(uint8_t reg, uint8_t val)
+{
+	_sharedBusManager->write_reg(_address,reg, val);
+}
+
+//-----------------------------------------------------------------------------------------------------------------------------
+
+uint8_t AP_InertialSensor_MPU600xx::register_read(uint8_t reg)
+{
+	return _sharedBusManager->read_reg(_address, reg);
+}
+
+//-----------------------------------------------------------------------------------------------------------------------------
+
+void AP_InertialSensor_MPU600xx::getData()
+{
+	// read the data
+	uint8_t addr = MPUREG_ACCEL_XOUT_H | 0x80;
+
+	Could_Throw(_sharedBusManager->read(_address, addr, (uint8_t*)(&_data), sizeof(_data)),);
+
+	// data comes oput backwards, fix that
+	uint8_t swap;
+	#define SWAP(x,y) swap = x; x = y; y = swap
+	SWAP(_data.reg.x_accel_h, _data.reg.x_accel_l);
+	SWAP(_data.reg.y_accel_h, _data.reg.y_accel_l);
+	SWAP(_data.reg.z_accel_h, _data.reg.z_accel_l);
+	SWAP(_data.reg.t_h, _data.reg.t_l);
+	SWAP(_data.reg.x_gyro_h, _data.reg.x_gyro_l);
+	SWAP(_data.reg.y_gyro_h, _data.reg.y_gyro_l);
+	SWAP(_data.reg.z_gyro_h, _data.reg.z_gyro_l);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Interupt version
+
+
+
+
+/*
+
 #define MPU6050_I2C_ADDRESS 0x68
 // MPU 6000 registers
 #define MPUREG_WHOAMI 0x75 //
@@ -92,6 +231,9 @@ AP_InertialSensor_MPU600xx::AP_InertialSensor_MPU600xx(I2CManager *theI2CManager
 
 bool AP_InertialSensor_MPU600xx::init()
 {
+	register_write(MPUREG_PWR_MGMT_1, 0);
+	delay(100);
+
 	//@TODO adde deveice check here (may need error checking on read??)	
 
 	// Chip reset
@@ -100,6 +242,9 @@ bool AP_InertialSensor_MPU600xx::init()
 	// Wake up device and select GyroZ clock (better performance)
 	register_write(MPUREG_PWR_MGMT_1, MPU_CLK_SEL_PLLGYROZ);
 	delay(1);
+
+	register_write(MPUREG_PWR_MGMT_1, 0);
+	delay(100);
 
 	// Disable I2C bus (recommended on datasheet)
 	if (_isSPI)
@@ -144,7 +289,7 @@ void AP_InertialSensor_MPU600xx::data_interrupt(void)
 
 void AP_InertialSensor_MPU600xx::register_write(uint8_t reg, uint8_t val)
 {
-	_sharedBusManager->write_reg(_address,reg, val);
+	_sharedBusManager->write_reg(_address, reg, val);
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------
@@ -169,19 +314,23 @@ bool AP_InertialSensor_MPU600xx::update()
 {
 	if (_readNum == 0)
 	{
-		return false;
+		//return false;
 	}
 
 	cli();
 
 	_safeData = _data;
 	_missedReadings = (_readNum - 1);
-	_readNum =0;
+	_readNum = 0;
 
 	sei();
 
+	getData();
+
+
+
 	uint8_t swap;
-	#define SWAP(x,y) swap = x; x = y; y = swap
+#define SWAP(x,y) swap = x; x = y; y = swap
 
 	// data comes oput backwards, fix that
 	SWAP(_data.reg.x_accel_h, _data.reg.x_accel_l);
@@ -194,7 +343,7 @@ bool AP_InertialSensor_MPU600xx::update()
 
 	_safeData = _data;
 
-
+	Serial.println((String)_safeData.value.x_accel);
 
 
 	return true;
@@ -216,4 +365,4 @@ void AP_InertialSensor_MPU600xx::get_accels(float* accel)
 	accel[0] = _safeData.value.x_accel;
 	accel[1] = _safeData.value.y_accel;
 	accel[2] = _safeData.value.z_accel;
-}
+}*/

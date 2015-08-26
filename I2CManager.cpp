@@ -62,7 +62,7 @@ void I2CManager::write(uint8_t address, uint8_t start, uint8_t *buffer, int size
 	if (Wire.write(start) != 1)
 	{
 		_e->add(E_BUS_FAIL, "I2C bus write failed");
-		Wire.endTransmission(true);
+		//Wire.endTransmission(true);
 		return;
 	}
 
@@ -70,7 +70,7 @@ void I2CManager::write(uint8_t address, uint8_t start, uint8_t *buffer, int size
 	if (Wire.write(buffer, size) != size)
 	{
 		_e->add(E_BUS_FAIL, "I2C bus write failed, not all bytes could be writen");
-		Wire.endTransmission(true);
+		//Wire.endTransmission(true);
 		return;
 	}
 

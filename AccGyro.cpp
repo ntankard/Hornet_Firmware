@@ -6,7 +6,7 @@
 #include "Arduino.h"
 
 
-AccGyro::AccGyro(HornetManager* theManager, Error* e, I2CManager *theI2CManager, uint8_t interruptPin) :_ins(theI2CManager, interruptPin), _pitchBuffer(e), _rollBuffer(e)
+AccGyro::AccGyro(HornetManager* theManager, Error* e, I2CManager *theI2CManager, uint8_t interruptPin) :_ins(e,theI2CManager, interruptPin), _pitchBuffer(e), _rollBuffer(e)
 {
 	_hornetManager = theManager;
 	_e = e;
@@ -14,7 +14,7 @@ AccGyro::AccGyro(HornetManager* theManager, Error* e, I2CManager *theI2CManager,
 
 //-----------------------------------------------------------------------------------------------------------------------------
 
-AccGyro::AccGyro(HornetManager* theManager, Error* e, SPIManager *theSPIManager, uint8_t cs_pin, uint8_t interruptPin) : _ins(theSPIManager, cs_pin, interruptPin), _pitchBuffer(e), _rollBuffer(e)
+AccGyro::AccGyro(HornetManager* theManager, Error* e, SPIManager *theSPIManager, uint8_t cs_pin, uint8_t interruptPin) : _ins(e,theSPIManager, cs_pin, interruptPin), _pitchBuffer(e), _rollBuffer(e)
 {
 	_hornetManager = theManager;
 	_e = e;
