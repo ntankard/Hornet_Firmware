@@ -1,5 +1,7 @@
 #pragma once
 
+#include "CircularBuffer.h"
+
 template<class T, int Size>
 class MovingAverage
 {

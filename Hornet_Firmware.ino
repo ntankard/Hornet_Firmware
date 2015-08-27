@@ -1,4 +1,6 @@
 // hardware libreys (do not remove)
+#include <Wire.h>
+#include <SPI.h>
 #include <Servo.h>
 #include <RPLidar.h>
 #include <ArduinoUnit.h>
@@ -9,6 +11,7 @@
 #define BUILD_TYPE FOR_HARDWARE
 
 #if BUILD_TYPE == FOR_HARDWARE
+
 
 // local components
 #include "HornetManager.h"
@@ -21,12 +24,19 @@
 #include "Scheduler.h"
 #include "Lidar.h"
 #include "Drone.h"
+#include "SPIManager.h"
+#include "I2CManager.h"
+#include "APM_Indicator.h"
 
 #include "CONFIG.h"
 
 // core componenets
 HornetManager *manager;
 Error *error;
+
+// bus
+SPIManager *spiManager;
+I2CManager *i2cManager;
 
 // coms systems
 Coms *coms;
@@ -44,19 +54,33 @@ Scheduler *scheduler;
 
 void setup()
 {
+	Serial.begin(9600);	//@TODO this should be in the USB serial
+
 	error = new Error();
 	manager = new HornetManager(error);
 
 	// construct the coms
 	comsDecoder = new ComsDecoder(manager);
 	coms = new Coms(comsDecoder);
-
 	comsEncoder = new ComsEncoder(coms, error);
 	manager->attachComs(coms);
 	manager->attachComsEncoder(comsEncoder);
 
+	// set up conection infurstructor for the sensors
+	spiManager = new SPIManager(error);
+	i2cManager = new I2CManager(error);
+
 	// construct thew accselerator and gyro
-	accGyro = new AccGyro(manager, error);
+	#if ENABLE_ACC == ENABLED
+		#ifdef USE_MPU6000
+				accGyro = new AccGyro(manager,error,spiManager,MPU6000_CS,MPU6000_INTERRUPT);
+		#endif
+		#ifdef USE_MPU6050
+				accGyro = new AccGyro(manager,error,i2cManager,MPU6050_INTERRUPT);
+		#endif
+	#else
+		accGyro = new AccGyro();
+	#endif
 	manager->attachAccGyro(accGyro);
 
 	// construct the monitor
@@ -64,7 +88,16 @@ void setup()
 	manager->attachMonitor(monitor);
 
 	// construct the indicator
-	indicator = new Indicator();
+	#if ENABLE_INDICATOR == ENABLED
+		#ifdef USE_APM_INDICATOR
+			indicator = new APM_Indicator();
+		#endif
+		#ifdef USE_DOT_MATRIX
+			indicator = new DM_Indicator();
+		#endif
+	#else
+		indicator = new Indicator();
+	#endif
 	manager->attachIndicator(indicator);
 
 	// construct the lidar
@@ -91,6 +124,8 @@ void loop()
 		delete coms;
 		delete comsDecoder;
 		delete comsEncoder;
+		delete spiManager;
+		delete i2cManager;
 
 		delete accGyro;
 		delete monitor;

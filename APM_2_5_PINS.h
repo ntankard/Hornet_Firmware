@@ -11,8 +11,8 @@
 #define PWM_7 2
 #define PWM_8 5
 
-#define BLUE_LED 25
-#define YELLOY_LED 26
-#define RED_LED 27
+#define APM_BLUE_LED 25
+#define APM_YELLOY_LED 26
+#define APM_RED_LED 27
 
 

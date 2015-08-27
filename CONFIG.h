@@ -8,7 +8,6 @@
 #define BOARD_TYPE_APM 1
 #define BOARD_TYPE_MEGA 2
 #define BOARD_TYPE_DUO 3
-#define BOARD_TYPE_UNO 4
 
 #define COM_MODE_SERIAL 1
 #define COM_MODE_XBEE 2
@@ -21,34 +20,28 @@
 // ----------------------------------------------------------------------------------------------------------------------------
 
 // Pick wich board to use
-#define BOARD_TYPE BOARD_TYPE_UNO
+#define BOARD_TYPE BOARD_TYPE_APM
 
 // Pick wich coms to use (XBEE not avalible for uno, will default to SERIAL)
 #define COM_MODE COM_MODE_SERIAL
 
 // Enable relevent systems (some will be automaticaly disabled for certain board)
-#define ENABLE_ACC			DISABLED
+#define ENABLE_ACC			ENABLED
 #define ENABLE_LIDAR		DISABLED
-#define ENABLE_INDICATOR	DISABLED
+#define ENABLE_INDICATOR	ENABLED
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // ---------------------------------------------------- BOARD FEATURES --------------------------------------------------------
 // ----------------------------------------------------------------------------------------------------------------------------
 
-#if BOARD_TYPE == BOARD_TYPE_UNO
-	//UNO overrride components that are not suported
-	#define ENABLE_ACC			DISABLED
-	#define ENABLE_LIDAR		DISABLED
-	#define ENABLE_INDICATOR	DISABLED
-	#define COM_MODE			COM_MODE_SERIAL
-#endif
+// What features do the board suport?
 
 #if BOARD_TYPE == BOARD_TYPE_APM
 	#define ENABLE_LIDAR		DISABLED
 #endif
 
 #if BOARD_TYPE == BOARD_TYPE_MEGA
-	#define ENABLE_ACC			DISABLED
+	#define ENABLE_LIDAR		DISABLED
 	#define ENABLE_INDICATOR	DISABLED
 #endif
 
@@ -62,15 +55,54 @@
 // ------------------------------------------------------ COMPONENTS ----------------------------------------------------------
 // ----------------------------------------------------------------------------------------------------------------------------
 
-#if ENABLE_ACC == DISABLED
+// What componets do you use based on the Board type
+
+#if ENABLE_ACC == ENABLED
 	#if BOARD_TYPE == BOARD_TYPE_APM
 		#define USE_MPU6000
+	#else
+		#define USE_MPU6050
+	#endif
+#endif
+
+#if ENABLE_INDICATOR == ENABLED
+	#if BOARD_TYPE == BOARD_TYPE_APM
+		#define USE_APM_INDICATOR
+	#else
+		#define USE_DOT_MATRIX
 	#endif
 #endif
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // ----------------------------------------------------- PIN SETTINGS ---------------------------------------------------------
 // ----------------------------------------------------------------------------------------------------------------------------
+
+#if BOARD_TYPE == BOARD_TYPE_APM
+
+	// indicator
+	#define BLUE_LED APM_BLUE_LED
+	#define YELLOY_LED APM_YELLOY_LED
+	#define RED_LED APM_RED_LED
+
+#else	// MEGA and DUO
+
+	// dot matrix
+	#define CANODE_1 A14
+	#define CANODE_2 A13
+	#define CANODE_3 A12
+	#define CANODE_4 A11
+	#define CANODE_5 A10
+	#define CANODE_6 A9
+	#define CANODE_7 A8
+	#define CANODE_8 33
+	#define CANODE_9 26
+	#define CANODE_10 27
+	#define CANODE_11 43
+	#define CANODE_12 38
+	#define CANODE_13 35
+	#define CANODE_14 30
+#endif
+
 
 #if COM_MODE == COM_MODE_XBEE
 	#define C_COMS_PORT Serial1
@@ -79,13 +111,23 @@
 	#define C_COMS_PORT Serial
 #endif
 
-#if ENABLE_LIDAR == DISABLED
+#if ENABLE_LIDAR == ENABLED
 	#if BOARD_TYPE == BOARD_TYPE_APM
 		#define C_LIDAR_MOTOCTL 3
 		#define C_LIDAR_SERIAL Serial2
 	#else
 		#define C_LIDAR_MOTOCTL 3
 		#define C_LIDAR_SERIAL Serial2
+	#endif
+#endif
+
+#if ENABLE_ACC == ENABLED
+	#ifdef USE_MPU6000
+		#define MPU6000_CS ACC_CS // from APM
+		#define MPU6000_INTERRUPT 6
+	#endif
+	#ifdef USE_MPU6050
+		#define MPU6050_INTERRUPT 2
 	#endif
 #endif
 
@@ -111,6 +153,7 @@
 
 #define E_ILLEGAL_ACCESS 1
 #define E_STATE_ERROR 2
+#define E_BUS_FAIL 3
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // --------------------------------------------------- GENERAL SETTINGS --------------------------------------------------------
@@ -132,10 +175,11 @@
 	#define C_COMS_BUFFER 100
 #endif
 
+//enum Color{ BLUE, YELLOW, RED, PURPLE, ORANGE, MAGENTA };
 
-#define C_STATE_INDICATE_CONNECT Indicator::MAGENTA,1,500
-#define C_STATE_INDICATE_IDLE Indicator::PURPLE,2,100
-#define C_STATE_INDICATE_FLIGHT Indicator::BLUE,2,100
+#define C_STATE_INDICATE_CONNECT 5,1,500
+#define C_STATE_INDICATE_IDLE 3,2,100
+#define C_STATE_INDICATE_FLIGHT 0,2,100
 
 #define C_ACC_CS ACC_CS
 
