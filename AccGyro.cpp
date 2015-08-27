@@ -5,29 +5,44 @@
 #include "SPI.h"
 #include "Arduino.h"
 
-AccGyro::AccGyro(HornetManager* theManager, Error* e) :_ins(C_ACC_CS), _pitchBuffer(e), _rollBuffer(e)
+
+AccGyro::AccGyro(HornetManager* theManager, Error* e, I2CManager *theI2CManager, uint8_t interruptPin) :_ins(e,theI2CManager, interruptPin), _pitchBuffer(e), _rollBuffer(e)
 {
 	_hornetManager = theManager;
 	_e = e;
 }
 
-void AccGyro::start()
+//-----------------------------------------------------------------------------------------------------------------------------
+
+AccGyro::AccGyro(HornetManager* theManager, Error* e, SPIManager *theSPIManager, uint8_t cs_pin, uint8_t interruptPin) : _ins(e,theSPIManager, cs_pin, interruptPin), _pitchBuffer(e), _rollBuffer(e)
 {
-	//@TODO this needs to change if we share the SPI bus
-	SPI.begin();
-	SPI.setClockDivider(SPI_CLOCK_DIV16); // 1MHZ SPI rate
-	// we need to stop the barometer from holding the SPI bus
-	pinMode(40, OUTPUT);
-	digitalWrite(40, HIGH);
+	_hornetManager = theManager;
+	_e = e;
+}
 
-	_ins.init();
+//-----------------------------------------------------------------------------------------------------------------------------
 
+bool AccGyro::start()
+{
+	return _ins.init();
 }
 
 void AccGyro::run()
 {
 	float accel[3];
 	float gyro[3];
+
+	if (_ins.update())
+	{
+		_ins.get_gyros(gyro);
+		_ins.get_accels(accel);
+
+		_hornetManager->ND_RawAccGyro(accel, gyro);
+	}
+
+	/*
+
+#ifdef USE_MPU6000
 
 	if (_ins.update()){
 		_ins.get_gyros(gyro);
@@ -42,6 +57,10 @@ void AccGyro::run()
 		_hornetManager->ND_PitchRoll(_pitchBuffer.add(pitch), _rollBuffer.add(roll));
 	}
 
+#endif
+#ifdef USE_MPU6050
+
+#endif*/
 }
 
 #endif

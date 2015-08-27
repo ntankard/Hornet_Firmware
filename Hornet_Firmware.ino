@@ -26,7 +26,10 @@
 #include "Drone.h"
 #include "SPIManager.h"
 #include "I2CManager.h"
+<<<<<<< HEAD
 #include "APM_Indicator.h"
+=======
+>>>>>>> 0deaf9d72bc672ff116004cc2d65d00692492db8
 
 #include "CONFIG.h"
 

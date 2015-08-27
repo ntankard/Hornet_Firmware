@@ -34,8 +34,11 @@
 // ---------------------------------------------------- BOARD FEATURES --------------------------------------------------------
 // ----------------------------------------------------------------------------------------------------------------------------
 
+<<<<<<< HEAD
 // What features do the board suport?
 
+=======
+>>>>>>> 0deaf9d72bc672ff116004cc2d65d00692492db8
 #if BOARD_TYPE == BOARD_TYPE_APM
 	#define ENABLE_LIDAR		DISABLED
 #endif
@@ -46,7 +49,6 @@
 #endif
 
 #if BOARD_TYPE == BOARD_TYPE_DUO
-	#define ENABLE_ACC			DISABLED
 	#define ENABLE_LIDAR		DISABLED
 	#define ENABLE_INDICATOR	DISABLED
 #endif
@@ -55,13 +57,17 @@
 // ------------------------------------------------------ COMPONENTS ----------------------------------------------------------
 // ----------------------------------------------------------------------------------------------------------------------------
 
+<<<<<<< HEAD
 // What componets do you use based on the Board type
 
+=======
+>>>>>>> 0deaf9d72bc672ff116004cc2d65d00692492db8
 #if ENABLE_ACC == ENABLED
 	#if BOARD_TYPE == BOARD_TYPE_APM
 		#define USE_MPU6000
 	#else
 		#define USE_MPU6050
+<<<<<<< HEAD
 	#endif
 #endif
 
@@ -70,6 +76,8 @@
 		#define USE_APM_INDICATOR
 	#else
 		#define USE_DOT_MATRIX
+=======
+>>>>>>> 0deaf9d72bc672ff116004cc2d65d00692492db8
 	#endif
 #endif
 

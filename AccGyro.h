@@ -1,41 +1,46 @@
 #pragma once
-#include "HornetManager.h"
-#include "Error.h"
 #include "CONFIG.h"
 
 #if ENABLE_ACC == ENABLED
 
-#include "CircularBuffer.h"
+#include "HornetManager.h"
+#include "Error.h"
+#include "SPIManager.h"
+#include "I2CManager.h"
+#include <stdint.h>
+
+#include "AP_InertialSensor_MPU600xx.h"
 #include "MovingAverage.h"
-#include "AP_InertialSensor_MPU6000.h"
 
 class AccGyro
 {
 public:
-	AccGyro(HornetManager* theManager, Error* e);
+	AccGyro(HornetManager* theManager, Error* e, I2CManager *theI2CManager, uint8_t interruptPin);
 
-	void start();
+	AccGyro(HornetManager* theManager, Error* e, SPIManager *theSPIManager, uint8_t cs_pin, uint8_t interruptPin);
+
+	bool start();
 
 	void run();
 
 private:
+
 	HornetManager* _hornetManager;
-	//CircularBuffer<int,5> _rollBuffer;
-	MovingAverage<float, C_PITCH_ROLL_WINDOW_AVE_WIDTH> _pitchBuffer;
-	MovingAverage<float, C_PITCH_ROLL_WINDOW_AVE_WIDTH> _rollBuffer;
 	Error* _e;
 
 
+	MovingAverage<float, C_PITCH_ROLL_WINDOW_AVE_WIDTH> _pitchBuffer;
+	MovingAverage<float, C_PITCH_ROLL_WINDOW_AVE_WIDTH> _rollBuffer;
 
-	AP_InertialSensor_MPU6000 _ins;
 
+	AP_InertialSensor_MPU600xx _ins;
 };
 #else
 
 class AccGyro
 {
 public:
-	AccGyro(HornetManager* theManager, Error* e){}
+	AccGyro(){}
 	void start(){}
 	void run(){}
 };
