@@ -20,7 +20,7 @@
 // ----------------------------------------------------------------------------------------------------------------------------
 
 // Pick wich board to use
-#define BOARD_TYPE BOARD_TYPE_APM
+#define BOARD_TYPE BOARD_TYPE_MEGA
 
 // Pick wich coms to use (XBEE not avalible for uno, will default to SERIAL)
 #define COM_MODE COM_MODE_SERIAL
@@ -42,7 +42,6 @@
 
 #if BOARD_TYPE == BOARD_TYPE_MEGA
 	#define ENABLE_LIDAR		DISABLED
-	#define ENABLE_INDICATOR	DISABLED
 #endif
 
 #if BOARD_TYPE == BOARD_TYPE_DUO
@@ -69,7 +68,7 @@
 	#if BOARD_TYPE == BOARD_TYPE_APM
 		#define USE_APM_INDICATOR
 	#else
-		#define USE_DOT_MATRIX
+		#define USE_DM_INDICATOR
 	#endif
 #endif
 
@@ -175,9 +174,17 @@
 	#define C_COMS_BUFFER 100
 #endif
 
-#define C_STATE_INDICATE_CONNECT APM_Indicator::Color::MAGENTA,1,500
-#define C_STATE_INDICATE_IDLE APM_Indicator::Color::PURPLE,2,100
-#define C_STATE_INDICATE_FLIGHT APM_Indicator::Color::BLUE,2,100
+#ifdef USE_APM_INDICATOR
+	#define C_STATE_INDICATE_CONNECT APM_Indicator::Color::MAGENTA,1,500
+	#define C_STATE_INDICATE_IDLE APM_Indicator::Color::PURPLE,2,100
+	#define C_STATE_INDICATE_FLIGHT APM_Indicator::Color::BLUE,2,100
+#endif
+
+#ifdef USE_DM_INDICATOR
+	#define C_STATE_INDICATE_CONNECT 1,1,500
+	#define C_STATE_INDICATE_IDLE 2,2,100
+	#define C_STATE_INDICATE_FLIGHT 3,2,100
+#endif
 
 #define C_ACC_CS ACC_CS
 

@@ -14,7 +14,7 @@ Indicator::Indicator()
 	_setting = 0;
 
 	_isBreak = false;
-	_pinIsOn = true;
+	_pinIsOn = false;
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------
@@ -28,6 +28,7 @@ void Indicator::on()
 		// reset
 		_isBreak = false;
 		_doneBlinks = 0;
+		_pinIsOn = false;
 		_pastTime = millis();
 	}
 }
@@ -76,7 +77,7 @@ void Indicator::run()
 				if (_pinIsOn == false)
 				{
 					// end of a regular gap
-					_pinIsOn = false;
+					_pinIsOn = true;
 					lightOn(_setting);
 					_pastTime = currentMillis;
 				}

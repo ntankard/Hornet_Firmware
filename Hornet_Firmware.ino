@@ -27,6 +27,7 @@
 #include "SPIManager.h"
 #include "I2CManager.h"
 #include "APM_Indicator.h"
+#include "DM_Indicator.h"
 
 #include "CONFIG.h"
 
@@ -92,7 +93,7 @@ void setup()
 		#ifdef USE_APM_INDICATOR
 			indicator = new APM_Indicator();
 		#endif
-		#ifdef USE_DOT_MATRIX
+		#ifdef USE_DM_INDICATOR
 			indicator = new DM_Indicator();
 		#endif
 	#else
