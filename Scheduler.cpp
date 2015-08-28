@@ -41,6 +41,8 @@ void Scheduler::run()
 	_coms->run();
 	_comsEncoder->run();
 
+	//Serial.println("Enter");
+
 	//acc
 	if (_accPriority != 0)
 	{
@@ -55,6 +57,8 @@ void Scheduler::run()
 	{
 		_accRunCount = 0;
 	}
+
+	//Serial.println("Done Acc");
 
 	//indicator
 	if (_indicatorPriority != 0)
@@ -71,6 +75,8 @@ void Scheduler::run()
 		_indicatorRunCount = 0;
 	}
 
+	//Serial.println("Done Indicator");
+
 	//lidar
 	if (_lidarPriority != 0)
 	{
@@ -86,6 +92,6 @@ void Scheduler::run()
 		_lidarRunCount = 0;
 	}
 	
-
+	//Serial.println("Done Lidar");
 }
 

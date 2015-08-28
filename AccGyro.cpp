@@ -37,7 +37,15 @@ void AccGyro::run()
 		_ins.get_gyros(gyro);
 		_ins.get_accels(accel);
 
+		double g = sqrt(pow(accel[0], 2) + pow(accel[1], 2) + pow(accel[2], 2));
+		float roll = (float)(asin(accel[0] / g));
+		float pitch = (float)((asin(accel[1] / g)));
+
+		float addedPitch = _pitchBuffer.add(pitch);
+		float addedRoll = _rollBuffer.add(roll);
+
 		_hornetManager->ND_RawAccGyro(accel, gyro);
+		_hornetManager->ND_PitchRoll(addedPitch, addedRoll);
 	}
 
 	/*

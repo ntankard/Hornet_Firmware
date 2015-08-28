@@ -22,19 +22,27 @@ void I2CManager::read(uint8_t address, uint8_t start, uint8_t *buffer, int size)
 	}
 	
 	// attempt to hold the I2C bus for continuouse transfer
-	error = Wire.endTransmission(false);
+	error = Wire.endTransmission();
 	if (error != 0)
 	{
 		_e->add(E_BUS_FAIL, "I2C bus hold failed, Error code: "+(String)error);
 		return;
 	}
 
+	Wire.beginTransmission(address);
+
 	// read all the values
 	if (Wire.requestFrom((uint8_t)address, (uint8_t)size, (uint8_t)true) != size)
 	{
 		_e->add(E_BUS_FAIL, "I2C bus read failed, not all the bytes were read ");
+		while (true)
+		{
+			Serial.println("HELP IM ON FIRE");
+		}
 		return;
 	}
+
+	while (!Wire.available()){}
 
 	// get the read values
 	int i = 0;
@@ -47,7 +55,13 @@ void I2CManager::read(uint8_t address, uint8_t start, uint8_t *buffer, int size)
 		_e->add(E_BUS_FAIL, "I2C bus read failed, all bytes were read but could nt be received ");
 	}
 
-	return;
+
+	error = Wire.endTransmission();
+	if (error != 0)
+	{
+		_e->add(E_BUS_FAIL, "I2C bus hold failed, Error code: " + (String)error);
+		return;
+	}
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------
@@ -55,7 +69,8 @@ void I2CManager::read(uint8_t address, uint8_t start, uint8_t *buffer, int size)
 void I2CManager::write(uint8_t address, uint8_t start, uint8_t *buffer, int size)
 {
 	int error;
-
+	Wire.flush();
+	Wire.clearWriteError();
 	Wire.beginTransmission(address);
 
 	// set the write address

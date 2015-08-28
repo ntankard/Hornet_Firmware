@@ -107,7 +107,7 @@ void ComsEncoder::sendPitchRoll(float pitch, float roll)
 
 		for (int j = 0; j < 4; j++)
 		{
-			_pitchRoll[toAdd][addCount] = u_pitch[j];
+			_pitchRoll[toAdd][addCount] = u_pitch[4 - (j + 1)];
 			addCount++;
 		}
 	
@@ -115,7 +115,7 @@ void ComsEncoder::sendPitchRoll(float pitch, float roll)
 
 		for (int j = 0; j < 4; j++)
 		{
-			_pitchRoll[toAdd][addCount] = u_roll[j];
+			_pitchRoll[toAdd][addCount] = u_roll[4 - (j + 1)];
 			addCount++;
 		}
 	}
@@ -139,7 +139,7 @@ void ComsEncoder::sendLidarPoint(float angle, float distance)
 
 	for (int j = 0; j < 4; j++)
 	{
-		_lidarData[toAdd][addCount] = u_lidarAngle [j];
+		_lidarData[toAdd][addCount] = u_lidarAngle [4-(j+1)];
 		addCount++;
 	}
 
@@ -147,7 +147,7 @@ void ComsEncoder::sendLidarPoint(float angle, float distance)
 
 	for (int j = 0; j < 4; j++)
 	{
-		_lidarData[toAdd][addCount] = u_lidarDistance[j];
+		_lidarData[toAdd][addCount] = u_lidarDistance[4 - (j + 1)];
 		addCount++;
 	}
 }

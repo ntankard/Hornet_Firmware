@@ -9,6 +9,7 @@
 const int ROWS[] = { CANODE_6, CANODE_10, CANODE_11, CANODE_3, CANODE_13 };
 const int COLUMNS[] = { CANODE_9, CANODE_14, CANODE_8, CANODE_5, CANODE_1, CANODE_7, CANODE_2 };
 
+
 const int SETTING_MAP[][4] = {	{ 0, 0, 1, 1 },
 								{ 0, 0, 2, 2 } ,
 								{ 0, 0, 3, 3 } ,
@@ -43,6 +44,13 @@ DM_Indicator::DM_Indicator()
 
 void DM_Indicator::lightOn(int setting)
 {
+	//@TODO add setting check
+
+	if (setting >= 4)
+	{
+		return;
+	}
+
 	if (_lastSetting != setting)
 	{
 		lightOff();

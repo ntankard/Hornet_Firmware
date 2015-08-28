@@ -8,6 +8,7 @@
 #include <Arduino.h>
 #include "Servo.h"
 #include "Drone.h"
+#include "APM_Indicator.h"
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // ---------------------------------------------------- CONSTRUCTION ----------------------------------------------------------
@@ -126,6 +127,13 @@ bool HornetManager::run()
 	// catch exeption
 	if (_e->isError())
 	{
+		_indicator->setDisplay(C_INDICATE_ERROR);
+		while (true)
+		{
+			delay(10);
+			String message = _e->getError()->errorInfo;
+			Serial.println(message);
+		}
 		//@TODO add error handeling here
 	}
 

@@ -9,10 +9,12 @@ public:
 	MovingAverage(Error *e) :_window(e)
 	{
 		_e = e;
+		_sum = 0;
 	}
 
 	T add(T toAdd)
 	{
+
 		if (_window.isFull())
 		{
 			_sum -= _window.remove();
