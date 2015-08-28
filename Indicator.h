@@ -1,10 +1,12 @@
 #pragma once
+#include "Runnable.h"
+
 #if ENABLE_INDICATOR == ENABLED
 
 /**
 * \brief	Uses some form of visual display to depict a message to the user
 */
-class Indicator 
+class Indicator :public Runnable
 {
 public:
 
@@ -51,6 +53,9 @@ public:
 	* \date	1/08/2015
 	*/
 	void run();
+
+	// no implimented
+	bool start(){ return true; }
 
 protected:
 
@@ -102,7 +107,7 @@ protected:
 
 #else
 
-class Indicator {
+class Indicator :public Runnable{
 public:
 	Indicator(){}
 	void run(){}

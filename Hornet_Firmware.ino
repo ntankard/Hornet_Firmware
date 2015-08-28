@@ -22,8 +22,6 @@
 #include "Monitor.h"
 #include "Indicator.h"
 #include "Scheduler.h"
-#include "Lidar.h"
-#include "Drone.h"
 #include "SPIManager.h"
 #include "I2CManager.h"
 #include "APM_Indicator.h"
@@ -35,6 +33,7 @@
 // core componenets
 HornetManager *manager;
 Error *error;
+Scheduler *scheduler;
 
 // bus
 SPIManager *spiManager;
@@ -50,10 +49,7 @@ AccGyro *accGyro;
 Magnetometer *magnetometer;
 Monitor *monitor;
 Indicator *indicator;
-Lidar *lidar;
-Drone *drone;
 
-Scheduler *scheduler;
 
 void setup()
 {
@@ -61,19 +57,22 @@ void setup()
 
 	error = new Error();
 	manager = new HornetManager(error);
+	scheduler = new Scheduler(error);
 
 	// construct the coms
 	comsDecoder = new ComsDecoder(manager);
 	coms = new Coms(comsDecoder);
+		manager->attachComs(coms);
+		scheduler->addRunable(C_SCHEDULER_COMS_THREAD, coms);
 	comsEncoder = new ComsEncoder(coms, error);
-	manager->attachComs(coms);
-	manager->attachComsEncoder(comsEncoder);
+		manager->attachComsEncoder(comsEncoder);
+		scheduler->addRunable(C_SCHEDULER_COMENCODER_THREAD, comsEncoder);
 
 	// set up conection infurstructor for the sensors
 	spiManager = new SPIManager(error);
 	i2cManager = new I2CManager(error);
 
-	// construct thew accselerator and gyro
+	// construct the accselerator and gyro
 	#if ENABLE_ACC == ENABLED
 		#ifdef USE_MPU6000
 				accGyro = new AccGyro(manager,error,spiManager,MPU6000_CS,MPU6000_INTERRUPT);
@@ -85,8 +84,11 @@ void setup()
 		accGyro = new AccGyro();
 	#endif
 	manager->attachAccGyro(accGyro);
+	scheduler->addRunable(C_SCHEDULER_ACCGYRO_THREAD, accGyro);
 
+	// construct the magnotomiter
 	magnetometer = new Magnetometer(spiManager);
+	scheduler->addRunable(C_SCHEDULER_MAG_THREAD, magnetometer);
 
 	// construct the monitor
 	monitor = new Monitor(comsEncoder);
@@ -104,44 +106,40 @@ void setup()
 		indicator = new Indicator();
 	#endif
 	manager->attachIndicator(indicator);
+	scheduler->addRunable(C_SCHEDULER_INDICATOR_THREAD, indicator);
 
-	// construct the lidar
-	lidar = new Lidar(manager);
-	manager->attachLidar(lidar);
-
-	drone= new Drone();
-	manager->attachDrone(drone);
-
-	// construct the scedulor
-	scheduler = new Scheduler(coms, comsEncoder, accGyro, indicator, lidar);
+	// attach the scedulor
 	manager->attachScheduler(scheduler);
 
-	// start all objest with threads
-	manager->start();
+	// check build integrety
+	if (scheduler->finish())
+	{
+		while (true){ Serial.println("FAILED TO START"); };
+		//@TODO add error code here
+	}
 
-	magnetometer->start();
+	//magnetometer->start();
+	manager->start();
 }
 
 void loop()
 {
-	magnetometer->run();
 	if (!manager->run())
 	{
+
+		// @TODO delete order should be backwards
 		delete manager;
 		delete error;
+		delete scheduler;
+		delete spiManager;
+		delete i2cManager;
 		delete coms;
 		delete comsDecoder;
 		delete comsEncoder;
-		delete spiManager;
-		delete i2cManager;
-
 		delete accGyro;
 		delete magnetometer;
 		delete monitor;
 		delete indicator;
-		delete lidar;
-		delete drone;
-
 		delete scheduler;
 
 		setup();

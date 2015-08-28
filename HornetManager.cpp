@@ -7,7 +7,6 @@
 #include "Scheduler.h"
 #include <Arduino.h>
 #include "Servo.h"
-#include "Drone.h"
 #include "APM_Indicator.h"
 
 //-----------------------------------------------------------------------------------------------------------------------------
@@ -28,8 +27,6 @@ void HornetManager::attachComsEncoder(ComsEncoder* theComsEncoder){_comsEncoder 
 void HornetManager::attachAccGyro(AccGyro* theAccGyro){	_accGyro = theAccGyro;}
 void HornetManager::attachMonitor(Monitor* theMonitor){	_monitor = theMonitor;}
 void HornetManager::attachIndicator(Indicator* theIndicator){	_indicator = theIndicator;}
-void HornetManager::attachLidar(Lidar* theLidar){ _lidar = theLidar; }
-void HornetManager::attachDrone(Drone* theDrone){ _drone = theDrone; }
 void HornetManager::attachScheduler(Scheduler* theScheduler){	_scheduler = theScheduler;}
 
 //-----------------------------------------------------------------------------------------------------------------------------
@@ -50,10 +47,7 @@ void HornetManager::ND_RawAccGyro(float accel[3], float gyro[3])
 
 void HornetManager::ND_Throttle(int t)
 {
-	if (_state == Flight)
-	{
-		_drone->setThrottle(t);
-	}
+	//@TODO impliment
 }
 
 void HornetManager::ND_PitchRoll(float pitch, float roll)
@@ -173,7 +167,6 @@ void HornetManager::S_initToConnect()
 	if (_state == Init)
 	{
 		_accGyro->start();
-		_drone->start();
 		_C_last = millis();
 		S_enterConnect();
 	}
@@ -187,10 +180,13 @@ void HornetManager::S_initToConnect()
 
 void HornetManager::S_enterConnect()
 {
+
 	// threads
-	_scheduler->setAccPriority(0);
-	_scheduler->setIndicatorPriority(2);
-	_scheduler->setLidarPriority(0);
+	_scheduler->setPriority(C_SCHEDULER_COMS_THREAD, 1);
+	_scheduler->setPriority(C_SCHEDULER_COMENCODER_THREAD, 1);
+	_scheduler->setPriority(C_SCHEDULER_ACCGYRO_THREAD, 0);
+	_scheduler->setPriority(C_SCHEDULER_INDICATOR_THREAD, 2);
+	_scheduler->setPriority(C_SCHEDULER_MAG_THREAD, 0);
 
 	// extra systems
 	_monitor->off();
@@ -210,7 +206,6 @@ void HornetManager::S_connectToIdle()
 		_state = Idle;
 		_monitor->on();
 		S_enterIdle();
-		_lidar->start();
 	}
 	else
 	{
@@ -223,9 +218,12 @@ void HornetManager::S_connectToIdle()
 void HornetManager::S_enterIdle()
 {
 	// threads
-	_scheduler->setAccPriority(2);
-	_scheduler->setIndicatorPriority(10);
-	_scheduler->setLidarPriority(2);
+	_scheduler->setPriority(C_SCHEDULER_COMS_THREAD, 1);
+	_scheduler->setPriority(C_SCHEDULER_COMENCODER_THREAD, 1);
+	_scheduler->setPriority(C_SCHEDULER_ACCGYRO_THREAD, 1);
+	_scheduler->setPriority(C_SCHEDULER_INDICATOR_THREAD, 10);
+	_scheduler->setPriority(C_SCHEDULER_MAG_THREAD, 1);
+
 
 	// extra systems
 	_monitor->on();
@@ -239,7 +237,6 @@ void HornetManager::S_idleToConnect(){}
 void HornetManager::S_idleToInit(){}
 void HornetManager::S_idleToTakeOff()
 {
-	_drone->arm();
 	S_enterTakeOff();
 }
 
@@ -255,9 +252,11 @@ void HornetManager::S_takeOffToFlight()
 void HornetManager::S_enterFlight()
 {
 	// threads
-	_scheduler->setAccPriority(2);
-	_scheduler->setIndicatorPriority(10);
-	_scheduler->setLidarPriority(2);
+	_scheduler->setPriority(C_SCHEDULER_COMS_THREAD, 1);
+	_scheduler->setPriority(C_SCHEDULER_COMENCODER_THREAD, 1);
+	_scheduler->setPriority(C_SCHEDULER_ACCGYRO_THREAD, 1);
+	_scheduler->setPriority(C_SCHEDULER_INDICATOR_THREAD, 10);
+	_scheduler->setPriority(C_SCHEDULER_MAG_THREAD, 1);
 
 	// extra systems
 	_monitor->on();
@@ -279,7 +278,6 @@ void HornetManager::S_enterLand()
 }
 void HornetManager::S_landToIdle()
 {
-	_drone->disarm();
 	S_enterIdle();
 }
 

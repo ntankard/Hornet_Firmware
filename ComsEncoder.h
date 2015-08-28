@@ -2,13 +2,16 @@
 #include "Coms.h"
 #include "CircularBuffer_Manager.h"
 #include "Error.h"
+#include "Runnable.h"
 
-class ComsEncoder
+class ComsEncoder:public Runnable
 {
 public:
 	ComsEncoder(Coms* coms, Error *e);
 
 	void run();
+
+	bool start(){ return true; }
 
 	void sendChar(uint8_t message);
 

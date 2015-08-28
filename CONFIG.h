@@ -1,6 +1,15 @@
 #pragma once
 #include "APM_2_5_PINS.h"
 
+// THe build depends on there being this many threads and them being from 0 to C_SCHEDULER_THREAD_NUM -1 with no repeats
+#define C_SCHEDULER_THREAD_NUM 5
+
+#define C_SCHEDULER_COMS_THREAD 0
+#define C_SCHEDULER_COMENCODER_THREAD 1
+#define C_SCHEDULER_ACCGYRO_THREAD 2
+#define C_SCHEDULER_INDICATOR_THREAD 3
+#define C_SCHEDULER_MAG_THREAD 4
+
 //-----------------------------------------------------------------------------------------------------------------------------
 // ------------------------------------------------------ BASE TYPES ----------------------------------------------------------
 // ----------------------------------------------------------------------------------------------------------------------------
@@ -162,6 +171,7 @@
 #define E_ILLEGAL_ACCESS 1
 #define E_STATE_ERROR 2
 #define E_BUS_FAIL 3
+#define E_SETUP_ERROR 4
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // --------------------------------------------------- GENERAL SETTINGS --------------------------------------------------------

@@ -1,5 +1,6 @@
 #pragma once
 #include "CONFIG.h"
+#include "Runnable.h"
 
 #if ENABLE_ACC == ENABLED
 
@@ -12,7 +13,7 @@
 #include "AP_InertialSensor_MPU600xx.h"
 #include "MovingAverage.h"
 
-class AccGyro
+class AccGyro :public Runnable
 {
 public:
 	AccGyro(HornetManager* theManager, Error* e, I2CManager *theI2CManager, uint8_t interruptPin);
@@ -37,7 +38,7 @@ private:
 };
 #else
 
-class AccGyro
+class AccGyro:public Runnable
 {
 public:
 	AccGyro(){}

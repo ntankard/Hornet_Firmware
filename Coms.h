@@ -2,13 +2,15 @@
 
 #include "XBee.h"
 #include "ComsDecoder.h"
-
-class Coms
+#include "Runnable.h"
+class Coms:public Runnable
 {
 public:
 	Coms(ComsDecoder* comsDecoder);
 
 	void run();
+
+	bool start(){ return true; }
 
 	bool canSend();
 
