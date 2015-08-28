@@ -2,6 +2,8 @@
 #include "Indicator.h"
 #include "CONFIG.h"
 
+#include "arduino.h"
+
 #ifdef USE_APM_INDICATOR
 
 class APM_Indicator :public Indicator
@@ -11,6 +13,8 @@ public:
 protected:
 	void lightOn(int setting);
 	void lightOff();
+	const int ON = LOW;
+	const int OFF = HIGH;
 	const int onOffState[6][3] = { { ON, OFF, OFF }, { OFF, OFF, ON }, { ON, OFF, ON }, { ON, OFF, ON }, { OFF, ON, ON }, { ON, ON, OFF } };
 };
 
