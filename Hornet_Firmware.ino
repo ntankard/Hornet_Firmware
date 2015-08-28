@@ -28,6 +28,7 @@
 #include "I2CManager.h"
 #include "APM_Indicator.h"
 #include "DM_Indicator.h"
+#include "Magnetometer.h"
 
 #include "CONFIG.h"
 
@@ -46,6 +47,7 @@ ComsEncoder *comsEncoder;
 
 // periferal systerms
 AccGyro *accGyro;
+Magnetometer *magnetometer;
 Monitor *monitor;
 Indicator *indicator;
 Lidar *lidar;
@@ -84,6 +86,8 @@ void setup()
 	#endif
 	manager->attachAccGyro(accGyro);
 
+	magnetometer = new Magnetometer(spiManager);
+
 	// construct the monitor
 	monitor = new Monitor(comsEncoder);
 	manager->attachMonitor(monitor);
@@ -114,10 +118,13 @@ void setup()
 
 	// start all objest with threads
 	manager->start();
+
+	magnetometer->start();
 }
 
 void loop()
 {
+	magnetometer->run();
 	if (!manager->run())
 	{
 		delete manager;
@@ -129,6 +136,7 @@ void loop()
 		delete i2cManager;
 
 		delete accGyro;
+		delete magnetometer;
 		delete monitor;
 		delete indicator;
 		delete lidar;

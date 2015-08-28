@@ -29,6 +29,7 @@
 #define ENABLE_ACC			ENABLED
 #define ENABLE_LIDAR		DISABLED
 #define ENABLE_INDICATOR	ENABLED
+#define ENABLE_MAG			ENABLED
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // ---------------------------------------------------- BOARD FEATURES --------------------------------------------------------
@@ -38,6 +39,7 @@
 
 #if BOARD_TYPE == BOARD_TYPE_APM
 	#define ENABLE_LIDAR		DISABLED
+	#define ENABLE_MAG			DISABLED
 #endif
 
 #if BOARD_TYPE == BOARD_TYPE_MEGA
@@ -48,6 +50,7 @@
 	#define ENABLE_ACC			DISABLED
 	#define ENABLE_LIDAR		DISABLED
 	#define ENABLE_INDICATOR	DISABLED
+	#define ENABLE_MAG			DISABLED
 #endif
 
 //-----------------------------------------------------------------------------------------------------------------------------
@@ -100,6 +103,12 @@
 	#define CANODE_12 38
 	#define CANODE_13 35
 	#define CANODE_14 30
+
+// Mag
+#define  SSNOTpin_DEF  24   // magnetometer pin 4
+#define DRDYpin_DEF  23   // magnetometer pin 5
+#define RESETpin_DEF  25   // magnetometer pin 6
+
 #endif
 
 
