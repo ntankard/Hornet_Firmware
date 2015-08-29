@@ -42,7 +42,7 @@ public:
 	/**
 	* \brief	Gets the last full set of valid data
 	*
-	* \param	data	A buffer to place the data
+	* \param	data	A buffer to place the data (size of 3)
 	*/
 	void getData(int16_t *data);
 

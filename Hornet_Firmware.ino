@@ -87,7 +87,7 @@ void setup()
 	scheduler->addRunable(C_SCHEDULER_ACCGYRO_THREAD, accGyro);
 
 	// construct the magnotomiter
-	magnetometer = new Magnetometer(spiManager,error);
+	magnetometer = new Magnetometer(manager,spiManager,error);
 	scheduler->addRunable(C_SCHEDULER_MAG_THREAD, magnetometer);
 	manager->attachMagnetometer(magnetometer);
 
