@@ -67,6 +67,16 @@ void HornetManager::ND_LidarEOSweep(float pitch, float roll, float yaw)
 	_monitor->newLidarEOSweep(pitch, roll, yaw);
 }
 
+void HornetManager::ND_RawMag(int16_t *mag)
+{
+
+}
+
+void HornetManager::ND_Yaw(double theYaw)
+{
+
+}
+
 //-----------------------------------------------------------------------------------------------------------------------------
 
 void HornetManager::M_ConnectionConfirmed()

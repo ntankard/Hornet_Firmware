@@ -55,6 +55,10 @@ public:
 	void attachMagnetometer(Magnetometer *theMagnetometer);
 
 	void ND_RawAccGyro(float accel[3], float gyro[3]);
+
+	void ND_RawMag(int16_t *mag);
+
+	void ND_Yaw(double theYaw);
 	
 	void ND_Throttle(int t);
 
