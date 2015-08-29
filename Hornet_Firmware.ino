@@ -8,7 +8,7 @@
 #define FOR_HARDWARE 1
 #define FOR_TEST 2
 
-#define BUILD_TYPE FOR_HARDWARE
+#define BUILD_TYPE FOR_TEST
 
 #if BUILD_TYPE == FOR_HARDWARE
 
@@ -153,6 +153,7 @@ void loop()
 #include "Test_LidarNavigation.h"
 #include "Test_MovingAverage.h"
 #include "Test_TimeOut.h"
+#include "Test_MessageBuffer.h"
 
 void setup()
 {

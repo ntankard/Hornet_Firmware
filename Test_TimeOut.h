@@ -20,7 +20,7 @@ test(TimeOut_All)
 	assertFalse(toTest.hasTimeOut());
 
 	// check that the timout dose ocure after the time
-	delay(500);
+	delay(800);
 	assertTrue(toTest.hasTimeOut());
 
 	// check that the timout stay avtive
