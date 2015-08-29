@@ -151,6 +151,7 @@ void loop()
 #include "Test_CircularBuffer.h"
 #include "Test_LidarNavigation.h"
 #include "Test_MovingAverage.h"
+#include "Test_TimeOut.h"
 
 void setup()
 {

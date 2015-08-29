@@ -74,8 +74,6 @@ protected:
 	*
 	* \author	Nicholas
 	* \date	1/08/2015
-	*
-	* \param	setting	What to display  (eg color for the APM)
 	*/
 	virtual void lightOff() = 0;
 
