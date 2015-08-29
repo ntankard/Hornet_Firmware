@@ -27,7 +27,8 @@ public:
 	* \param	buffer	A place to dump the read data
 	* \param	size	The number of bytes to read	
 	* 					
-	* \throw   E_BUS_FAIL    If the read fails
+	* \throw	E_BUS_FAIL		If the read fails
+	* \throw	E_BUS_TIMEOUT	If the data dosnt arive from the periferal in time
 	*/
 	virtual void read(uint8_t address, uint8_t start, uint8_t *buffer, int size) = 0;
 

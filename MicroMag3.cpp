@@ -3,8 +3,6 @@
 #if ENABLE_MAG == ENABLED
 
 #include <stdint.h>
-#include "arduino.h"
-#include <SPI.h>
 
 
 #define X_ADDR 0b01100001
@@ -42,8 +40,8 @@ bool MicroMag3::update()
 	{
 		uint8_t byte_H, byte_L;
 		//digitalWrite(_SSNOTpin, LOW);
-		byte_H = SPI.transfer(0);
-		byte_L = SPI.transfer(0);
+		byte_H = _SPIManager->transfer(0);
+		byte_L = _SPIManager->transfer(0);
 		//digitalWrite(_SSNOTpin, HIGH);
 
 		// read the data from the last measure
@@ -78,7 +76,7 @@ void MicroMag3::sendCommand(uint8_t command)
 
 	//send the request
 	//digitalWrite(_SSNOTpin, LOW);
-	SPI.transfer(command);
+	_SPIManager->transfer(command);
 	//digitalWrite(_SSNOTpin, HIGH);
 }
 

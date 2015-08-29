@@ -42,3 +42,10 @@ void SPIManager::write(uint8_t address, uint8_t start, uint8_t *buffer, int size
 
 	digitalWrite(address, HIGH);
 }
+
+//-----------------------------------------------------------------------------------------------------------------------------
+
+uint8_t SPIManager::transfer(uint8_t toSend)
+{
+	return SPI.transfer(toSend);
+}

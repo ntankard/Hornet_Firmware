@@ -1,5 +1,6 @@
 #include "I2CManager.h"
 #include <Wire.h>
+#include "TimeOut.h"
 
 I2CManager::I2CManager(Error *theError) :SharedBusManager(theError)
 {
@@ -35,14 +36,19 @@ void I2CManager::read(uint8_t address, uint8_t start, uint8_t *buffer, int size)
 	if (Wire.requestFrom((uint8_t)address, (uint8_t)size, (uint8_t)true) != size)
 	{
 		_e->add(E_BUS_FAIL, "I2C bus read failed, not all the bytes were read ");
-		while (true)
-		{
-			Serial.println("HELP IM ON FIRE");
-		}
 		return;
 	}
 
-	while (!Wire.available()){}
+	// wait for the first peice of slave data
+	TimeOut readWait;
+	readWait.start(C_I2C_READ_WAIT);
+	while (!Wire.available())
+	{
+		if (readWait.hasTimeOut())
+		{
+			_e->add(E_BUS_TIMEOUT, "I2C bus read never received data from the slave");
+		}
+	}
 
 	// get the read values
 	int i = 0;
