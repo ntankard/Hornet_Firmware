@@ -12,5 +12,10 @@ public:
 	virtual uint8_t* getBytes() = 0;
 	virtual void setBytes(uint8_t* data) = 0;
 	virtual int getSize() = 0;
+	virtual uint8_t* getPacket();
+	virtual bool isLocked() = 0;
+	virtual void lock() = 0;
+	virtual void unlock() = 0;
+	virtual uint8_t getID() = 0;
 
 };

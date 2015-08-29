@@ -2,7 +2,7 @@
 
 #if ENABLE_MAG == ENABLED
 
-Magnetometer::Magnetometer(HornetManager* theHornetManager,SPIManager *theSPIManager, Error *e) :_mag(theSPIManager, e), _yawBuffer(e)
+Magnetometer::Magnetometer(HornetManager* theHornetManager, SPIManager *theSPIManager, Error *e) :_mag(theSPIManager, e), _yawBuffer(e), _yawSender(e), _rawSender(e)
 {
 	_hornetManager = theHornetManager;
 }

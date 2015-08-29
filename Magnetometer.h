@@ -9,6 +9,8 @@
 
 #include "MicroMag3.h"
 #include "MovingAverage.h"
+#include "MessageBuffer.h"
+#include "CircularBuffer.h"
 
 /**
 * \brief	A mamanger for a MicroMag3 magnotomiter
@@ -48,8 +50,14 @@ private:
 	/** \brief	The fillter for the raw data */
 	MovingAverage<double, C_YAW_WINDOW_AVE_WIDTH> _yawBuffer;
 
-	/** \brief	THe message router */
+	/** \brief	The message router */
 	HornetManager *_hornetManager;
+
+	/** \brief	The message buffer for Yaw data */
+	CircularBuffer<MessageBuffer<1, MB_YAW>, C_MB_YAW_SIZE> _yawSender;
+
+	/** \brief	The message buffer for raw mag data */
+	CircularBuffer<MessageBuffer<3, MB_RAW_MAG>, C_MB_MAG_SIZE> _rawSender;
 };
 
 #else

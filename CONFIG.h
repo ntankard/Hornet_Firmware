@@ -1,6 +1,13 @@
 #pragma once
 #include "APM_2_5_PINS.h"
 
+
+#define C_MB_MAG_SIZE 10
+#define C_MB_YAW_SIZE 10
+
+#define MB_RAW_MAG 1
+#define MB_YAW 2
+
 // THe build depends on there being this many threads and them being from 0 to C_SCHEDULER_THREAD_NUM -1 with no repeats
 #define C_SCHEDULER_THREAD_NUM 5
 

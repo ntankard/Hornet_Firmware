@@ -14,7 +14,7 @@ test(MessageBuffer_float)
 	float inBuffer[] = { 23432.43234, -234.124, 242, 0 };
 	uint8_t *outBuffer = reinterpret_cast<uint8_t *>(&inBuffer);
 
-	MessageBuffer<testSize> toTest;
+	MessageBuffer<testSize,1> toTest;
 	toTest.setData(inBuffer);
 
 	// check the real data

@@ -154,6 +154,7 @@ void loop()
 #include "Test_MovingAverage.h"
 #include "Test_TimeOut.h"
 #include "Test_MessageBuffer.h"
+#include "Test_MessageBuffer_Manager.h"
 
 void setup()
 {

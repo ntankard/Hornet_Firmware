@@ -2,7 +2,7 @@
 
 #include "MessageBuffer_Passer.h"
 
-template<int Size>
+template<int Size,int ID>
 class MessageBuffer : public MessageBuffer_Passer
 {
 public:
@@ -11,17 +11,27 @@ public:
 	{
 		struct
 		{
+			uint8_t comID;
+			float data[Size];
+		}value;
+		struct
+		{
+			uint8_t comID;
 			uint8_t data[Size * sizeof(float)];
 		}raw;
 		struct
 		{
-			float data[Size];
-		}value;
+			uint8_t data[Size * sizeof(float)+1];
+		}packet;
 	};
 
 	//-----------------------------------------------------------------------------------------------------------------------------
 
-	MessageBuffer(){}
+	MessageBuffer()
+	{
+		_message.value.comID = ID;
+		_isLocked = false;
+	}
 
 	//-----------------------------------------------------------------------------------------------------------------------------
 
@@ -66,78 +76,39 @@ public:
 
 	//-----------------------------------------------------------------------------------------------------------------------------
 
-private:
-	MemoryMap _message;
-};
-
-/*
-template<class T, int Size>
-class MessageBuffer
-{
-public:
-
-	typedef union MemoryMap
+	uint8_t* getPacket()
 	{
-		struct
-		{
-			uint8_t data[Size * sizeof(T)];
-		}raw;
-		struct
-		{
-			T data[Size];
-		}value;
-	};
-
-	MessageBuffer(int ID)
-	{
-		_ID = ID;
-		_isLocked = false;
+		return _message.packet.data;
 	}
 
-	void setMessage(int i, T toAdd)
-	{
-		_message.value.data[i] = toAdd;
-		_isLocked = true;
-	}
-
-	void setMessage(T toAdd[Size])
-	{
-		for (int i = 0; i < Size; i++)
-		{
-			setMessage(i, toAdd[i]);
-		}
-	}
+	//-----------------------------------------------------------------------------------------------------------------------------
 
 	bool isLocked()
 	{
 		return _isLocked;
 	}
 
-	void free()
+	//-----------------------------------------------------------------------------------------------------------------------------
+
+	void lock()
+	{
+		_isLocked = true;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------------------
+
+	void unlock()
 	{
 		_isLocked = false;
 	}
 
-	T* getMessage()
-	{
-		return _message.value.data;
-	}
+	//-----------------------------------------------------------------------------------------------------------------------------
 
-	uint8_t* getBytes()
+	uint8_t getID()
 	{
-		return _message.raw.data;
+		return _message.value.comID;
 	}
-
-	int getID()
-	{
-		return _message.value.ID;
-	}
-
 private:
 	MemoryMap _message;
-	int _ID;
-
 	bool _isLocked;
 };
-
-*/
