@@ -8,6 +8,7 @@
 #include <Arduino.h>
 #include "Servo.h"
 #include "APM_Indicator.h"
+#include "Magnetometer.h"
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // ---------------------------------------------------- CONSTRUCTION ----------------------------------------------------------
@@ -28,6 +29,7 @@ void HornetManager::attachAccGyro(AccGyro* theAccGyro){	_accGyro = theAccGyro;}
 void HornetManager::attachMonitor(Monitor* theMonitor){	_monitor = theMonitor;}
 void HornetManager::attachIndicator(Indicator* theIndicator){	_indicator = theIndicator;}
 void HornetManager::attachScheduler(Scheduler* theScheduler){	_scheduler = theScheduler;}
+void HornetManager::attachMagnetometer(Magnetometer *theMagnetometer){ _magnetometer = theMagnetometer; }
 
 //-----------------------------------------------------------------------------------------------------------------------------
 
@@ -167,6 +169,7 @@ void HornetManager::S_initToConnect()
 	if (_state == Init)
 	{
 		_accGyro->start();
+		_magnetometer->start();
 		_C_last = millis();
 		S_enterConnect();
 	}

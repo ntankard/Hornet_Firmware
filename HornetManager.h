@@ -8,6 +8,7 @@ class AccGyro;
 class Monitor;
 class Indicator;
 class Scheduler;
+class Magnetometer;
 
 enum State{ Init, Connect, Idle ,TakeOff,Flight,Land,Emergency,Crash};
 
@@ -51,6 +52,7 @@ public:
 	void attachMonitor(Monitor* theMonitor);
 	void attachIndicator(Indicator* theIndicator);
 	void attachScheduler(Scheduler* theScheduler);
+	void attachMagnetometer(Magnetometer *theMagnetometer);
 
 	void ND_RawAccGyro(float accel[3], float gyro[3]);
 	
@@ -111,6 +113,7 @@ private:
 	Monitor* _monitor;
 	Indicator* _indicator;
 	Scheduler* _scheduler;
+	Magnetometer *_magnetometer;
 
 	Error *_e;
 

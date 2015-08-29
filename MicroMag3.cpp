@@ -2,50 +2,74 @@
 
 #if ENABLE_MAG == ENABLED
 
-#include <stdint.h>
-
-
+// register map
 #define X_ADDR 0b01100001
 #define Y_ADDR 0b01100010
 #define Z_ADDR 0b01100011
-
 const uint8_t ADD[] = { X_ADDR, Y_ADDR, Z_ADDR };
 
-MicroMag3::MicroMag3(SPIManager *theSPIManager, int SSNOTpin, int DRDYpin, int RESETpin)
+//-----------------------------------------------------------------------------------------------------------------------------
+
+MicroMag3::MicroMag3(SPIManager *theSPIManager,Error *e)
 {
 	_SPIManager = theSPIManager;
-	_SSNOTpin = SSNOTpin;
-	_DRDYpin = DRDYpin;
-	_RESETpin = RESETpin;
+	_e = e;
 
-	pinMode(_SSNOTpin, OUTPUT);
-	pinMode(_RESETpin, OUTPUT);
-	pinMode(_DRDYpin, INPUT);
-	digitalWrite(_SSNOTpin, LOW);
-	digitalWrite(_RESETpin, LOW);
+	pinMode(C_MAG_SSNOT, OUTPUT);
+	pinMode(C_MAG_RESET, OUTPUT);
+	pinMode(C_MAG_DRDY, INPUT);
+	digitalWrite(C_MAG_SSNOT, LOW);	// this permidantly locks the SPI bus, remove if shared
+	digitalWrite(C_MAG_RESET, LOW);
 
 	_sensor = 0;
-	_isMeasuring = false;
 }
+
+//-----------------------------------------------------------------------------------------------------------------------------
 
 bool MicroMag3::init()
 {
+	TimeOut setupTime;
+
+	// atempt to read
 	sendCommand(ADD[_sensor]);
+
+	// wait for the message
+	setupTime.start(1000);
+	while (digitalRead(C_MAG_DRDY) == LOW)
+	{
+		if (setupTime.hasTimeOut())
+		{
+			return false;
+		}
+	}
+
+	// check the validity of the data
+	uint8_t byte_H, byte_L;
+	byte_H = _SPIManager->transfer(0);
+	byte_L = _SPIManager->transfer(0);
+	if (byte_H == 0 && byte_L == 0)
+	{
+		return false;
+	}
+
+	// start the next read
+	sendCommand(ADD[_sensor]);
+	_lastRead.start(C_MAG_MAX_READ_TIME);
+	return true;
 }
+
+//-----------------------------------------------------------------------------------------------------------------------------
 
 bool MicroMag3::update()
 {
 	//uint8_t data[2];
-	if (digitalRead(_DRDYpin) == HIGH)
+	if (digitalRead(C_MAG_DRDY) == HIGH)
 	{
 		uint8_t byte_H, byte_L;
-		//digitalWrite(_SSNOTpin, LOW);
 		byte_H = _SPIManager->transfer(0);
 		byte_L = _SPIManager->transfer(0);
-		//digitalWrite(_SSNOTpin, HIGH);
 
 		// read the data from the last measure
-		//_SPIManager->read(_SSNOTpin, 0, data, 2);
 		_lastValid[_sensor] = (byte_H << 8) | byte_L;
 
 		_sensor++;
@@ -57,27 +81,38 @@ bool MicroMag3::update()
 
 		// start a new measurment
 		sendCommand(ADD[_sensor]);
+		_lastRead.start(C_MAG_MAX_READ_TIME);
 	}
+	else
+	{
+		if (_lastRead.hasTimeOut())
+		{
+			_e->add(E_HARDWARE_FAILURE, "Magnetometer Read failed (timeout)");
+		}
+	}
+
 	return (_sensor == 0);
 }
 
+//-----------------------------------------------------------------------------------------------------------------------------
+
+void MicroMag3::getData(int16_t *data)
+{
+	data[0] = _lastValid[0];
+	data[1] = _lastValid[1];
+	data[2] = _lastValid[2];
+}
+
+//-----------------------------------------------------------------------------------------------------------------------------
+
 void MicroMag3::sendCommand(uint8_t command)
 {
-	//digitalWrite(_SSNOTpin, LOW);
-	//delay(2);
-
-	// pulse the reset
-	//digitalWrite(_RESETpin, LOW);
+	digitalWrite(C_MAG_RESET, HIGH);
 	//delay(1);
-	digitalWrite(_RESETpin, HIGH);
-	//delay(1);
-	digitalWrite(_RESETpin, LOW);
-	//delay(2);
+	digitalWrite(C_MAG_RESET, LOW);
+	
 
-	//send the request
-	//digitalWrite(_SSNOTpin, LOW);
 	_SPIManager->transfer(command);
-	//digitalWrite(_SSNOTpin, HIGH);
 }
 
 #endif

@@ -113,11 +113,6 @@
 	#define CANODE_13 35
 	#define CANODE_14 30
 
-// Mag
-#define  SSNOTpin_DEF  24   // magnetometer pin 4
-#define DRDYpin_DEF  23   // magnetometer pin 5
-#define RESETpin_DEF  25   // magnetometer pin 6
-
 #endif
 
 
@@ -148,6 +143,16 @@
 	#endif
 #endif
 
+#if ENABLE_MAG == ENABLED
+	#if BOARD_TYPE == BOARD_TYPE_APM
+		// no conection yet
+	#else
+		#define C_MAG_SSNOT 24
+		#define C_MAG_DRDY 23
+		#define C_MAG_RESET 25
+	#endif
+#endif
+
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // ------------------------------------------------------ COMM CODES ----------------------------------------------------------
@@ -173,6 +178,7 @@
 #define E_BUS_FAIL 3
 #define E_SETUP_ERROR 4
 #define E_BUS_TIMEOUT 5
+#define E_HARDWARE_FAILURE 6
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // --------------------------------------------------- GENERAL SETTINGS --------------------------------------------------------
@@ -214,7 +220,7 @@
 #define C_LOGGER_PITCH_ROLL_RATE 10
 
 #define C_I2C_READ_WAIT 100
-
+#define C_MAG_MAX_READ_TIME 150
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // ---------------------------------------------------- LIDAR SETTINGS ---------------------------------------------------------
