@@ -36,9 +36,9 @@ void Magnetometer::run()
 		MessageBuffer_Passer* yawMB = _yawSender.getAvailable();
 		yawMB->setData(&addedYaw);
 		MessageBuffer_Passer* rawMB = _rawSender.getAvailable();
-		rawMB->getBytes()[0] = mag[0];
-		rawMB->getBytes()[1] = mag[1];
-		rawMB->getBytes()[2] = mag[2];
+		rawMB->getData()[0] = mag[0];
+		rawMB->getData()[1] = mag[1];
+		rawMB->getData()[2] = mag[2];
 
 		// Send the data
 		_hornetManager->newData(yawMB);

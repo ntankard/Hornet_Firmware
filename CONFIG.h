@@ -11,14 +11,21 @@
 #define C_CL_NAV_USE	4
 #define C_CL_DEBUG		5
 
-#define MB_RAW_MAG 1
-#define MB_YAW 2
+#define MB_RAW_MAG		1
+#define MB_YAW			2
+#define MB_ROLL_PITCH	'p'
+#define MB_RAW_ACC		'g'
 
-//								_________________________________________________________________
-//								| ID			| SIZE	| MONITOR	| COM PRI		| BUFFER SIZE
-//								-----------------------------------------------------------------
-#define MB_RAW_MAG_SETTING		MB_RAW_MAG,		3,		10,			C_CL_DEBUG,		10
-#define MB_YAW_SETTINGS			MB_YAW,			1,		10,			C_CL_NAV_INFO,	10
+//#define C_COMS_CODE_ACCGYRO			'g'
+//#define C_COMS_CODE_PITCH_ROLL		'p'
+
+//									_________________________________________________________________
+//									| ID			| SIZE	| MONITOR	| COM PRI		| BUFFER SIZE
+//									-----------------------------------------------------------------
+#define MB_RAW_MAG_SETTING			MB_RAW_MAG,		3,		10,			C_CL_DEBUG,		10
+#define MB_YAW_SETTINGS				MB_YAW,			1,		10,			C_CL_NAV_INFO,	10
+#define MB_ROLL_PITCH_SETTINGS		MB_ROLL_PITCH,	2,		10,			C_CL_NAV_INFO,	10
+#define MB_RAW_ACC_SETTINGS			MB_RAW_ACC,		6,		10,			C_CL_DEBUG,		10
 
 // THe build depends on there being this many threads and them being from 0 to C_SCHEDULER_THREAD_NUM -1 with no repeats
 #define C_SCHEDULER_THREAD_NUM 5

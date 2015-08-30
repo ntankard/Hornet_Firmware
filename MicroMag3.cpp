@@ -76,7 +76,7 @@ bool MicroMag3::update()
 		if (_sensor >= 3)
 		{
 			_sensor = 0;
-			Serial.println((String)_lastValid[0]);
+
 		}
 
 		// start a new measurment

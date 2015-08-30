@@ -12,6 +12,7 @@
 
 #include "AP_InertialSensor_MPU600xx.h"
 #include "MovingAverage.h"
+#include "MessageBuffer_Manager.h"
 
 class AccGyro :public Runnable
 {
@@ -32,6 +33,12 @@ private:
 
 	MovingAverage<float, C_PITCH_ROLL_WINDOW_AVE_WIDTH> _pitchBuffer;
 	MovingAverage<float, C_PITCH_ROLL_WINDOW_AVE_WIDTH> _rollBuffer;
+
+	/** \brief	The message buffers for Yaw data */
+	MessageBuffer_Manager<MB_ROLL_PITCH_SETTINGS> _rollPitchSender;
+
+	/** \brief	The message buffers for raw mag data */
+	MessageBuffer_Manager<MB_RAW_ACC_SETTINGS> _rawSender;
 
 
 	AP_InertialSensor_MPU600xx _ins;

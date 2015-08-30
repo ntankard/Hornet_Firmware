@@ -46,7 +46,7 @@ void HornetManager::newData(MessageBuffer_Passer *data)
 {
 	if (data->isMonitor())
 	{
-		
+		_comsEncoder->sendData(data);
 	}
 
 //	monitor->newData(data);
@@ -59,40 +59,13 @@ void HornetManager::newData(MessageBuffer_Passer *data)
 }
 
 
-void HornetManager::ND_RawAccGyro(float accel[3], float gyro[3])
-{
-	_monitor->newRawAccGyro(accel, gyro);
-}
 
 void HornetManager::ND_Throttle(int t)
 {
 	//@TODO impliment
 }
 
-void HornetManager::ND_PitchRoll(float pitch, float roll)
-{
-	_monitor->newPitchRoll(pitch, roll);
-}
 
-void HornetManager::ND_LidarPoint(float angle, float distance)
-{
-	_monitor->newLidarPoint(angle, distance);
-}
-
-void HornetManager::ND_LidarEOSweep(float pitch, float roll, float yaw)
-{
-	_monitor->newLidarEOSweep(pitch, roll, yaw);
-}
-
-void HornetManager::ND_RawMag(int16_t *mag)
-{
-
-}
-
-void HornetManager::ND_Yaw(double theYaw)
-{
-
-}
 
 //-----------------------------------------------------------------------------------------------------------------------------
 

@@ -57,11 +57,11 @@ public:
 
 	void newData(MessageBuffer_Passer *data);
 
-	void ND_RawAccGyro(float accel[3], float gyro[3]);
+	//void ND_RawAccGyro(float accel[3], float gyro[3]);
 
-	void ND_RawMag(int16_t *mag);
+	//void ND_RawMag(int16_t *mag);
 
-	void ND_Yaw(double theYaw);
+	//void ND_Yaw(double theYaw);
 	
 	void ND_Throttle(int t);
 
@@ -69,13 +69,8 @@ public:
 
 	void M_ArmDisarm();
 
-	void ND_PitchRoll(float pitch, float roll);
+	//void ND_PitchRoll(float pitch, float roll);
 
-	void ND_LidarData(float yaw, float distance, float pitch);
-
-	void ND_LidarPoint(float angle, float distance);
-
-	void ND_LidarEOSweep(float pitch, float roll, float yaw);
 
 	bool run();
 

@@ -44,8 +44,22 @@ void AccGyro::run()
 		float addedPitch = _pitchBuffer.add(pitch);
 		float addedRoll = _rollBuffer.add(roll);
 
-		_hornetManager->ND_RawAccGyro(accel, gyro);
-		_hornetManager->ND_PitchRoll(addedPitch, addedRoll);
+		// Package the data
+		MessageBuffer_Passer* rollPitchMB = _rollPitchSender.getAvailable();
+		rollPitchMB->getBytes()[0] = addedPitch;
+		rollPitchMB->getBytes()[1] = addedRoll;
+
+		MessageBuffer_Passer* rawMB = _rawSender.getAvailable();
+		rawMB->getData()[0] = accel[0];
+		rawMB->getData()[1] = accel[1];
+		rawMB->getData()[2] = accel[2];
+		rawMB->getData()[3] = gyro[0];
+		rawMB->getData()[4] = gyro[1];
+		rawMB->getData()[5] = gyro[2];
+
+		// Send the data
+		_hornetManager->newData(rollPitchMB);
+		_hornetManager->newData(rawMB);
 	}
 
 	/*
