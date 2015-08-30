@@ -46,17 +46,26 @@ void AccGyro::run()
 
 		// Package the data
 		MessageBuffer_Passer* rollPitchMB = _rollPitchSender.getAvailable();
-		rollPitchMB->getBytes()[0] = addedPitch;
-		rollPitchMB->getBytes()[1] = addedRoll;
+		rollPitchMB->getData()[0] = addedPitch;
+		rollPitchMB->getData()[1] = addedRoll;
 
 		MessageBuffer_Passer* rawMB = _rawSender.getAvailable();
-		rawMB->getData()[0] = accel[0];
+		/*rawMB->getData()[0] = accel[0];
 		rawMB->getData()[1] = accel[1];
 		rawMB->getData()[2] = accel[2];
 		rawMB->getData()[3] = gyro[0];
 		rawMB->getData()[4] = gyro[1];
-		rawMB->getData()[5] = gyro[2];
+		rawMB->getData()[5] = gyro[2];*/
 
+		rawMB->getData()[0] = 1;
+		rawMB->getData()[1] = 2;
+		rawMB->getData()[2] = 3;
+		rawMB->getData()[3] = 4;
+		rawMB->getData()[4] = 5;
+		rawMB->getData()[5] = 6;
+
+		//Serial.print((String)rawMB->getBytes()[0] + " " + (String)rawMB->getBytes()[1] + " " + (String)rawMB->getBytes()[2] + " " + (String)rawMB->getBytes()[3] + " ");
+		//Serial.print('\n');
 		// Send the data
 		_hornetManager->newData(rollPitchMB);
 		_hornetManager->newData(rawMB);

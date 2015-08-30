@@ -36,8 +36,15 @@ void ComsEncoder::run()
 			if (!_buffer[i]->isEmpty())
 			{
 				MessageBuffer_Passer* toSend = _buffer[i]->remove();
-				_coms->send(toSend->getPacket(), toSend->getSize() + 1);
+				_coms->send(toSend->getPacket(), toSend->getPacketSize());
 				toSend->unlock();
+
+				//Serial.print((String)toSend->getPacket()[0] + " " + (String)toSend->getPacket()[1] + " " + (String)toSend->getPacket()[2] + " " + (String)toSend->getPacket()[3] + " ");
+				//Serial.print('\n');
+
+				//Serial.println("ID " + (String)toSend->getID());
+				//Serial.println("SIZE " + (String)toSend->getPacketSize());
+
 				return;
 			}
 		}

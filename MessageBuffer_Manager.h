@@ -33,6 +33,7 @@ public:
 			if (!_message[i].isLocked())
 			{
 				toSend =  &_message[i];
+				break;
 			}
 		}
 

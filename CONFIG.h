@@ -22,10 +22,10 @@
 //									_________________________________________________________________
 //									| ID			| SIZE	| MONITOR	| COM PRI		| BUFFER SIZE
 //									-----------------------------------------------------------------
-#define MB_RAW_MAG_SETTING			MB_RAW_MAG,		3,		10,			C_CL_DEBUG,		10
-#define MB_YAW_SETTINGS				MB_YAW,			1,		10,			C_CL_NAV_INFO,	10
-#define MB_ROLL_PITCH_SETTINGS		MB_ROLL_PITCH,	2,		10,			C_CL_NAV_INFO,	10
-#define MB_RAW_ACC_SETTINGS			MB_RAW_ACC,		6,		10,			C_CL_DEBUG,		10
+#define MB_RAW_MAG_SETTING			MB_RAW_MAG,		3,		0,			C_CL_DEBUG,		10
+#define MB_YAW_SETTINGS				MB_YAW,			1,		0,			C_CL_NAV_INFO,	10
+#define MB_ROLL_PITCH_SETTINGS		MB_ROLL_PITCH,	2,		0,			C_CL_NAV_INFO,	10
+#define MB_RAW_ACC_SETTINGS			MB_RAW_ACC,		6,		1000,		C_CL_DEBUG,		10
 
 // THe build depends on there being this many threads and them being from 0 to C_SCHEDULER_THREAD_NUM -1 with no repeats
 #define C_SCHEDULER_THREAD_NUM 5
