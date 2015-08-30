@@ -32,7 +32,12 @@ private:
 	Coms *_coms;
 	Error *_e;
 
-	CircularBuffer<MessageBuffer_Passer*, C_COMENCODER_SIZE>* _buffer[C_CL];
+
+	MessageBuffer_Passer* _buffer[C_CL][C_COMENCODER_SIZE];
+	CircularBuffer_Manager<C_COMENCODER_SIZE> _buffer_man[C_CL];
+
+
+	//CircularBuffer<MessageBuffer_Passer*, C_COMENCODER_SIZE>* _buffer[C_CL];
 
 	uint8_t _messageBuffer[20];
 	CircularBuffer_Manager<20> _messageBuffer_man;

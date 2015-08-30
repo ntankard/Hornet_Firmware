@@ -34,6 +34,14 @@ public:
 		_end = 0;
 	}
 
+	CircularBuffer_Manager()
+	{
+		_e = NULL;
+		_start = 0;
+		_end = 0;
+	}
+
+
 	/**
 	 * \fn	bool CircularBuffer_Manager::isEmpty()
 	 *
@@ -90,8 +98,10 @@ public:
 	{
 		if (isFull())
 		{
-			_e->add(E_ILLEGAL_ACCESS, "Attempting to add to a full buffer");
-			return -1;
+			if (_e != NULL){
+				_e->add(E_ILLEGAL_ACCESS, "Attempting to add to a full buffer");
+				return -1;
+			}
 		}
 
 		int toRemove = _start;
@@ -121,8 +131,10 @@ public:
 	{
 		if (isEmpty())
 		{
-			_e->add(E_ILLEGAL_ACCESS, "Attempting to remove from an empty buffer");
-			return -1;
+			if (_e != NULL){
+				_e->add(E_ILLEGAL_ACCESS, "Attempting to remove from an empty buffer");
+				return -1;
+			}
 		}
 
 		int toRemove = _end;

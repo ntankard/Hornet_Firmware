@@ -5,18 +5,18 @@ ComsEncoder::ComsEncoder(Coms* coms, Error *e) :_rawAccGyro_man(e), _messageBuff
 	_e = e;
 	_coms = coms;
 
-	for (int i = 0; i < C_CL; i++)
+	/*for (int i = 0; i < C_CL; i++)
 	{
 		_buffer[i] = new CircularBuffer<MessageBuffer_Passer*, C_COMENCODER_SIZE>(e);
-	}
+	}*/
 }
 
 ComsEncoder::~ComsEncoder()
 {
-	for (int i = 0; i < C_CL; i++)
+	/*for (int i = 0; i < C_CL; i++)
 	{
 		delete _buffer[i];
-	}
+	}*/
 }
 
 void ComsEncoder::run()
@@ -33,9 +33,10 @@ void ComsEncoder::run()
 
 		for (int i = 0; i < C_CL; i++)
 		{
-			if (!_buffer[i]->isEmpty())
+			if (!_buffer_man[i].isEmpty())
 			{
-				MessageBuffer_Passer* toSend = _buffer[i]->remove();
+				int sendLoc = _buffer_man[i].remove();
+				MessageBuffer_Passer* toSend = _buffer[i][sendLoc];
 				_coms->send(toSend->getPacket(), toSend->getPacketSize());
 				toSend->unlock();
 
@@ -76,13 +77,20 @@ void ComsEncoder::run()
 
 void ComsEncoder::sendData(MessageBuffer_Passer *data)
 {
-	if (_buffer[data->getComPri()]->isFull())
+
+	//MessageBuffer_Passer* _buffer[C_CL][C_COMENCODER_SIZE];
+	//CircularBuffer_Manager<C_COMENCODER_SIZE> _buffer_man;
+
+
+
+	if (_buffer_man[data->getComPri()].isFull())
 	{
 		//@TODO add overflow detection
 		return;
 	}
 
-	_buffer[data->getComPri()]->add(data);
+	int addLoc = _buffer_man[data->getComPri()].add();
+	_buffer[data->getComPri()][addLoc] = data;
 	if (data->isLocked())
 	{
 		//@TODO throw
