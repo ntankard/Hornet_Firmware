@@ -1,17 +1,22 @@
 #pragma once
 #include "Coms.h"
 #include "CircularBuffer_Manager.h"
+#include "CircularBuffer.h"
 #include "Error.h"
 #include "Runnable.h"
+#include "MessageBuffer_Passer.h"
 
 class ComsEncoder:public Runnable
 {
 public:
 	ComsEncoder(Coms* coms, Error *e);
+	~ComsEncoder();
 
 	void run();
 
 	bool start(){ return true; }
+
+	void sendData(MessageBuffer_Passer *data);
 
 	void sendChar(uint8_t message);
 
@@ -27,6 +32,7 @@ private:
 	Coms *_coms;
 	Error *_e;
 
+	CircularBuffer<MessageBuffer_Passer*, C_COMENCODER_SIZE>* _buffer[C_CL];
 
 	uint8_t _messageBuffer[20];
 	CircularBuffer_Manager<20> _messageBuffer_man;

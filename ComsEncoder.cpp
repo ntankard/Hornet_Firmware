@@ -4,6 +4,19 @@ ComsEncoder::ComsEncoder(Coms* coms, Error *e) :_rawAccGyro_man(e), _messageBuff
 {
 	_e = e;
 	_coms = coms;
+
+	for (int i = 0; i < C_CL; i++)
+	{
+		_buffer[i] = new CircularBuffer<MessageBuffer_Passer*, C_COMENCODER_SIZE>(e);
+	}
+}
+
+ComsEncoder::~ComsEncoder()
+{
+	for (int i = 0; i < C_CL; i++)
+	{
+		delete _buffer[i];
+	}
 }
 
 void ComsEncoder::run()
@@ -18,8 +31,19 @@ void ComsEncoder::run()
 			return;
 		}
 
+		for (int i = 0; i < C_CL; i++)
+		{
+			if (!_buffer[i]->isEmpty())
+			{
+				MessageBuffer_Passer* toSend = _buffer[i]->remove();
+				_coms->send(toSend->getPacket(), toSend->getSize() + 1);
+				toSend->unlock();
+				return;
+			}
+		}
+
 		//priority 2 (non critical nav data)
-		if (!_rawAccGyro_man.isEmpty())
+		/*if (!_rawAccGyro_man.isEmpty())
 		{
 			int remove = _rawAccGyro_man.remove();
 			_coms->send(_rawAccGyro[remove], 25);
@@ -38,9 +62,26 @@ void ComsEncoder::run()
 			int remove = _lidarData_man.remove();
 			_coms->send(_lidarData[remove], 9);
 			return;
-		}
+		}*/
 
 	}
+}
+
+void ComsEncoder::sendData(MessageBuffer_Passer *data)
+{
+	if (_buffer[data->getComPri()]->isFull())
+	{
+		//@TODO add overflow detection
+		return;
+	}
+
+	_buffer[data->getComPri()]->add(data);
+	if (data->isLocked())
+	{
+		//@TODO throw
+		return;
+	}
+	data->lock();
 }
 
 void ComsEncoder::sendChar(uint8_t message)

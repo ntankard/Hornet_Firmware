@@ -1,12 +1,24 @@
 #pragma once
 #include "APM_2_5_PINS.h"
 
+#define C_COMENCODER_SIZE 10
 
-#define C_MB_MAG_SIZE 10
-#define C_MB_YAW_SIZE 10
+#define C_CL			6
+#define C_CL_COMS		0
+#define C_CL_SYSTEM_CMD 1
+#define C_CL_NAV_CMD	2
+#define C_CL_NAV_INFO	3
+#define C_CL_NAV_USE	4
+#define C_CL_DEBUG		5
 
 #define MB_RAW_MAG 1
 #define MB_YAW 2
+
+//								_________________________________________________________________
+//								| ID			| SIZE	| MONITOR	| COM PRI		| BUFFER SIZE
+//								-----------------------------------------------------------------
+#define MB_RAW_MAG_SETTING		MB_RAW_MAG,		3,		10,			C_CL_DEBUG,		10
+#define MB_YAW_SETTINGS			MB_YAW,			1,		10,			C_CL_NAV_INFO,	10
 
 // THe build depends on there being this many threads and them being from 0 to C_SCHEDULER_THREAD_NUM -1 with no repeats
 #define C_SCHEDULER_THREAD_NUM 5

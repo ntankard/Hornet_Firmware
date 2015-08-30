@@ -4,7 +4,8 @@
 #include "MessageBuffer_Passer.h"
 #include "CircularBuffer_Manager.h"
 
-template<int MessageSize, int MessageID, int BufferSize>
+
+template<uint8_t MessageID, int MessageSize, int ToMonitor, uint8_t ComPri, int BufferSize>
 class MessageBuffer_Manager
 {
 public:
@@ -15,6 +16,7 @@ public:
 	MessageBuffer_Manager()
 	{
 		_safe.lock();	// ensure that no object cant ever lock this object
+		_monitorCount = 0;
 	}
 
 	/**
@@ -24,21 +26,38 @@ public:
 	*/
 	MessageBuffer_Passer* getAvailable()
 	{
+		// find a free buffer
+		MessageBuffer_Passer* toSend = &_safe;
 		for (int i = 0; i < BufferSize; i++)
 		{
 			if (!_message[i].isLocked())
 			{
-				return &_message[i];
+				toSend =  &_message[i];
 			}
 		}
-		return &_safe;
+
+		// should this message be monitored?
+		_monitorCount++;
+		if (ToMonitor != 0 && _monitorCount >= ToMonitor)
+		{
+			_monitorCount = 0;
+			toSend->monitor();
+		}
+		else
+		{
+			toSend->dontMonitor();
+		}
+
+		return toSend; 
 	}
 
 private:
 
+	int _monitorCount;
+
 	/** \brief	A pool of avalible buffers to use */
-	MessageBuffer<MessageSize, MessageID> _message[BufferSize];
+	MessageBuffer<MessageID, ComPri, MessageSize> _message[BufferSize];
 
 	/** \brief	A object the can never be locked to ensure there is always avalible memory */
-	MessageBuffer<MessageSize, MessageID> _safe;
+	MessageBuffer<MessageID, ComPri, MessageSize> _safe;
 };

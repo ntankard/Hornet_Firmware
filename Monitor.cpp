@@ -23,6 +23,11 @@ void Monitor::off()
 	_isOn = false;
 }
 
+void Monitor::newData(MessageBuffer_Passer *data)
+{
+
+}
+
 void Monitor::newRawAccGyro(float accel[3], float gyro[3])
 {
 	if (_isOn)

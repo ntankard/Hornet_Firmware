@@ -1,6 +1,7 @@
 #pragma once
 #include "ComsEncoder.h"
 #include "Error.h"
+#include "MessageBuffer_Passer.h"
 
 /**
  * \class	Monitor
@@ -46,6 +47,10 @@ public:
 	 * \date	1/08/2015
 	 */
 	void off();
+
+	void newData(MessageBuffer_Passer *data);
+
+
 
 	/**
 	 * \fn	void Monitor::newAccGyro(float accel[3], float gyro[3]);

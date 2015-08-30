@@ -17,5 +17,8 @@ public:
 	virtual void lock() = 0;
 	virtual void unlock() = 0;
 	virtual uint8_t getID() = 0;
-
+	virtual uint8_t getComPri() = 0;
+	virtual void monitor() = 0;
+	virtual void dontMonitor() =0;
+	virtual bool isMonitor() = 0;
 };

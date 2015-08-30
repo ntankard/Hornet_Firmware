@@ -2,7 +2,7 @@
 
 #include "MessageBuffer_Passer.h"
 
-template<int Size,int ID>
+template<uint8_t ID, uint8_t ComPri, int Size>
 class MessageBuffer : public MessageBuffer_Passer
 {
 public:
@@ -31,6 +31,7 @@ public:
 	{
 		_message.value.comID = ID;
 		_isLocked = false;
+		_monitor = false;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------------------
@@ -108,7 +109,37 @@ public:
 	{
 		return _message.value.comID;
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------------------
+
+	uint8_t getComPri()
+	{
+		return ComPri;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------------------
+
+	virtual void monitor()
+	{
+		_monitor = true;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------------------
+
+	virtual void dontMonitor()
+	{
+		_monitor = false;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------------------
+
+	virtual bool isMonitor()
+	{
+		return _monitor;
+	}
+
 private:
 	MemoryMap _message;
 	bool _isLocked;
+	bool _monitor;
 };

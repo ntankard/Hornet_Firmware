@@ -1,5 +1,6 @@
 #pragma once
 #include "Error.h"
+#include "MessageBuffer_Passer.h"
 
 // forward declare to prevent circular dependancy
 class Coms;
@@ -53,6 +54,8 @@ public:
 	void attachIndicator(Indicator* theIndicator);
 	void attachScheduler(Scheduler* theScheduler);
 	void attachMagnetometer(Magnetometer *theMagnetometer);
+
+	void newData(MessageBuffer_Passer *data);
 
 	void ND_RawAccGyro(float accel[3], float gyro[3]);
 

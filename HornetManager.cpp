@@ -42,6 +42,23 @@ void HornetManager::start()
 // --------------------------------------------------- NOTIFICATIONS ----------------------------------------------------------
 // ----------------------------------------------------------------------------------------------------------------------------
 
+void HornetManager::newData(MessageBuffer_Passer *data)
+{
+	if (data->isMonitor())
+	{
+		
+	}
+
+//	monitor->newData(data);
+
+	switch (data->getID())
+	{
+	default:
+		break;
+	}
+}
+
+
 void HornetManager::ND_RawAccGyro(float accel[3], float gyro[3])
 {
 	_monitor->newRawAccGyro(accel, gyro);
