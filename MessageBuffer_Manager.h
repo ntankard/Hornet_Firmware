@@ -2,7 +2,6 @@
 
 #include "MessageBuffer.h"
 #include "MessageBuffer_Passer.h"
-#include "CircularBuffer_Manager.h"
 
 /**
 * \brief	A manager for a set of Message Bufffers

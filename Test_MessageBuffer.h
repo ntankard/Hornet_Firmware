@@ -6,110 +6,42 @@
 
 test(MessageBuffer_float)
 {
-	const int testSize = 4;
-	const int typeSize = sizeof(float);
-	const int testID = 23;
+	const uint8_t ID = 4;
+	const uint8_t ComPri = 6;
+	const int Size = 16;
 
-	// create the test data
-	float inBuffer[] = { 23432.43234, -234.124, 242, 0 };
+	// generate the test data
+	float inBuffer[Size];
+	for (int i = 0; i < Size; i++)
+	{
+		inBuffer[i] = (float)random(-10000, 10000) * 0.0001;
+	}
 	uint8_t *outBuffer = reinterpret_cast<uint8_t *>(&inBuffer);
 
-	MessageBuffer<testSize,1> toTest;
-	toTest.setData(inBuffer);
+	MessageBuffer<ID, ComPri, Size> toTest;
+	toTest.copyData(inBuffer);
 
 	// check the real data
-	for (int i = 0; i < testSize; i++)
+	assertEqual(toTest.getDataSize(),Size);
+	for (int i = 0; i < Size; i++)
 	{
 		assertEqual(inBuffer[i], toTest.getData()[i]);
 	}
 
 	// check the byte data
-	for (int i = 0; i < (testSize*typeSize); i++)
+	assertEqual(toTest.getBytesSize(), (Size * sizeof(float)));
+	for (int i = 0; i < (Size * sizeof(float)); i++)
 	{
 		assertEqual(outBuffer[i], toTest.getBytes()[i]);
 	}
 
-}
-
-/*
-
-test(MessageBuffer_double)
-{
-	const int testSize = 4;
-	const int typeSize = sizeof(double);
-	const int testID = 23;
-
-	// create the test data
-	double inBuffer[] = { 1234.234, -22534.23, 1432, 0 };
-	uint8_t *outBuffer = reinterpret_cast<uint8_t *>(&inBuffer);
-
-	MessageBuffer<double, testSize> toTest(testID);
-	toTest.setMessage(inBuffer);
-
-	// check the real data
-	for (int i = 0; i < testSize; i++)
+	// check the packet
+	assertEqual(toTest.getPacketSize(), (Size * sizeof(float))+1);
+	for (int i = 0; i < (Size * sizeof(float)); i++)
 	{
-		assertEqual(inBuffer[i], toTest.getMessage()[i]);
-	}
-
-	// check the byte data
-	for (int i = 0; i < (testSize*typeSize); i++)
-	{
-		assertEqual(outBuffer[i], toTest.getBytes()[i]);
+		assertEqual(outBuffer[i], toTest.getPacket()[i + 1]);
 	}
 }
 
-test(MessageBuffer_int)
-{
-	const int testSize = 4;
-	const int typeSize = sizeof(int);
-	const int testID = 23;
-
-	// create the test data
-	int inBuffer[] = { 3453, -4324, 142, 0 };
-	uint8_t *outBuffer = reinterpret_cast<uint8_t *>(&inBuffer);
-
-	MessageBuffer<int, testSize> toTest(testID);
-	toTest.setMessage(inBuffer);
-
-	// check the real data
-	for (int i = 0; i < testSize; i++)
-	{
-		assertEqual(inBuffer[i], toTest.getMessage()[i]);
-	}
-
-	// check the byte data
-	for (int i = 0; i < (testSize*typeSize); i++)
-	{
-		assertEqual(outBuffer[i], toTest.getBytes()[i]);
-	}
-}
-
-test(MessageBuffer_int16_t)
-{
-	const int testSize = 4;
-	const int typeSize = sizeof(int16_t);
-	const int testID = 23;
-
-	// create the test data
-	int16_t inBuffer[] = { 3425, -234, 12, 0 };
-	uint8_t *outBuffer = reinterpret_cast<uint8_t *>(&inBuffer);
-
-	MessageBuffer<int16_t, testSize> toTest(testID);
-	toTest.setMessage(inBuffer);
-
-	// check the real data
-	for (int i = 0; i < testSize; i++)
-	{
-		assertEqual(inBuffer[i], toTest.getMessage()[i]);
-	}
-
-	// check the byte data
-	for (int i = 0; i < (testSize*typeSize); i++)
-	{
-		assertEqual(outBuffer[i], toTest.getBytes()[i]);
-	}
-}
-*/
 #endif;
  

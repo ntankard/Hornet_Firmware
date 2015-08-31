@@ -8,16 +8,18 @@
 
 test(MessageBuffer_Manager_Lock)
 {
-	const int MessageSize = 2;
 	const int MessageID = 4;
-	const int MessageBufferSize = 5;
+	const int MessageSize = 8;
+	const int ToMonitor = 8;
+	const uint8_t ComPri = 2;
+	const int BufferSize = 5;
 
-	MessageBuffer_Manager<MessageSize, MessageID, MessageBufferSize> toTest;
+	MessageBuffer_Manager<MessageID, MessageSize, ToMonitor, ComPri, BufferSize> toTest;
 	MessageBuffer_Passer* removed;
 	MessageBuffer_Passer* removedLastValid;
 
 	// check that you can get 5 lockable objects
-	for (int i = 0; i < MessageBufferSize; i++)
+	for (int i = 0; i < BufferSize; i++)
 	{
 		removedLastValid = toTest.getAvailable();
 		assertFalse(removedLastValid->isLocked());
@@ -41,11 +43,13 @@ test(MessageBuffer_Manager_Lock)
 
 test(MessageBuffer_Manager_Union)
 {
-	const int MessageSize = 4;
 	const int MessageID = 4;
-	const int MessageBufferSize = 5;
+	const int MessageSize = 8;
+	const int ToMonitor = 8;
+	const uint8_t ComPri = 2;
+	const int BufferSize = 5;
 
-	MessageBuffer_Manager<MessageSize, MessageID, MessageBufferSize> toTest;
+	MessageBuffer_Manager<MessageID, MessageSize, ToMonitor, ComPri, BufferSize> toTest;
 	MessageBuffer_Passer* removed;
 
 	// get a buffer
@@ -53,16 +57,12 @@ test(MessageBuffer_Manager_Union)
 	assertFalse(removed->isLocked());
 
 	// create test data
-	float inBuffer[] = { 3425, -234, 12, 0 };
-	uint8_t *outBuffer = reinterpret_cast<uint8_t *>(&inBuffer);
-	removed->setData(inBuffer);
-	assertEqual(removed->getSize(), MessageSize);
-
-	// test the original data
 	for (int i = 0; i < MessageSize; i++)
 	{
-		assertEqual(inBuffer[i], removed->getData()[i]);
+		removed->getData()[i] = (float)random(-10000, 10000) * 0.0001;
 	}
+	uint8_t *outBuffer = reinterpret_cast<uint8_t *>(removed->getData());
+	assertEqual(removed->getDataSize(), MessageSize);
 
 	// test the raw data
 	for (int i = 0; i < MessageSize * sizeof(float); i++)
@@ -80,25 +80,31 @@ test(MessageBuffer_Manager_Union)
 
 test(MessageBuffer_Manager_Data)
 {
-	const int MessageSize = 2;
 	const int MessageID = 4;
-	const int MessageBufferSize = 5;
+	const int MessageSize = 2;
+	const int ToMonitor = 8;
+	const uint8_t ComPri = 2;
+	const int BufferSize = 5;
 
-	MessageBuffer_Manager<MessageSize, MessageID, MessageBufferSize> toTest;
+	MessageBuffer_Manager<MessageID, MessageSize, ToMonitor, ComPri, BufferSize> toTest;
 	MessageBuffer_Passer* removed;
 
-	float inBuffer[MessageBufferSize][MessageSize] = { { 3425, -234 },
-														{ 2343, -6556 },
-														{ 0, 45 },
-														{ -546, -908 },
-														{ 345, 76 } };
+	// generate the data
+	float inBuffer[BufferSize][MessageSize];
+	for (int i = 0; i < BufferSize; i++)
+	{
+		for (int j = 0; j < MessageSize; j++)
+		{
+			inBuffer[i][j] = (float)random(-10000, 10000) * 0.0001;
+		}
+	}
 
 	// check that the data is retaind properly
-	for (int i = 0; i < MessageBufferSize; i++)
+	for (int i = 0; i < BufferSize; i++)
 	{
 		removed = toTest.getAvailable();
 		assertFalse(removed->isLocked());
-		removed->setData(inBuffer[i]);
+		removed->copyData(inBuffer[i]);
 		for (int j = 0; j < MessageSize; j++)
 		{
 			assertEqual(inBuffer[i][j], removed->getData()[j]);
@@ -108,7 +114,7 @@ test(MessageBuffer_Manager_Data)
 	// check that data is maintained in a locked buffer
 	removed = toTest.getAvailable();
 	assertFalse(removed->isLocked());
-	removed->setData(inBuffer[0]);
+	removed->copyData(inBuffer[0]);
 	removed->lock();
 	for (int j = 0; j < MessageSize; j++)
 	{
@@ -117,7 +123,7 @@ test(MessageBuffer_Manager_Data)
 
 	MessageBuffer_Passer* second = toTest.getAvailable();
 	assertFalse(second->isLocked());
-	second->setData(inBuffer[1]);
+	second->copyData(inBuffer[1]);
 
 	for (int j = 0; j < MessageSize; j++)
 	{
