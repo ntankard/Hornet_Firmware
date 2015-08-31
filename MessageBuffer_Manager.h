@@ -4,7 +4,15 @@
 #include "MessageBuffer_Passer.h"
 #include "CircularBuffer_Manager.h"
 
-
+/**
+* \brief	A manager for a set of Message Bufffers
+*
+* \param	MessageID	The message ID
+* \param	MessageSize	The number of floats in the message
+* \param	ToMonitor	How many messages need to be sent befor it should be send to the base station
+* \param	ComPri		The comunications prioroty of the message (if monitor is true)
+* \param	BufferSize	THe number of MessageBuffers to have
+*/
 template<uint8_t MessageID, int MessageSize, int ToMonitor, uint8_t ComPri, int BufferSize>
 class MessageBuffer_Manager
 {
@@ -54,6 +62,7 @@ public:
 
 private:
 
+	/** \brief	How many messages have been sent wince the last one was monitord */
 	int _monitorCount;
 
 	/** \brief	A pool of avalible buffers to use */

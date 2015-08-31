@@ -34,7 +34,7 @@ void Magnetometer::run()
 
 		// Package the data
 		MessageBuffer_Passer* yawMB = _yawSender.getAvailable();
-		yawMB->setData(&addedYaw);
+		yawMB->copyData(&addedYaw);
 		MessageBuffer_Passer* rawMB = _rawSender.getAvailable();
 		rawMB->getData()[0] = mag[0];
 		rawMB->getData()[1] = mag[1];
