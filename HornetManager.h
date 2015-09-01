@@ -6,7 +6,7 @@
 class Coms;
 class ComsEncoder;
 class AccGyro;
-class Monitor;
+//class Monitor;
 class Indicator;
 class Scheduler;
 class Magnetometer;
@@ -50,7 +50,7 @@ public:
 	void attachComs(Coms* theComs);
 	void attachComsEncoder(ComsEncoder* theComsEncoder);
 	void attachAccGyro(AccGyro* theAccGyro);
-	void attachMonitor(Monitor* theMonitor);
+//	void attachMonitor(Monitor* theMonitor);
 	void attachIndicator(Indicator* theIndicator);
 	void attachScheduler(Scheduler* theScheduler);
 	void attachMagnetometer(Magnetometer *theMagnetometer);
@@ -112,7 +112,6 @@ private:
 	Coms* _coms;
 	ComsEncoder* _comsEncoder;
 	AccGyro* _accGyro;
-	Monitor* _monitor;
 	Indicator* _indicator;
 	Scheduler* _scheduler;
 	Magnetometer *_magnetometer;
@@ -122,5 +121,7 @@ private:
 	unsigned long _C_last;
 
 	bool _isReset;
+
+	bool _monitor;
 };
 

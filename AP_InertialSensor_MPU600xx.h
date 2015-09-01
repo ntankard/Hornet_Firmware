@@ -57,9 +57,8 @@ public:
 	* \date	1/08/2015
 	*
 	* \param	theI2CManager	The wrapper for the I2C Bus
-	* \param	interruptPin	The interupt pin that indcates new data is avalible
 	*/
-	AP_InertialSensor_MPU600xx(Error *e, I2CManager *theI2CManager, uint8_t interruptPin);
+	AP_InertialSensor_MPU600xx(Error *e, I2CManager *theI2CManager);
 
 	/**
 	* \brief	Constuctor for the SPI Bus
@@ -69,9 +68,8 @@ public:
 	*
 	* \param	theSPIManager	The wrapper for the SPI Bus
 	* \param	cs_pin			The pin to enable the the chpis SPI bus
-	* \param	interruptPin	The interupt pin that indcates new data is avalible
 	*/
-	AP_InertialSensor_MPU600xx(Error *e, SPIManager *theSPIManager, uint8_t cs_pin, uint8_t interruptPin);
+	AP_InertialSensor_MPU600xx(Error *e, SPIManager *theSPIManager, uint8_t cs_pin);
 
 	/**
 	* \brief	Sets up the Acc component
@@ -155,9 +153,6 @@ private:
 
 	/** \brief	The address of the bus object (chip select pit or I2C address) */
 	uint8_t _address;
-
-	/** \brief	The interrupt pin indicating that new data is avalible */
-	uint8_t _interruptPin; 
 
 	/** \brief	Last valid data */
 	MPU60xx_Data_Packet _data;

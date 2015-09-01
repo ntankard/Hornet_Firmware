@@ -31,10 +31,10 @@ void ComsDecoder::processMessage(uint8_t *data, uint8_t dataLength)
 
 void ComsDecoder::sendFailure()
 {
-
+	//@TODO this
 }
 
 void ComsDecoder::receiveFailure()
 {
-
+	//@TODO this
 }

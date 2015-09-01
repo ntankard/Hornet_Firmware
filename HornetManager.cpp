@@ -2,7 +2,6 @@
 #include "Coms.h"
 #include "ComsEncoder.h"
 #include "AccGyro.h"
-#include "Monitor.h"
 #include "Indicator.h"
 #include "Scheduler.h"
 #include <Arduino.h>
@@ -19,6 +18,7 @@ HornetManager::HornetManager(Error *theError)
 	_e = theError;
 	S_enterInit();
 	_isReset = false;
+	_monitor = false;
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------
@@ -26,7 +26,7 @@ HornetManager::HornetManager(Error *theError)
 void HornetManager::attachComs(Coms* theComs){_coms = theComs;}
 void HornetManager::attachComsEncoder(ComsEncoder* theComsEncoder){_comsEncoder = theComsEncoder;}
 void HornetManager::attachAccGyro(AccGyro* theAccGyro){	_accGyro = theAccGyro;}
-void HornetManager::attachMonitor(Monitor* theMonitor){	_monitor = theMonitor;}
+//void HornetManager::attachMonitor(Monitor* theMonitor){	_monitor = theMonitor;}
 void HornetManager::attachIndicator(Indicator* theIndicator){	_indicator = theIndicator;}
 void HornetManager::attachScheduler(Scheduler* theScheduler){	_scheduler = theScheduler;}
 void HornetManager::attachMagnetometer(Magnetometer *theMagnetometer){ _magnetometer = theMagnetometer; }
@@ -44,7 +44,7 @@ void HornetManager::start()
 
 void HornetManager::newData(MessageBuffer_Passer *data)
 {
-	if (data->isMonitor())
+	if (_monitor && data->isMonitor())
 	{
 		_comsEncoder->sendData(data);
 	}
@@ -192,7 +192,7 @@ void HornetManager::S_enterConnect()
 	_scheduler->setPriority(C_SCHEDULER_MAG_THREAD, 0);
 
 	// extra systems
-	_monitor->off();
+	_monitor = false;
 	_indicator->on();
 	_indicator->setDisplay(C_STATE_INDICATE_CONNECT);
 
@@ -207,7 +207,7 @@ void HornetManager::S_connectToIdle()
 	if (_state == Connect)
 	{
 		_state = Idle;
-		_monitor->on();
+		_monitor = true;
 		S_enterIdle();
 	}
 	else
@@ -229,7 +229,7 @@ void HornetManager::S_enterIdle()
 
 
 	// extra systems
-	_monitor->on();
+	_monitor = true;
 	_indicator->on();
 	_indicator->setDisplay(C_STATE_INDICATE_IDLE);
 
@@ -262,7 +262,7 @@ void HornetManager::S_enterFlight()
 	_scheduler->setPriority(C_SCHEDULER_MAG_THREAD, 1);
 
 	// extra systems
-	_monitor->on();
+	_monitor = true;
 	_indicator->on();
 	_indicator->setDisplay(C_STATE_INDICATE_FLIGHT);
 

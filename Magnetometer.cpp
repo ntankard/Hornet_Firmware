@@ -22,7 +22,6 @@ void Magnetometer::run()
 {
 	int16_t mag[3];
 	
-
 	if (_mag.update())
 	{
 		_mag.getData(mag);

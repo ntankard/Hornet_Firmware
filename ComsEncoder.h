@@ -1,54 +1,75 @@
 #pragma once
-#include "Coms.h"
-#include "CircularBuffer_Manager.h"
-#include "CircularBuffer.h"
-#include "Error.h"
-#include "Runnable.h"
-#include "MessageBuffer_Passer.h"
 
+#include "Runnable.h"
+#include "Coms.h"
+#include "Error.h"
+#include "MessageBuffer_Passer.h"
+#include "CircularBuffer_Manager.h"
+
+/**
+* \brief	An object to buffer messages for sending
+*/
 class ComsEncoder:public Runnable
 {
 public:
-	ComsEncoder(Coms* coms, Error *e);
-	~ComsEncoder();
 
+	/**
+	* \brief	Default constructor.
+	*
+	* \param	coms	The object to send messages
+	* \param	e		The shared error object
+	*
+	* \author	Nicholas
+	* \date	1/08/2015
+	*/
+	ComsEncoder(Coms* coms, Error *e);
+
+	/**
+	* \brief	Sends one of the waiting messages
+	*/
 	void run();
 
+	/**
+	* \brief	DO NOTHING
+	*/
 	bool start(){ return true; }
 
-	void sendData(MessageBuffer_Passer *data);
+	/**
+	* \brief	Add one message to the queue
+	*
+	* \param	data	The message to send
+	*
+	* \return	Was there enough room in the buffers to send the message
+	*/
+	bool sendData(MessageBuffer_Passer *data);
 
-	void sendChar(uint8_t message);
-
-	void sendRawAccGyro(float accel[3], float gyro[3]);
-
-	void sendPitchRoll(float pitch, float roll);
-
-	void sendLidarPoint(float angle, float distance);
-
-	void sendLidarEOSweep(float pitch, float roll, float yaw);
+	/**
+	* \brief	Add a single char to the queu (top priority)
+	*
+	* \param	message	The message to send
+	*
+	* \return	Was there enough room in the buffers to send the message
+	*/
+	bool sendChar(uint8_t message);
 
 private:
+
+	/** \brief	The object to send messages */
 	Coms *_coms;
+
+	/** \brief	The shared error object */
 	Error *_e;
 
-
+	/** \brief	The buffer of messages to send */
 	MessageBuffer_Passer* _buffer[C_CL][C_COMENCODER_SIZE];
+
+	/** \brief	The manger for the queue of messages */
 	CircularBuffer_Manager<C_COMENCODER_SIZE> _buffer_man[C_CL];
 
+	/** \brief	The buffer of bytes to send */
+	uint8_t _messageBuffer[C_COMENCODER_M_SIZE];
 
-	//CircularBuffer<MessageBuffer_Passer*, C_COMENCODER_SIZE>* _buffer[C_CL];
-
-	uint8_t _messageBuffer[20];
-	CircularBuffer_Manager<20> _messageBuffer_man;
-
-	uint8_t _rawAccGyro[10][25];
-	CircularBuffer_Manager<10> _rawAccGyro_man;
-
-	uint8_t _pitchRoll[10][9];
-	CircularBuffer_Manager<10> _pitchRoll_man;
-
-	uint8_t _lidarData[10][9];
-	CircularBuffer_Manager<10> _lidarData_man;
+	/** \brief	The manager for the byte buffer */
+	CircularBuffer_Manager<C_COMENCODER_M_SIZE> _messageBuffer_man;
 };
 

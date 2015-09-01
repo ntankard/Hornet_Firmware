@@ -13,12 +13,11 @@
 
 //-----------------------------------------------------------------------------------------------------------------------------
 
-AP_InertialSensor_MPU600xx::AP_InertialSensor_MPU600xx(Error *e,SPIManager *theSPIManager, uint8_t cs_pin, uint8_t interruptPin)
+AP_InertialSensor_MPU600xx::AP_InertialSensor_MPU600xx(Error *e,SPIManager *theSPIManager, uint8_t cs_pin )
 {
 	// bus settings
 	_sharedBusManager = theSPIManager;
 	_address = cs_pin;
-	_interruptPin = interruptPin;
 	
 	// SPI chip seelct
 	pinMode(cs_pin, OUTPUT);
@@ -29,12 +28,11 @@ AP_InertialSensor_MPU600xx::AP_InertialSensor_MPU600xx(Error *e,SPIManager *theS
 
 //-----------------------------------------------------------------------------------------------------------------------------
 
-AP_InertialSensor_MPU600xx::AP_InertialSensor_MPU600xx(Error *e, I2CManager *theI2CManager, uint8_t interruptPin)
+AP_InertialSensor_MPU600xx::AP_InertialSensor_MPU600xx(Error *e, I2CManager *theI2CManager)
 {
 	// bus settings
 	_sharedBusManager = theI2CManager;
 	_address = MPUREG_I2C_ADDRESS;
-	_interruptPin = interruptPin;
 
 	_e = e;
 }

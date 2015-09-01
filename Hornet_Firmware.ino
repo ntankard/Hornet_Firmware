@@ -8,7 +8,7 @@
 #define FOR_HARDWARE 1
 #define FOR_TEST 2
 
-#define BUILD_TYPE FOR_TEST
+#define BUILD_TYPE FOR_HARDWARE
 
 #if BUILD_TYPE == FOR_HARDWARE
 
@@ -17,9 +17,11 @@
 #include "HornetManager.h"
 #include "ComsDecoder.h"
 #include "Coms.h"
+#include "Serial_Coms.h"
+#include "XBee_Coms.h"
 #include "ComsEncoder.h"
 #include "AccGyro.h"
-#include "Monitor.h"
+//#include "Monitor.h"
 #include "Indicator.h"
 #include "Scheduler.h"
 #include "SPIManager.h"
@@ -47,7 +49,6 @@ ComsEncoder *comsEncoder;
 // periferal systerms
 AccGyro *accGyro;
 Magnetometer *magnetometer;
-Monitor *monitor;
 Indicator *indicator;
 
 
@@ -61,7 +62,12 @@ void setup()
 
 	// construct the coms
 	comsDecoder = new ComsDecoder(manager);
-	coms = new Coms(comsDecoder);
+#if COM_MODE == COM_MODE_XBEE
+	coms = new XBee_Coms(comsDecoder);
+#endif
+#if COM_MODE == COM_MODE_SERIAL
+	coms = new Serial_Coms(comsDecoder);
+#endif
 		manager->attachComs(coms);
 		scheduler->addRunable(C_SCHEDULER_COMS_THREAD, coms);
 	comsEncoder = new ComsEncoder(coms, error);
@@ -75,10 +81,10 @@ void setup()
 	// construct the accselerator and gyro
 	#if ENABLE_ACC == ENABLED
 		#ifdef USE_MPU6000
-				accGyro = new AccGyro(manager,error,spiManager,MPU6000_CS,MPU6000_INTERRUPT);
+				accGyro = new AccGyro(manager,error,spiManager,MPU6000_CS);
 		#endif
 		#ifdef USE_MPU6050
-				accGyro = new AccGyro(manager,error,i2cManager,MPU6050_INTERRUPT);
+				accGyro = new AccGyro(manager, i2cManager, error);
 		#endif
 	#else
 		accGyro = new AccGyro();
@@ -90,10 +96,6 @@ void setup()
 	magnetometer = new Magnetometer(manager,spiManager,error);
 	scheduler->addRunable(C_SCHEDULER_MAG_THREAD, magnetometer);
 	manager->attachMagnetometer(magnetometer);
-
-	// construct the monitor
-	monitor = new Monitor(comsEncoder);
-	manager->attachMonitor(monitor);
 
 	// construct the indicator
 	#if ENABLE_INDICATOR == ENABLED
@@ -139,7 +141,6 @@ void loop()
 		delete comsEncoder;
 		delete accGyro;
 		delete magnetometer;
-		delete monitor;
 		delete indicator;
 		delete scheduler;
 

@@ -1,6 +1,5 @@
 #pragma once
 #include "Error.h"
-#include "Arduino.h"
 
 /**
  * \class	CircularBuffer_Manager
@@ -20,20 +19,21 @@ class CircularBuffer_Manager
 public:
 
 	/**
-	 * \fn	CircularBuffer_Manager::CircularBuffer_Manager()
-	 *
 	 * \brief	Default constructor.
 	 *
-	 * \author	Nicholas
-	 * \date	1/08/2015
+	 * \param	e	The shared error object
 	 */
 	CircularBuffer_Manager(Error *e)
 	{
 		_e = e;
 		_start = 0;
 		_end = 0;
+		_size = 0;
 	}
 
+	/**
+	* \brief	Default constructor.
+	*/
 	CircularBuffer_Manager()
 	{
 		_e = NULL;
@@ -41,6 +41,15 @@ public:
 		_end = 0;
 	}
 
+	/**
+	* \brief	Sets the shared error obect (this lets a default contructor exist)
+	*
+	* \param	e	The shared error object
+	*/
+	void setError(Error *e)
+	{
+		_e = e;
+	}
 
 	/**
 	 * \fn	bool CircularBuffer_Manager::isEmpty()
@@ -54,7 +63,11 @@ public:
 	 */
 	bool isEmpty()
 	{
-		return _start == _end;
+		if (_size == 0)
+		{
+			return true;
+		}
+		return false;
 	}
 
 	/**
@@ -69,17 +82,21 @@ public:
 	 */
 	bool isFull()
 	{
-		if (_end == 0 && (_start - 1) == Size)
+		if (_size == Size)
 		{
 			return true;
 		}
-
-		if (_start == (_end - 1))
-		{
-			return true;
-		}
-
 		return false;
+	}
+
+	/**
+	* \brief	The number of objects in the buffer
+	*
+	* \return	The Size
+	*/
+	int size()
+	{
+		return _size;
 	}
 
 	/**
@@ -100,9 +117,11 @@ public:
 		{
 			if (_e != NULL){
 				_e->add(E_ILLEGAL_ACCESS, "Attempting to add to a full buffer");
-				return -1;
 			}
+			return -1;
 		}
+
+		_size++;
 
 		int toRemove = _start;
 
@@ -133,9 +152,11 @@ public:
 		{
 			if (_e != NULL){
 				_e->add(E_ILLEGAL_ACCESS, "Attempting to remove from an empty buffer");
-				return -1;
 			}
+			return -1;
 		}
+
+		_size--;
 
 		int toRemove = _end;
 
@@ -159,5 +180,8 @@ private:
 
 	/** \brief	The systems error object */
 	Error *_e;
+
+	/** \brief	The number of objects in the buffer */
+	int _size;
 };
 

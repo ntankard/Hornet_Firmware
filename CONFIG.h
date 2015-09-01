@@ -1,40 +1,6 @@
 #pragma once
 #include "APM_2_5_PINS.h"
 
-#define C_COMENCODER_SIZE 10
-
-#define C_CL			6
-#define C_CL_COMS		0
-#define C_CL_SYSTEM_CMD 1
-#define C_CL_NAV_CMD	2
-#define C_CL_NAV_INFO	3
-#define C_CL_NAV_USE	4
-#define C_CL_DEBUG		5
-
-#define MB_RAW_MAG		1
-#define MB_YAW			2
-#define MB_ROLL_PITCH	'p'
-#define MB_RAW_ACC		'g'
-
-//#define C_COMS_CODE_ACCGYRO			'g'
-//#define C_COMS_CODE_PITCH_ROLL		'p'
-
-//									_________________________________________________________________
-//									| ID			| SIZE	| MONITOR	| COM PRI		| BUFFER SIZE
-//									-----------------------------------------------------------------
-#define MB_RAW_MAG_SETTING			MB_RAW_MAG,		3,		0,			C_CL_DEBUG,		10
-#define MB_YAW_SETTINGS				MB_YAW,			1,		0,			C_CL_NAV_INFO,	10
-#define MB_ROLL_PITCH_SETTINGS		MB_ROLL_PITCH,	2,		0,			C_CL_NAV_INFO,	10
-#define MB_RAW_ACC_SETTINGS			MB_RAW_ACC,		6,		1000,		C_CL_DEBUG,		10
-
-// THe build depends on there being this many threads and them being from 0 to C_SCHEDULER_THREAD_NUM -1 with no repeats
-#define C_SCHEDULER_THREAD_NUM 5
-
-#define C_SCHEDULER_COMS_THREAD 0
-#define C_SCHEDULER_COMENCODER_THREAD 1
-#define C_SCHEDULER_ACCGYRO_THREAD 2
-#define C_SCHEDULER_INDICATOR_THREAD 3
-#define C_SCHEDULER_MAG_THREAD 4
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // ------------------------------------------------------ BASE TYPES ----------------------------------------------------------
@@ -58,7 +24,7 @@
 #define BOARD_TYPE BOARD_TYPE_MEGA
 
 // Pick wich coms to use (XBEE not avalible for uno, will default to SERIAL)
-#define COM_MODE COM_MODE_SERIAL
+#define COM_MODE COM_MODE_XBEE
 
 // Enable relevent systems (some will be automaticaly disabled for certain board)
 #define ENABLE_ACC			ENABLED
@@ -249,10 +215,45 @@
 #define C_I2C_READ_WAIT 100
 #define C_MAG_MAX_READ_TIME 150
 
-//-----------------------------------------------------------------------------------------------------------------------------
-// ---------------------------------------------------- LIDAR SETTINGS ---------------------------------------------------------
-// ----------------------------------------------------------------------------------------------------------------------------
+#define C_COMENCODER_SIZE 10
+#define C_COMENCODER_M_SIZE 20
+
 
 //-----------------------------------------------------------------------------------------------------------------------------
-// ---------------------------------------------------- COMM SETTINGS ---------------------------------------------------------
+// --------------------------------------------------- MESSAGE SETTINGS -------------------------------------------------------
 // ----------------------------------------------------------------------------------------------------------------------------
+
+#define MB_RAW_MAG		1
+#define MB_YAW			2
+#define MB_ROLL_PITCH	'p'
+#define MB_RAW_ACC		'g'
+
+#define C_CL			6
+#define C_CL_COMS		0
+#define C_CL_SYSTEM_CMD 1
+#define C_CL_NAV_CMD	2
+#define C_CL_NAV_INFO	3
+#define C_CL_NAV_USE	4
+#define C_CL_DEBUG		5
+
+
+//									_________________________________________________________________
+//									| ID			| SIZE	| MONITOR	| COM PRI		| BUFFER SIZE
+//									-----------------------------------------------------------------
+#define MB_RAW_MAG_SETTING			MB_RAW_MAG,		3,		0,			C_CL_DEBUG,		10
+#define MB_YAW_SETTINGS				MB_YAW,			1,		0,			C_CL_NAV_INFO,	10
+#define MB_ROLL_PITCH_SETTINGS		MB_ROLL_PITCH,	2,		0,			C_CL_NAV_INFO,	10
+#define MB_RAW_ACC_SETTINGS			MB_RAW_ACC,		6,		1000,		C_CL_DEBUG,		10
+
+//-----------------------------------------------------------------------------------------------------------------------------
+// --------------------------------------------------- SCHEDULER SETTINS ------------------------------------------------------
+// ----------------------------------------------------------------------------------------------------------------------------
+
+// THe build depends on there being this many threads and them being from 0 to C_SCHEDULER_THREAD_NUM -1 with no repeats
+#define C_SCHEDULER_THREAD_NUM 5
+
+#define C_SCHEDULER_COMS_THREAD 0
+#define C_SCHEDULER_COMENCODER_THREAD 1
+#define C_SCHEDULER_ACCGYRO_THREAD 2
+#define C_SCHEDULER_INDICATOR_THREAD 3
+#define C_SCHEDULER_MAG_THREAD 4

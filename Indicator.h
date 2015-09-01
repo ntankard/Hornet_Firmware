@@ -80,7 +80,6 @@ protected:
 	/** \brief	Is the indicator on */
 	bool _isOn;
 
-
 	/** \brief	How many times to blink (eg blink 3 times then a gap) */
 	int _blinks;
 
