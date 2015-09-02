@@ -6,7 +6,6 @@
 class Coms;
 class ComsEncoder;
 class AccGyro;
-//class Monitor;
 class Indicator;
 class Scheduler;
 class Magnetometer;
@@ -37,23 +36,15 @@ public:
 	 */
 	void start();
 
-	/**
-	 * \fn	void HornetManager::attachComs(Coms* theComs);
-	 *
-	 * \brief	Attach a pre constructed coms object that holds a refrence to this manager instance
-	 *
-	 * \author	Nicholas
-	 * \date	29/07/2015
-	 *
-	 * \param [in,out]	theComs	If non-null, the coms.
-	 */
+
 	void attachComs(Coms* theComs);
 	void attachComsEncoder(ComsEncoder* theComsEncoder);
+
 	void attachAccGyro(AccGyro* theAccGyro);
-//	void attachMonitor(Monitor* theMonitor);
 	void attachIndicator(Indicator* theIndicator);
-	void attachScheduler(Scheduler* theScheduler);
 	void attachMagnetometer(Magnetometer *theMagnetometer);
+
+	void attachScheduler(Scheduler* theScheduler);
 
 	void newData(MessageBuffer_Passer *data);
 
@@ -66,19 +57,15 @@ public:
 	void ND_Throttle(int t);
 
 	void M_ConnectionConfirmed();
-
 	void M_ArmDisarm();
-
-	//void ND_PitchRoll(float pitch, float roll);
-
+	void M_Reset();
 
 	bool run();
 
-	void M_Reset();
+
 private:
 
 	void runConnect();
-
 
 	void S_enterInit();
 	void S_initToConnect();
@@ -109,19 +96,18 @@ private:
 
 	State _state;
 
-	Coms* _coms;
-	ComsEncoder* _comsEncoder;
-	AccGyro* _accGyro;
-	Indicator* _indicator;
 	Scheduler* _scheduler;
-	Magnetometer *_magnetometer;
-
 	Error *_e;
 
+	Coms* _coms;
+	ComsEncoder* _comsEncoder;
+
+	AccGyro* _accGyro;
+	Indicator* _indicator;
+	Magnetometer *_magnetometer;
+
 	unsigned long _C_last;
-
 	bool _isReset;
-
 	bool _monitor;
 };
 

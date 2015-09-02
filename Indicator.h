@@ -56,6 +56,16 @@ public:
 
 	// no implimented
 	bool start(){ return true; }
+	
+	/**
+	* \brief	Swiches on a light that dose not need to be managed by run and wwont be overwriden by the otehr lights
+	*/
+	virtual void safeOn() = 0;
+
+	/**
+	* \brief	Swiches off the safe light
+	*/
+	virtual void safeOff() = 0;
 
 protected:
 

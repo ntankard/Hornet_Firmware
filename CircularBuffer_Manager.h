@@ -118,7 +118,7 @@ public:
 			if (_e != NULL){
 				_e->add(E_ILLEGAL_ACCESS, "Attempting to add to a full buffer");
 			}
-			return -1;
+			return 0;
 		}
 
 		_size++;
@@ -153,7 +153,7 @@ public:
 			if (_e != NULL){
 				_e->add(E_ILLEGAL_ACCESS, "Attempting to remove from an empty buffer");
 			}
-			return -1;
+			return 0;
 		}
 
 		_size--;

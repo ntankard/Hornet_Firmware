@@ -65,7 +65,7 @@ private:
 class Magnetometer : public Runnable
 {
 public:
-	Magnetometer(HornetManager* theHornetManager,SPIManager *theSPIManager, Error *e);
+	Magnetometer(HornetManager* theHornetManager, SPIManager *theSPIManager, Error *e){}
 	bool start(){return true;}
 	void run(){}
 };

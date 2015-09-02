@@ -24,13 +24,13 @@
 #define BOARD_TYPE BOARD_TYPE_MEGA
 
 // Pick wich coms to use (XBEE not avalible for uno, will default to SERIAL)
-#define COM_MODE COM_MODE_XBEE
+#define COM_MODE COM_MODE_SERIAL
 
 // Enable relevent systems (some will be automaticaly disabled for certain board)
-#define ENABLE_ACC			ENABLED
+#define ENABLE_ACC			DISABLED
 #define ENABLE_LIDAR		DISABLED
 #define ENABLE_INDICATOR	ENABLED
-#define ENABLE_MAG			ENABLED
+#define ENABLE_MAG			DISABLED
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // ---------------------------------------------------- BOARD FEATURES --------------------------------------------------------
@@ -171,6 +171,7 @@
 #define E_SETUP_ERROR 4
 #define E_BUS_TIMEOUT 5
 #define E_HARDWARE_FAILURE 6
+#define E_INDEX_OOB 7
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // --------------------------------------------------- GENERAL SETTINGS --------------------------------------------------------
@@ -223,11 +224,13 @@
 // --------------------------------------------------- MESSAGE SETTINGS -------------------------------------------------------
 // ----------------------------------------------------------------------------------------------------------------------------
 
+// outbound	 com IDS
 #define MB_RAW_MAG		1
 #define MB_YAW			2
 #define MB_ROLL_PITCH	'p'
 #define MB_RAW_ACC		'g'
 
+// com priorities
 #define C_CL			6
 #define C_CL_COMS		0
 #define C_CL_SYSTEM_CMD 1
@@ -240,10 +243,10 @@
 //									_________________________________________________________________
 //									| ID			| SIZE	| MONITOR	| COM PRI		| BUFFER SIZE
 //									-----------------------------------------------------------------
-#define MB_RAW_MAG_SETTING			MB_RAW_MAG,		3,		0,			C_CL_DEBUG,		10
-#define MB_YAW_SETTINGS				MB_YAW,			1,		0,			C_CL_NAV_INFO,	10
-#define MB_ROLL_PITCH_SETTINGS		MB_ROLL_PITCH,	2,		0,			C_CL_NAV_INFO,	10
-#define MB_RAW_ACC_SETTINGS			MB_RAW_ACC,		6,		1000,		C_CL_DEBUG,		10
+#define MB_RAW_MAG_SETTING			MB_RAW_MAG,		3,		100,		C_CL_DEBUG,		10
+#define MB_YAW_SETTINGS				MB_YAW,			1,		10,			C_CL_NAV_INFO,	10
+#define MB_ROLL_PITCH_SETTINGS		MB_ROLL_PITCH,	2,		10,			C_CL_NAV_INFO,	10
+#define MB_RAW_ACC_SETTINGS			MB_RAW_ACC,		6,		100,		C_CL_DEBUG,		10
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // --------------------------------------------------- SCHEDULER SETTINS ------------------------------------------------------
@@ -252,6 +255,7 @@
 // THe build depends on there being this many threads and them being from 0 to C_SCHEDULER_THREAD_NUM -1 with no repeats
 #define C_SCHEDULER_THREAD_NUM 5
 
+// must be in required start order
 #define C_SCHEDULER_COMS_THREAD 0
 #define C_SCHEDULER_COMENCODER_THREAD 1
 #define C_SCHEDULER_ACCGYRO_THREAD 2

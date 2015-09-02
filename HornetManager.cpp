@@ -5,7 +5,6 @@
 #include "Indicator.h"
 #include "Scheduler.h"
 #include <Arduino.h>
-#include "Servo.h"
 #include "APM_Indicator.h"
 #include "Magnetometer.h"
 
@@ -26,7 +25,6 @@ HornetManager::HornetManager(Error *theError)
 void HornetManager::attachComs(Coms* theComs){_coms = theComs;}
 void HornetManager::attachComsEncoder(ComsEncoder* theComsEncoder){_comsEncoder = theComsEncoder;}
 void HornetManager::attachAccGyro(AccGyro* theAccGyro){	_accGyro = theAccGyro;}
-//void HornetManager::attachMonitor(Monitor* theMonitor){	_monitor = theMonitor;}
 void HornetManager::attachIndicator(Indicator* theIndicator){	_indicator = theIndicator;}
 void HornetManager::attachScheduler(Scheduler* theScheduler){	_scheduler = theScheduler;}
 void HornetManager::attachMagnetometer(Magnetometer *theMagnetometer){ _magnetometer = theMagnetometer; }
@@ -44,9 +42,11 @@ void HornetManager::start()
 
 void HornetManager::newData(MessageBuffer_Passer *data)
 {
-	if (_monitor && data->isMonitor())
-	{
-		_comsEncoder->sendData(data);
+	if (_state != Init){
+		if (_monitor && data->isMonitor())
+		{
+			_comsEncoder->sendData(data);
+		}
 	}
 
 //	monitor->newData(data);
@@ -123,7 +123,7 @@ bool HornetManager::run()
 	// catch exeption
 	if (_e->isError())
 	{
-		_indicator->setDisplay(C_INDICATE_ERROR);
+		_indicator->safeOn();
 		while (true)
 		{
 			delay(10);
@@ -146,7 +146,7 @@ void HornetManager::runConnect()
 	if (_C_last + C_CONNECT_PULSE_TIME <= current)
 	{
 		_C_last = current;
-		_comsEncoder->sendChar(C_COMS_CODE_CONNECT_REQUEST);
+		_comsEncoder->sendChar((char)current);
 	}
 
 }
@@ -168,8 +168,6 @@ void HornetManager::S_initToConnect()
 {
 	if (_state == Init)
 	{
-		_accGyro->start();
-		_magnetometer->start();
 		_C_last = millis();
 		S_enterConnect();
 	}
@@ -206,8 +204,6 @@ void HornetManager::S_connectToIdle()
 {
 	if (_state == Connect)
 	{
-		_state = Idle;
-		_monitor = true;
 		S_enterIdle();
 	}
 	else
@@ -223,9 +219,9 @@ void HornetManager::S_enterIdle()
 	// threads
 	_scheduler->setPriority(C_SCHEDULER_COMS_THREAD, 1);
 	_scheduler->setPriority(C_SCHEDULER_COMENCODER_THREAD, 1);
-	_scheduler->setPriority(C_SCHEDULER_ACCGYRO_THREAD, 1);
+	_scheduler->setPriority(C_SCHEDULER_ACCGYRO_THREAD, 10);
 	_scheduler->setPriority(C_SCHEDULER_INDICATOR_THREAD, 10);
-	_scheduler->setPriority(C_SCHEDULER_MAG_THREAD, 1);
+	_scheduler->setPriority(C_SCHEDULER_MAG_THREAD, 10);
 
 
 	// extra systems
@@ -257,9 +253,9 @@ void HornetManager::S_enterFlight()
 	// threads
 	_scheduler->setPriority(C_SCHEDULER_COMS_THREAD, 1);
 	_scheduler->setPriority(C_SCHEDULER_COMENCODER_THREAD, 1);
-	_scheduler->setPriority(C_SCHEDULER_ACCGYRO_THREAD, 1);
+	_scheduler->setPriority(C_SCHEDULER_ACCGYRO_THREAD, 10);
 	_scheduler->setPriority(C_SCHEDULER_INDICATOR_THREAD, 10);
-	_scheduler->setPriority(C_SCHEDULER_MAG_THREAD, 1);
+	_scheduler->setPriority(C_SCHEDULER_MAG_THREAD, 10);
 
 	// extra systems
 	_monitor = true;

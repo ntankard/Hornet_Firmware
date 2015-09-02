@@ -83,7 +83,7 @@ class AccGyro:public Runnable
 {
 public:
 	AccGyro(){}
-	void start(){}
+	bool start(){ return true; }
 	void run(){}
 };
 

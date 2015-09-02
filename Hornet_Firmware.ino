@@ -1,33 +1,36 @@
 // hardware libreys (do not remove)
 #include <Wire.h>
 #include <SPI.h>
-#include <Servo.h>
-#include <RPLidar.h>
 #include <ArduinoUnit.h>
 
 #define FOR_HARDWARE 1
 #define FOR_TEST 2
 
-#define BUILD_TYPE FOR_HARDWARE
+#define BUILD_TYPE FOR_TEST
 
 #if BUILD_TYPE == FOR_HARDWARE
 
 
-// local components
+// core
 #include "HornetManager.h"
-#include "ComsDecoder.h"
-#include "Coms.h"
-#include "Serial_Coms.h"
-#include "XBee_Coms.h"
-#include "ComsEncoder.h"
-#include "AccGyro.h"
-//#include "Monitor.h"
-#include "Indicator.h"
+#include "Error.h"
 #include "Scheduler.h"
+
+//bus
 #include "SPIManager.h"
 #include "I2CManager.h"
-#include "APM_Indicator.h"
-#include "DM_Indicator.h"
+
+//coms
+#include "ComsDecoder.h"
+#include "Coms.h"
+	#include "Serial_Coms.h"
+	#include "XBee_Coms.h"
+#include "ComsEncoder.h"
+
+#include "AccGyro.h"
+#include "Indicator.h"
+	#include "APM_Indicator.h"
+	#include "DM_Indicator.h"
 #include "Magnetometer.h"
 
 #include "CONFIG.h"
@@ -117,11 +120,18 @@ void setup()
 	// check build integrety
 	if (scheduler->finish())
 	{
-		while (true){ Serial.println("FAILED TO START"); };
+		indicator->safeOn();
+		while (true){ Serial.println("FAILED TO START"); delay(1000); };
 		//@TODO add error code here
 	}
 
-	//magnetometer->start();
+	if (!scheduler->startAll())
+	{
+		indicator->safeOn();
+		while (true){ Serial.println("FAILED TO START 2"); delay(1000); };
+		//@TODO add error code here
+	}
+
 	manager->start();
 }
 
@@ -129,19 +139,23 @@ void loop()
 {
 	if (!manager->run())
 	{
-
-		// @TODO delete order should be backwards
-		delete manager;
-		delete error;
-		delete scheduler;
-		delete spiManager;
-		delete i2cManager;
-		delete coms;
-		delete comsDecoder;
-		delete comsEncoder;
+		// periferal
 		delete accGyro;
 		delete magnetometer;
 		delete indicator;
+
+		// coms
+		delete coms;
+		delete comsDecoder;
+		delete comsEncoder;
+
+		//bus
+		delete spiManager;
+		delete i2cManager;
+
+		//core
+		delete manager;
+		delete error;
 		delete scheduler;
 
 		setup();
@@ -151,6 +165,7 @@ void loop()
 #else
 
 #include "Test_CircularBuffer.h"
+#include "Test_CircularBuffer_Manager.h"
 #include "Test_LidarNavigation.h"
 #include "Test_MovingAverage.h"
 #include "Test_TimeOut.h"
