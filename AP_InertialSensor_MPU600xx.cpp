@@ -102,7 +102,7 @@ void AP_InertialSensor_MPU600xx::getData()
 	// read the data
 	uint8_t addr = MPUREG_ACCEL_XOUT_H | 0x80;
 
-	Could_Throw(_sharedBusManager->read(_address, addr, (uint8_t*)(&_data), sizeof(_data)),);
+	Could_Throw(_sharedBusManager->read(_address, addr, (uint8_t*)(&_data.reg), sizeof(_data.reg)), );
 
 	// data comes oput backwards, fix that
 	uint8_t swap;

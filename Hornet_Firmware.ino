@@ -1,12 +1,12 @@
 // hardware libreys (do not remove)
 #include <Wire.h>
 #include <SPI.h>
-#include <ArduinoUnit.h>
+//#include <ArduinoUnit.h>
 
 #define FOR_HARDWARE 1
 #define FOR_TEST 2
 
-#define BUILD_TYPE FOR_TEST
+#define BUILD_TYPE FOR_HARDWARE
 
 #if BUILD_TYPE == FOR_HARDWARE
 
@@ -35,6 +35,42 @@
 
 #include "CONFIG.h"
 
+int freeRam()
+{
+	extern int __heap_start, *__brkval;
+	int v;
+	return (int)&v - (__brkval == 0 ? (int)&__heap_start : (int)__brkval);
+}
+
+/*
+void setup()
+{
+
+}
+
+void loop()
+{
+
+}
+
+Error error;
+HornetManager manager(&error);
+Scheduler scheduler(&error);
+
+SPIManager spiManager(&error);
+I2CManager i2cManager(&error);
+
+ComsDecoder comsDecoder(&manager);
+#if COM_MODE == COM_MODE_XBEE
+XBee_Coms coms(&comsDecoder);
+#endif
+#if COM_MODE == COM_MODE_SERIAL
+Serial_Coms coms(&comsDecoder);
+#endif
+ComsEncoder comsEncoder(&coms);*/
+
+
+
 // core componenets
 HornetManager *manager;
 Error *error;
@@ -55,16 +91,29 @@ Magnetometer *magnetometer;
 Indicator *indicator;
 
 
+int i;
+
 void setup()
 {
+	i = 0;
+	delay(1000);
 	Serial.begin(9600);	//@TODO this should be in the USB serial
 
+
+	//Serial.clearWriteError();
+	//Serial.flush();
+
+	delay(2000);
+
+	Serial.println("Start Build");
+	Serial.println((String)freeRam());
+	
 	error = new Error();
 	manager = new HornetManager(error);
 	scheduler = new Scheduler(error);
 
 	// construct the coms
-	comsDecoder = new ComsDecoder(manager);
+			comsDecoder = new ComsDecoder(manager);
 #if COM_MODE == COM_MODE_XBEE
 	coms = new XBee_Coms(comsDecoder);
 #endif
@@ -75,7 +124,7 @@ void setup()
 		scheduler->addRunable(C_SCHEDULER_COMS_THREAD, coms);
 	comsEncoder = new ComsEncoder(coms, error);
 		manager->attachComsEncoder(comsEncoder);
-		scheduler->addRunable(C_SCHEDULER_COMENCODER_THREAD, comsEncoder);
+scheduler->addRunable(C_SCHEDULER_COMENCODER_THREAD, comsEncoder);
 
 	// set up conection infurstructor for the sensors
 	spiManager = new SPIManager(error);
@@ -131,13 +180,19 @@ void setup()
 		while (true){ Serial.println("FAILED TO START 2"); delay(1000); };
 		//@TODO add error code here
 	}
+	Serial.println((String)freeRam());
+	Serial.println("End Build");
 
 	manager->start();
 }
 
+
 void loop()
 {
-	if (!manager->run())
+	manager->run();
+	delay(1);
+
+	/*if (!manager->run())
 	{
 		// periferal
 		delete accGyro;
@@ -160,6 +215,7 @@ void loop()
 
 		setup();
 	}
+	delay(100);*/
 }
 
 #else

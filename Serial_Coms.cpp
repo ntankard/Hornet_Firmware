@@ -4,7 +4,7 @@
 
 Serial_Coms::Serial_Coms(ComsDecoder* comsDecoder) :Coms(comsDecoder)
 {
-	C_COMS_PORT.begin(C_COMS_BAUD_RATE);
+	//C_COMS_PORT.begin(C_COMS_BAUD_RATE);
 	_readData = 0;
 }
 

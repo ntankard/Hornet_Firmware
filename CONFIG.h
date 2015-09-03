@@ -178,7 +178,7 @@
 // ----------------------------------------------------------------------------------------------------------------------------
 
 
-#define C_ERROR_BUFFER 100
+#define C_ERROR_BUFFER 10
 #define C_LOGGER_ACC_RATE 10
 #define C_CONNECT_PULSE_TIME 1000
 
@@ -192,6 +192,8 @@
 	#define C_COMS_BAUD_RATE 9600
 	#define C_COMS_BUFFER 100
 #endif
+
+
 
 #ifdef USE_APM_INDICATOR
 	#define C_STATE_INDICATE_CONNECT 5,1,500

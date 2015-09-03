@@ -124,10 +124,10 @@ bool HornetManager::run()
 	if (_e->isError())
 	{
 		_indicator->safeOn();
+		String message = _e->getError()->errorInfo;
 		while (true)
 		{
 			delay(10);
-			String message = _e->getError()->errorInfo;
 			Serial.println(message);
 		}
 		//@TODO add error handeling here
