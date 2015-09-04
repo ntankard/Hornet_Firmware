@@ -32,14 +32,7 @@ test(Error_Regular)
 
 test(Error_Overflow)
 {
-	asm volatile("" ::: "memory");
 	Error toTest;
-	asm volatile("" ::: "memory");
-	int postTest = -223;
-	asm volatile("" ::: "memory");
-
-	// check that the optomizer hasnt broken anything
-	assertEqual((int)&postTest, (int)&toTest + sizeof(Error)+4);
 
 	// test that its built corectly
 	assertFalse(toTest.isError());
@@ -60,9 +53,6 @@ test(Error_Overflow)
 
 	// check that all errors were removed properly
 	assertFalse(toTest.isError());
-
-	// check that the error has not excaped its allocated memory
-	assertEqual(postTest,-223);
 }
 
 #endif;
