@@ -37,7 +37,6 @@ void loop()
 #include "Test_Scheduler.h"
 #include "Test_Error.h"
 
-
 void setup()
 {
 	Serial.begin(9600);
