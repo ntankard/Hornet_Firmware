@@ -18,7 +18,7 @@
 
 #if DEBUG_BUILD == ENABLE
 #define DEBUG_PRINT(message) Serial.println(message);
-#define TEST_PRINT(message) Serial.println(message);
+#define TP(message) Serial.println(message);
 #else
 #define DEBUG_PRINT(message)
 #endif
@@ -48,3 +48,15 @@
 // must be in required start order
 #define C_TEST1 0
 #define C_TEST2 1
+
+//-----------------------------------------------------------------------------------------------------------------------------
+// ----------------------------------------------------- STATE SETTINGS -------------------------------------------------------
+// ----------------------------------------------------------------------------------------------------------------------------
+
+#define ST_TO_CONNECT		Connect
+#define ST_TO_IDLE			Idle
+#define ST_TO_TAKEOFF		TakeOff
+#define ST_TO_FLIGHT		Flight
+#define ST_TO_LAND			Land
+#define ST_TO_EMERGENCY		Emergency
+#define ST_TO_CRACH			Crash
