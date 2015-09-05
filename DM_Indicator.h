@@ -5,6 +5,21 @@
 
 #ifdef USE_DM_INDICATOR
 
+#include "SequenceGenerator.h"
+
+const int ROWS[] = { CANODE_6, CANODE_10, CANODE_11, CANODE_3, CANODE_13 };
+const int COLUMNS[] = { CANODE_9, CANODE_14, CANODE_8, CANODE_12, CANODE_1, CANODE_7, CANODE_2 };
+
+#define NUM_ROWS 5
+#define NUM_COLLUNS 7
+
+const int MATRIX_SIZE = ((NUM_ROWS - 1) * (NUM_COLLUNS - 1));
+
+#define ROW_ON HIGH
+#define ROW_OFF LOW
+#define COLUMNS_ON LOW
+#define COLUMNS_OFF HIGH
+
 
 class Indicator : public Runnable
 {
@@ -55,15 +70,16 @@ public:
 	void run();
 
 	// no implimented
-	bool start(){ return true; }
+	bool start();
 
 	void safeOn();
 	void safeOff();
-private:
 	void reset();
+private:
+
 
 	void lightOn(int setting_1, int setting_2);
-	void lightOff();
+	void lightOff(int setting_1, int setting_2);
 
 	/** \brief	Is the indicator on */
 	bool _isOn;
@@ -78,19 +94,10 @@ private:
 	int _setting_1;
 	int _setting_2;
 
-	/** \brief	the time of the last event */
-	unsigned long _pastTime;
-
-	/** \brief	are the lights on or off? */
-	bool _pinIsOn;
-
-	/** \brief	Is in the indicator in a bag between blinks*/
-	bool _isBreak;
-
-	/** \brief	how many blanks have alredy orcured (since the last break)*/
-	int _doneBlinks;
 
 	Error *_e;
+
+	SequenceGenerator _sequenceGenerator;
 };
 
 #else

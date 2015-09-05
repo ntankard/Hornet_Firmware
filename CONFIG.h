@@ -55,23 +55,26 @@
 // ----------------------------------------------------------------------------------------------------------------------------
 
 // THe build depends on there being this many threads and them being from 0 to C_SCHEDULER_THREAD_NUM -1 with no repeats
-#define C_SCHEDULER_THREAD_NUM 2
+#define C_SCHEDULER_THREAD_NUM 1
 
 // must be in required start order
-#define C_TEST1 0
-#define C_TEST2 1
+#define C_SCHEDULER_INDICATOR_THREAD 0
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // ----------------------------------------------------- STATE SETTINGS -------------------------------------------------------
 // ----------------------------------------------------------------------------------------------------------------------------
 
-#define ST_TO_CONNECT		Connect
-#define ST_TO_IDLE			Idle
-#define ST_TO_TAKEOFF		TakeOff
-#define ST_TO_FLIGHT		Flight
-#define ST_TO_LAND			Land
-#define ST_TO_EMERGENCY		Emergency
-#define ST_TO_CRACH			Crash
+
+//							____________| Thread Priority|_______________________
+//							| State		| INDICATOR			| LIGHT	|BLINKS| RATE
+//							-----------------------------------------------------------------
+#define ST_TO_CONNECT		Connect,	10,					0,		1,		1000
+#define ST_TO_IDLE			Idle,		10,					5,		2,		500
+#define ST_TO_TAKEOFF		TakeOff,	10,					10,		3,		500
+#define ST_TO_FLIGHT		Flight,		10,					15,		1,		1000
+#define ST_TO_LAND			Land,		10,					20,		1,		1000
+#define ST_TO_EMERGENCY		Emergency,	10,					21,		1,		1000
+#define ST_TO_CRACH			Crash,		10,					22,		1,		1000
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // ----------------------------------------------------- PIN SETTINGS ---------------------------------------------------------

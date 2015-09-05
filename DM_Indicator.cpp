@@ -6,42 +6,48 @@
 #ifdef USE_DM_INDICATOR
 #include "arduino.h"
 
-const int ROWS[] = { CANODE_6, CANODE_10, CANODE_11, CANODE_3, CANODE_13 };
-const int COLUMNS[] = { CANODE_9, CANODE_14, CANODE_8, CANODE_12, CANODE_1, CANODE_7, CANODE_2 };
 
-#define NUM_ROWS 5
-#define NUM_COLLUNS 7
 
-const int MATRIX_SIZE = ((NUM_ROWS - 1) * (NUM_COLLUNS -1));
-
-#define ROW_ON HIGH
-#define ROW_OFF LOW
-#define COLUMNS_ON LOW
-#define COLUMNS_OFF HIGH
+//-----------------------------------------------------------------------------------------------------------------------------
 
 Indicator::Indicator(Error *e)
 {
 	_e = e;
 
+}
+
+bool Indicator::start()
+{
 	for (int i = 0; i < (NUM_ROWS); i++)
 	{
 		pinMode(ROWS[i], OUTPUT);
+		digitalWrite(ROWS[i], ROW_OFF);
 	}
 
 	for (int i = 0; i < (NUM_COLLUNS); i++)
 	{
 		pinMode(COLUMNS[i], OUTPUT);
+		digitalWrite(COLUMNS[i], COLUMNS_OFF);
 	}
 
-	safeOff();
-	reset();
+	pinMode(CANODE_4, OUTPUT);
+	pinMode(CANODE_5, OUTPUT);
+
+	_setting_1 = 0;
+	_setting_2 = 0;
+	_blinks = 0;
+	_rate = 500;
+
+	//safeOff();
+	_sequenceGenerator.set(500, 0, 0);	//default is solid on
+	return true;
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------
 
 void Indicator::reset()
 {
-	for (int i = 0; i < (NUM_ROWS-1); i++)
+	/*for (int i = 0; i < (NUM_ROWS-1); i++)
 	{
 		digitalWrite(ROWS[i], ROW_OFF);
 	}
@@ -59,24 +65,31 @@ void Indicator::reset()
 	_setting_2 = 0;
 
 	_isBreak = false;
-	_pinIsOn = false;
+	_pinIsOn = false;*/
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------
 
 void Indicator::on()
 {
-	reset();
+	_sequenceGenerator.set(_rate, _blinks, 3);	//reset
 	_isOn = true;
-	lightOn(_setting_1,_setting_2);
+	if (_sequenceGenerator.isHigh())
+	{
+		lightOn(_setting_1, _setting_2);
+	}
+	else
+	{
+		lightOff(_setting_1, _setting_2);
+	}
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------
 
 void Indicator::off()
 {
-	lightOff();
 	_isOn = false;
+	lightOff(_setting_1, _setting_2);
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------
@@ -89,63 +102,43 @@ void Indicator::setDisplay(int setting_1, int setting_2, int blinks, int rate)
 		return;
 	}
 
+	// reset
+	lightOff(_setting_1, _setting_2);
+	_sequenceGenerator.set(rate, blinks, 3);
 
-
-	reset();
 	_setting_1 = setting_1;
 	_setting_2 = setting_2;
 	_blinks = blinks;
 	_rate = rate;
+
+	if (_isOn)
+	{
+		if (_sequenceGenerator.isHigh())
+		{
+			lightOn(_setting_1, _setting_2);
+		}
+		else
+		{
+			lightOff(_setting_1, _setting_2);
+		}
+	}
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------
 
 void Indicator::run()
 {
-	unsigned long currentMillis = millis();
-
 	if (_isOn)
 	{
-		if (_isBreak)
+		if (_sequenceGenerator.run())
 		{
-			if (currentMillis >= (_pastTime + (_rate * 3)))
+			if (_sequenceGenerator.isHigh())
 			{
-				// end of a break
-				_pinIsOn = true;
-				lightOn(_setting_1,_setting_2);
-				_pastTime = currentMillis;
-				_isBreak = false;
-				_doneBlinks = 0;
+				lightOn(_setting_1, _setting_2);
 			}
-		}
-		else
-		{
-			if (currentMillis >= (_pastTime + _rate))
+			else
 			{
-				if (_pinIsOn == false)
-				{
-					// end of a regular gap
-					_pinIsOn = true;
-					lightOn(_setting_1, _setting_2);
-					_pastTime = currentMillis;
-				}
-				else
-				{
-					// end of a on period
-					_pinIsOn = false;
-					lightOff();
-					_pastTime = currentMillis;
-					if (_blinks != 1)
-					{
-						// pattern
-						_doneBlinks++;
-						if (_doneBlinks >= _blinks)
-						{
-							// time for a long break
-							_isBreak = true;
-						}
-					}
-				}
+				lightOff(_setting_1, _setting_2);
 			}
 		}
 	}
@@ -173,20 +166,20 @@ void Indicator::lightOn(int setting_1, int setting_2)
 {
 	// asume that settings are valid as they are gate checked by setParam
 
-	digitalWrite(setting_1%NUM_ROWS, ROW_ON);
-	digitalWrite(setting_1/NUM_ROWS, COLUMNS_ON);
-	digitalWrite(setting_2%NUM_ROWS, ROW_ON);
-	digitalWrite(setting_2 / NUM_ROWS, COLUMNS_ON);
+	digitalWrite(ROWS[setting_1%(NUM_ROWS-1)], ROW_ON);
+	digitalWrite(COLUMNS[setting_1 / (NUM_ROWS - 1)], COLUMNS_ON);
+	digitalWrite(ROWS[setting_2 % (NUM_ROWS - 1)], ROW_ON);
+	digitalWrite(COLUMNS[setting_2 / (NUM_ROWS - 1)], COLUMNS_ON);
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------
 
-void Indicator::lightOff()
+void Indicator::lightOff(int setting_1, int setting_2)
 {
-	digitalWrite(_setting_1%NUM_ROWS, ROW_OFF);
-	digitalWrite(_setting_1 / NUM_ROWS, COLUMNS_OFF);
-	digitalWrite(_setting_2%NUM_ROWS, ROW_OFF);
-	digitalWrite(_setting_2 / NUM_ROWS, COLUMNS_OFF);
+	digitalWrite(ROWS[setting_1 % (NUM_ROWS - 1)], ROW_OFF);
+	digitalWrite(COLUMNS[setting_1 / (NUM_ROWS - 1)], COLUMNS_OFF);
+	digitalWrite(ROWS[setting_2 % (NUM_ROWS - 1)], ROW_OFF);
+	digitalWrite(COLUMNS[setting_2 / (NUM_ROWS - 1)], COLUMNS_OFF);
 }
 
 #endif

@@ -3,7 +3,7 @@
 #define FOR_MANUAL_TEST 2
 #define FOR_TEST 3
 
-#define BUILD_TYPE FOR_MANUAL_TEST
+#define BUILD_TYPE FOR_HARDWARE
 
 #if BUILD_TYPE == FOR_HARDWARE
 
@@ -36,6 +36,7 @@ void loop()
 
 #include "Test_Scheduler.h"
 #include "Test_Error.h"
+#include "Test_SequenceGenerator.h"
 
 void setup()
 {
@@ -51,29 +52,25 @@ void loop()
 #endif
 #if BUILD_TYPE == FOR_MANUAL_TEST
 
-#include "DM_Indicator.h"
-#include "Error.h"
-
-
-Error e;
-Indicator toTest(&e);
-
+#include "MTest_DM_Indicator.h"
 
 void setup()
 {
 	Serial.begin(9600);
 
-	toTest.safeOn();
-	//delay(2000);
-	//toTest.setDisplay(0, 10, 3, 100);
-	//toTest.on();
-
+	//MTest_DM_Indicator_Points();
+	//MTest_DM_Indicator_Safe();
+	//MTest_DM_Indicator_SafeWithBlink();
+	//MTest_DM_Indicator_FullSettings();
+	//MTest_DM_Indicator_SolidOn();
+	//MTest_DM_Indicator_Blink();
+	//MTest_DM_Indicator_Sequence();
 
 }
 
 void loop()
 {
-	//toTest.run();
+	
 }
 
 #endif
