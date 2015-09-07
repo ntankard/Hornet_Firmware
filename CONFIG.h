@@ -63,28 +63,27 @@
 // ----------------------------------------------------------------------------------------------------------------------------
 
 // THe build depends on there being this many threads and them being from 0 to C_SCHEDULER_THREAD_NUM -1 with no repeats
-#define C_SCHEDULER_THREAD_NUM 3
+#define C_SCHEDULER_THREAD_NUM 2
 
 // must be in required start order
 #define C_SCHEDULER_INDICATOR_THREAD 0
-#define C_SCHEDULER_COMS_THREAD 1
-#define C_SCHEDULER_COMENCODER_THREAD 2
+#define C_SCHEDULER_COMENCODER_THREAD 1
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // ----------------------------------------------------- STATE SETTINGS -------------------------------------------------------
 // ----------------------------------------------------------------------------------------------------------------------------
 
 
-//							____________|       Thread Priority		|_______________________
-//							| State		| INDICATOR	|  COMS	| COM EN| LIGHT	|BLINKS| RATE
+//							____________|    Thread Priority	|_______________________
+//							| State		| INDICATOR		| COM EN| LIGHT	|BLINKS| RATE
 //							-----------------------------------------------------------------
-#define ST_TO_CONNECT		Connect,	10,			1,		1,		0,		1,		1000
-#define ST_TO_IDLE			Idle,		10,			1,		1,		5,		2,		250
-#define ST_TO_TAKEOFF		TakeOff,	10,			1,		1,		10,		3,		500
-#define ST_TO_FLIGHT		Flight,		10,			1,		1,		15,		1,		1000
-#define ST_TO_LAND			Land,		10,			1,		1,		20,		1,		1000
-#define ST_TO_EMERGENCY		Emergency,	10,			1,		1,		21,		1,		1000
-#define ST_TO_CRACH			Crash,		10,			1,		1,		22,		1,		1000
+#define ST_TO_CONNECT		Connect,	10,				1,		0,		1,		1000
+#define ST_TO_IDLE			Idle,		10,				1,		5,		2,		250
+#define ST_TO_TAKEOFF		TakeOff,	10,				1,		10,		3,		500
+#define ST_TO_FLIGHT		Flight,		10,				1,		15,		1,		1000
+#define ST_TO_LAND			Land,		10,				1,		20,		1,		1000
+#define ST_TO_EMERGENCY		Emergency,	10,				1,		21,		1,		1000
+#define ST_TO_CRACH			Crash,		10,				1,		22,		1,		1000
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // ----------------------------------------------------- PIN SETTINGS ---------------------------------------------------------

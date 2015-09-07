@@ -30,7 +30,7 @@ public:
 	*
 	* \param	e	The shared error object
 	*/
-	Indicator(Error *e);
+	Indicator(volatile Error *e);
 
 	/**
 	* \brief	Turn on (and reset) the indicator
@@ -95,7 +95,7 @@ private:
 	int _setting_2;
 
 
-	Error *_e;
+	volatile Error *_e;
 
 	SequenceGenerator _sequenceGenerator;
 };

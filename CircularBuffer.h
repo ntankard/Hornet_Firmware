@@ -20,7 +20,7 @@ public:
 	* \author	Nicholas
 	* \date	1/08/2015
 	*/
-	CircularBuffer(Error *e)
+	CircularBuffer(volatile Error *e)
 	{
 		_e = e;
 		_start = 0;
@@ -149,7 +149,7 @@ private:
 	int _end;
 
 	/** \brief	The systems error object */
-	Error *_e;
+	volatile Error *_e;
 
 	/** \brief	The number of objects in the buffer */
 	int _size;

@@ -24,7 +24,7 @@ public:
 	/**
 	* \brief	Default constructor.
 	*/
-	Scheduler(Error *e);
+	Scheduler(volatile Error *e);
 
 	/**
 	* \brief	Constctor for the MPU6050
@@ -68,7 +68,7 @@ public:
 	MessageBuffer_Passer *getData();
 
 private:
-	Error *_e;
+	volatile Error *_e;
 	Thread_Settings _threads[C_SCHEDULER_THREAD_NUM];
 	int _setCount;
 	int _runCount[C_SCHEDULER_THREAD_NUM];

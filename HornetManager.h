@@ -23,18 +23,18 @@ private:
 
 	void runConnect();
 
-	void changeState(State newState, int indicatorPriority, int comsPriority,int comEncoderPri, int lightSetting, int lightBlinks, int lightRate);
+	void changeState(State newState, int indicatorPriority,int comEncoderPri, int lightSetting, int lightBlinks, int lightRate);
 
 	State _state;
 	unsigned long _C_last;
 
 
 	Scheduler _scheduler;
-	Error _e;
+	volatile Error _e;
 
 	// all other objects
 	Indicator _indicator;
-	Coms _coms;
+	//Coms _coms;
 	ComsEncoder _comsEncoder;
 	
 };

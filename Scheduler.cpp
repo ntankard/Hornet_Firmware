@@ -1,6 +1,6 @@
 #include "Scheduler.h"
 
-Scheduler::Scheduler(Error *e)
+Scheduler::Scheduler(volatile Error *e)
 {
 	_e = e;
 	_setCount = 0;

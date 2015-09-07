@@ -23,7 +23,7 @@ public:
 	 *
 	 * \param	e	The shared error object
 	 */
-	CircularBuffer_Manager(Error *e)
+	CircularBuffer_Manager(volatile Error *e)
 	{
 		_e = e;
 		_start = 0;
@@ -46,7 +46,7 @@ public:
 	*
 	* \param	e	The shared error object
 	*/
-	void setError(Error *e)
+	void setError(volatile Error *e)
 	{
 		_e = e;
 	}
@@ -179,7 +179,7 @@ private:
 	int _end;
 
 	/** \brief	The systems error object */
-	Error *_e;
+	volatile Error *_e;
 
 	/** \brief	The number of objects in the buffer */
 	int _size;

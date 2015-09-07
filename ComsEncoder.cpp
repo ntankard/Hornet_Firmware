@@ -1,9 +1,8 @@
 #include "ComsEncoder.h"
 
-ComsEncoder::ComsEncoder(Coms* coms, Error *e)
+ComsEncoder::ComsEncoder( volatile Error *e)
 {
 	_e = e;
-	_coms = coms;
 
 	// make the buffers safe
 	for (int i = 0; i < C_CL; i++)
@@ -16,14 +15,13 @@ ComsEncoder::ComsEncoder(Coms* coms, Error *e)
 
 int ComsEncoder::run()
 {
-	if (_coms->canSend())
+	if (_coms.canSend())
 	{
 		// priority 1 (messages)
 		if (!_messageBuffer_man.isEmpty())
 		{
 			uint8_t toSend[] = { _messageBuffer[_messageBuffer_man.remove()] };
-			_coms->send(toSend, 1);
-			return 0;
+			_coms.send(toSend, 1);
 		}
 
 		for (int i = 0; i < C_CL; i++)
@@ -32,11 +30,17 @@ int ComsEncoder::run()
 			{
 				int sendLoc = _buffer_man[i].remove();
 				MessageBuffer_Passer* toSend = _buffer[i][sendLoc];
-				_coms->send(toSend->getPacket(), toSend->getPacketSize());
+				_coms.send(toSend->getPacket(), toSend->getPacketSize());
 				toSend->unlock();
-				return 0;
+				break;
 			}
 		}
+	}
+
+	if (_coms.run() != 0)
+	{
+		_toReturn = _coms.getMessage();
+		return 1;
 	}
 
 	return 0;

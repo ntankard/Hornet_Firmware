@@ -22,13 +22,13 @@ public:
 	* \author	Nicholas
 	* \date	1/08/2015
 	*/
-	ComsEncoder(Coms* coms, Error *e);
+	ComsEncoder(volatile Error *e);
 
 	/**
 	* \brief	Sends one of the waiting messages
 	*/
 	int run();
-	MessageBuffer_Passer* getMessage(){ return NULL; }
+	MessageBuffer_Passer* getMessage(){ return _toReturn; }
 
 	/**
 	* \brief	DO NOTHING
@@ -56,10 +56,10 @@ public:
 private:
 
 	/** \brief	The object to send messages */
-	Coms *_coms;
+	Coms _coms;
 
 	/** \brief	The shared error object */
-	Error *_e;
+	volatile Error *_e;
 
 	/** \brief	The buffer of messages to send */
 	MessageBuffer_Passer* _buffer[C_CL][C_COMENCODER_SIZE];
@@ -74,5 +74,7 @@ private:
 
 	/** \brief	The manager for the byte buffer */
 	CircularBuffer_Manager<C_COMENCODER_M_SIZE> _messageBuffer_man;
+
+	MessageBuffer_Passer* _toReturn;
 };
 

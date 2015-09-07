@@ -37,7 +37,7 @@ public:
 	 * \param	code	The code.
 	 * \param	line	The line the error ocured on
 	 */
-	void add(uint8_t code, uint8_t  line);
+	void add(uint8_t code, uint8_t  line) volatile;
 
 	/**
 	 * \fn	bool Error::isError();
@@ -49,7 +49,7 @@ public:
 	 *
 	 * \return	true if error, false if not.
 	 */
-	bool isError();
+	bool isError() volatile;
 
 	/**
 	 * \fn	ErrorMessage* Error::getError();
@@ -61,7 +61,7 @@ public:
 	 *
 	 * \return	null if it fails, else the error.
 	 */
-	uint16_t getError();
+	uint16_t getError() volatile;
 
 private:
 

@@ -4,10 +4,9 @@
 // ---------------------------------------------------- CONSTRUCTION ----------------------------------------------------------
 // ----------------------------------------------------------------------------------------------------------------------------
 
-HornetManager::HornetManager() :_scheduler(&_e), _indicator(&_e), _comsEncoder(&_coms,&_e)
+HornetManager::HornetManager() :_scheduler(&_e), _indicator(&_e), _comsEncoder(&_e)
 {
 	_state = Init;
-
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------
@@ -17,7 +16,6 @@ void HornetManager::start()
 
 	// setup all scedual objects
 	_scheduler.addRunable(C_SCHEDULER_INDICATOR_THREAD, &_indicator);
-	_scheduler.addRunable(C_SCHEDULER_COMS_THREAD, &_coms);
 	_scheduler.addRunable(C_SCHEDULER_COMENCODER_THREAD, &_comsEncoder);
 
 	// start all objects
@@ -93,12 +91,11 @@ void HornetManager::newData(MessageBuffer_Passer* data)
 
 //-----------------------------------------------------------------------------------------------------------------------------
 
-void HornetManager::changeState(State newState, int indicatorPriority, int comsPriority, int comEncoderPri, int lightSetting, int lightBlinks, int lightRate)
+void HornetManager::changeState(State newState, int indicatorPriority, int comEncoderPri, int lightSetting, int lightBlinks, int lightRate)
 {
 	_state = newState;
 
 	_scheduler.setPriority(C_SCHEDULER_INDICATOR_THREAD, indicatorPriority);
-	_scheduler.setPriority(C_SCHEDULER_COMS_THREAD, comsPriority);
 	_scheduler.setPriority(C_SCHEDULER_COMENCODER_THREAD, comEncoderPri);
 
 	_indicator.setDisplay(0, lightSetting, lightBlinks, lightRate);
