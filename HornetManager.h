@@ -5,6 +5,7 @@
 #include "Serial_Coms.h"
 #include "ComsEncoder.h"
 #include "AccGyro.h"
+//#include "I2CManager.h"
 
 enum State{ Init, Connect, Idle ,TakeOff,Flight,Land,Emergency,Crash};
 
@@ -37,6 +38,7 @@ private:
 	Indicator _indicator;
 	ComsEncoder _comsEncoder;
 	AccGyro _accGyro;
+	//I2CManager _I2CManager;
 	
 };
 

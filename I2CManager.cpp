@@ -4,8 +4,11 @@
 
 I2CManager::I2CManager(volatile Error *theError) //:SharedBusManager(theError)
 {
-	_e = theError;
-	Wire.begin();
+	_e = theError; 
+
+	//Wire.clearWriteError();
+	//Wire.flush();
+	//Wire.begin();
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------

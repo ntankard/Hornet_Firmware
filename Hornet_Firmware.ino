@@ -17,7 +17,11 @@ HornetManager hornetManager;
 void setup()
 {
 
-	//Serial.begin(9600);	//@TODO this should be in the USB serial
+	Serial.begin(9600);	//@TODO this should be in the USB serial
+	delay(500);
+	Wire.begin();	// no idea why this needs to be here
+
+
 	DEBUG_PRINT("Start Setup");
 	//HornetManager hornetManager;
 	hornetManager.start();

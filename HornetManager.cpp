@@ -84,6 +84,11 @@ void HornetManager::newMessage(uint8_t data)
 
 void HornetManager::newData(volatile MessageBuffer_Passer* data)
 {
+	if (data->isMonitor())
+	{
+		_comsEncoder.sendData(data);
+	}
+
 	if (data->getDataSize() == 0)
 	{
 		newMessage(data->getID());
