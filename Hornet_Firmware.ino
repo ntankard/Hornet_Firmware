@@ -1,4 +1,3 @@
-
 #define FOR_HARDWARE 1
 #define FOR_MANUAL_TEST 2
 #define FOR_TEST 3
@@ -7,16 +6,20 @@
 
 #if BUILD_TYPE == FOR_HARDWARE
 
+#include <SPI.h>
+#include <Wire.h>
 #include "Config.h"
 #include "HornetManager.h"
+
 
 HornetManager hornetManager;
 
 void setup()
 {
-	Serial.begin(9600);	//@TODO this should be in the USB serial
-	DEBUG_PRINT("Start Setup");
 
+	//Serial.begin(9600);	//@TODO this should be in the USB serial
+	DEBUG_PRINT("Start Setup");
+	//HornetManager hornetManager;
 	hornetManager.start();
 
 	DEBUG_PRINT("End Setup");

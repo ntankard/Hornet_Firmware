@@ -32,7 +32,7 @@ public:
 		{
 			uint8_t dump;
 			uint8_t data[Size * sizeof(int16_t) + 1];
-		}packet;
+		}packet ;
 	};
 
 	//-----------------------------------------------------------------------------------------------------------------------------
@@ -46,28 +46,28 @@ public:
 
 	//-----------------------------------------------------------------------------------------------------------------------------
 	
-	uint8_t getID()
+	volatile uint8_t getID()volatile
 	{
 		return _message.value.comID;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------------------
 
-	uint8_t getComPri()
+	volatile uint8_t getComPri()volatile
 	{
 		return ComPri;
 	}
 
 	//------------------------------------------------------------ DATA ------------------------------------------------------------
 
-	int16_t* getData()
+	volatile int16_t* getData()volatile
 	{
 		return _message.value.data;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------------------
 
-	void copyData(int16_t* data)
+	void copyData(int16_t* data)volatile
 	{
 		for (int i = 0; i < getDataSize(); i++)
 		{
@@ -77,21 +77,21 @@ public:
 
 	//-----------------------------------------------------------------------------------------------------------------------------
 
-	int getDataSize()
+	int getDataSize()volatile
 	{
 		return Size;
 	}
 
 	//----------------------------------------------------------- BYTES ------------------------------------------------------------
 
-	uint8_t* getBytes()
+	volatile uint8_t* getBytes()volatile
 	{
 		return _message.raw.data;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------------------
 
-	void copyBytes(uint8_t* data)
+	void copyBytes(uint8_t* data)volatile
 	{
 		for (int i = 0; i < getBytesSize(); i++)
 		{
@@ -101,21 +101,21 @@ public:
 
 	//-----------------------------------------------------------------------------------------------------------------------------
 
-	int getBytesSize()
+	int getBytesSize()volatile
 	{
 		return Size * sizeof(int16_t);
 	}
 
 	//----------------------------------------------------------- PACKET -----------------------------------------------------------
 
-	uint8_t* getPacket()
+	volatile uint8_t* getPacket()volatile
 	{
 		return _message.packet.data;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------------------
 
-	void copyPacket(uint8_t* data)
+	void copyPacket(uint8_t* data)volatile
 	{
 		for (int i = 0; i < getPacketSize(); i++)
 		{
@@ -125,49 +125,49 @@ public:
 
 	//-----------------------------------------------------------------------------------------------------------------------------
 
-	int getPacketSize()
+	int getPacketSize()volatile
 	{
 		return Size * sizeof(int16_t) + 1;
 	}
 
 	//----------------------------------------------------------- LOCK -----------------------------------------------------------
 
-	void lock()
+	void lock()volatile
 	{
 		_isLocked = true;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------------------
 
-	void unlock()
+	void unlock()volatile
 	{
 		_isLocked = false;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------------------
 
-	bool isLocked()
+	volatile bool isLocked()volatile
 	{
 		return _isLocked;
 	}
 
 	//---------------------------------------------------------- MONITOR ----------------------------------------------------------
 
-	void monitor()
+	void monitor()volatile
 	{
 		_monitor = true;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------------------
 
-	void dontMonitor()
+	void dontMonitor()volatile
 	{
 		_monitor = false;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------------------
 
-	bool isMonitor()
+	volatile bool isMonitor()volatile
 	{
 		return _monitor;
 	}
@@ -176,7 +176,7 @@ public:
 
 private:
 
-	MemoryMap _message;
-	bool _isLocked;
-	bool _monitor;
+	volatile  MemoryMap _message;
+	volatile bool _isLocked;
+	volatile bool _monitor;
 };

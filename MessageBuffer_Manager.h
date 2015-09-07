@@ -31,10 +31,10 @@ public:
 	*
 	* \return	An avalible buffer
 	*/
-	MessageBuffer_Passer* getAvailable()
+	volatile MessageBuffer_Passer* getAvailable() volatile
 	{
 		// find a free buffer
-		MessageBuffer_Passer* toSend = &_safe;
+		volatile MessageBuffer_Passer* toSend = &_safe;
 		for (int i = 0; i < BufferSize; i++)
 		{
 			if (!_message[i].isLocked())
@@ -65,8 +65,8 @@ private:
 	int _monitorCount;
 
 	/** \brief	A pool of avalible buffers to use */
-	MessageBuffer<MessageID, ComPri, MessageSize> _message[BufferSize];
+	volatile MessageBuffer<MessageID, ComPri, MessageSize> _message[BufferSize];
 
 	/** \brief	A object the can never be locked to ensure there is always avalible memory */
-	MessageBuffer<MessageID, ComPri, MessageSize> _safe;
+	volatile MessageBuffer<MessageID, ComPri, MessageSize> _safe;
 };

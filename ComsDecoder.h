@@ -30,7 +30,7 @@ public:
 	* \param	data		The received message
 	* \param	dataLength	The number of bytes received
 	*/
-	MessageBuffer_Passer* processMessage(uint8_t *data, uint8_t dataLength);
+	volatile MessageBuffer_Passer* processMessage(uint8_t *data, uint8_t dataLength);
 
 	/**
 	* \brief	A message failed to be sent corectly
@@ -45,6 +45,6 @@ public:
 private:
 
 	// reusable message buffer
-	MessageBuffer_Empty _charMessage;
+	volatile MessageBuffer_Empty _charMessage;
 };
 

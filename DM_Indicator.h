@@ -71,7 +71,7 @@ public:
 
 	// no implimented
 	bool start();
-	MessageBuffer_Passer* getMessage(){return NULL;}
+	volatile MessageBuffer_Passer* getMessage()volatile { return NULL; }
 
 	void safeOn();
 	void safeOff();

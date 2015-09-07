@@ -65,7 +65,7 @@ public:
 	*/
 	int run();
 
-	MessageBuffer_Passer *getData();
+	volatile MessageBuffer_Passer *getData();
 
 private:
 	volatile Error *_e;

@@ -29,8 +29,8 @@ int ComsEncoder::run()
 			if (!_buffer_man[i].isEmpty())
 			{
 				int sendLoc = _buffer_man[i].remove();
-				MessageBuffer_Passer* toSend = _buffer[i][sendLoc];
-				_coms.send(toSend->getPacket(), toSend->getPacketSize());
+				volatile MessageBuffer_Passer* toSend = _buffer[i][sendLoc];
+				_coms.send((uint8_t*)toSend->getPacket(), toSend->getPacketSize());
 				toSend->unlock();
 				break;
 			}
@@ -48,7 +48,7 @@ int ComsEncoder::run()
 
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-bool ComsEncoder::sendData(MessageBuffer_Passer *data)
+bool ComsEncoder::sendData(volatile MessageBuffer_Passer *data)
 {
 	if (_buffer_man[data->getComPri()].isFull())
 	{

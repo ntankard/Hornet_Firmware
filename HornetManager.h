@@ -4,6 +4,7 @@
 #include "DM_Indicator.h"
 #include "Serial_Coms.h"
 #include "ComsEncoder.h"
+#include "AccGyro.h"
 
 enum State{ Init, Connect, Idle ,TakeOff,Flight,Land,Emergency,Crash};
 
@@ -17,13 +18,13 @@ public:
 	void run();
 
 	void newMessage(uint8_t data);
-	void newData(MessageBuffer_Passer* data);
+	void newData(volatile MessageBuffer_Passer* data);
 
 private:
 
 	void runConnect();
 
-	void changeState(State newState, int indicatorPriority,int comEncoderPri, int lightSetting, int lightBlinks, int lightRate);
+	void changeState(State newState, int indicatorPriority, int comEncoderPri, int accGyroPri, int lightSetting, int lightBlinks, int lightRate);
 
 	State _state;
 	unsigned long _C_last;
@@ -34,8 +35,8 @@ private:
 
 	// all other objects
 	Indicator _indicator;
-	//Coms _coms;
 	ComsEncoder _comsEncoder;
+	AccGyro _accGyro;
 	
 };
 

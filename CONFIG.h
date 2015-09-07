@@ -21,8 +21,10 @@
 // ----------------------------------------------------------------------------------------------------------------------------
 
 #if DEBUG_BUILD == ENABLE
+
 #define DEBUG_PRINT(message) Serial.println(message);
 #define TP(message) Serial.println(message);
+//#define TP(message) if(true){Serial.end(); Serial.begin(9600); delay(100); Serial.println(message);  }
 #else
 #define DEBUG_PRINT(message)
 #endif
@@ -47,6 +49,9 @@
 #define C_COMENCODER_SIZE 10
 #define C_COMENCODER_M_SIZE 20
 #define C_CONNECT_PULSE_TIME 1000
+#define C_I2C_READ_WAIT 100
+#define C_PITCH_ROLL_WINDOW_AVE_WIDTH 10
+#define C_YAW_WINDOW_AVE_WIDTH 10
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // ----------------------------------------------------- ERROR CODES ----------------------------------------------------------
@@ -57,33 +62,35 @@
 #define E_HARDWARE_FAILURE	0x06
 #define E_INDEX_OUT_BOUNDS	0x07
 #define E_BUFFER_OVERFLOW   0x08
+#define E_BUS_FAIL			0x09
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // --------------------------------------------------- SCHEDULER SETTINS ------------------------------------------------------
 // ----------------------------------------------------------------------------------------------------------------------------
 
 // THe build depends on there being this many threads and them being from 0 to C_SCHEDULER_THREAD_NUM -1 with no repeats
-#define C_SCHEDULER_THREAD_NUM 2
+#define C_SCHEDULER_THREAD_NUM 3
 
 // must be in required start order
 #define C_SCHEDULER_INDICATOR_THREAD 0
 #define C_SCHEDULER_COMENCODER_THREAD 1
+#define C_SCHEDULER_ACCGYRO_THREAD 2
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // ----------------------------------------------------- STATE SETTINGS -------------------------------------------------------
 // ----------------------------------------------------------------------------------------------------------------------------
 
 
-//							____________|    Thread Priority	|_______________________
-//							| State		| INDICATOR		| COM EN| LIGHT	|BLINKS| RATE
+//							____________|        Thread Priority			|_______________________
+//							| State		| INDICATOR		| COM EN	|ACC	| LIGHT	|BLINKS| RATE
 //							-----------------------------------------------------------------
-#define ST_TO_CONNECT		Connect,	10,				1,		0,		1,		1000
-#define ST_TO_IDLE			Idle,		10,				1,		5,		2,		250
-#define ST_TO_TAKEOFF		TakeOff,	10,				1,		10,		3,		500
-#define ST_TO_FLIGHT		Flight,		10,				1,		15,		1,		1000
-#define ST_TO_LAND			Land,		10,				1,		20,		1,		1000
-#define ST_TO_EMERGENCY		Emergency,	10,				1,		21,		1,		1000
-#define ST_TO_CRACH			Crash,		10,				1,		22,		1,		1000
+#define ST_TO_CONNECT		Connect,	10,				1,			0,		0,		1,		1000
+#define ST_TO_IDLE			Idle,		10,				1,			5,		5,		2,		250
+#define ST_TO_TAKEOFF		TakeOff,	10,				1,			5,		10,		3,		500
+#define ST_TO_FLIGHT		Flight,		10,				1,			5,		15,		1,		1000
+#define ST_TO_LAND			Land,		10,				1,			5,		20,		1,		1000
+#define ST_TO_EMERGENCY		Emergency,	10,				1,			5,		21,		1,		1000
+#define ST_TO_CRACH			Crash,		10,				1,			5,		22,		1,		1000
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // ----------------------------------------------------- PIN SETTINGS ---------------------------------------------------------
@@ -126,3 +133,13 @@
 
 #define C_COMS_CODE_CONNECT_REQUEST 'a'
 #define C_COMS_CODE_CONNECT_CONFIRM 'b'
+
+
+
+//									_________________________________________________________________
+//									| ID			| SIZE	| MONITOR	| COM PRI		| BUFFER SIZE
+//									-----------------------------------------------------------------
+#define MB_RAW_MAG_SETTING			MB_RAW_MAG,		3,		100,		C_CL_DEBUG,		10
+#define MB_YAW_SETTINGS				MB_YAW,			1,		10,			C_CL_NAV_INFO,	10
+#define MB_ROLL_PITCH_SETTINGS		MB_ROLL_PITCH,	2,		10,			C_CL_NAV_INFO,	10
+#define MB_RAW_ACC_SETTINGS			MB_RAW_ACC,		6,		100,		C_CL_DEBUG,		10

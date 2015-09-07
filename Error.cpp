@@ -2,6 +2,7 @@
 
 Error::Error()
 {
+	//Serial.begin(9600);
 	_errors = 0;
 }
 

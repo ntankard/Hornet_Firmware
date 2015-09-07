@@ -9,24 +9,24 @@ class MessageBuffer_Passer
 {
 public:
 
-	virtual uint8_t getID() = 0;
-	virtual uint8_t getComPri() = 0;
+	virtual volatile uint8_t getID()volatile = 0;
+	virtual volatile uint8_t getComPri()volatile = 0;
 
-	virtual int16_t* getData() = 0;
-	virtual void copyData(int16_t* data) = 0;
-	virtual int getDataSize() = 0;
-	virtual uint8_t* getBytes() = 0;
-	virtual void copyBytes(uint8_t* data) = 0;
-	virtual int getBytesSize() = 0;
-	virtual uint8_t* getPacket();
-	virtual void copyPacket(uint8_t* data) = 0;
-	virtual int getPacketSize() = 0;
+	virtual volatile  int16_t* getData() volatile = 0;
+	virtual void copyData(int16_t* data)volatile = 0;
+	virtual int getDataSize()volatile = 0;
+	virtual volatile uint8_t* getBytes()volatile = 0;
+	virtual void copyBytes(uint8_t* data)volatile = 0;
+	virtual int getBytesSize()volatile = 0;
+	virtual volatile uint8_t* getPacket()volatile;
+	virtual void copyPacket(uint8_t* data)volatile = 0;
+	virtual int getPacketSize()volatile = 0;
 	
-	virtual void lock() = 0;
-	virtual void unlock() = 0;
-	virtual bool isLocked() = 0;
+	virtual void lock()volatile = 0;
+	virtual void unlock()volatile = 0;
+	virtual volatile  bool isLocked()volatile = 0;
 	
-	virtual void monitor() = 0;
-	virtual void dontMonitor() =0;
-	virtual bool isMonitor() = 0;
+	virtual void monitor()volatile = 0;
+	virtual void dontMonitor()volatile = 0;
+	virtual volatile bool isMonitor()volatile = 0;
 };

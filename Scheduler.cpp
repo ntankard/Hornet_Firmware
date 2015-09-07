@@ -99,7 +99,7 @@ int Scheduler::run()
 	}
 }
 
-MessageBuffer_Passer *Scheduler::getData()
+volatile MessageBuffer_Passer *Scheduler::getData()
 {
 	//@TODO add count check here
 	return _threads[_currentThread].thread->getMessage();

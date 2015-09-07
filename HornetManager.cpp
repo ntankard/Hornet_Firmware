@@ -4,7 +4,7 @@
 // ---------------------------------------------------- CONSTRUCTION ----------------------------------------------------------
 // ----------------------------------------------------------------------------------------------------------------------------
 
-HornetManager::HornetManager() :_scheduler(&_e), _indicator(&_e), _comsEncoder(&_e)
+HornetManager::HornetManager() :_scheduler(&_e), _indicator(&_e), _comsEncoder(&_e), _accGyro(&_e)
 {
 	_state = Init;
 }
@@ -17,6 +17,7 @@ void HornetManager::start()
 	// setup all scedual objects
 	_scheduler.addRunable(C_SCHEDULER_INDICATOR_THREAD, &_indicator);
 	_scheduler.addRunable(C_SCHEDULER_COMENCODER_THREAD, &_comsEncoder);
+	_scheduler.addRunable(C_SCHEDULER_ACCGYRO_THREAD, &_accGyro);
 
 	// start all objects
 	if (!_scheduler.finish() || !_scheduler.startAll())
@@ -24,7 +25,7 @@ void HornetManager::start()
 		_indicator.safeOn();
 		while (true)
 		{
-			TP("Not all objects attached");//@TODO add build exeption here
+			TP("Not all objects attached")//@TODO add build exeption here
 			delay(500);
 		}
 	}
@@ -81,7 +82,7 @@ void HornetManager::newMessage(uint8_t data)
 	}
 }
 
-void HornetManager::newData(MessageBuffer_Passer* data)
+void HornetManager::newData(volatile MessageBuffer_Passer* data)
 {
 	if (data->getDataSize() == 0)
 	{
@@ -91,12 +92,13 @@ void HornetManager::newData(MessageBuffer_Passer* data)
 
 //-----------------------------------------------------------------------------------------------------------------------------
 
-void HornetManager::changeState(State newState, int indicatorPriority, int comEncoderPri, int lightSetting, int lightBlinks, int lightRate)
+void HornetManager::changeState(State newState, int indicatorPriority, int comEncoderPri, int accGyroPri, int lightSetting, int lightBlinks, int lightRate)
 {
 	_state = newState;
 
 	_scheduler.setPriority(C_SCHEDULER_INDICATOR_THREAD, indicatorPriority);
 	_scheduler.setPriority(C_SCHEDULER_COMENCODER_THREAD, comEncoderPri);
+	_scheduler.setPriority(C_SCHEDULER_ACCGYRO_THREAD, accGyroPri);
 
 	_indicator.setDisplay(0, lightSetting, lightBlinks, lightRate);
 }

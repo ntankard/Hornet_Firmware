@@ -4,8 +4,8 @@
 class Runnable
 {
 public:
-	virtual bool start()=0;
+	virtual bool start()  = 0;
 	virtual int run() = 0;
-	virtual MessageBuffer_Passer* getMessage();
+	virtual volatile MessageBuffer_Passer* getMessage()volatile = 0;
 };
 

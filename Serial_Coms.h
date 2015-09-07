@@ -17,7 +17,7 @@ public:
 	int run();
 	bool canSend();
 	void send(uint8_t *data, uint8_t dataLength);
-	MessageBuffer_Passer* getMessage(){ return _pendingMessage; }
+	volatile MessageBuffer_Passer* getMessage()volatile { return _pendingMessage; }
 
 private:
 
@@ -29,7 +29,7 @@ private:
 
 	ComsDecoder _comsDecoder;
 
-	MessageBuffer_Passer* _pendingMessage;
+	volatile MessageBuffer_Passer* _pendingMessage;
 };
 
 #endif

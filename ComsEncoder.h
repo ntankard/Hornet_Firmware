@@ -28,7 +28,7 @@ public:
 	* \brief	Sends one of the waiting messages
 	*/
 	int run();
-	MessageBuffer_Passer* getMessage(){ return _toReturn; }
+	volatile MessageBuffer_Passer* getMessage()volatile { return _toReturn; }
 
 	/**
 	* \brief	DO NOTHING
@@ -42,7 +42,7 @@ public:
 	*
 	* \return	Was there enough room in the buffers to send the message
 	*/
-	bool sendData(MessageBuffer_Passer *data);
+	bool sendData(volatile MessageBuffer_Passer *data);
 
 	/**
 	* \brief	Add a single char to the queu (top priority)
@@ -62,7 +62,7 @@ private:
 	volatile Error *_e;
 
 	/** \brief	The buffer of messages to send */
-	MessageBuffer_Passer* _buffer[C_CL][C_COMENCODER_SIZE];
+	volatile MessageBuffer_Passer* _buffer[C_CL][C_COMENCODER_SIZE];
 
 	/** \brief	The manger for the queue of messages */
 	CircularBuffer_Manager<C_COMENCODER_SIZE> _buffer_man[C_CL];
@@ -75,6 +75,6 @@ private:
 	/** \brief	The manager for the byte buffer */
 	CircularBuffer_Manager<C_COMENCODER_M_SIZE> _messageBuffer_man;
 
-	MessageBuffer_Passer* _toReturn;
+	volatile MessageBuffer_Passer* _toReturn;
 };
 

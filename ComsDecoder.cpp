@@ -8,7 +8,7 @@ ComsDecoder::ComsDecoder()
 {
 }
 
-MessageBuffer_Passer* ComsDecoder::processMessage(uint8_t *data, uint8_t dataLength)
+volatile MessageBuffer_Passer* ComsDecoder::processMessage(uint8_t *data, uint8_t dataLength)
 {
 
 	switch (data[0])
