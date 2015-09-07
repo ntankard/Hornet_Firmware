@@ -55,6 +55,20 @@ void LidarNavigation::processLidarData(float angle, float distance)
 	{
 		newLidarPoint(angle, distance);
 	}
+
+	if (isPattern())
+	{
+		//add pattern to pattern iter
+		DoublyLinkedNodeIterator<Point> iter = DoublyLinkedNodeIterator<Point>(*head);
+		iter++;
+		start_point = &iter.getNode()->getValue();
+		iter.last();
+		iter--;
+		end_point = &iter.getNode()->getValue();
+		Pattern pattern(start_point, end_point);
+		start_point = NULL;
+		end_point = NULL;
+	}
 }
 
 void LidarNavigation::newLidarPoint(float angle, float distance)
@@ -76,7 +90,7 @@ PointNode* LidarNavigation::getHead()
 	return head;
 }
 
-bool LidarNavigation::isPattern()
+/*bool LidarNavigation::isPattern()
 {
 	//if all your points drawn into lines have an average angle offset less than or equal to
 	//the L_LINE_TO_LINE_OFFSET then you can return true otherwise return false
@@ -88,7 +102,7 @@ bool LidarNavigation::isPattern()
 	float y2;
 	DoublyLinkedNodeIterator<Point> iter = DoublyLinkedNodeIterator<Point>(*head);
 	iter++;
-	for (int i = 1; i < L_POINTS_IN_PATTERN; i++)
+	for (int i = 0; i < L_POINTS_IN_PATTERN; i++)
 	{
 		x1 = (*iter).getX();
 		y1 = (*iter).getY();
@@ -97,11 +111,59 @@ bool LidarNavigation::isPattern()
 		y2 = (*iter).getY();
 
 		nextAngle = atan((y2 - y1) / (x2 - x1)) * 180 / PI;
-		angleOfBestFit = ((angleOfBestFit * (i-1)) + nextAngle) / i;
-		Serial.println(nextAngle);
+		Serial.println(i);
+		if (abs(nextAngle - angleOfBestFit) < L_LINE_TO_LINE_OFFSET)
+		{
+			angleOfBestFit = ((angleOfBestFit * i) + nextAngle) / (i+1);
+			Serial.println(angleOfBestFit);
+		}
+		else
+		{
+			return false;
+		}
 		
 	}Serial.println(angleOfBestFit);
 	return true;
+}*/
+
+bool LidarNavigation::isPattern()
+{
+	//if all your points drawn into lines have an average angle offset less than or equal to
+	//the L_LINE_TO_LINE_OFFSET then you can return true otherwise return false
+	float angleOfBestFit = 0;
+	float angles[L_POINTS_IN_PATTERN - 1];
+	float x1;
+	float x2;
+	float y1;
+	float y2;
+	DoublyLinkedNodeIterator<Point> iter = DoublyLinkedNodeIterator<Point>(*head);
+	iter++;
+	for (int i = 0; i < L_POINTS_IN_PATTERN - 1; i++)
+	{
+		x1 = iter.getNode()->getValue().getX();
+		y1 = iter.getNode()->getValue().getY();
+		iter++;
+		x2 = iter.getNode()->getValue().getX();
+		y2 = iter.getNode()->getValue().getY();
+		angles[i] = atan((y2 - y1) / (x2 - x1)) * 180 / PI;
+	}
+	angleOfBestFit = angles[0];
+	for (int i = 1; i < L_POINTS_IN_PATTERN - 1; i++)
+	{
+		if ((abs(angles[i]) - abs(angleOfBestFit)) < L_LINE_TO_LINE_OFFSET)
+		{
+			angleOfBestFit = angleOfBestFit * (i-1) + angles[i];
+			angleOfBestFit = angleOfBestFit / i;
+		}	
+		else
+		{
+			Serial.println(angleOfBestFit);
+			return false;
+		}
+	}
+	Serial.println(angleOfBestFit);
+	return true;
+
 }
 
 bool LidarNavigation::isFeature()

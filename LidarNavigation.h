@@ -4,6 +4,7 @@
 #include "Error.h"
 #include "DoublyLinkedNodeIterator.h"
 #include "Point.h"
+#include "Pattern.h"
 
 typedef DoublyLinkedNode<Point>::Node PointNode;
 
@@ -39,6 +40,10 @@ private:
 	HornetManager *_hornetManager;
 	Error *_e;
 	PointNode* head;
+	Point* start_point;
+	Point* end_point;
+	Pattern* start_pattern;
+	Pattern* end_pattern;
 };
 
 

@@ -111,6 +111,7 @@ void loop()
 #include "Test_LidarNavigation.h"
 #include "Test_Point.h"
 #include "Test_DoublyLinkedNodeIterator.h"
+#include "Test_Pattern.h"
 
 void setup()
 {

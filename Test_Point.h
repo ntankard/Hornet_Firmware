@@ -4,7 +4,7 @@
 
 #include "Error.h"
 #include "Point.h"
-/*
+
 test(Point_Setup)
 {
 	Error e;
@@ -69,5 +69,5 @@ test(Point_All_Quadrants)
 	Serial.println(pointQ4.getY());
 	Serial.println("Should = -1.74");
 }
-*/
+
 #endif;

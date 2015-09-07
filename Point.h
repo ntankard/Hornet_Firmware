@@ -36,6 +36,12 @@ public:
 		_state = state;
 	}
 
+	void setXY(float x, float y)
+	{
+		_coorX = x;
+		_coorY = y;
+	}
+
 	PointState getState() const
 	{
 		return _state;
