@@ -46,8 +46,8 @@ public:
 private:
 
 	volatile MessageBuffer_Passer* _toSend[2];
-	int _sendCount;
 
+	int _sendCount;
 
 	/** \brief	The shared error object (mimics exeptions in c++) */
 	volatile Error* _e;

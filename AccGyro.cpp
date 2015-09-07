@@ -31,16 +31,16 @@ int AccGyro::run()
 		_ins.get_accels(accel);
 
 		// precces the data
-		/*double g = sqrt(pow(accel[0], 2) + pow(accel[1], 2) + pow(accel[2], 2));
+		double g = sqrt(pow(accel[0], 2) + pow(accel[1], 2) + pow(accel[2], 2));
 		float roll = (float)(asin(accel[0] / g));
 		float pitch = (float)((asin(accel[1] / g)));
 		float addedPitch = _pitchBuffer.add(pitch);
-		float addedRoll = _rollBuffer.add(roll);*/
+		float addedRoll = _rollBuffer.add(roll);
 
 		// Package the data
 		volatile MessageBuffer_Passer* rollPitchMB = _rollPitchSender.getAvailable();
-		//rollPitchMB->getData()[0] = addedPitch;
-		//rollPitchMB->getData()[1] = addedRoll;
+		rollPitchMB->getData()[0] = (addedPitch * 10000);
+		rollPitchMB->getData()[1] = (addedRoll * 10000);
 
 		volatile MessageBuffer_Passer* rawMB = _rawSender.getAvailable();
 		rawMB->getData()[0] = accel[0];
