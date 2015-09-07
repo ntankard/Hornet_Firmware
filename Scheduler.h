@@ -63,12 +63,15 @@ public:
 	/**
 	* \brief	Exicute each thread at its priority
 	*/
-	void run();
+	int run();
+
+	MessageBuffer_Passer *getData();
 
 private:
 	Error *_e;
 	Thread_Settings _threads[C_SCHEDULER_THREAD_NUM];
 	int _setCount;
 	int _runCount[C_SCHEDULER_THREAD_NUM];
+	int _currentThread;
 };
 

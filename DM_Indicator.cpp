@@ -16,6 +16,8 @@ Indicator::Indicator(Error *e)
 
 }
 
+//-----------------------------------------------------------------------------------------------------------------------------
+
 bool Indicator::start()
 {
 	for (int i = 0; i < (NUM_ROWS); i++)
@@ -38,35 +40,14 @@ bool Indicator::start()
 	_blinks = 0;
 	_rate = 500;
 
-	//safeOff();
+	safeOff();
 	_sequenceGenerator.set(500, 0, 0);	//default is solid on
+
+	on();
+
 	return true;
 }
 
-//-----------------------------------------------------------------------------------------------------------------------------
-
-void Indicator::reset()
-{
-	/*for (int i = 0; i < (NUM_ROWS-1); i++)
-	{
-		digitalWrite(ROWS[i], ROW_OFF);
-	}
-
-	for (int i = 0; i < (NUM_COLLUNS - 1); i++)
-	{
-		digitalWrite(COLUMNS[i], COLUMNS_OFF);
-	}
-
-	_isOn = false;
-
-	_blinks = 1;
-	_rate = 1000;
-	_setting_1 = 0;
-	_setting_2 = 0;
-
-	_isBreak = false;
-	_pinIsOn = false;*/
-}
 
 //-----------------------------------------------------------------------------------------------------------------------------
 
@@ -126,7 +107,7 @@ void Indicator::setDisplay(int setting_1, int setting_2, int blinks, int rate)
 
 //-----------------------------------------------------------------------------------------------------------------------------
 
-void Indicator::run()
+int Indicator::run()
 {
 	if (_isOn)
 	{
@@ -142,6 +123,7 @@ void Indicator::run()
 			}
 		}
 	}
+	return 0;
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------

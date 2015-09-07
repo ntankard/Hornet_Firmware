@@ -4,6 +4,7 @@ Scheduler::Scheduler(Error *e)
 {
 	_e = e;
 	_setCount = 0;
+	_currentThread = C_SCHEDULER_THREAD_NUM;
 	for (int i = 0; i < C_SCHEDULER_THREAD_NUM; i++)
 	{
 		_runCount[i] = 0;
@@ -72,21 +73,34 @@ void Scheduler::setPriority(int ID, int p)
 
 //-----------------------------------------------------------------------------------------------------------------------------
 
-void Scheduler::run()
+int Scheduler::run()
 {
-	for (int i = 0; i < C_SCHEDULER_THREAD_NUM; i++)
-	{
-		if (_threads[i].priority != 0)
+
+	// keep looping until a thread runs (this will lock if all thread are 0)
+	while (true){
+		_currentThread++;
+		if (_currentThread >= C_SCHEDULER_THREAD_NUM)
 		{
-			_runCount[i]++;
-			if (_runCount[i] >= _threads[i].priority)
+			_currentThread = 0;
+		}
+
+		if (_threads[_currentThread].priority != 0)
+		{
+			_runCount[_currentThread]++;
+			if (_runCount[_currentThread] >= _threads[_currentThread].priority)
 			{
-				_threads[i].thread->run();
+				return _threads[_currentThread].thread->run();
 			}
 		}
 		else
 		{
-			_runCount[i] = 0;
+			_runCount[_currentThread] = 0;
 		}
 	}
+}
+
+MessageBuffer_Passer *Scheduler::getData()
+{
+	//@TODO add count check here
+	return _threads[_currentThread].thread->getMessage();
 }

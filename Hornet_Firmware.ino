@@ -8,11 +8,9 @@
 #if BUILD_TYPE == FOR_HARDWARE
 
 #include "Config.h"
-#include "Error.h"
 #include "HornetManager.h"
 
-Error e;
-HornetManager hornetManager(&e);
+HornetManager hornetManager;
 
 void setup()
 {
@@ -37,6 +35,10 @@ void loop()
 #include "Test_Scheduler.h"
 #include "Test_Error.h"
 #include "Test_SequenceGenerator.h"
+#include "Test_CircularBuffer.h"
+#include "Test_CircularBuffer_Manager.h"
+#include "Test_MessageBuffer.h"
+#include "Test_MessageBuffer_Manager.h"
 
 void setup()
 {

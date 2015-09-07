@@ -35,11 +35,18 @@
 #define USE_DM_INDICATOR
 #endif
 
+#define USER_SERIAL_COMS
+
 //-----------------------------------------------------------------------------------------------------------------------------
 // --------------------------------------------------- GENERAL SETTINGS -------------------------------------------------------
 // ----------------------------------------------------------------------------------------------------------------------------
 
 #define C_ERROR_BUFFER 10
+#define C_COMS_BUFFER 10
+#define C_COMS_PORT Serial
+#define C_COMENCODER_SIZE 10
+#define C_COMENCODER_M_SIZE 20
+#define C_CONNECT_PULSE_TIME 1000
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // ----------------------------------------------------- ERROR CODES ----------------------------------------------------------
@@ -49,32 +56,35 @@
 #define E_TIMEOUT			0x05
 #define E_HARDWARE_FAILURE	0x06
 #define E_INDEX_OUT_BOUNDS	0x07
+#define E_BUFFER_OVERFLOW   0x08
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // --------------------------------------------------- SCHEDULER SETTINS ------------------------------------------------------
 // ----------------------------------------------------------------------------------------------------------------------------
 
 // THe build depends on there being this many threads and them being from 0 to C_SCHEDULER_THREAD_NUM -1 with no repeats
-#define C_SCHEDULER_THREAD_NUM 1
+#define C_SCHEDULER_THREAD_NUM 3
 
 // must be in required start order
 #define C_SCHEDULER_INDICATOR_THREAD 0
+#define C_SCHEDULER_COMS_THREAD 1
+#define C_SCHEDULER_COMENCODER_THREAD 2
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // ----------------------------------------------------- STATE SETTINGS -------------------------------------------------------
 // ----------------------------------------------------------------------------------------------------------------------------
 
 
-//							____________| Thread Priority|_______________________
-//							| State		| INDICATOR			| LIGHT	|BLINKS| RATE
+//							____________|       Thread Priority		|_______________________
+//							| State		| INDICATOR	|  COMS	| COM EN| LIGHT	|BLINKS| RATE
 //							-----------------------------------------------------------------
-#define ST_TO_CONNECT		Connect,	10,					0,		1,		1000
-#define ST_TO_IDLE			Idle,		10,					5,		2,		500
-#define ST_TO_TAKEOFF		TakeOff,	10,					10,		3,		500
-#define ST_TO_FLIGHT		Flight,		10,					15,		1,		1000
-#define ST_TO_LAND			Land,		10,					20,		1,		1000
-#define ST_TO_EMERGENCY		Emergency,	10,					21,		1,		1000
-#define ST_TO_CRACH			Crash,		10,					22,		1,		1000
+#define ST_TO_CONNECT		Connect,	10,			1,		1,		0,		1,		1000
+#define ST_TO_IDLE			Idle,		10,			1,		1,		5,		2,		250
+#define ST_TO_TAKEOFF		TakeOff,	10,			1,		1,		10,		3,		500
+#define ST_TO_FLIGHT		Flight,		10,			1,		1,		15,		1,		1000
+#define ST_TO_LAND			Land,		10,			1,		1,		20,		1,		1000
+#define ST_TO_EMERGENCY		Emergency,	10,			1,		1,		21,		1,		1000
+#define ST_TO_CRACH			Crash,		10,			1,		1,		22,		1,		1000
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // ----------------------------------------------------- PIN SETTINGS ---------------------------------------------------------
@@ -95,3 +105,25 @@
 #define CANODE_12 5
 #define CANODE_13 49
 #define CANODE_14 47
+
+//-----------------------------------------------------------------------------------------------------------------------------
+// --------------------------------------------------- MESSAGE SETTINGS -------------------------------------------------------
+// ----------------------------------------------------------------------------------------------------------------------------
+
+// outbound	 com IDS
+#define MB_RAW_MAG		1
+#define MB_YAW			2
+#define MB_ROLL_PITCH	'p'
+#define MB_RAW_ACC		'g'
+
+// com priorities
+#define C_CL			6
+#define C_CL_COMS		0
+#define C_CL_SYSTEM_CMD 1
+#define C_CL_NAV_CMD	2
+#define C_CL_NAV_INFO	3
+#define C_CL_NAV_USE	4
+#define C_CL_DEBUG		5
+
+#define C_COMS_CODE_CONNECT_REQUEST 'a'
+#define C_COMS_CODE_CONNECT_CONFIRM 'b'

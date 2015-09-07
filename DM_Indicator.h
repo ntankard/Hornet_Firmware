@@ -67,14 +67,14 @@ public:
 	* \author	Nicholas
 	* \date	1/08/2015
 	*/
-	void run();
+	int run();
 
 	// no implimented
 	bool start();
+	MessageBuffer_Passer* getMessage(){return NULL;}
 
 	void safeOn();
 	void safeOff();
-	void reset();
 private:
 
 
