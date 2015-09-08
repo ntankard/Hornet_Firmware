@@ -42,8 +42,7 @@ private:
 	PointNode* head;
 	Point* start_point;
 	Point* end_point;
-	Pattern* start_pattern;
-	Pattern* end_pattern;
+	Pattern* pattern;
 };
 
 
