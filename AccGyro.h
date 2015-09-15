@@ -1,6 +1,9 @@
 #pragma once
 #include "CONFIG.h"
 #include "Runnable.h"
+#include "Error.h"
+
+#ifdef USE_ACC
 
 #include "Error.h"
 #include "SPIManager.h"
@@ -67,14 +70,15 @@ private:
 	/** \brief	The MPU600XX device */
 	AP_InertialSensor_MPU600xx _ins;
 };
-/*#else
+#else
 
 class AccGyro:public Runnable
 {
 public:
-	AccGyro(){}
-	bool start(){ return true; }
-	void run(){}
+	AccGyro(volatile Error* e){}
+	bool start(){return true;}
+	int run(){return 0;}
+	volatile  MessageBuffer_Passer* getMessage()volatile{return NULL;}
 };
 
-#endif*/
+#endif

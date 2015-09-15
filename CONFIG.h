@@ -15,6 +15,8 @@
 
 
 #define ENABLE_INDICATOR	ENABLE
+#define ENABLE_ACC			ENABLE
+#define ENABLE_MAG			ENABLE
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // ---------------------------------------------------- BOARD FEATURES --------------------------------------------------------
@@ -24,7 +26,7 @@
 
 #define DEBUG_PRINT(message) Serial.println(message);
 #define TP(message) Serial.println(message);
-//#define TP(message) if(true){Serial.end(); Serial.begin(9600); delay(100); Serial.println(message);  }
+
 #else
 #define DEBUG_PRINT(message)
 #endif
@@ -35,6 +37,16 @@
 
 #if ENABLE_INDICATOR == ENABLE
 #define USE_DM_INDICATOR
+#endif
+
+#if ENABLE_ACC == ENABLE
+#define USE_ACC
+#define USE_MPU6050
+#endif
+
+#if ENABLE_MAG == ENABLE
+#define USE_MAG
+#define USE_MICROMAG3
 #endif
 
 #define USER_SERIAL_COMS
@@ -52,6 +64,7 @@
 #define C_I2C_READ_WAIT 100
 #define C_PITCH_ROLL_WINDOW_AVE_WIDTH 10
 #define C_YAW_WINDOW_AVE_WIDTH 10
+#define C_MAG_MAX_READ_TIME 150
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // ----------------------------------------------------- ERROR CODES ----------------------------------------------------------
@@ -69,28 +82,29 @@
 // ----------------------------------------------------------------------------------------------------------------------------
 
 // THe build depends on there being this many threads and them being from 0 to C_SCHEDULER_THREAD_NUM -1 with no repeats
-#define C_SCHEDULER_THREAD_NUM 3
+#define C_SCHEDULER_THREAD_NUM 4
 
 // must be in required start order
 #define C_SCHEDULER_INDICATOR_THREAD 0
 #define C_SCHEDULER_COMENCODER_THREAD 1
 #define C_SCHEDULER_ACCGYRO_THREAD 2
+#define C_SCHEDULER_MAG_THREAD 3
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // ----------------------------------------------------- STATE SETTINGS -------------------------------------------------------
 // ----------------------------------------------------------------------------------------------------------------------------
 
 
-//							____________|        Thread Priority			|_______________________
-//							| State		| INDICATOR		| COM EN	|ACC	| LIGHT	|BLINKS| RATE
+//							____________|			  Thread Priority				|_______________________
+//							| State		| INDICATOR		| COM EN	|ACC	|Mag	| LIGHT	|BLINKS| RATE
 //							-----------------------------------------------------------------
-#define ST_TO_CONNECT		Connect,	10,				1,			0,		0,		1,		1000
-#define ST_TO_IDLE			Idle,		10,				1,			5,		5,		2,		250
-#define ST_TO_TAKEOFF		TakeOff,	10,				1,			5,		10,		3,		500
-#define ST_TO_FLIGHT		Flight,		10,				1,			5,		15,		1,		1000
-#define ST_TO_LAND			Land,		10,				1,			5,		20,		1,		1000
-#define ST_TO_EMERGENCY		Emergency,	10,				1,			5,		21,		1,		1000
-#define ST_TO_CRACH			Crash,		10,				1,			5,		22,		1,		1000
+#define ST_TO_CONNECT		Connect,	10,				1,			0,		0,		0,		1,		1000
+#define ST_TO_IDLE			Idle,		10,				1,			5,		5,		5,		2,		250
+#define ST_TO_TAKEOFF		TakeOff,	10,				1,			5,		5,		10,		3,		500
+#define ST_TO_FLIGHT		Flight,		10,				1,			5,		5,		15,		1,		1000
+#define ST_TO_LAND			Land,		10,				1,			5,		5,		20,		1,		1000
+#define ST_TO_EMERGENCY		Emergency,	10,				1,			5,		5,		21,		1,		1000
+#define ST_TO_CRACH			Crash,		10,				1,			5,		5,		22,		1,		1000
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // ----------------------------------------------------- PIN SETTINGS ---------------------------------------------------------
@@ -111,6 +125,11 @@
 #define CANODE_12 5
 #define CANODE_13 49
 #define CANODE_14 47
+
+// mag
+#define C_MAG_SSNOT 10
+#define C_MAG_DRDY 11
+#define C_MAG_RESET 12
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // --------------------------------------------------- MESSAGE SETTINGS -------------------------------------------------------

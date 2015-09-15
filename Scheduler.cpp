@@ -1,5 +1,7 @@
 #include "Scheduler.h"
 
+
+
 Scheduler::Scheduler(volatile Error *e)
 {
 	_e = e;
@@ -29,7 +31,7 @@ void Scheduler::addRunable(int ID, Runnable *theRunnable)
 	}
 
 	_threads[ID].thread = theRunnable;
-	_threads[ID].priority = 0;
+	_threads[ID].priority = 1;
 	_setCount++;
 }
 
@@ -78,6 +80,7 @@ int Scheduler::run()
 
 	// keep looping until a thread runs (this will lock if all thread are 0)
 	while (true){
+
 		_currentThread++;
 		if (_currentThread >= C_SCHEDULER_THREAD_NUM)
 		{

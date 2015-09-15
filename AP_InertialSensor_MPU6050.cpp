@@ -1,6 +1,6 @@
 #include "AP_InertialSensor_MPU6050.h"
 
-#if ENABLE_ACC == ENABLED
+#ifdef USE_MPU6050
 
 #include "Arduino.h"
 
@@ -9,9 +9,6 @@
 #define MPUREG_WHOAMI 0x75 
 #define MPUREG_PWR_MGMT_1 0x6B 
 #define MPUREG_ACCEL_XOUT_H 0x3B 
-
-
-
 
 //-----------------------------------------------------------------------------------------------------------------------------
 

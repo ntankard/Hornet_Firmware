@@ -1,6 +1,6 @@
 #include "AccGyro.h"
 
-//#if ENABLE_ACC == ENABLED
+#ifdef USE_ACC
 
 #include "SPI.h"
 #include "Arduino.h"
@@ -31,7 +31,7 @@ int AccGyro::run()
 		_ins.get_accels(accel);
 
 		// precces the data
-		double g = sqrt(pow(accel[0], 2) + pow(accel[1], 2) + pow(accel[2], 2));
+		float g = sqrt(pow(accel[0], 2) + pow(accel[1], 2) + pow(accel[2], 2));
 		float roll = (float)(asin(accel[0] / g));
 		float pitch = (float)((asin(accel[1] / g)));
 		float addedPitch = _pitchBuffer.add(pitch);
@@ -56,14 +56,18 @@ int AccGyro::run()
 		_toSend[1] = rawMB;
 		return 2;
 	}
+
+	return 0;
 }
 
-volatile  MessageBuffer_Passer* AccGyro::getMessage() volatile
+//-----------------------------------------------------------------------------------------------------------------------------
+
+volatile MessageBuffer_Passer* AccGyro::getMessage() volatile
 {
 	_sendCount++;
 	return _toSend[_sendCount - 1];
 }
 
-//#endif
+#endif
 
 

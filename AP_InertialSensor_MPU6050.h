@@ -1,10 +1,9 @@
 #pragma once
 #include "CONFIG.h"
 
-#if ENABLE_ACC == ENABLED
+#ifdef USE_MPU6050
 
 #include "I2CManager.h"
-//#include "SPIManager.h"
 #include "Error.h"
 #include <stdint.h>
 

@@ -7,19 +7,17 @@
 
 #include "SequenceGenerator.h"
 
-const int ROWS[] = { CANODE_6, CANODE_10, CANODE_11, CANODE_3, CANODE_13 };
-const int COLUMNS[] = { CANODE_9, CANODE_14, CANODE_8, CANODE_12, CANODE_1, CANODE_7, CANODE_2 };
-
 #define NUM_ROWS 5
 #define NUM_COLLUNS 7
 
+const int ROWS[NUM_ROWS] = { CANODE_6, CANODE_10, CANODE_11, CANODE_3, CANODE_13 };
+const int COLUMNS[NUM_COLLUNS] = { CANODE_9, CANODE_14, CANODE_8, CANODE_12, CANODE_1, CANODE_7, CANODE_2 };
 const int MATRIX_SIZE = ((NUM_ROWS - 1) * (NUM_COLLUNS - 1));
 
 #define ROW_ON HIGH
 #define ROW_OFF LOW
 #define COLUMNS_ON LOW
 #define COLUMNS_OFF HIGH
-
 
 class Indicator : public Runnable
 {
@@ -31,6 +29,13 @@ public:
 	* \param	e	The shared error object
 	*/
 	Indicator(volatile Error *e);
+
+	/**
+	* \brief	Setup all the pins for the indicator 
+	*
+	* \return	always true (no hardware check)
+	*/
+	bool start();
 
 	/**
 	* \brief	Turn on (and reset) the indicator
@@ -64,21 +69,41 @@ public:
 	/**
 	* \brief	Reasses the indicator and make and needed harddware changed
 	*
-	* \author	Nicholas
-	* \date	1/08/2015
+	* \return	0 (never passes a message)
 	*/
 	int run();
 
-	// no implimented
-	bool start();
+	/**
+	* \brief	Unimplimented
+	*/
 	volatile MessageBuffer_Passer* getMessage()volatile { return NULL; }
 
+	/**
+	* \brief	Swich on the safe light (a light thats not effected by the otehr blinking lights)
+	*/
 	void safeOn();
+
+	/**
+	* \brief	Swich off the safe light (a light thats not effected by the otehr blinking lights)
+	*/
 	void safeOff();
+
 private:
 
-
+	/**
+	* \brief	Turn on a sequence of lights
+	*
+	* \param	setting_1	The coordinate of light one (x + ROWS*y)
+	* \param	setting_2	The coordinate of light two (x + ROWS*y)
+	*/
 	void lightOn(int setting_1, int setting_2);
+
+	/**
+	* \brief	Turn off a sequence of lights
+	*
+	* \param	setting_1	The coordinate of light one (x + ROWS*y)
+	* \param	setting_2	The coordinate of light two (x + ROWS*y)
+	*/
 	void lightOff(int setting_1, int setting_2);
 
 	/** \brief	Is the indicator on */
@@ -90,23 +115,30 @@ private:
 	/** \brief	How fast to blink */
 	unsigned long _rate;
 
-	/** \brief	setting	What to display  (eg color for the APM) */
+	/** \brief	The coordinate of light 1 */
 	int _setting_1;
+
+	/** \brief	The coordinate of light 2 */
 	int _setting_2;
 
-
+	/** \brief	The shared error object */
 	volatile Error *_e;
 
+	/** \brief	The sequence generator */
 	SequenceGenerator _sequenceGenerator;
 };
 
 #else
 class Indicator :public Runnable{
 public:
-	Indicator(){}
-	void run(){}
+	Indicator(volatile Error *e){}
+	bool start(){return false;}
 	void on(){}
 	void off(){}
-	void setDisplay(int setting, int blinks, int rate);
+	void setDisplay(int setting_1, int setting_2, int blinks, int rate){}
+	int run(){return 0;}
+	volatile MessageBuffer_Passer* getMessage()volatile { return NULL; }
+	void safeOn(){}
+	void safeOff(){}
 };
 #endif

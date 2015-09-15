@@ -1,5 +1,7 @@
 #pragma once
 
+#if BUILD_TYPE == FOR_MANUAL_TEST
+
 #include "Error.h"
 #include "DM_Indicator.h"
 
@@ -128,3 +130,5 @@ void MTest_DM_Indicator_Sequence()
 		toTest.run();
 	}
 }
+
+#endif

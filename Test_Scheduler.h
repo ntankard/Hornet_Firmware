@@ -26,10 +26,13 @@ public:
 		return startMode;
 	}
 
-	void run()
+	int run()
 	{
 		runCount++;
+		return 1;
 	}
+
+	volatile MessageBuffer_Passer* getMessage()volatile{ return NULL; }
 };
 
 test(Scheduler_Setup)
@@ -182,14 +185,20 @@ test(Scheduler_Run)
 	}
 	assertFalse(e.isError());
 
-	// check that nothing runs by default
-	for (int i = 0; i < 100; i++)
+	// check that they run at priority 1
+	for (int i = 0; i < (C_SCHEDULER_THREAD_NUM*10); i++)
 	{
 		toTest.run();
 	}
 	for (int i = 0; i < C_SCHEDULER_THREAD_NUM; i++)
 	{
-		assertEqual(tests[i].runCount, 0);
+		assertEqual(tests[i].runCount, 10);
+	}
+
+	// reset all run counts
+	for (int i = 0; i < C_SCHEDULER_THREAD_NUM; i++)
+	{
+		tests[i].runCount = 0;
 	}
 
 	// check that everything runs in parelr if on the same 
@@ -197,18 +206,17 @@ test(Scheduler_Run)
 	{
 		toTest.setPriority(i, 1);
 	}
-	for (int i = 0; i < 100; i++)
+	for (int i = 1; i < 100; i++)
 	{
 		for (int j = 0; j < C_SCHEDULER_THREAD_NUM; j++)
 		{
+			toTest.run();
 			assertEqual(tests[j].runCount, i);
 		}
-		toTest.run();
 	}
 
 	// check that things can run at difrent priorities
 	//@TODO
-
 	
 }
 

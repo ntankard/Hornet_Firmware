@@ -15,8 +15,8 @@ test(MessageBuffer_Manager_Lock)
 	const int BufferSize = 5;
 
 	MessageBuffer_Manager<MessageID, MessageSize, ToMonitor, ComPri, BufferSize> toTest;
-	MessageBuffer_Passer* removed;
-	MessageBuffer_Passer* removedLastValid;
+	volatile MessageBuffer_Passer* removed;
+	volatile MessageBuffer_Passer* removedLastValid;
 
 	// check that you can get 5 lockable objects
 	for (int i = 0; i < BufferSize; i++)
@@ -50,7 +50,7 @@ test(MessageBuffer_Manager_Union)
 	const int BufferSize = 5;
 
 	MessageBuffer_Manager<MessageID, MessageSize, ToMonitor, ComPri, BufferSize> toTest;
-	MessageBuffer_Passer* removed;
+	volatile MessageBuffer_Passer* removed;
 
 	// get a buffer
 	removed = toTest.getAvailable();
@@ -61,7 +61,7 @@ test(MessageBuffer_Manager_Union)
 	{
 		removed->getData()[i] = (int16_t)random(-30000, 30000);
 	}
-	uint8_t *outBuffer = reinterpret_cast<uint8_t *>(removed->getData());
+	uint8_t *outBuffer = reinterpret_cast<uint8_t *>((int16_t*)removed->getData());
 	assertEqual(removed->getDataSize(), MessageSize);
 
 	// test the raw data
@@ -71,7 +71,7 @@ test(MessageBuffer_Manager_Union)
 	}
 
 	// test the packet
-	assertEqual(MessageID, removed->getPacket()[0]);
+	assertEqual(MessageID, ((uint8_t*)removed->getPacket())[0]);
 	for (int i = 0; i < MessageSize * sizeof(int16_t); i++)
 	{
 		assertEqual(outBuffer[i], removed->getPacket()[i + 1]);
@@ -87,7 +87,7 @@ test(MessageBuffer_Manager_Data)
 	const int BufferSize = 5;
 
 	MessageBuffer_Manager<MessageID, MessageSize, ToMonitor, ComPri, BufferSize> toTest;
-	MessageBuffer_Passer* removed;
+	volatile MessageBuffer_Passer* removed;
 
 	// generate the data
 	int16_t inBuffer[BufferSize][MessageSize];
@@ -121,7 +121,7 @@ test(MessageBuffer_Manager_Data)
 		assertEqual(inBuffer[0][j], removed->getData()[j]);
 	}
 
-	MessageBuffer_Passer* second = toTest.getAvailable();
+	volatile MessageBuffer_Passer* second = toTest.getAvailable();
 	assertFalse(second->isLocked());
 	second->copyData(inBuffer[1]);
 
