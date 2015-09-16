@@ -2,47 +2,27 @@
 
 #ifdef USE_GYRO
 
-//#include "MPU6050_6Axis_MotionApps20.h"
-
-// ================================================================
-// ===               INTERRUPT DETECTION ROUTINE                ===
-// ================================================================
-
-volatile bool mpuInterrupt = false;     // indicates whether MPU interrupt pin has gone high
-
-
-void dmpDataReady() {
-	mpuInterrupt = true;
-}
-
 Gyro::Gyro()
 {
 }
 
 bool Gyro::start()
 {
-	// NOTE: 8MHz or slower host processors, like the Teensy @ 3.3v or Ardunio
-	// Pro Mini running at 3.3v, cannot handle this baud rate reliably due to
-	// the baud timing being too misaligned with processor ticks. You must use
-	// 38400 or slower in these cases, or use some kind of external separate
-	// crystal solution for the UART timer.
-
 	// initialize device
-	Serial.println(F("Initializing I2C devices..."));
+	DEBUG_PRINTLN(F("Initializing I2C devices..."));
 	mpu.initialize();
 
 	// verify connection
-	Serial.println(F("Testing device connections..."));
-	Serial.println(mpu.testConnection() ? F("MPU6050 connection successful") : F("MPU6050 connection failed"));
-
-	// wait for ready
-	Serial.println(F("\nSend any character to begin DMP programming and demo: "));
-	while (Serial.available() && Serial.read()); // empty buffer
-	while (!Serial.available());                 // wait for data
-	while (Serial.available() && Serial.read()); // empty buffer again
+	DEBUG_PRINTLN(F("Testing device connections..."));
+	if (!mpu.testConnection())
+	{
+		DEBUG_PRINTLN(F("MPU6050 connection failed"));
+		return false;
+	}
+	DEBUG_PRINTLN(F("MPU6050 connection successful"));
 
 	// load and configure the DMP
-	Serial.println(F("Initializing DMP..."));
+	DEBUG_PRINTLN(F("Initializing DMP..."));
 	devStatus = mpu.dmpInitialize();
 
 	// supply your own gyro offsets here, scaled for min sensitivity
@@ -54,17 +34,16 @@ bool Gyro::start()
 	// make sure it worked (returns 0 if so)
 	if (devStatus == 0) {
 		// turn on the DMP, now that it's ready
-		Serial.println(F("Enabling DMP..."));
+		DEBUG_PRINTLN(F("Enabling DMP..."));
 		mpu.setDMPEnabled(true);
 
 		// enable Arduino interrupt detection
-		Serial.println(F("Enabling interrupt detection (Arduino external interrupt 0)..."));
+		//DEBUG_PRINTLN(F("Enabling interrupt detection (Arduino external interrupt 0)..."));
 		//attachInterrupt(0, dmpDataReady, RISING);
-		mpuIntStatus = mpu.getIntStatus();
+		//mpuIntStatus = mpu.getIntStatus();
 
 		// set our DMP Ready flag so the main loop() function knows it's okay to use it
-		Serial.println(F("DMP ready! Waiting for first interrupt..."));
-		dmpReady = true;
+		DEBUG_PRINTLN(F("DMP ready!"));
 
 		// get expected DMP packet size for later comparison
 		packetSize = mpu.dmpGetFIFOPacketSize();
@@ -76,8 +55,8 @@ bool Gyro::start()
 		// (if it's going to break, usually the code will be 1)
 		Serial.print(F("DMP Initialization failed (code "));
 		Serial.print(devStatus);
-		Serial.println(F(")"));
-		return true;
+		DEBUG_PRINTLN(F(")"));
+		return false;
 	}
 
 	return true;
@@ -87,97 +66,46 @@ int Gyro::run()
 {
 	fifoCount = mpu.getFIFOCount();
 
-	// is there a full packets worth of dat?
+	// is there a full packets worth of data?
 	if (fifoCount < packetSize)
 	{
-		return 0;
+		return 0;	//@TODO add timeout check
 	}
 
 	// check for overflow
 	if (fifoCount >= 1024)
 	{
-		//@TODO add error handeing here
+		mpu.resetFIFO();	//@TODO may need to do more here
+		DEBUG_PRINTLN(F("FIFO overflow!"));
+		return 0;
 	}
 
 	// empty all but 1 of the packets ( to prevent a cascading overflow)
-	int j = 0;
 	for (int i = 0; i < ((fifoCount / packetSize)-1); i++)
 	{
 		mpu.getFIFOBytes(fifoBuffer, packetSize);
-		j++;
 	}
-	Serial.print((String)j + " ");
 
 	// read a packet from FIFO
 	mpu.getFIFOBytes(fifoBuffer, packetSize);
 
-	// display Euler angles in degrees
+	// find Euler angles in degrees
 	mpu.dmpGetQuaternion(&q, fifoBuffer);
 	mpu.dmpGetGravity(&gravity, &q);
 	mpu.dmpGetYawPitchRoll(ypr, &q, &gravity);
-	Serial.print("ypr\t");
-	Serial.print(ypr[0] * 180 / M_PI);
-	Serial.print("\t");
-	Serial.print(ypr[1] * 180 / M_PI);
-	Serial.print("\t");
-	Serial.println(ypr[2] * 180 / M_PI);
-
-	// empty all but 1 of the packets
-
-	//while (mpu.getFIFOCount() < packetSize){};
-
-	// reset interrupt flag and get INT_STATUS byte
-	//mpuInterrupt = false;
-	//mpuIntStatus = mpu.getIntStatus();
-
-	// get current FIFO count
-	//fifoCount = mpu.getFIFOCount();
-
-	// check for overflow (this should never happen unless our code is too inefficient)
-	/*if ((mpuIntStatus & 0x10) || fifoCount == 1024) {
-		// reset so we can continue cleanly
-		mpu.resetFIFO();
-		Serial.println(F("FIFO overflow!"));
-
-		// otherwise, check for DMP data ready interrupt (this should happen frequently)
-	}
-	else if (mpuIntStatus & 0x02) {
-		// wait for correct available data length, should be a VERY short wait
-		//while (fifoCount < packetSize) fifoCount = mpu.getFIFOCount();
-
-		// read a packet from FIFO
-		mpu.getFIFOBytes(fifoBuffer, packetSize);
-
-		// track FIFO count here in case there is > 1 packet available
-		// (this lets us immediately read more without waiting for an interrupt)
-		fifoCount -= packetSize;
 
 
-		// display Euler angles in degrees
-		mpu.dmpGetQuaternion(&q, fifoBuffer);
-		mpu.dmpGetGravity(&gravity, &q);
-		mpu.dmpGetYawPitchRoll(ypr, &q, &gravity);
-		Serial.print("ypr\t");
-		Serial.print(ypr[0] * 180 / M_PI);
-		Serial.print("\t");
-		Serial.print(ypr[1] * 180 / M_PI);
-		Serial.print("\t");
-		Serial.println(ypr[2] * 180 / M_PI);
+	_toSend = _rollPitchYawSender.getAvailable();
+	_toSend->getData()[0] = ypr[0]*10000;
+	_toSend->getData()[1] = ypr[1]*10000;
+	_toSend->getData()[2] = ypr[2]*10000;
 
-
-	}
-		//e = micros();
-
-		//Serial.println((String)(e - s));
-
-		*/
-
-	return 0;
+	return 1;
 }
 
 volatile MessageBuffer_Passer* Gyro::getMessage()volatile
 {
-	return NULL;
+	return _toSend;
 }
 
 #endif

@@ -13,7 +13,6 @@
 
 #define DEBUG_BUILD ENABLE
 
-
 #define ENABLE_INDICATOR	ENABLE
 #define ENABLE_ACC			ENABLE
 #define ENABLE_MAG			ENABLE
@@ -152,6 +151,7 @@
 #define MB_YAW			2
 #define MB_ROLL_PITCH	'p'
 #define MB_RAW_ACC		'g'
+#define MB_ROLL_PITCH_YAW	'y'
 
 // com priorities
 #define C_CL			6
@@ -168,9 +168,10 @@
 
 
 //									_________________________________________________________________
-//									| ID			| SIZE	| MONITOR	| COM PRI		| BUFFER SIZE
+//									| ID				| SIZE	| MONITOR	| COM PRI		| BUFFER SIZE
 //									-----------------------------------------------------------------
-#define MB_RAW_MAG_SETTING			MB_RAW_MAG,		3,		100,		C_CL_DEBUG,		10
-#define MB_YAW_SETTINGS				MB_YAW,			1,		10,			C_CL_NAV_INFO,	10
-#define MB_ROLL_PITCH_SETTINGS		MB_ROLL_PITCH,	2,		10,			C_CL_NAV_INFO,	10
-#define MB_RAW_ACC_SETTINGS			MB_RAW_ACC,		6,		100,		C_CL_DEBUG,		10
+#define MB_RAW_MAG_SETTING			MB_RAW_MAG,			3,		100,		C_CL_DEBUG,		10
+#define MB_YAW_SETTINGS				MB_YAW,				1,		10,			C_CL_NAV_INFO,	10
+#define MB_ROLL_PITCH_SETTINGS		MB_ROLL_PITCH,		2,		10,			C_CL_NAV_INFO,	10
+#define MB_RAW_ACC_SETTINGS			MB_RAW_ACC,			6,		100,		C_CL_DEBUG,		10
+#define MB_ROLL_PITCH_YAW_SETTINGS	MB_ROLL_PITCH_YAW,	3,		10,			C_CL_NAV_INFO,	10

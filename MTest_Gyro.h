@@ -8,7 +8,6 @@
 
 void MTest_Gyro_Print()
 {
-	//volatile Error _e;
 	Gyro toTest;
 
 	if (!toTest.start())
@@ -16,32 +15,28 @@ void MTest_Gyro_Print()
 		Serial.print("Failed to setup the acc");
 		while (true){}
 	}
-	//Serial.print("YES");
 
 	while (true)
 	{
-		//delay(100);
-		toTest.run();
-		//delay(50);
-
-		/*if (toTest.run() != 0)
+		if (toTest.run() != 0)
 		{
 			volatile MessageBuffer_Passer* data;
 			data = toTest.getMessage();
 
 			double x = data->getData()[0];
 			double y = data->getData()[1];
+			double z = data->getData()[2];
 
 			x = x / 10000.0;
 			y = y / 10000.0;
+			z = z / 10000.0;
 
 			x = degrees(x);
 			y = degrees(y);
+			z = degrees(z);
 
-			Serial.println("X:" + (String)(x)+" Y:" + (String)(y));
-
-			data = toTest.getMessage();
-		}*/
+			Serial.println("X:" + (String)(x)+" Y:" + (String)(y)+" Y:" + (String)(z));
+		}
 	}
 }
 
