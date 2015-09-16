@@ -24,7 +24,7 @@
 
 #if DEBUG_BUILD == ENABLE
 
-#define DEBUG_PRINT(message) Serial.println(message);
+//#define DEBUG_PRINT(message) Serial.println(message);
 #define TP(message) Serial.println(message);
 
 #else
