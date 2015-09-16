@@ -14,8 +14,6 @@
 #define DEBUG_BUILD ENABLE
 
 #define ENABLE_INDICATOR	ENABLE
-#define ENABLE_ACC			ENABLE
-#define ENABLE_MAG			ENABLE
 #define ENABLE_GYRO			ENABLE
 
 //-----------------------------------------------------------------------------------------------------------------------------
@@ -50,15 +48,6 @@
 #define USE_MPU6050
 #endif
 
-#if ENABLE_ACC == ENABLE
-#define USE_ACC
-#define USE_MPU6050
-#endif
-
-#if ENABLE_MAG == ENABLE
-#define USE_MAG
-#define USE_MICROMAG3
-#endif
 
 #define USER_SERIAL_COMS
 
@@ -72,10 +61,7 @@
 #define C_COMENCODER_SIZE 10
 #define C_COMENCODER_M_SIZE 20
 #define C_CONNECT_PULSE_TIME 1000
-#define C_I2C_READ_WAIT 100
-#define C_PITCH_ROLL_WINDOW_AVE_WIDTH 10
-#define C_YAW_WINDOW_AVE_WIDTH 10
-#define C_MAG_MAX_READ_TIME 150
+
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // ----------------------------------------------------- ERROR CODES ----------------------------------------------------------
@@ -146,10 +132,6 @@
 // ----------------------------------------------------------------------------------------------------------------------------
 
 // outbound	 com IDS
-#define MB_RAW_MAG		1
-#define MB_YAW			2
-#define MB_ROLL_PITCH	'p'
-#define MB_RAW_ACC		'g'
 #define MB_ROLL_PITCH_YAW	'y'
 
 // com priorities
@@ -169,8 +151,4 @@
 //									_________________________________________________________________
 //									| ID				| SIZE	| MONITOR	| COM PRI		| BUFFER SIZE
 //									-----------------------------------------------------------------
-#define MB_RAW_MAG_SETTING			MB_RAW_MAG,			3,		100,		C_CL_DEBUG,		10
-#define MB_YAW_SETTINGS				MB_YAW,				1,		10,			C_CL_NAV_INFO,	10
-#define MB_ROLL_PITCH_SETTINGS		MB_ROLL_PITCH,		2,		10,			C_CL_NAV_INFO,	10
-#define MB_RAW_ACC_SETTINGS			MB_RAW_ACC,			6,		100,		C_CL_DEBUG,		10
 #define MB_ROLL_PITCH_YAW_SETTINGS	MB_ROLL_PITCH_YAW,	3,		10,			C_CL_NAV_INFO,	10
