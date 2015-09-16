@@ -4,9 +4,7 @@
 #include "DM_Indicator.h"
 #include "Serial_Coms.h"
 #include "ComsEncoder.h"
-#include "AccGyro.h"
-#include "Magnetometer.h"
-//#include "I2CManager.h"
+#include "Gyro.h"
 
 enum State{ Init, Connect, Idle ,TakeOff,Flight,Land,Emergency,Crash};
 
@@ -26,7 +24,7 @@ private:
 
 	void runConnect();
 
-	void changeState(State newState, int indicatorPriority, int comEncoderPri, int accGyroPri, int magPri, int lightSetting, int lightBlinks, int lightRate);
+	void changeState(State newState, int indicatorPriority, int comEncoderPri, int gyroPri, int lightSetting, int lightBlinks, int lightRate);
 
 	State _state;
 	unsigned long _C_last;
@@ -38,9 +36,7 @@ private:
 	// all other objects
 	Indicator _indicator;
 	ComsEncoder _comsEncoder;
-	AccGyro _accGyro;
-	Magnetometer _magnetometer;
-	//I2CManager _I2CManager;
+	Gyro _gyro;
 	
 };
 

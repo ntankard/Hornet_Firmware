@@ -3,7 +3,7 @@
 #define FOR_TEST 3
 #define OTHER 4
 
-#define BUILD_TYPE FOR_MANUAL_TEST
+#define BUILD_TYPE FOR_HARDWARE
 
 #if BUILD_TYPE == FOR_HARDWARE
 
@@ -11,7 +11,6 @@
 #include <Wire.h>
 #include "Config.h"
 #include "HornetManager.h"
-
 
 HornetManager hornetManager;
 
@@ -30,7 +29,7 @@ void setup()
 
 
 	DEBUG_PRINT("Start Setup");
-	//HornetManager hornetManager;
+
 	hornetManager.start();
 
 	DEBUG_PRINT("End Setup");
