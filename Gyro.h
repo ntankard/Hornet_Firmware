@@ -1,6 +1,12 @@
 #pragma once
-
+#include "CONFIG.h"
 #include "Runnable.h"
+
+
+#ifdef USE_GYRO
+
+
+
 #include "MPU6050.h"
 
 class Gyro : public Runnable
@@ -33,3 +39,17 @@ private:
 	uint8_t teapotPacket[14] = { '$', 0x02, 0, 0, 0, 0, 0, 0, 0, 0, 0x00, 0x00, '\r', '\n' };
 };
 
+#else
+#include "Arduino.h"
+
+class Gyro : public Runnable
+{
+public:
+	Gyro(){}
+	bool start(){return true;}
+	int run(){return 0;}
+	volatile MessageBuffer_Passer* getMessage()volatile{return NULL;}
+private:
+
+};
+#endif

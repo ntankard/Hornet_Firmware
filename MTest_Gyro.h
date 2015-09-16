@@ -22,7 +22,7 @@ void MTest_Gyro_Print()
 	{
 		//delay(100);
 		toTest.run();
-		delay(50);
+		//delay(50);
 
 		/*if (toTest.run() != 0)
 		{

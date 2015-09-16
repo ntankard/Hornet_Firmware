@@ -1,4 +1,7 @@
 #include "Gyro.h"
+
+#ifdef USE_GYRO
+
 //#include "MPU6050_6Axis_MotionApps20.h"
 
 // ================================================================
@@ -82,28 +85,21 @@ bool Gyro::start()
 
 int Gyro::run()
 {
-	// if programming failed, don't try to do anything
-	if (!dmpReady) return 0;
+	fifoCount = mpu.getFIFOCount();
 
-	// wait for MPU interrupt or extra packet(s) available
-	/*while (!mpuInterrupt && fifoCount < packetSize) {
-		// other program behavior stuff here
-		// .
-		// .
-		// .
-		// if you are really paranoid you can frequently test in between other
-		// stuff to see if mpuInterrupt is true, and if so, "break;" from the
-		// while() loop to immediately process the MPU data
-		// .
-		// .
-		// .
-	}*/
-	// wait for enough data to be in the FIFO
-	do{
-		fifoCount = mpu.getFIFOCount();
-	} while (fifoCount < packetSize);
+	// is there a full packets worth of dat?
+	if (fifoCount < packetSize)
+	{
+		return 0;
+	}
 
-	// empty all but 1 of the packets
+	// check for overflow
+	if (fifoCount >= 1024)
+	{
+		//@TODO add error handeing here
+	}
+
+	// empty all but 1 of the packets ( to prevent a cascading overflow)
 	int j = 0;
 	for (int i = 0; i < ((fifoCount / packetSize)-1); i++)
 	{
@@ -112,19 +108,33 @@ int Gyro::run()
 	}
 	Serial.print((String)j + " ");
 
+	// read a packet from FIFO
+	mpu.getFIFOBytes(fifoBuffer, packetSize);
+
+	// display Euler angles in degrees
+	mpu.dmpGetQuaternion(&q, fifoBuffer);
+	mpu.dmpGetGravity(&gravity, &q);
+	mpu.dmpGetYawPitchRoll(ypr, &q, &gravity);
+	Serial.print("ypr\t");
+	Serial.print(ypr[0] * 180 / M_PI);
+	Serial.print("\t");
+	Serial.print(ypr[1] * 180 / M_PI);
+	Serial.print("\t");
+	Serial.println(ypr[2] * 180 / M_PI);
+
 	// empty all but 1 of the packets
 
 	//while (mpu.getFIFOCount() < packetSize){};
 
 	// reset interrupt flag and get INT_STATUS byte
-	mpuInterrupt = false;
-	mpuIntStatus = mpu.getIntStatus();
+	//mpuInterrupt = false;
+	//mpuIntStatus = mpu.getIntStatus();
 
 	// get current FIFO count
 	//fifoCount = mpu.getFIFOCount();
 
 	// check for overflow (this should never happen unless our code is too inefficient)
-	if ((mpuIntStatus & 0x10) || fifoCount == 1024) {
+	/*if ((mpuIntStatus & 0x10) || fifoCount == 1024) {
 		// reset so we can continue cleanly
 		mpu.resetFIFO();
 		Serial.println(F("FIFO overflow!"));
@@ -160,7 +170,7 @@ int Gyro::run()
 
 		//Serial.println((String)(e - s));
 
-
+		*/
 
 	return 0;
 }
@@ -169,3 +179,5 @@ volatile MessageBuffer_Passer* Gyro::getMessage()volatile
 {
 	return NULL;
 }
+
+#endif

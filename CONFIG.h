@@ -17,6 +17,7 @@
 #define ENABLE_INDICATOR	ENABLE
 #define ENABLE_ACC			ENABLE
 #define ENABLE_MAG			ENABLE
+#define ENABLE_GYRO			ENABLE
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // ---------------------------------------------------- BOARD FEATURES --------------------------------------------------------
@@ -24,11 +25,17 @@
 
 #if DEBUG_BUILD == ENABLE
 
-//#define DEBUG_PRINT(message) Serial.println(message);
+#define DEBUG_PRINT(x) Serial.print(x)
+#define DEBUG_PRINTF(x, y) Serial.print(x, y)
+#define DEBUG_PRINTLN(x) Serial.println(x)
+#define DEBUG_PRINTLNF(x, y) Serial.println(x, y)
 #define TP(message) Serial.println(message);
 
 #else
-#define DEBUG_PRINT(message)
+#define DEBUG_PRINT(x)
+#define DEBUG_PRINTF(x, y)
+#define DEBUG_PRINTLN(x)
+#define DEBUG_PRINTLNF(x, y)
 #endif
 
 //-----------------------------------------------------------------------------------------------------------------------------
@@ -37,6 +44,11 @@
 
 #if ENABLE_INDICATOR == ENABLE
 #define USE_DM_INDICATOR
+#endif
+
+#if ENABLE_GYRO == ENABLE
+#define USE_GYRO
+#define USE_MPU6050
 #endif
 
 #if ENABLE_ACC == ENABLE
