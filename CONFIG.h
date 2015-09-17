@@ -23,9 +23,9 @@
 #if DEBUG_BUILD == ENABLE
 
 #define DEBUG_PRINT(x) Serial.print(x)
-#define DEBUG_PRINTF(x, y) Serial.print(x, y)
+//#define DEBUG_PRINTF(x, y) Serial.print('d'+x, y)
 #define DEBUG_PRINTLN(x) Serial.println(x)
-#define DEBUG_PRINTLNF(x, y) Serial.println(x, y)
+//#define DEBUG_PRINTLNF(x, y) Serial.println('d'+x, y)
 #define TP(message) Serial.println(message);
 
 #else
@@ -133,6 +133,7 @@
 
 // outbound	 com IDS
 #define MB_ROLL_PITCH_YAW	'y'
+#define MB_STATUS			's'
 
 // com priorities
 #define C_CL			6
@@ -152,3 +153,4 @@
 //									| ID				| SIZE	| MONITOR	| COM PRI		| BUFFER SIZE
 //									-----------------------------------------------------------------
 #define MB_ROLL_PITCH_YAW_SETTINGS	MB_ROLL_PITCH_YAW,	3,		10,			C_CL_NAV_INFO,	10
+#define MB_STATUS_SETTINGS			MB_STATUS,			1,		1,			C_CL_SYSTEM_CMD,3

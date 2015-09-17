@@ -9,20 +9,20 @@ Gyro::Gyro()
 bool Gyro::start()
 {
 	// initialize device
-	DEBUG_PRINTLN(F("Initializing I2C devices..."));
+	DEBUG_PRINTLN("Initializing I2C devices...");
 	mpu.initialize();
 
 	// verify connection
-	DEBUG_PRINTLN(F("Testing device connections..."));
+	DEBUG_PRINTLN("Testing device connections...");
 	if (!mpu.testConnection())
 	{
-		DEBUG_PRINTLN(F("MPU6050 connection failed"));
+		DEBUG_PRINTLN("MPU6050 connection failed");
 		return false;
 	}
-	DEBUG_PRINTLN(F("MPU6050 connection successful"));
+	DEBUG_PRINTLN("MPU6050 connection successful");
 
 	// load and configure the DMP
-	DEBUG_PRINTLN(F("Initializing DMP..."));
+	DEBUG_PRINTLN("Initializing DMP...");
 	devStatus = mpu.dmpInitialize();
 
 	// supply your own gyro offsets here, scaled for min sensitivity
@@ -34,7 +34,7 @@ bool Gyro::start()
 	// make sure it worked (returns 0 if so)
 	if (devStatus == 0) {
 		// turn on the DMP, now that it's ready
-		DEBUG_PRINTLN(F("Enabling DMP..."));
+		DEBUG_PRINTLN("Enabling DMP...");
 		mpu.setDMPEnabled(true);
 
 		// enable Arduino interrupt detection
@@ -43,7 +43,7 @@ bool Gyro::start()
 		//mpuIntStatus = mpu.getIntStatus();
 
 		// set our DMP Ready flag so the main loop() function knows it's okay to use it
-		DEBUG_PRINTLN(F("DMP ready!"));
+		DEBUG_PRINTLN("DMP ready!");
 
 		// get expected DMP packet size for later comparison
 		packetSize = mpu.dmpGetFIFOPacketSize();
@@ -53,9 +53,9 @@ bool Gyro::start()
 		// 1 = initial memory load failed
 		// 2 = DMP configuration updates failed
 		// (if it's going to break, usually the code will be 1)
-		Serial.print(F("DMP Initialization failed (code "));
-		Serial.print(devStatus);
-		DEBUG_PRINTLN(F(")"));
+		DEBUG_PRINT("DMP Initialization failed (code ");
+		DEBUG_PRINT(devStatus);
+		DEBUG_PRINTLN(")");
 		return false;
 	}
 
@@ -76,7 +76,7 @@ int Gyro::run()
 	if (fifoCount >= 1024)
 	{
 		mpu.resetFIFO();	//@TODO may need to do more here
-		DEBUG_PRINTLN(F("FIFO overflow!"));
+		DEBUG_PRINTLN("FIFO overflow!");
 		return 0;
 	}
 

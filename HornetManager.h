@@ -6,7 +6,7 @@
 #include "ComsEncoder.h"
 #include "Gyro.h"
 
-enum State{ Init, Connect, Idle ,TakeOff,Flight,Land,Emergency,Crash};
+enum State{ Init = 0, Connect = 1, Idle =2,TakeOff=3,Flight=4,Land=5,Emergency=6,Crash=7};
 
 
 class HornetManager
@@ -37,6 +37,9 @@ private:
 	Indicator _indicator;
 	ComsEncoder _comsEncoder;
 	Gyro _gyro;
+
+	unsigned long _statusLast;
+	MessageBuffer_Manager<MB_STATUS_SETTINGS> _statusSender;
 	
 };
 

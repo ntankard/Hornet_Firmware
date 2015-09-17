@@ -31,8 +31,9 @@ void HornetManager::start()
 	}
 
 	// transition to an operating state
-	changeState(ST_TO_CONNECT);
+	changeState(ST_TO_IDLE);			//@TODO conection state is bypasses
 	_C_last = millis();
+	_statusLast = millis();
 }
 
 
@@ -65,6 +66,16 @@ void HornetManager::run()
 			TP((String)line)
 				delay(500);
 		}
+	}
+
+	// update the status
+	unsigned long current = millis();
+	if (_statusLast + 1000 <= current)
+	{
+		volatile MessageBuffer_Passer* toSend = _statusSender.getAvailable();
+		toSend->getData()[0] = _state;
+		newData(toSend);
+		_statusLast += 1000;
 	}
 }
 
