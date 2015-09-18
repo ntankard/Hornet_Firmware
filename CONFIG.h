@@ -1,4 +1,6 @@
 #pragma once
+#include <Arduino.h>
+
 //-----------------------------------------------------------------------------------------------------------------------------
 // ------------------------------------------------------ BASE TYPES ----------------------------------------------------------
 // ----------------------------------------------------------------------------------------------------------------------------
@@ -47,7 +49,6 @@
 #define USE_GYRO
 #define USE_MPU6050
 #endif
-
 
 #define USER_SERIAL_COMS
 
@@ -134,6 +135,12 @@
 // outbound	 com IDS
 #define MB_ROLL_PITCH_YAW	'y'
 #define MB_STATUS			's'
+#define MB_MOTOR			'm'
+
+// inbound coms IDS
+#define MB_JOY_XY			'j'
+#define MB_JOY_THROTTLE		't'
+#define MB_JOY_Z			'z'
 
 // com priorities
 #define C_CL			6
@@ -144,6 +151,7 @@
 #define C_CL_NAV_USE	4
 #define C_CL_DEBUG		5
 
+// removed
 #define C_COMS_CODE_CONNECT_REQUEST 'a'
 #define C_COMS_CODE_CONNECT_CONFIRM 'b'
 
@@ -154,3 +162,8 @@
 //									-----------------------------------------------------------------
 #define MB_ROLL_PITCH_YAW_SETTINGS	MB_ROLL_PITCH_YAW,	3,		10,			C_CL_NAV_INFO,	10
 #define MB_STATUS_SETTINGS			MB_STATUS,			1,		1,			C_CL_SYSTEM_CMD,3
+#define	MB_JOY_XY_SETTING			MB_JOY_XY,			2,		0,			C_CL_NAV_CMD,	1
+#define	MB_JOY_THROTTLE_SETTING		MB_JOY_THROTTLE,	1,		0,			C_CL_NAV_CMD,	1
+#define	MB_JOY_Z_SETTING			MB_JOY_Z,			1,		0,			C_CL_NAV_CMD,	1
+#define	MB_MOTOR_SETTING			MB_MOTOR,			4,		2,			C_CL_NAV_INFO,	20
+

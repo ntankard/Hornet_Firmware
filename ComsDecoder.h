@@ -2,6 +2,8 @@
 #include <inttypes.h>
 
 #include "MessageBuffer_Empty.h"
+#include "MessageBuffer_Manager.h"
+#include "CONFIG.h"
 
 
 
@@ -46,5 +48,10 @@ private:
 
 	// reusable message buffer
 	volatile MessageBuffer_Empty _charMessage;
+
+	volatile MessageBuffer_Manager<MB_JOY_XY_SETTING> _XYJoySender;
+	volatile MessageBuffer_Manager<MB_JOY_THROTTLE_SETTING> _throttleJoySender;
+	volatile MessageBuffer_Manager<MB_JOY_Z_SETTING> _ZJoySender;
+
 };
 

@@ -5,6 +5,7 @@
 #include "Serial_Coms.h"
 #include "ComsEncoder.h"
 #include "Gyro.h"
+#include "Drone.h"
 
 enum State{ Init = 0, Connect = 1, Idle =2,TakeOff=3,Flight=4,Land=5,Emergency=6,Crash=7};
 
@@ -40,6 +41,9 @@ private:
 
 	unsigned long _statusLast;
 	MessageBuffer_Manager<MB_STATUS_SETTINGS> _statusSender;
+
+	//@TODO remove
+	Drone _theDrone;
 	
 };
 

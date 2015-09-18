@@ -104,6 +104,24 @@ void HornetManager::newData(volatile MessageBuffer_Passer* data)
 	{
 		newMessage(data->getID());
 	}
+
+	switch (data->getID())
+	{
+	case MB_JOY_XY:
+		//_theDrone.newPitchRoll(data->getData()[0], data->getData()[1]);
+		newData(_theDrone.newPitchRoll(data->getData()[0], data->getData()[1]));
+		break;
+	case MB_JOY_Z:
+		//_theDrone.newYaw(data->getData()[0]);
+		newData(_theDrone.newYaw(data->getData()[0]));
+		break;
+	case MB_JOY_THROTTLE:
+		//_theDrone.newThrottle(data->getData()[0]);
+		newData(_theDrone.newThrottle(data->getData()[0]));
+		break;
+	default:
+		break;
+	}
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------
