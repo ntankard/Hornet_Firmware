@@ -110,8 +110,6 @@ void HornetManager::takeOff()
 {
 	changeState(ST_TO_TAKEOFF);
 
-	delay(1000);
-
 	changeState(ST_TO_FLIGHT);
 }
 
