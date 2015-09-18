@@ -50,7 +50,8 @@
 #define USE_MPU6050
 #endif
 
-#define USER_SERIAL_COMS
+//#define USER_SERIAL_COMS
+#define USER_XBEE_COMS
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // --------------------------------------------------- GENERAL SETTINGS -------------------------------------------------------
@@ -58,10 +59,13 @@
 
 #define C_ERROR_BUFFER 10
 #define C_COMS_BUFFER 10
-#define C_COMS_PORT Serial
+#define C_COMS_PORT Serial2		//@TODO make this dynamic
 #define C_COMENCODER_SIZE 10
 #define C_COMENCODER_M_SIZE 20
 #define C_CONNECT_PULSE_TIME 1000
+#define C_COMS_BAUD_RATE 9600
+#define C_COMMS_BSTATION_ADDRESS 0x0000
+#define C_COMMS_MAX_RETRY 3
 
 
 //-----------------------------------------------------------------------------------------------------------------------------

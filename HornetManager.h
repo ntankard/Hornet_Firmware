@@ -3,6 +3,7 @@
 #include "Scheduler.h"
 #include "DM_Indicator.h"
 #include "Serial_Coms.h"
+#include "XBee_Coms.h"
 #include "ComsEncoder.h"
 #include "Gyro.h"
 #include "Drone.h"

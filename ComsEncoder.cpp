@@ -42,7 +42,6 @@ int ComsEncoder::run()
 		_toReturn = _coms.getMessage();
 		return 1;
 	}
-
 	return 0;
 }
 

@@ -2,6 +2,7 @@
 
 #include "Runnable.h"
 #include "Serial_Coms.h"
+#include "XBee_Coms.h"
 #include "Error.h"
 #include "MessageBuffer_Passer.h"
 #include "CircularBuffer_Manager.h"

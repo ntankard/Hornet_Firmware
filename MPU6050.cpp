@@ -3511,7 +3511,7 @@ uint8_t MPU6050::dmpInitialize() {
 
 			DEBUG_PRINTLN("Setting DMP and FIFO_OFLOW interrupts enabled...");
 			setIntEnabled(0x12);
-
+			Serial.flush();
 			DEBUG_PRINTLN("Setting sample rate to 200Hz...");
 			setRate(4); // 1khz / (1 + 4) = 200 Hz
 
@@ -3530,7 +3530,7 @@ uint8_t MPU6050::dmpInitialize() {
 
 			DEBUG_PRINTLN("Clearing OTP Bank flag...");
 			setOTPBankValid(false);
-
+			Serial.flush();
 			DEBUG_PRINTLN("Setting X/Y/Z gyro offset TCs to previous values...");
 			setXGyroOffsetTC(xgOffsetTC);
 			setYGyroOffsetTC(ygOffsetTC);
@@ -3546,7 +3546,7 @@ uint8_t MPU6050::dmpInitialize() {
 			uint16_t pos = 0;
 			for (j = 0; j < 4 || j < dmpUpdate[2] + 3; j++, pos++) dmpUpdate[j] = pgm_read_byte(&dmpUpdates[pos]);
 			writeMemoryBlock(dmpUpdate + 3, dmpUpdate[2], dmpUpdate[0], dmpUpdate[1]);
-
+			Serial.flush();
 			DEBUG_PRINTLN("Writing final memory update 2/7 (function unknown)...");
 			for (j = 0; j < 4 || j < dmpUpdate[2] + 3; j++, pos++) dmpUpdate[j] = pgm_read_byte(&dmpUpdates[pos]);
 			writeMemoryBlock(dmpUpdate + 3, dmpUpdate[2], dmpUpdate[0], dmpUpdate[1]);
@@ -3561,7 +3561,7 @@ uint8_t MPU6050::dmpInitialize() {
 			DEBUG_PRINT("Current FIFO count=");
 			DEBUG_PRINTLN(fifoCount);
 			getFIFOBytes(fifoBuffer, fifoCount);
-
+			Serial.flush();
 			DEBUG_PRINTLN("Setting motion detection threshold to 2...");
 			setMotionDetectionThreshold(2);
 
@@ -3573,7 +3573,7 @@ uint8_t MPU6050::dmpInitialize() {
 
 			DEBUG_PRINTLN("Setting zero-motion detection duration to 0...");
 			setZeroMotionDetectionDuration(0);
-
+			Serial.flush();
 			DEBUG_PRINTLN("Resetting FIFO...");
 			resetFIFO();
 
@@ -3582,7 +3582,7 @@ uint8_t MPU6050::dmpInitialize() {
 
 			DEBUG_PRINTLN("Enabling DMP...");
 			setDMPEnabled(true);
-
+			Serial.flush();
 			DEBUG_PRINTLN("Resetting DMP...");
 			resetDMP();
 
@@ -3637,7 +3637,8 @@ uint8_t MPU6050::dmpInitialize() {
 
 			DEBUG_PRINTLN("Disabling DMP (you turn it on later)...");
 			setDMPEnabled(false);
-
+			Serial.flush();
+			Serial.clearWriteError();
 			DEBUG_PRINTLN("Setting up internal 42-byte (default) DMP packet buffer...");
 			dmpPacketSize = 42;
 			/*if ((dmpPacketBuffer = (uint8_t *)malloc(42)) == 0) {

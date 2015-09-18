@@ -25,7 +25,7 @@ void HornetManager::start()
 		_indicator.safeOn();
 		while (true)
 		{
-			TP("Not all objects attached")//@TODO add build exeption here
+			DEBUG_PRINTLN("Not all objects attached");//@TODO add build exeption here
 			delay(500);
 		}
 	}
@@ -62,9 +62,9 @@ void HornetManager::run()
 		int line = _e.getError();
 		_indicator.safeOn();
 		while (true){
-			TP("ERROR");
-			TP((String)line)
-				delay(500);
+			DEBUG_PRINTLN("ERROR");
+			DEBUG_PRINTLN((String)line);
+			delay(500);
 		}
 	}
 

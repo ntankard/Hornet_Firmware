@@ -23,6 +23,16 @@ void setup()
 	{
 		Serial.read();
 	}
+
+	C_COMS_PORT.begin(9600);	//@TODO this should be in the USB serial
+	C_COMS_PORT.clearWriteError();
+	C_COMS_PORT.flush();
+	while (C_COMS_PORT.available())
+	{
+		C_COMS_PORT.read();
+	}
+
+
 	delay(500);
 	Wire.begin();	// no idea why this needs to be here
 
