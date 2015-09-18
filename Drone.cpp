@@ -1,54 +1,88 @@
 #include "Drone.h"
+#include "CONFIG.h"
 
 
 Drone::Drone()
 {
+	_roll = 0;
+	_pitch = 0;
+	_yaw = 0;
+	_throttle = 0;
 }
 
-void Drone::start()
+void Drone::caculateMotor()
 {
-	_frontLeft.attach(C_MOTOR_FRONT_LEFT);
-	_frontRight.attach(C_MOTOR_FRONT_RIGHT);
-	_backLeft.attach(C_MOTOR_BACK_LEFT);
-	_backRight.attach(C_MOTOR_BACK_RIGHT);
+	if (_throttle == 0)
+	{
+		for (int i = 0; i < 4; i++)
+		{
+			_motorPower[i] = 0;
+		}
+	}
+	else
+	{
+		_motorPower[0] = _throttle - _pitch - _roll + _yaw;
+		_motorPower[1] = _throttle - _pitch + _roll - _yaw;
+		_motorPower[2] = _throttle + _pitch + _roll + _yaw;
+		_motorPower[3] = _throttle + _pitch - _roll - _yaw;
 
-	_frontLeft.write(0);
-	_frontRight.write(0);
-	_backLeft.write(0);
-	_backRight.write(0); 
-	_isArmed = false;
+
+		for (int i = 0; i < 4; i++)
+		{
+			if (_motorPower[i]>100)
+			{
+				_motorPower[i] = 100;
+			}
+			if (_motorPower[i] < 0)
+			{
+				_motorPower[i] = 0;
+			}
+		}
+	}
 }
 
-void Drone::arm()
+volatile MessageBuffer_Passer* Drone::newThrottle(int t)
 {
-	_frontLeft.write(IDLE);
-	_frontRight.write(IDLE);
-	_backLeft.write(IDLE);
-	_backRight.write(IDLE);
-	_isArmed = false;
+	_throttle = t;
+	caculateMotor();
+	volatile MessageBuffer_Passer* toSend = _motorSender.getAvailable();
+	for (int i = 0; i < 4; i++)
+	{
+		toSend->getData()[i] = _motorPower[i];
+	}
+	return toSend;
+}
+volatile MessageBuffer_Passer* Drone::newPitchRoll(int p, int r)
+{
+	_pitch = p-50;
+	_roll = r-50;
+	caculateMotor();
+	volatile MessageBuffer_Passer* toSend = _motorSender.getAvailable();
+	for (int i = 0; i < 4; i++)
+	{
+		toSend->getData()[i] = _motorPower[i];
+	}
+	return toSend;
+}
+volatile MessageBuffer_Passer* Drone::newYaw(int y)
+{
+	_yaw = y-50;
+	caculateMotor();
+	volatile MessageBuffer_Passer* toSend = _motorSender.getAvailable();
+	for (int i = 0; i < 4; i++)
+	{
+		toSend->getData()[i] = _motorPower[i];
+	}
+	return toSend;
 }
 
-void Drone::disarm()
+volatile MessageBuffer_Passer* Drone::getCurrent()
 {
-	_frontLeft.write(0);
-	_frontRight.write(0);
-	_backLeft.write(0);
-	_backRight.write(0);
-	_isArmed = false;
-}
-
-void Drone::setThrottle(int p)
-{
-	double range = MAX - IDLE;
-
-	double setting = range*((double)p / 100.0);
-
-	_frontLeft.write(setting + IDLE);
-	_frontRight.write(setting + IDLE);
-	_backLeft.write(setting + IDLE);
-	_backRight.write(setting + IDLE);
-}
-
-Drone::~Drone()
-{
+	caculateMotor();
+	volatile MessageBuffer_Passer* toSend = _motorSender.getAvailable();
+	for (int i = 0; i < 4; i++)
+	{
+		toSend->getData()[i] = _motorPower[i];
+	}
+	return toSend;
 }

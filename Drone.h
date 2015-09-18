@@ -1,39 +1,28 @@
 #pragma once
-#include <Servo.h>
-#include "Arduino.h"
 
+#include "MessageBuffer_Manager.h"
 #include "CONFIG.h"
-#include "APM_2_5_PINS.h"
-
-#define C_MOTOR_FRONT_LEFT	PWM_3
-#define C_MOTOR_FRONT_RIGHT PWM_4
-#define C_MOTOR_BACK_RIGHT	PWM_5
-#define C_MOTOR_BACK_LEFT	PWM_6
-
-#define IDLE 60
-#define MAX 135
-
 class Drone
 {
 public:
 	Drone();
 
-	void start();
+	volatile MessageBuffer_Passer* newThrottle(int t);
+	volatile MessageBuffer_Passer* newPitchRoll(int p, int r);
+	volatile MessageBuffer_Passer* newYaw(int y);
 
-	void arm();
-
-	void disarm();
-
-	void setThrottle(int p);
-
-	~Drone();
+	volatile MessageBuffer_Passer* getCurrent();
 private:
-	Servo _frontLeft;
-	Servo _frontRight;
-	Servo _backLeft;
-	Servo _backRight;
 
-	bool _isArmed;
+	void caculateMotor();
 
+	int _roll;
+	int _pitch;
+	int _yaw;
+	int _throttle;
+
+	int _motorPower[4];
+
+	MessageBuffer_Manager<MB_MOTOR_SETTING> _motorSender;
 };
 

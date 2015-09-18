@@ -1,127 +1,106 @@
-// hardware libreys (do not remove)
-#include <Servo.h>
-#include <RPLidar.h>
-#include <ArduinoUnit.h>
-
 #define FOR_HARDWARE 1
-#define FOR_TEST 2
+#define FOR_MANUAL_TEST 2
+#define FOR_TEST 3
+#define OTHER 4
 
 #define BUILD_TYPE FOR_HARDWARE
 
 #if BUILD_TYPE == FOR_HARDWARE
 
-// local components
+#include <Wire.h>
+#include "Config.h"
 #include "HornetManager.h"
-#include "ComsDecoder.h"
-#include "Coms.h"
-#include "ComsEncoder.h"
-#include "AccGyro.h"
-#include "Monitor.h"
-#include "Indicator.h"
-#include "Scheduler.h"
-#include "Lidar.h"
-#include "Drone.h"
 
-#include "CONFIG.h"
-
-int i = 0;
-
-// core componenets
-HornetManager *manager;
-Error *error;
-
-// coms systems
-Coms *coms;
-ComsDecoder *comsDecoder;
-ComsEncoder *comsEncoder;
-
-// periferal systerms
-AccGyro *accGyro;
-Monitor *monitor;
-Indicator *indicator;
-Lidar *lidar;
-Drone *drone;
-
-Scheduler *scheduler;
+HornetManager hornetManager;
 
 void setup()
 {
-	error = new Error();
-	manager = new HornetManager(error);
 
-	// construct the coms
-	comsDecoder = new ComsDecoder(manager);
-	coms = new Coms(comsDecoder);
+	Serial.begin(9600);	//@TODO this should be in the USB serial
+	Serial.clearWriteError();
+	Serial.flush();
+	while (Serial.available())
+	{
+		Serial.read();
+	}
+	delay(500);
+	Wire.begin();	// no idea why this needs to be here
 
-	comsEncoder = new ComsEncoder(coms, error);
-	manager->attachComs(coms);
-	manager->attachComsEncoder(comsEncoder);
 
-	// construct thew accselerator and gyro
-	accGyro = new AccGyro(manager, error);
-	manager->attachAccGyro(accGyro);
+	DEBUG_PRINT("Start Setup");
 
-	// construct the monitor
-	monitor = new Monitor(comsEncoder);
-	manager->attachMonitor(monitor);
+	hornetManager.start();
 
-	// construct the indicator
-	indicator = new Indicator();
-	manager->attachIndicator(indicator);
-
-	// construct the lidar
-	lidar = new Lidar(manager);
-	manager->attachLidar(lidar);
-
-	drone= new Drone();
-	manager->attachDrone(drone);
-
-	// construct the scedulor
-	scheduler = new Scheduler(coms, comsEncoder, accGyro, indicator, lidar);
-	manager->attachScheduler(scheduler);
-
-	// start all objest with threads
-	manager->start();
+	DEBUG_PRINT("End Setup");
 }
 
 void loop()
 {
-	Serial.println((String)(i));
-	i++;
-
-	if (!manager->run())
-	{
-		delete manager;
-		delete error;
-		delete coms;
-		delete comsDecoder;
-		delete comsEncoder;
-
-		delete accGyro;
-		delete monitor;
-		delete indicator;
-		delete lidar;
-		delete drone;
-
-		delete scheduler;
-
-		setup();
-	}
+	hornetManager.run();
 }
 
-#else
+#endif
+#if BUILD_TYPE == FOR_TEST
 
+#include <ArduinoUnit.h>
+
+#include "Test_Scheduler.h"
+#include "Test_Error.h"
+#include "Test_SequenceGenerator.h"
 #include "Test_CircularBuffer.h"
-#include "Test_LidarNavigation.h"
+#include "Test_CircularBuffer_Manager.h"
+#include "Test_MessageBuffer.h"
+#include "Test_MessageBuffer_Manager.h"
 
 void setup()
 {
 	Serial.begin(9600);
+	delay(2000);
 }
 
 void loop()
 {
 	Test::run();
 }
+
+#endif
+#if BUILD_TYPE == FOR_MANUAL_TEST
+
+#include <Wire.h>
+
+//#include "MTest_DM_Indicator.h"
+#include "MTest_Gyro.h"
+
+void setup()
+{
+	Serial.begin(9600);	//@TODO this should be in the USB serial
+	Serial.clearWriteError();
+	Serial.flush();
+	while (Serial.available())
+	{
+		Serial.read();
+	}
+	delay(500);
+	Wire.begin();	// no idea why this needs to be here
+
+	//MTest_DM_Indicator_Points();
+	//MTest_DM_Indicator_Safe();
+	//MTest_DM_Indicator_SafeWithBlink();
+	//MTest_DM_Indicator_FullSettings();
+	//MTest_DM_Indicator_SolidOn();
+	//MTest_DM_Indicator_Blink();
+	//MTest_DM_Indicator_Sequence();
+
+	MTest_Gyro_Print();
+}
+
+void loop()
+{
+}
+
+#endif
+
+#if BUILD_TYPE == OTHER
+
 
 #endif

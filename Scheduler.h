@@ -1,38 +1,77 @@
 #pragma once
-#include "Coms.h"
-#include "ComsEncoder.h"
-#include "AccGyro.h"
-#include "Indicator.h"
-#include "Lidar.h"
+#include "Runnable.h"
+#include "Config.h"
+#include "Error.h"
 
+/**
+* \brief	A thread and its priority
+*/
+struct thread_settings
+{
+	Runnable *thread;
+	int priority;
+};
+
+typedef struct thread_settings Thread_Settings;
+
+/**
+* \brief	Mimics a multi thread system
+*/
 class Scheduler
 {
 public:
-	Scheduler(Coms* theComs, ComsEncoder* theComsEncoder, AccGyro* theAccGyro, Indicator* theIndicator, Lidar* theLidar);
 
-	void setAccPriority(int p);
+	/**
+	* \brief	Default constructor.
+	*/
+	Scheduler(volatile Error *e);
 
-	void setIndicatorPriority(int p);
+	/**
+	* \brief	Constctor for the MPU6050
+	*
+	* \param	ID				The ID of the thread
+	* \param	theRunnable		The thread
+	*
+	* \throw	E_SETUP_ERROR	If the thread is null or its atempting ot overwight anotehr thread
+	*/
+	void addRunable(int ID, Runnable *theRunnable);
 
-	void setLidarPriority(int p);
+	/**
+	* \brief	Solidifys the scedular after all runables are added
+	*
+	* \return	true if all threads are acounted for
+	*/
+	bool finish();
 
-	void run();
+	/**
+	* \brief	Solidifys the scedular after all runables are added
+	*
+	* \return	true if all threads are acounted for
+	*/
+	bool startAll();
+
+	/**
+	* \brief	Set the priority of a spesific thread
+	*
+	* \param	ID				The ID of the thread
+	* \param	p				The priority to set
+	*
+	* \throw E_INDEX_OOB		If the ID is invalid
+	*/
+	void setPriority(int ID, int p);
+
+	/**
+	* \brief	Exicute each thread at its priority
+	*/
+	int run();
+
+	volatile MessageBuffer_Passer *getData();
 
 private:
-
-	Coms* _coms;
-	ComsEncoder* _comsEncoder;
-
-	int _accPriority;
-	int _accRunCount;
-	AccGyro* _accGyro;
-
-	int _indicatorPriority;
-	int _indicatorRunCount;
-	Indicator* _indicator;
-
-	int _lidarPriority;
-	int _lidarRunCount;
-	Lidar* _lidar;
+	volatile Error *_e;
+	Thread_Settings _threads[C_SCHEDULER_THREAD_NUM];
+	int _setCount;
+	int _runCount[C_SCHEDULER_THREAD_NUM];
+	int _currentThread;
 };
 

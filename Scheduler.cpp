@@ -1,91 +1,109 @@
 #include "Scheduler.h"
 
 
-Scheduler::Scheduler(Coms* theComs, ComsEncoder* theComsEncoder, AccGyro* theAccGyro, Indicator* theIndicator, Lidar* theLidar)
+
+Scheduler::Scheduler(volatile Error *e)
 {
-	_coms = theComs;
-	_comsEncoder = theComsEncoder;
-
-	_accGyro = theAccGyro;
-	_accPriority = 1;
-	_accRunCount = 0;
-
-	_indicator = theIndicator;
-	_indicatorPriority = 1;
-	_indicatorRunCount = 0;
-
-	_lidar = theLidar;
-	_lidarPriority = 1;
-	_lidarRunCount = 0;
-}
-
-void Scheduler::setAccPriority(int p)
-{
-	_accPriority = p;
-}
-
-void Scheduler::setIndicatorPriority(int p)
-{
-	_indicatorPriority = p;
-}
-
-void Scheduler::setLidarPriority(int p)
-{
-	_lidarPriority = p;
-}
-
-
-void Scheduler::run()
-{
-	// top priority
-	_coms->run();
-	_comsEncoder->run();
-
-	//acc
-	if (_accPriority != 0)
+	_e = e;
+	_setCount = 0;
+	_currentThread = C_SCHEDULER_THREAD_NUM;
+	for (int i = 0; i < C_SCHEDULER_THREAD_NUM; i++)
 	{
-		_accRunCount++;
-		if (_accRunCount >= _accPriority)
+		_runCount[i] = 0;
+		_threads[i].priority = -1;
+	}
+}
+
+//-----------------------------------------------------------------------------------------------------------------------------
+
+void Scheduler::addRunable(int ID, Runnable *theRunnable)
+{
+	if (ID >= C_SCHEDULER_THREAD_NUM || ID <0)
+	{
+		_e->add(E_INDEX_OUT_BOUNDS, __LINE__);
+		return;
+	}
+
+	if (_threads[ID].priority != -1)
+	{
+		_e->add(E_INDEX_OUT_BOUNDS, __LINE__);
+		return;
+	}
+
+	_threads[ID].thread = theRunnable;
+	_threads[ID].priority = 1;
+	_setCount++;
+}
+
+//-----------------------------------------------------------------------------------------------------------------------------
+
+bool Scheduler::finish()
+{
+	return (_setCount == C_SCHEDULER_THREAD_NUM);
+}
+
+//-----------------------------------------------------------------------------------------------------------------------------
+
+bool Scheduler::startAll()
+{
+	if (!finish())
+	{
+		_e->add(E_NULL_PTR, __LINE__);
+		return false;
+	}
+
+	for (int i = 0; i < C_SCHEDULER_THREAD_NUM;i++)
+	{
+		if (!_threads[i].thread->start())
 		{
-			_accGyro->run();
-			_accRunCount = 0;
+			return false;
 		}
 	}
-	else
-	{
-		_accRunCount = 0;
-	}
-
-	//indicator
-	if (_indicatorPriority != 0)
-	{
-		_indicatorRunCount++;
-		if (_indicatorRunCount >= _indicatorPriority)
-		{
-			_indicator->run();
-			_indicatorRunCount = 0;
-		}
-	}
-	else
-	{
-		_indicatorRunCount = 0;
-	}
-
-	//lidar
-	if (_lidarPriority != 0)
-	{
-		_lidarRunCount++;
-		if (_lidarRunCount >= _lidarPriority)
-		{
-			_lidar->run();
-			_lidarRunCount = 0;
-		}
-	}
-	else
-	{
-		_lidarRunCount = 0;
-	}
-	
-
+	return true;
 }
 
+//-----------------------------------------------------------------------------------------------------------------------------
+
+void Scheduler::setPriority(int ID, int p)
+{
+	if (ID >= C_SCHEDULER_THREAD_NUM || ID <0)
+	{
+		_e->add(E_INDEX_OUT_BOUNDS, __LINE__);
+	}
+	_threads[ID].priority = p;
+}
+
+//-----------------------------------------------------------------------------------------------------------------------------
+
+int Scheduler::run()
+{
+
+	// keep looping until a thread runs (this will lock if all thread are 0)
+	while (true){
+
+		_currentThread++;
+		if (_currentThread >= C_SCHEDULER_THREAD_NUM)
+		{
+			_currentThread = 0;
+		}
+
+		if (_threads[_currentThread].priority != 0)
+		{
+			_runCount[_currentThread]++;
+			if (_runCount[_currentThread] >= _threads[_currentThread].priority)
+			{
+				return _threads[_currentThread].thread->run();
+			}
+		}
+		else
+		{
+			_runCount[_currentThread] = 0;
+		}
+	}
+}
+
+volatile MessageBuffer_Passer *Scheduler::getData()
+{
+	//@TODO add count check here
+	return _threads[_currentThread].thread->getMessage();
+}

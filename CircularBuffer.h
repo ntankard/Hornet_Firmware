@@ -1,7 +1,12 @@
 #pragma once
 #include "Error.h"
-#include "Arduino.h"
 
+/**
+* \brief	A Queue
+*
+* \tparam	T		The type of the object to add
+* \tparam	Size	Size of the buffer
+*/
 template<class T, int Size>
 class CircularBuffer
 {
@@ -15,7 +20,7 @@ public:
 	* \author	Nicholas
 	* \date	1/08/2015
 	*/
-	CircularBuffer(Error *e)
+	CircularBuffer(volatile Error *e)
 	{
 		_e = e;
 		_start = 0;
@@ -54,23 +59,38 @@ public:
 	*/
 	bool isFull()
 	{
-		if (_size == 10)
+		if (_size == Size)
 		{
 			return true;
 		}
 		return false;
 	}
 
+	/**
+	* \brief	The number of objects in the buffer
+	*
+	* \return	The Size
+	*/
 	int size()
 	{
 		return _size;
 	}
 
+	/**
+	* \brief	Adds a object to the buffer
+	*
+	* \author	Nicholas
+	* \date	1/08/2015
+	*
+	* \param	toAdd	The object to add
+	*
+	* \throw	E_ILLEGAL_ACCESS	If full
+	*/
 	void add(T toAdd)
 	{
 		if (isFull())
 		{
-			_e->add(E_ILLEGAL_ACCESS, "Attempting to add to a full buffer");
+			_e->add(E_BUFFER_OVERFLOW, __LINE__);
 			return;
 		}
 
@@ -103,7 +123,7 @@ public:
 	{
 		if (isEmpty())
 		{
-			_e->add(E_ILLEGAL_ACCESS, "Attempting to remove from an empty buffer");
+			_e->add(E_BUFFER_OVERFLOW, __LINE__);
 			return 0;
 		}
 
@@ -120,7 +140,6 @@ public:
 		return _buffer[toRemove];
 	}
 
-
 private:
 
 	/** \brief	The index to add to. */
@@ -130,9 +149,11 @@ private:
 	int _end;
 
 	/** \brief	The systems error object */
-	Error *_e;
+	volatile Error *_e;
 
+	/** \brief	The number of objects in the buffer */
 	int _size;
 
+	/** \brief	The Buffer */
 	T _buffer[Size];
 };

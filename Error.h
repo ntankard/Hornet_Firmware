@@ -1,20 +1,8 @@
 #pragma once
-#include "CONFIG.h"
-#include <Arduino.h>
-
-/**
- * \struct	ErrorMessage
- *
- * \brief	The information about a single error event
- *
- * \author	Nicholas
- * \date	1/08/2015
- */
-struct ErrorMessage
-{
-	int errorCode;
-	String errorInfo;
-};
+#include "Config.h"
+#include "Arduino.h"
+#define Throw_Check(toReturn)	if(_e->isError()){return toReturn;}
+#define Could_Throw(function, toReturn)	function;if(_e->isError()){return toReturn;}
 
 /**
  * \class	Error
@@ -47,9 +35,9 @@ public:
 	 * \date	1/08/2015
 	 *
 	 * \param	code	The code.
-	 * \param	info	The information.
+	 * \param	line	The line the error ocured on
 	 */
-	void add(int code, String info);
+	void add(uint8_t code, uint8_t  line) volatile;
 
 	/**
 	 * \fn	bool Error::isError();
@@ -61,7 +49,7 @@ public:
 	 *
 	 * \return	true if error, false if not.
 	 */
-	bool isError();
+	bool isError() volatile;
 
 	/**
 	 * \fn	ErrorMessage* Error::getError();
@@ -73,12 +61,15 @@ public:
 	 *
 	 * \return	null if it fails, else the error.
 	 */
-	ErrorMessage* getError();
+	uint16_t getError() volatile;
 
 private:
 
 	/** \brief	The error events[ c error buffer]. */
-	ErrorMessage _errorEvents[C_ERROR_BUFFER];
+	uint8_t _errorEvents[C_ERROR_BUFFER];
+
+	/** \brief	THe line the error ocured on */
+	uint8_t _errorLine[C_ERROR_BUFFER];
 
 	/** \brief	The number of recorded errors */
 	int _errors;
