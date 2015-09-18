@@ -51,12 +51,24 @@ int Coms::run()
 				{
 					_comsDecoder.sendFailure();	//@TODO make this do sompthing useful
 					_outstandingSent = false;
+					TP("FAIL1");
 				}
 			}
 		}
 		else
 		{
 			_comsDecoder.receiveFailure();	//@TODO sompthing useful
+			TP("FAIL2");
+		}
+	}
+	else
+	{
+		if (_outstandingSent)
+		{
+			if (_sendTimeOut.hasTimeOut())
+			{
+				_outstandingSent = false;
+			}
 		}
 	}
 
@@ -81,10 +93,16 @@ void Coms::send(uint8_t *data, uint8_t dataLength)
 		_resendCount = 0;
 		_outstandingSent = true;
 
+		for (int i = 0; i < dataLength; i++)
+		{
+			_dataBuffer[i] = data[i];
+		}
+
 		// send the message
-		_tx16.setPayload(data);
+		_tx16.setPayload(_dataBuffer);
 		_tx16.setPayloadLength(dataLength);
 		_xbee.send(_tx16);
+		_sendTimeOut.start(100);
 	}
 }
 

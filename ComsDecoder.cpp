@@ -47,7 +47,7 @@ volatile MessageBuffer_Passer* ComsDecoder::processMessage(uint8_t *data, uint8_
 		{
 			break;//@TODO throw
 		}
-		toSend = _throttleJoySender.getAvailable();
+		toSend = _ZJoySender.getAvailable();
 		for (int i = 0; i < dataLength; i++)
 		{
 			toSend->getPacket()[i] = data[i];

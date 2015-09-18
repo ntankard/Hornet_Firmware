@@ -3,6 +3,8 @@
 #include "MessageBuffer.h"
 #include "MessageBuffer_Passer.h"
 
+#include "CONFIG.h"
+
 /**
 * \brief	A manager for a set of Message Bufffers
 *
@@ -33,6 +35,8 @@ public:
 	*/
 	volatile MessageBuffer_Passer* getAvailable() volatile
 	{
+		bool safe = true;
+
 		// find a free buffer
 		volatile MessageBuffer_Passer* toSend = &_safe;
 		for (int i = 0; i < BufferSize; i++)
@@ -40,8 +44,14 @@ public:
 			if (!_message[i].isLocked())
 			{
 				toSend =  &_message[i];
+				safe = false;
 				break;
 			}
+		}
+
+		if (safe == true)
+		{
+			//TP("OVERFLOW");
 		}
 
 		// should this message be monitored?
@@ -49,7 +59,15 @@ public:
 		if (ToMonitor != 0 && _monitorCount >= ToMonitor)
 		{
 			_monitorCount = 0;
-			toSend->monitor();
+			if (!safe)
+			{
+				toSend->monitor();
+			}
+			else
+			{
+				toSend->dontMonitor();
+			}
+			
 		}
 		else
 		{

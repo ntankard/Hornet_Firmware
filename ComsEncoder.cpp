@@ -54,12 +54,13 @@ bool ComsEncoder::sendData(volatile MessageBuffer_Passer *data)
 		return false;
 	}
 
-	int addLoc = _buffer_man[data->getComPri()].add();
-	_buffer[data->getComPri()][addLoc] = data;
 	if (data->isLocked())
 	{
 		return false;
 	}
+	int addLoc = _buffer_man[data->getComPri()].add();
+	_buffer[data->getComPri()][addLoc] = data;
+
 	data->lock();
 
 	return true;

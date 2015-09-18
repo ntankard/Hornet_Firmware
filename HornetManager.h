@@ -45,6 +45,8 @@ private:
 	unsigned long _statusLast;
 	MessageBuffer_Manager<MB_STATUS_SETTINGS> _statusSender;
 
+	int _loopCount;
+
 	//@TODO remove
 	Drone _theDrone;
 	

@@ -166,7 +166,7 @@
 //									| ID				| SIZE	| MONITOR	| COM PRI		| BUFFER SIZE
 //									-----------------------------------------------------------------
 #define MB_ROLL_PITCH_YAW_SETTINGS	MB_ROLL_PITCH_YAW,	3,		10,			C_CL_NAV_INFO,	10
-#define MB_STATUS_SETTINGS			MB_STATUS,			1,		1,			C_CL_SYSTEM_CMD,3
+#define MB_STATUS_SETTINGS			MB_STATUS,			2,		1,			C_CL_SYSTEM_CMD,3
 #define	MB_JOY_XY_SETTING			MB_JOY_XY,			2,		0,			C_CL_NAV_CMD,	1
 #define	MB_JOY_THROTTLE_SETTING		MB_JOY_THROTTLE,	1,		0,			C_CL_NAV_CMD,	1
 #define	MB_JOY_Z_SETTING			MB_JOY_Z,			1,		0,			C_CL_NAV_CMD,	1

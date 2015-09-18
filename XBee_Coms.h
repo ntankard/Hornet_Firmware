@@ -3,6 +3,8 @@
 #include "ComsDecoder.h"
 #include "Runnable.h"
 
+#include "TimeOut.h"
+
 #ifdef USER_XBEE_COMS
 
 //#include "Coms.h"
@@ -44,7 +46,11 @@ private:
 
 	ComsDecoder _comsDecoder;
 
+	uint8_t _dataBuffer[10];
+
 	volatile MessageBuffer_Passer* _pendingMessage;
+
+	TimeOut _sendTimeOut;
 };
 
 #endif
