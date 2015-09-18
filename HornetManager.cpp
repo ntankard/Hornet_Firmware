@@ -75,8 +75,11 @@ void HornetManager::run()
 		volatile MessageBuffer_Passer* toSend = _statusSender.getAvailable();
 		toSend->getData()[0] = _state;
 		newData(toSend);
+		newData(_theDrone.getCurrent());
 		_statusLast += 1000;
 	}
+
+	//@TODO remove
 }
 
 void HornetManager::newMessage(uint8_t data)

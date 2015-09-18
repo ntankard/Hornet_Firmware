@@ -10,6 +10,8 @@ public:
 	volatile MessageBuffer_Passer* newThrottle(int t);
 	volatile MessageBuffer_Passer* newPitchRoll(int p, int r);
 	volatile MessageBuffer_Passer* newYaw(int y);
+
+	volatile MessageBuffer_Passer* getCurrent();
 private:
 
 	void caculateMotor();
