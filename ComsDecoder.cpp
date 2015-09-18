@@ -17,6 +17,9 @@ volatile MessageBuffer_Passer* ComsDecoder::processMessage(uint8_t *data, uint8_
 	case C_COMS_CODE_CONNECT_CONFIRM:
 		_charMessage.setID(data[0]);
 		return &_charMessage;
+	case MB_ARM_DISARM:
+		_charMessage.setID(data[0]);
+		return &_charMessage;
 	case MB_JOY_XY:
 		if (dataLength != 5)
 		{

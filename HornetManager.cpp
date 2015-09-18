@@ -75,7 +75,6 @@ void HornetManager::run()
 		volatile MessageBuffer_Passer* toSend = _statusSender.getAvailable();
 		toSend->getData()[0] = _state;
 		newData(toSend);
-		newData(_theDrone.getCurrent());
 		_statusLast += 1000;
 	}
 
@@ -91,9 +90,29 @@ void HornetManager::newMessage(uint8_t data)
 		{
 			changeState(ST_TO_IDLE);
 		}
+		break;
+	case MB_ARM_DISARM:
+		if (_state == Idle)
+		{
+			takeOff();
+		}
+		else if (_state = Flight)
+		{
+			changeState(ST_TO_IDLE);
+		}
+		break;
 	default:
 		break;
 	}
+}
+
+void HornetManager::takeOff()
+{
+	changeState(ST_TO_TAKEOFF);
+
+	delay(1000);
+
+	changeState(ST_TO_FLIGHT);
 }
 
 void HornetManager::newData(volatile MessageBuffer_Passer* data)
@@ -138,6 +157,10 @@ void HornetManager::changeState(State newState, int indicatorPriority, int comEn
 	_scheduler.setPriority(C_SCHEDULER_GYRO_THREAD, gyroPri);
 
 	_indicator.setDisplay(0, lightSetting, lightBlinks, lightRate);
+
+	volatile MessageBuffer_Passer* toSend = _statusSender.getAvailable();
+	toSend->getData()[0] = _state;
+	newData(toSend);
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------

@@ -23,6 +23,8 @@ public:
 
 private:
 
+	void takeOff();
+
 	void runConnect();
 
 	void changeState(State newState, int indicatorPriority, int comEncoderPri, int gyroPri, int lightSetting, int lightBlinks, int lightRate);

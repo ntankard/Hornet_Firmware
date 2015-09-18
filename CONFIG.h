@@ -141,6 +141,7 @@
 #define MB_JOY_XY			'j'
 #define MB_JOY_THROTTLE		't'
 #define MB_JOY_Z			'z'
+#define MB_ARM_DISARM		'd'
 
 // com priorities
 #define C_CL			6
