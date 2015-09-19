@@ -99,10 +99,12 @@ void HornetManager::newMessage(uint8_t data)
 	case MB_ARM_DISARM:
 		if (_state == Idle)
 		{
+			_theDrone.arm();
 			takeOff();
 		}
 		else if (_state = Flight)
 		{
+			_theDrone.disarm();
 			changeState(ST_TO_IDLE);
 		}
 		break;
@@ -134,15 +136,19 @@ void HornetManager::newData(volatile MessageBuffer_Passer* data)
 	{
 	case MB_JOY_XY:
 		//_theDrone.newPitchRoll(data->getData()[0], data->getData()[1]);
-		newData(_theDrone.newPitchRoll(data->getData()[0], data->getData()[1]));
+		_theDrone.newJoyXY(data);
 		break;
 	case MB_JOY_Z:
 		//_theDrone.newYaw(data->getData()[0]);
-		newData(_theDrone.newYaw(data->getData()[0]));
+		//newData(_theDrone.newYaw(data->getData()[0]));
 		break;
 	case MB_JOY_THROTTLE:
 		//_theDrone.newThrottle(data->getData()[0]);
-		newData(_theDrone.newThrottle(data->getData()[0]));
+		//newData(_theDrone.newThrottle(data->getData()[0]));
+		_theDrone.newJoyThrottle(data);
+		break;
+	case MB_ROLL_PITCH_YAW:
+		_theDrone.newGyro(data);
 		break;
 	default:
 		break;

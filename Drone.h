@@ -2,10 +2,17 @@
 
 #include "MessageBuffer_Manager.h"
 #include "CONFIG.h"
+
+#include "EngineDriver.h"
+
 class Drone
 {
 public:
 	Drone();
+
+	void arm();
+	void disarm();
+	bool isArmed();
 
 	volatile MessageBuffer_Passer* newThrottle(int t);
 	volatile MessageBuffer_Passer* newPitchRoll(int p, int r);
@@ -14,14 +21,17 @@ public:
 	volatile MessageBuffer_Passer* getCurrent();
 private:
 
-	void caculateMotor();
+	void setEngines(int offset =0);
 
 	int _roll;
 	int _pitch;
 	int _yaw;
 	int _throttle;
 
-	int _motorPower[4];
+	bool _isOn;
+
+	int _enginePower[4];
+	EngineDriver _engines[4];
 
 	MessageBuffer_Manager<MB_MOTOR_SETTING> _motorSender;
 };

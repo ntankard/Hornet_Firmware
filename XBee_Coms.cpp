@@ -51,14 +51,12 @@ int Coms::run()
 				{
 					_comsDecoder.sendFailure();	//@TODO make this do sompthing useful
 					_outstandingSent = false;
-					TP("FAIL1");
 				}
 			}
 		}
 		else
 		{
 			_comsDecoder.receiveFailure();	//@TODO sompthing useful
-			TP("FAIL2");
 		}
 	}
 	else

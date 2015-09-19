@@ -1,3 +1,4 @@
+
 #define FOR_HARDWARE 1
 #define FOR_MANUAL_TEST 2
 #define FOR_TEST 3
@@ -8,6 +9,7 @@
 #if BUILD_TYPE == FOR_HARDWARE
 
 #include <Wire.h>
+#include <Servo.h>
 #include "Config.h"
 #include "HornetManager.h"
 
@@ -62,6 +64,9 @@ void loop()
 #include "Test_MessageBuffer.h"
 #include "Test_MessageBuffer_Manager.h"
 
+// will affect the hardware!!
+#include "Test_Drone.h"
+
 void setup()
 {
 	Serial.begin(9600);
@@ -111,6 +116,5 @@ void loop()
 #endif
 
 #if BUILD_TYPE == OTHER
-
 
 #endif
