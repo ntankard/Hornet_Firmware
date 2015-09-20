@@ -1,6 +1,7 @@
 #pragma once 
 #include "Arduino.h"
 #include "math.h"
+#include "Pattern.h"
 
 class Feature
 {
@@ -13,6 +14,4 @@ public:
 private:
 	Pattern* _startPattern;
 	Pattern* _endPattern;
-
-	//@TODO Add in feature code from laptop****
 };

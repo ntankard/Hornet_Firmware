@@ -2,8 +2,28 @@
 
 #if BUILD_TYPE == FOR_TEST
 
-#include "Error.h"
+#include "Feature.h"
 #include "Point.h"
+#include "Pattern.h"
+#include "LidarNavigation.h"
+
+test(Pattern_setup)
+{
+	LidarNavigation* l = new LidarNavigation();
+	PointNode* node = l->getHead();
+	DoublyLinkedNodeIterator<Point> iter = DoublyLinkedNodeIterator<Point>(*node);
+	iter++;
+	for (int i = 0; i < L_POINTS_IN_PATTERN; i++)
+	{
+		iter.getNode()->getValue().setXY(i + 1, i + 1);
+		iter++;
+	}
+	l->createPattern();
+	assertEqual(l->getPattern()->getStartCoordX(), 1);
+	assertEqual(l->getPattern()->getStartCoordY(), 1);
+	assertEqual(l->getPattern()->getEndCoordX(), L_POINTS_IN_PATTERN);
+	assertEqual(l->getPattern()->getEndCoordY(), L_POINTS_IN_PATTERN);
+}
 
 test(isPattern_DeadStraightLine)
 {
@@ -129,4 +149,4 @@ test(isPattern_Line_Broken)
 	assertFalse(l->isPattern());
 }
 
-#endif;
+#endif

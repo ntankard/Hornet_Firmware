@@ -7,6 +7,7 @@
 #include "Pattern.h"
 
 typedef DoublyLinkedNode<Point>::Node PointNode;
+typedef DoublyLinkedNode<Pattern>::Node PatternNode;
 
 class LidarNavigation
 {
@@ -25,23 +26,29 @@ public:
 
 	PointNode* getHead();
 
+	Pattern* getPattern();
+
 	void removePoint(); //removes a point from the start of the linkednodes, ONLY gets called when list is full
 
 	int getSize(); //gets the size of the doublylinkednodes *excludes head and tail
 
 	bool isPattern();
 
-	bool isFeature();
+	void createPattern();
+
+	bool isFeature(Pattern* startPattern, Pattern* endPattern);
+
+	void createFeature();
 
 	bool isAnchor();
+
+	void createAnchor();
 
 private:
 	bool _setup = false;
 	HornetManager *_hornetManager;
 	Error *_e;
 	PointNode* head;
-	Point* start_point;
-	Point* end_point;
 	Pattern* pattern;
 };
 

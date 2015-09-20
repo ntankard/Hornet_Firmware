@@ -1,6 +1,7 @@
 #pragma once
 
 #include "LidarNavigation.h"
+#include "math.h"
 
 
 LidarNavigation::LidarNavigation(HornetManager *theHornetManager, Error *theError)
@@ -54,21 +55,11 @@ void LidarNavigation::processLidarData(float angle, float distance)
 	else
 	{
 		newLidarPoint(angle, distance);
-	}
-
-	if (isPattern())
-	{
-		//add pattern to pattern iter
-		DoublyLinkedNodeIterator<Point> iter = DoublyLinkedNodeIterator<Point>(*head);
-		iter++;
-		start_point = &iter.getNode()->getValue();
-		iter.last();
-		iter--;
-		end_point = &iter.getNode()->getValue();
-		pattern = new Pattern(start_point, end_point);
-		start_point = NULL;
-		end_point = NULL;
-	}
+		if (isPattern())
+		{
+			createPattern();
+		}
+	}	
 }
 
 void LidarNavigation::newLidarPoint(float angle, float distance)
@@ -88,6 +79,11 @@ void LidarNavigation::newLidarPoint(float angle, float distance)
 PointNode* LidarNavigation::getHead()
 {
 	return head;
+}
+
+Pattern* LidarNavigation::getPattern()
+{
+	return pattern;
 }
 
 bool LidarNavigation::isPattern()
@@ -121,20 +117,26 @@ bool LidarNavigation::isPattern()
 		}	
 		else
 		{
-			Serial.println(angleOfBestFit);
 			return false;
 		}
 	}
-	Serial.println(angleOfBestFit);
 	return true;
-
 }
 
-bool LidarNavigation::isFeature()
+
+bool LidarNavigation::isFeature(Pattern* startPattern, Pattern* endPattern)
 {
-	//if you have 2 patterns at 90 degree
-	L_PATTERNS_IN_CORNER_FEATURE;
-	return true;
+	if (abs(startPattern->getEndCoordX() - endPattern->getStartCoordX()) <= L_PATTERN_RANGE_IN_FEATURE)
+	{
+		if (abs(startPattern->getEndCoordY() - endPattern->getStartCoordY()) <= L_PATTERN_RANGE_IN_FEATURE)
+		{
+			if (abs(startPattern->getAngle() - endPattern->getAngle()) < 90 + L_FEATURE_CORNER_ANGLE_TOLERANCE && abs(startPattern->getAngle() - endPattern->getAngle()) > 90 - L_FEATURE_CORNER_ANGLE_TOLERANCE)
+			{
+				return true;
+			}
+		}
+	}
+	return false;
 }
 
 bool LidarNavigation::isAnchor()
@@ -158,6 +160,26 @@ int LidarNavigation::getSize()
 	}
 	return count;
 }
+
+void LidarNavigation::EOSweep(float pitch, float roll, float yaw)
+{
+	// compare sweeps, look for ancors
+}
+
+void LidarNavigation::createPattern() 
+{
+	DoublyLinkedNodeIterator<Point> iter = DoublyLinkedNodeIterator<Point>(*head);
+	iter++;
+	Point* start_point = &iter.getNode()->getValue();
+	iter = iter.last();
+	iter--;
+	Point* end_point = &iter.getNode()->getValue();
+	pattern = new Pattern(start_point, end_point);
+	start_point = NULL;
+	end_point = NULL;
+}
+
+
 
 /*void LidarNavigation::newLidarPoint(float angle, float distance)
 {
@@ -217,8 +239,3 @@ void LidarNavigation::removePoint()
 	delete node;
 	delete point;
 }*/
-
-void LidarNavigation::EOSweep(float pitch, float roll, float yaw)
-{
-	// compare sweeps, look for ancors
-}

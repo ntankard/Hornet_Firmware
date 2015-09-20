@@ -1,6 +1,7 @@
 #pragma once 
 #include "Arduino.h"
 #include "math.h"
+#include "Point.h"
 
 class Pattern
 {
@@ -19,6 +20,26 @@ public:
 	float getAngle() const //returns a copy of _angle
 	{
 		return _angle;
+	}
+
+	float getStartCoordX()
+	{
+		return _start_coorX;
+	}
+
+	float getStartCoordY()
+	{
+		return _start_coorY;
+	}
+
+	float getEndCoordX()
+	{
+		return _end_coorX;
+	}
+
+	float getEndCoordY()
+	{
+		return _end_coorY;
 	}
 
 private:

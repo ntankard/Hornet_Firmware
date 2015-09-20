@@ -21,7 +21,7 @@
 // ----------------------------------------------------------------------------------------------------------------------------
 
 // Pick wich board to use
-#define BOARD_TYPE BOARD_TYPE_UNO
+#define BOARD_TYPE BOARD_TYPE_MEGA
 
 // Pick wich coms to use (XBEE not avalible for uno, will default to SERIAL)
 #define COM_MODE COM_MODE_SERIAL
@@ -151,6 +151,8 @@
 #define L_LINE_TO_LINE_OFFSET 5
 #define L_POINTS_IN_PATTERN 10
 #define L_PATTERNS_IN_CORNER_FEATURE 2
+#define L_PATTERN_RANGE_IN_FEATURE 4
+#define L_FEATURE_CORNER_ANGLE_TOLERANCE 4
 #define L_FEATURE_RECURRENCE_IN_ANCHOR 3
 
 //-----------------------------------------------------------------------------------------------------------------------------
