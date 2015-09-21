@@ -79,6 +79,7 @@ void HornetManager::run()
 		toSend->getData()[0] = _state;
 		toSend->getData()[1] = _loopCount;
 		newData(toSend);
+		//newData(_theDrone.getCurrent());
 		_statusLast += 1000;
 		_loopCount = 0;
 	}
@@ -137,6 +138,7 @@ void HornetManager::newData(volatile MessageBuffer_Passer* data)
 	case MB_JOY_XY:
 		//_theDrone.newPitchRoll(data->getData()[0], data->getData()[1]);
 		_theDrone.newJoyXY(data);
+		newData(_theDrone.getCurrent());
 		break;
 	case MB_JOY_Z:
 		//_theDrone.newYaw(data->getData()[0]);
@@ -146,9 +148,11 @@ void HornetManager::newData(volatile MessageBuffer_Passer* data)
 		//_theDrone.newThrottle(data->getData()[0]);
 		//newData(_theDrone.newThrottle(data->getData()[0]));
 		_theDrone.newJoyThrottle(data);
+		newData(_theDrone.getCurrent());
 		break;
 	case MB_ROLL_PITCH_YAW:
 		_theDrone.newGyro(data);
+		newData(_theDrone.getCurrent());
 		break;
 	default:
 		break;

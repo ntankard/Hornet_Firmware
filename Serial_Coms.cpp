@@ -13,9 +13,9 @@ Coms::Coms()
 
 int Coms::run()
 {
-	while (C_COMS_PORT.available())	// keep reading untill a full packet has been read
+	while (C_SERIAL_COMS_PORT.available())	// keep reading untill a full packet has been read
 	{
-		uint8_t read = C_COMS_PORT.read();
+		uint8_t read = C_SERIAL_COMS_PORT.read();
 		if (read == '\n')
 		{
 			_pendingMessage = _comsDecoder.processMessage(_buffer, _readData);
@@ -44,8 +44,8 @@ void Coms::send(uint8_t *data, uint8_t dataLength)
 {
 	for (int i = 0; i < dataLength; i++)
 	{
-		C_COMS_PORT.write(data[i]);
+		C_SERIAL_COMS_PORT.write(data[i]);
 	}
-	C_COMS_PORT.write("\n");
+	C_SERIAL_COMS_PORT.write("\n");
 }
 #endif

@@ -79,9 +79,14 @@ void Stabilizer::caculateDronePos()
 	int16_t deltaPitch = targetPitch - currentPitch;
 	int16_t deltaYaw = targetYaw - currentYaw;
 
-	int16_t settingRoll = deltaRoll / 2000;
-	int16_t settingPitch = deltaPitch / 2000;
-	int16_t settingYaw = deltaYaw / 2000;
+
+	//TP("TARGET :" + (String)targetRoll + "  CURRENT :" + (String)currentRoll);
+
+	TP((String)deltaRoll);
+
+	int16_t settingRoll = deltaRoll / 100;
+	int16_t settingPitch = deltaPitch / 100;
+	int16_t settingYaw = deltaYaw / 100;
 
 	_theDrone.newPitchRoll(settingPitch, settingRoll);
 	_theDrone.newYaw(settingYaw);

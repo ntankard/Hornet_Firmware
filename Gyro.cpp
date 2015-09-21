@@ -96,9 +96,9 @@ int Gyro::run()
 
 
 	_toSend = _rollPitchYawSender.getAvailable();
-	_toSend->getData()[0] = ypr[0]*10000;
+	_toSend->getData()[0] = ypr[2]*10000;
 	_toSend->getData()[1] = ypr[1]*10000;
-	_toSend->getData()[2] = ypr[2]*10000;
+	_toSend->getData()[2] = ypr[0]*10000;
 
 	return 1;
 }

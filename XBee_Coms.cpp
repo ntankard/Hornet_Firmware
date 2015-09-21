@@ -9,7 +9,7 @@ Coms::Coms()
 	//_tx16 = Tx16Request(C_COMMS_BSTATION_ADDRESS, (uint8_t*)data, 1);
 
 	// setup the conection to the XBEE
-	_xbee.begin(C_COMS_PORT);
+	_xbee.begin(C_XBEE_COMS_PORT);
 	_outstandingSent = false;
 
 }

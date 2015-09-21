@@ -8,6 +8,8 @@
 #define ENABLE	1
 #define DISABLE 2
 
+#define XBEE	1
+#define SERIAL	2
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // ----------------------------------------------------- BUILD CONFIG ---------------------------------------------------------
@@ -17,6 +19,8 @@
 
 #define ENABLE_INDICATOR	ENABLE
 #define ENABLE_GYRO			ENABLE
+
+#define COM_MODE			SERIAL
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // ---------------------------------------------------- BOARD FEATURES --------------------------------------------------------
@@ -50,8 +54,14 @@
 #define USE_MPU6050
 #endif
 
-//#define USER_SERIAL_COMS
+#if COM_MODE == XBEE
 #define USER_XBEE_COMS
+#endif
+#if COM_MODE == SERIAL
+#define USER_SERIAL_COMS
+#endif
+
+
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // --------------------------------------------------- GENERAL SETTINGS -------------------------------------------------------
@@ -59,7 +69,8 @@
 
 #define C_ERROR_BUFFER 10
 #define C_COMS_BUFFER 10
-#define C_COMS_PORT Serial2		//@TODO make this dynamic
+#define C_SERIAL_COMS_PORT Serial		//@TODO make this dynamic
+#define C_XBEE_COMS_PORT Serial2		//@TODO make this dynamic
 #define C_COMENCODER_SIZE 10
 #define C_COMENCODER_M_SIZE 20
 #define C_CONNECT_PULSE_TIME 1000
@@ -175,5 +186,5 @@
 #define	MB_JOY_XY_SETTING			MB_JOY_XY,			2,		0,			C_CL_NAV_CMD,	1
 #define	MB_JOY_THROTTLE_SETTING		MB_JOY_THROTTLE,	1,		0,			C_CL_NAV_CMD,	1
 #define	MB_JOY_Z_SETTING			MB_JOY_Z,			1,		0,			C_CL_NAV_CMD,	1
-#define	MB_MOTOR_SETTING			MB_MOTOR,			4,		1,			C_CL_NAV_INFO,	20
+#define	MB_MOTOR_SETTING			MB_MOTOR,			4,		10,			C_CL_NAV_INFO,	20
 

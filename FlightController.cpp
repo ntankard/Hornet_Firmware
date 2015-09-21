@@ -20,7 +20,7 @@ void FlightController::arm()
 void FlightController::disarm()
 {
 	_theStabilizer.disarm();
-	_isArmed = true;
+	_isArmed = false;
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------
@@ -29,7 +29,7 @@ void FlightController::newGyro(volatile MessageBuffer_Passer *gyro)
 {
 	if (!_isArmed)
 	{
-		_lastYaw = gyro->getData()[3];
+		_lastYaw = gyro->getData()[2];
 	}
 	else
 	{
@@ -41,7 +41,7 @@ void FlightController::newGyro(volatile MessageBuffer_Passer *gyro)
 
 void FlightController::newJoyXY(volatile MessageBuffer_Passer *XY)
 {
-	int MAX_ANGLE = 5235;
+	int16_t MAX_ANGLE = 80;
 
 	_theStabilizer.newTargetPos(MAX_ANGLE * XY->getData()[0], MAX_ANGLE * XY->getData()[1]);
 }
