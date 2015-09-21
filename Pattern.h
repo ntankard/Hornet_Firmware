@@ -21,7 +21,6 @@ public:
 
 	void setPattern(Point* start, Point* end)
 	{
-		_state = SET;
 		_start_coorX = start->getX();
 		_start_coorY = start->getY();
 		_end_coorX = end->getX();
@@ -52,6 +51,16 @@ public:
 	float getEndCoordY()
 	{
 		return _end_coorY;
+	}
+
+	DataState getState()
+	{
+		return _state;
+	}
+
+	void setState(DataState state)
+	{
+		_state = state;
 	}
 
 private:

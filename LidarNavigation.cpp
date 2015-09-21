@@ -71,6 +71,21 @@ void LidarNavigation::setupPoints(float angle, float distance)
 
 void LidarNavigation::processLidarData(float angle, float distance)
 {
+	pointManager(angle, distance);
+	if (pointManager->isPattern())
+	{
+		patternManager->addPattern(pointManager->getStartPoint(), pointManager->getEndPoint());
+		if (patternManager->isFeature())
+		{
+			featureManager->addFeature(patternManager->getEnterPattern(), patternManager->getExitPattern());
+			if (featureManager->isAnchor())
+			{
+				anchorManager->addAnchor(featureManager->getRecurringFeature());
+			}
+		}
+	}
+}
+PointManager stuff below
 	if (!_setup) 
 	{
 		setupPoints(angle, distance);
