@@ -15,6 +15,7 @@ PointManager::PointManager()
 		PointNode* node = new PointNode(*point);
 		_pointList->insertAfter(*node);
 	}
+	_setup = false;
 }
 
 void PointManager::addPoint(float angle, float distance)
@@ -40,21 +41,17 @@ void PointManager::addPoint(float angle, float distance)
 void PointManager::setupPoint(float angle, float distance)
 {
 	DoublyLinkedNodeIterator<Point> iter = DoublyLinkedNodeIterator<Point>(*_pointList);
+	iter = iter.first();
+	for (iter; iter.getNode()->getValue().getState() != NULLPOINT; iter++)
+	{
+		//goes to the next NULLPOINT
+	}
+	iter.getNode()->getValue().setPoint(angle, distance, DATA);
 	iter = iter.last();
 	iter--;
 	if (iter.getNode()->getValue().getState() == DATA)
 	{
 		_setup = true;
-		addPoint(angle, distance); //call here so we don't lose a point
-	}
-	else
-	{
-		iter = iter.first();
-		for (iter; iter.getNode()->getValue().getState() != NULLPOINT; iter++)
-		{
-			//goes to the next NULLPOINT
-		}
-		iter.getNode()->getValue().setPoint(angle, distance, DATA);
 	}
 }
 
@@ -99,7 +96,7 @@ bool PointManager::isPattern()
 	return false;
 }
 
-PointNode* PointManager::gePointList()
+PointNode* PointManager::getPointList()
 {
 	return _pointList;
 }

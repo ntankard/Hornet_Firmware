@@ -1,5 +1,6 @@
 #pragma once
 
+#include "CONFIG.h"
 #include "Pattern.h"
 
 class PatternManager
