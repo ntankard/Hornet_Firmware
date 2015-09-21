@@ -12,6 +12,7 @@ public:
 	bool isFeature();
 	Pattern* getEnterPattern();
 	Pattern* getExitPattern();
+	bool isSetup();
 private:
 	bool _setup;
 	Pattern* _enterPattern;

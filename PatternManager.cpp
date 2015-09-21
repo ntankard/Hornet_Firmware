@@ -64,3 +64,8 @@ Pattern* PatternManager::getExitPattern()
 {
 	return _exitPattern;
 }
+
+bool PatternManager::isSetup()
+{
+	return _setup;
+}

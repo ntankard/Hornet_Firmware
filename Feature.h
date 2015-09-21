@@ -1,22 +1,51 @@
 #pragma once 
 #include "Arduino.h"
-#include "math.h"
 #include "Pattern.h"
+
+enum FeatureState { FEATURE_HEAD, FEATURE_TAIL, FEATURE_NULL, FEATURE_DATA };
 
 class Feature
 {
 public:
-	Feature(Pattern* enterPattern, Pattern* exitPattern)
+	Feature(FeatureState state)
 	{
-		float _enter_start_coorX = enterPattern->getStartCoordX();
-		float _enter_start_coorY = enterPattern->getStartCoordY();
-		float _enter_end_coorX = enterPattern->getEndCoordX();
-		float _enter_end_coorY = enterPattern->getEndCoordY();
+		_state = state;
 
-		float _exit_start_coorX = exitPattern->getStartCoordX();
-		float _exit_start_coorY = exitPattern->getStartCoordY();
-		float _exit_end_coorX = exitPattern->getEndCoordX();
-		float _exit_end_coorY = exitPattern->getEndCoordY();
+		_enter_start_coorX = 0;
+		_enter_start_coorY = 0;
+		_enter_end_coorX = 0;
+		_enter_end_coorY = 0;
+
+		_exit_start_coorX = 0;
+		_exit_start_coorY = 0;
+		_exit_end_coorX = 0;
+		_exit_end_coorY = 0;
+
+		_life = 0;
+		_occurances = 0;
+	}
+
+	void setFeature(Pattern* enterPattern, Pattern* exitPattern)
+	{
+		_state = FEATURE_DATA;
+
+		_enter_start_coorX = enterPattern->getStartCoordX();
+		_enter_start_coorY = enterPattern->getStartCoordY();
+		_enter_end_coorX = enterPattern->getEndCoordX();
+		_enter_end_coorY = enterPattern->getEndCoordY();
+
+		_exit_start_coorX = exitPattern->getStartCoordX();
+		_exit_start_coorY = exitPattern->getStartCoordY();
+		_exit_end_coorX = exitPattern->getEndCoordX();
+		_exit_end_coorY = exitPattern->getEndCoordY();
+
+		_life = L_FEATURE_LIFE;
+		_occurances = 0;
+	}
+
+	FeatureState getState()
+	{
+		return _state;
 	}
 
 	float getEnterStartX()
@@ -46,7 +75,7 @@ public:
 
 	float getExitStartY()
 	{
-		return _exit_start_coorY
+		return _exit_start_coorY;
 	}
 
 	float getExitEndX()
@@ -59,7 +88,24 @@ public:
 		return _exit_end_coorY;
 	}
 
+	void loseLife()
+	{
+		_life--;
+	}
+
+	int getLife()
+	{
+		return _life;
+	}
+
+	void setState(FeatureState state)
+	{
+		_state = state;
+	}
+
 private:
+	FeatureState _state;
+
 	float _enter_start_coorX;
 	float _enter_start_coorY;
 	float _enter_end_coorX;
@@ -69,4 +115,7 @@ private:
 	float _exit_start_coorY;
 	float _exit_end_coorX;
 	float _exit_end_coorY;
+
+	int _life;
+	int _occurances;
 };
