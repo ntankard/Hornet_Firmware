@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Point.h"
+#include "DoublyLinkedNodeIterator.h"
 
 typedef DoublyLinkedNode<Point>::Node PointNode;
 

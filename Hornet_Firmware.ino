@@ -112,7 +112,8 @@ void loop()
 //#include "Test_Point.h"
 //#include "Test_DoublyLinkedNodeIterator.h"
 //#include "Test_Pattern.h"
-#include "Test_Feature.h"
+//#include "Test_Feature.h"
+#include "Test_PointManager.h"
 
 void setup()
 {
