@@ -16,6 +16,10 @@ public:
 
 	LidarNavigation();//used for testing
 
+	void initPointList();
+
+	void initPatternList();
+
 	void setupPoints(float angle, float distance);
 
 	void processLidarData(float angle, float distance);
@@ -26,7 +30,9 @@ public:
 
 	PointNode* getHead();
 
-	Pattern* getPattern();
+	PatternNode* getPatternList();
+
+	Pattern* getPattern(int index);
 
 	void removePoint(); //removes a point from the start of the linkednodes, ONLY gets called when list is full
 
@@ -49,7 +55,7 @@ private:
 	HornetManager *_hornetManager;
 	Error *_e;
 	PointNode* head;
-	Pattern* pattern;
+	PatternNode* patternList;
 };
 
 

@@ -154,6 +154,7 @@
 #define L_PATTERN_RANGE_IN_FEATURE 4
 #define L_FEATURE_CORNER_ANGLE_TOLERANCE 4
 #define L_FEATURE_RECURRENCE_IN_ANCHOR 3
+#define L_PATTERNS_STORED 10
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // ---------------------------------------------------- COMM SETTINGS ---------------------------------------------------------

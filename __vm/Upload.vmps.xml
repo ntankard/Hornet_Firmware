@@ -1,0 +1,11 @@
+<VisualMicro>
+  <Program Name="Hornet_Firmware" Ext=".ino" Location="D:\Uni\Hornet_Drone\Hornet_Firmware">
+    <Compile IsDebugStart="1" CompilerErrors="0" ConfigurationName="Debug" StopOnError="False" OptimiseLibs="True" OptimiseCore="True" BuildPath="C:\Users\Matt\AppData\Local\V.Micro\Arduino\Builds\Hornet_Firmware\mega_atmega2560" IncludeDebug="0" IncludesDebug="0" SketchName="Hornet_Firmware" IsCompiled="1" />
+    <Platform Name="arduino16x" Package="arduino" Platform="avr" Architecture="avr">
+    </Platform>
+    <Debug DebugEnabled="0" EnableBreak="1" />
+    <VCCodeModel>
+      <VCCodeMacros />
+    </VCCodeModel>
+  </Program>
+</VisualMicro>

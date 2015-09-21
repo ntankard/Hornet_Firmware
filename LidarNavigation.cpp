@@ -2,6 +2,7 @@
 
 #include "LidarNavigation.h"
 #include "math.h"
+#include "Pattern.h"
 
 
 LidarNavigation::LidarNavigation(HornetManager *theHornetManager, Error *theError)
@@ -11,6 +12,14 @@ LidarNavigation::LidarNavigation(HornetManager *theHornetManager, Error *theErro
 }
 
 LidarNavigation::LidarNavigation()
+{
+	//setup PointList
+	initPointList();
+	//setup PatternList
+	initPatternList();
+}
+
+void LidarNavigation::initPointList() 
 {
 	Point* headPoint = new Point(HEAD);
 	head = new PointNode(*headPoint);
@@ -25,6 +34,20 @@ LidarNavigation::LidarNavigation()
 	}
 }
 
+void LidarNavigation::initPatternList()
+{
+	Pattern* headPattern = new Pattern(patternHEAD);
+	patternList = new PatternNode(*headPattern);
+	Pattern* tailPattern = new Pattern(patternTAIL);
+	PatternNode* tail = new PatternNode(*tailPattern);
+	patternList->insertAfter(*tail);
+	for (int i = 0; i < L_PATTERNS_STORED; i++)
+	{
+		Pattern* pattern = new Pattern(patternNULL);
+		PatternNode* node = new PatternNode(*pattern);
+		patternList->insertAfter(*node);
+	}
+}
 void LidarNavigation::setupPoints(float angle, float distance)
 {
 	DoublyLinkedNodeIterator<Point> iter = DoublyLinkedNodeIterator<Point>(*head);
@@ -81,9 +104,19 @@ PointNode* LidarNavigation::getHead()
 	return head;
 }
 
-Pattern* LidarNavigation::getPattern()
+PatternNode* LidarNavigation::getPatternList()
 {
-	return pattern;
+	return patternList;
+}
+
+Pattern* LidarNavigation::getPattern(int index)
+{
+	DoublyLinkedNodeIterator<Pattern> iter = DoublyLinkedNodeIterator<Pattern>(*getPatternList());
+	for (index; index > 0; index--)
+	{
+		iter++;
+	}
+	return &iter.getNode()->getValue();
 }
 
 bool LidarNavigation::isPattern()
@@ -168,13 +201,15 @@ void LidarNavigation::EOSweep(float pitch, float roll, float yaw)
 
 void LidarNavigation::createPattern() 
 {
-	DoublyLinkedNodeIterator<Point> iter = DoublyLinkedNodeIterator<Point>(*head);
-	iter++;
-	Point* start_point = &iter.getNode()->getValue();
-	iter = iter.last();
-	iter--;
-	Point* end_point = &iter.getNode()->getValue();
-	pattern = new Pattern(start_point, end_point);
+	DoublyLinkedNodeIterator<Point> pointIter = DoublyLinkedNodeIterator<Point>(*head);
+	pointIter++;
+	Point* start_point = &pointIter.getNode()->getValue();
+	pointIter = pointIter.last();
+	pointIter--;
+	Point* end_point = &pointIter.getNode()->getValue();
+	DoublyLinkedNodeIterator<Pattern> patternIter = DoublyLinkedNodeIterator<Pattern>(*patternList);
+	patternIter++;
+	patternIter.getNode()->getValue().setPattern(start_point, end_point);
 	start_point = NULL;
 	end_point = NULL;
 }
