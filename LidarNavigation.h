@@ -2,60 +2,26 @@
 
 #include "HornetManager.h"
 #include "Error.h"
-#include "DoublyLinkedNodeIterator.h"
-#include "Point.h"
-#include "Pattern.h"
-
-typedef DoublyLinkedNode<Point>::Node PointNode;
-typedef DoublyLinkedNode<Pattern>::Node PatternNode;
+#include "PointManager.h"
+#include "PatternManager.h"
+//#include "FeatureManager.h"
+//#include "AnchorManager.h"
 
 class LidarNavigation
 {
 public:
 	LidarNavigation(HornetManager *theHornetManager, Error *theError);
-
-	LidarNavigation();//used for testing
-
-	void initPointList();
-
-	void initPatternList();
-
-	void setupPoints(float angle, float distance);
-
+	LidarNavigation();
 	void processLidarData(float angle, float distance);
-
-	void newLidarPoint(float angle, float distance);
-
 	void EOSweep(float pitch, float roll, float yaw);
 
-	PointNode* getHead();
-
-	PatternNode* getPatternList();
-
-	Pattern* getPattern(int index);
-
-	void removePoint(); //removes a point from the start of the linkednodes, ONLY gets called when list is full
-
-	int getSize(); //gets the size of the doublylinkednodes *excludes head and tail
-
-	bool isPattern();
-
-	void createPattern();
-
-	bool isFeature(Pattern* startPattern, Pattern* endPattern);
-
-	void createFeature();
-
-	bool isAnchor();
-
-	void createAnchor();
-
 private:
-	bool _setup = false;
+	PointManager* _pointManager;
+	PatternManager* _patternManager;
+	//FeatureManager* _featureManager;
+	//AnchorManager* _anchorManager;
 	HornetManager *_hornetManager;
 	Error *_e;
-	PointNode* head;
-	PatternNode* patternList;
 };
 
 

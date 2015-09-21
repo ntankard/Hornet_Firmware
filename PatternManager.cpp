@@ -4,8 +4,8 @@
 
 PatternManager::PatternManager()
 {
-	_startPattern = new Pattern(NOT_SET);
-	_endPattern = new Pattern(NOT_SET);
+	_enterPattern = new Pattern(NOT_SET);
+	_exitPattern = new Pattern(NOT_SET);
 	_setup = false;
 }
 
@@ -17,29 +17,50 @@ void PatternManager::addPattern(Point* startPoint, Point* endPoint)
 	}
 	else
 	{
-		Pattern* temp = _startPattern;
-		_startPattern = _endPattern;
-		_endPattern = temp;
-		_endPattern->setPattern(startPoint, endPoint);
+		Pattern* temp = _enterPattern;
+		_enterPattern = _exitPattern;
+		_exitPattern = temp;
+		_exitPattern->setPattern(startPoint, endPoint);
 	}
 }
 
 void PatternManager::setupPattern(Point* startPoint, Point* endPoint)
 {
-	if (_startPattern->getState() == NOT_SET)
+	if (_enterPattern->getState() == NOT_SET)
 	{
-		_startPattern->setPattern(startPoint, endPoint);
-		_startPattern->setState(SET);
+		_enterPattern->setPattern(startPoint, endPoint, SET);
 	} 
-	else if (_endPattern->getState() == NOT_SET)
+	else if (_exitPattern->getState() == NOT_SET)
 	{
-		_endPattern->setPattern(startPoint, endPoint);
-		_endPattern->setState(SET);
+		_exitPattern->setPattern(startPoint, endPoint, SET);
 		_setup = true;
 	}	
 }
 
-bool PatternManager::isSetup()
+bool PatternManager::isFeature()
 {
-	return _setup;
+	if (_setup)
+	{
+		if (abs(_enterPattern->getEndCoordX() - _exitPattern->getStartCoordX()) <= L_PATTERN_RANGE_IN_FEATURE)
+		{
+			if (abs(_enterPattern->getEndCoordY() - _exitPattern->getStartCoordY()) <= L_PATTERN_RANGE_IN_FEATURE)
+			{
+				if (abs(_enterPattern->getAngle() - _exitPattern->getAngle()) < 90 + L_FEATURE_CORNER_ANGLE_TOLERANCE && abs(_enterPattern->getAngle() - _exitPattern->getAngle()) > 90 - L_FEATURE_CORNER_ANGLE_TOLERANCE)
+				{
+					return true;
+				}
+			}
+		}
+	}	
+	return false;
+}
+
+Pattern* PatternManager::getEnterPattern()
+{
+	return _enterPattern;
+}
+
+Pattern* PatternManager::getExitPattern()
+{
+	return _exitPattern;
 }
