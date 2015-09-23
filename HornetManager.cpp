@@ -4,7 +4,7 @@
 // ---------------------------------------------------- CONSTRUCTION ----------------------------------------------------------
 // ----------------------------------------------------------------------------------------------------------------------------
 
-HornetManager::HornetManager() :_scheduler(&_e), _indicator(&_e), _comsEncoder(&_e)
+HornetManager::HornetManager() :_scheduler(&_e), _indicator(&_e), _comsEncoder(&_e), _lidar(&_e)
 {
 	_state = Init;
 }
@@ -18,16 +18,27 @@ void HornetManager::start()
 	_scheduler.addRunable(C_SCHEDULER_INDICATOR_THREAD, &_indicator);
 	_scheduler.addRunable(C_SCHEDULER_COMENCODER_THREAD, &_comsEncoder);
 	_scheduler.addRunable(C_SCHEDULER_GYRO_THREAD, &_gyro);
+	_scheduler.addRunable(C_SCHEDULER_LIDAR_THREAD, &_lidar);
 
 	// start all objects
-	if (!_scheduler.finish() || !_scheduler.startAll())
+	if (!_scheduler.finish())
 	{
 		_indicator.safeOn();
 		while (true)
 		{
-			TP("Not all objects attached")//@TODO add build exeption here
+			TP("Finish Error: Not all objects attached");//@TODO add build exeption here
 			delay(500);
 		}
+	}
+	if (!_scheduler.startAll())
+	{
+		_indicator.safeOn();
+		while (true)
+		{
+			TP("Start Error: Not all objects attached");//@TODO add build exeption here
+			delay(500);
+		}
+
 	}
 
 	// transition to an operating state
@@ -63,7 +74,7 @@ void HornetManager::run()
 		_indicator.safeOn();
 		while (true){
 			TP("ERROR");
-			TP((String)line)
+			TP((String)line);
 				delay(500);
 		}
 	}
@@ -146,13 +157,14 @@ void HornetManager::newData(volatile MessageBuffer_Passer* data)
 
 //-----------------------------------------------------------------------------------------------------------------------------
 
-void HornetManager::changeState(State newState, int indicatorPriority, int comEncoderPri, int gyroPri, int lightSetting, int lightBlinks, int lightRate)
+void HornetManager::changeState(State newState, int indicatorPriority, int comEncoderPri, int gyroPri, int lidarPri, int lightSetting, int lightBlinks, int lightRate)
 {
 	_state = newState;
 
 	_scheduler.setPriority(C_SCHEDULER_INDICATOR_THREAD, indicatorPriority);
 	_scheduler.setPriority(C_SCHEDULER_COMENCODER_THREAD, comEncoderPri);
 	_scheduler.setPriority(C_SCHEDULER_GYRO_THREAD, gyroPri);
+	_scheduler.setPriority(C_SCHEDULER_LIDAR_THREAD, lidarPri);
 
 	_indicator.setDisplay(0, lightSetting, lightBlinks, lightRate);
 

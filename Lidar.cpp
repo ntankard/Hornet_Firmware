@@ -1,88 +1,103 @@
 #include "Lidar.h"
-#include "CONFIG.h"
+#include "TimeOut.h"
 
-#if ENABLE_LIDAR == ENABLED
 
-Lidar::Lidar(HornetManager* theManager)
+Lidar::Lidar(volatile Error* e) :_lidarComs(e)
 {
-	_hornetManager = theManager;
 }
 
-void Lidar::start()
+bool Lidar::start()
 {
-	/*_lidar.begin(C_LIDAR_SERIAL);
+	// Activate motor
 	pinMode(C_LIDAR_MOTOCTL, OUTPUT);
+	analogWrite(C_LIDAR_MOTOCTL, 255);
 
-	analogWrite(C_LIDAR_MOTOCTL, 0); //stop the rplidar motor
-	
-	Serial.println("Start");
-	
-	// try to detect RPLIDAR... 
-	rplidar_response_device_info_t info;
-	if (IS_OK(_lidar.getDeviceInfo(info, 100))) {
-		// detected...
-		_lidar.startScan();
+	// Reset
+	_lidarComs.sendRequest(RPLIDAR_CMD_RESET);
+	_lidarComs.run();
 
-		// start motor rotating at max allowed speed
-		analogWrite(C_LIDAR_MOTOCTL, 255);
-		Serial.println("Lidar Running");
-	}
-	else
+	//Empty buffer (extra data that was sent before the reset)
+	delay(1000);
+	while (C_LIDAR_SERIAL.available())
 	{
-		Serial.println("Lidar Error");
-		//@TODO add throw here
-	}*/
+		char t = C_LIDAR_SERIAL.read();
 
-	_lidar.begin(C_LIDAR_SERIAL);
+	}
 
-	// set pin modes
-	pinMode(C_LIDAR_MOTOCTL, OUTPUT);
+	// Check device health
+	TimeOut timeOut;
+	timeOut.start(1000);
+	_lidarComs.sendRequest(RPLIDAR_CMD_GET_DEVICE_HEALTH);
+	while (true)
+	{
+		_lidarComs.run();
+		if (_lidarComs.getIsDone())
+		{
+			HealthPacket theHealthPacket = _lidarComs.getLastHealthPacket();
+			DEBUG_PRINTLN("LIDAR Error Code: " + (String)theHealthPacket.data.error_code);
+			DEBUG_PRINTLN("LIDAR Status:     " + (String)theHealthPacket.data.status);
+			if (theHealthPacket.data.error_code != 0 || theHealthPacket.data.status != 0)
+			{
+				analogWrite(C_LIDAR_MOTOCTL, 0);
+				return false;
+			}
+
+			break;
+		}
+		if (timeOut.hasTimeOut())
+		{
+			analogWrite(C_LIDAR_MOTOCTL, 0);
+			return false;
+		}
+	}
+
+	// Check device info
+	timeOut.start(1000);
+	_lidarComs.sendRequest(RPLIDAR_CMD_GET_DEVICE_INFO);
+	while (true)
+	{
+		_lidarComs.run();
+		if (_lidarComs.getIsDone())
+		{
+			InfoPacket theInfoPacket = _lidarComs.getLastInfoPacket();
+			DEBUG_PRINTLN("LIDAR Firmware Version: " + (String)theInfoPacket.data.firmware_version);
+			DEBUG_PRINTLN("LIDAR Hardware Version: " + (String)theInfoPacket.data.hardware_version);
+			DEBUG_PRINTLN("LIDAR Model:            " + (String)theInfoPacket.data.model);
+			if (theInfoPacket.data.firmware_version != 271 || theInfoPacket.data.hardware_version != 0 || theInfoPacket.data.model != 0)
+			{
+				analogWrite(C_LIDAR_MOTOCTL, 0);
+				return false;
+			}
+			break;
+		}
+		if (timeOut.hasTimeOut())
+		{
+			analogWrite(C_LIDAR_MOTOCTL, 0);
+			return false;
+		}
+	}
+	// Lidar checks completed, start scan
+	_lidarComs.sendRequest(RPLIDAR_CMD_SCAN);
+
 }
 
-void Lidar::run()
+
+int Lidar::run()
 {
-	/*if (IS_OK(_lidar.waitPoint())) {
-		float distance = _lidar.getCurrentPoint().distance; //distance value in mm unit
-		float angle = _lidar.getCurrentPoint().angle; //angle value in degree
-		bool  startBit = _lidar.getCurrentPoint().startBit; //whether this point is belong to a new scan
-		byte  quality = _lidar.getCurrentPoint().quality; //quality of the current measurement
-
-		//@TODO add notification
-		if (startBit)
+		
+	_lidarComs.run();
+		if (_lidarComs.getIsDone())
 		{
-			// Notify sweep complete
-			_hornetManager->ND_LidarPoint(angle, distance);
-			_hornetManager->ND_LidarEOSweep(0, 0, 0); //@TODO add data
+			DataPacket theData = _lidarComs.getLastDataPacket();
+
+			float angle = ((theData.data.angle >> 1) / 64);
+			float distance = ((theData.data.distance) / 4.0f);
+
+			_toSend = _lidarSender.getAvailable();
+			_toSend->getData()[0] = angle * 80;
+			_toSend->getData()[1] = distance;
+			return 1;
 		}
-		else
-		{
-			// Notify normal point
-			_hornetManager->ND_LidarPoint(angle, distance);
-		}
-	}*/
-	if (IS_OK(_lidar.waitPoint())) {
-		float distance = _lidar.getCurrentPoint().distance; //distance value in mm unit
-		float angle = _lidar.getCurrentPoint().angle; //anglue value in degree
-		bool  startBit = _lidar.getCurrentPoint().startBit; //whether this point is belong to a new scan
-		byte  quality = _lidar.getCurrentPoint().quality; //quality of the current measurement
-
-		Serial.println(distance);
-	}
-	else {
-		analogWrite(C_LIDAR_MOTOCTL, 0); //stop the rplidar motor
-
-		// try to detect RPLIDAR... 
-		rplidar_response_device_info_t info;
-		if (IS_OK(_lidar.getDeviceInfo(info, 100))) {
-			// detected...
-			_lidar.startScan();
-
-			// start motor rotating at max allowed speed
-			analogWrite(C_LIDAR_MOTOCTL, 255); //255 is 5.5 Hz?
-		}
-	}
-
-
+		return 0;
 }
 
-#endif

@@ -10,13 +10,14 @@
 #include <Wire.h>
 #include "Config.h"
 #include "HornetManager.h"
+#include "Arduino.h"
 
 HornetManager hornetManager;
 
 void setup()
 {
 
-	Serial.begin(9600);	//@TODO this should be in the USB serial
+	Serial.begin(115200);	//@TODO this should be in the USB serial
 	Serial.clearWriteError();
 	Serial.flush();
 	while (Serial.available())
@@ -26,7 +27,17 @@ void setup()
 	delay(500);
 	Wire.begin();	// no idea why this needs to be here
 
+#ifdef USE_LIDAR
+	C_LIDAR_SERIAL.begin(115200);	//@TODO this should be in the USB serial
+	C_LIDAR_SERIAL.clearWriteError();
+	C_LIDAR_SERIAL.flush();
+	while (C_LIDAR_SERIAL.available())
+	{
+		C_LIDAR_SERIAL.read();
+	}
+	delay(500);
 
+#endif
 	DEBUG_PRINT("Start Setup");
 
 	hornetManager.start();
@@ -68,12 +79,15 @@ void loop()
 
 #include <Wire.h>
 
-//#include "MTest_DM_Indicator.h"
+#include "MTest_DM_Indicator.h"
 #include "MTest_Gyro.h"
+#include "MTest_LidarComs.h"
+#include "MTest_Lidar.h"
+#include "CONFIG.h"
 
 void setup()
 {
-	Serial.begin(9600);	//@TODO this should be in the USB serial
+	Serial.begin(115200);	//@TODO this should be in the USB serial
 	Serial.clearWriteError();
 	Serial.flush();
 	while (Serial.available())
@@ -83,6 +97,18 @@ void setup()
 	delay(500);
 	Wire.begin();	// no idea why this needs to be here
 
+#ifdef USE_LIDAR
+	C_LIDAR_SERIAL.begin(115200);	//@TODO this should be in the USB serial
+	C_LIDAR_SERIAL.clearWriteError();
+	C_LIDAR_SERIAL.flush();
+	while (C_LIDAR_SERIAL.available())
+	{
+		C_LIDAR_SERIAL.read();
+	}
+	delay(500);
+
+#endif
+
 	//MTest_DM_Indicator_Points();
 	//MTest_DM_Indicator_Safe();
 	//MTest_DM_Indicator_SafeWithBlink();
@@ -91,7 +117,13 @@ void setup()
 	//MTest_DM_Indicator_Blink();
 	//MTest_DM_Indicator_Sequence();
 
-	MTest_Gyro_Print();
+	//MTest_Gyro_Print();
+
+
+	//MTest_LidarComs_Print();
+	//MTest_LidarComs_PrintAll();
+
+	MTest_Lidar_Print();
 }
 
 void loop()

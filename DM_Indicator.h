@@ -132,7 +132,7 @@ private:
 class Indicator :public Runnable{
 public:
 	Indicator(volatile Error *e){}
-	bool start(){return false;}
+	bool start(){return true;}
 	void on(){}
 	void off(){}
 	void setDisplay(int setting_1, int setting_2, int blinks, int rate){}
