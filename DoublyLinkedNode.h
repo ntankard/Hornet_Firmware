@@ -9,19 +9,24 @@ private:
 	Node* fNext;
 	Node* fPrevious;
 
-	DoublyLinkedNode(): fValue((DataType*)0),
-						fNext(&NIL),
-						fPrevious(&NIL)
-	{}
-
 public:
 	static Node NIL;
+
+	DoublyLinkedNode() : fValue((DataType*)0),
+		fNext(&NIL),
+		fPrevious(&NIL)
+	{}
 
 	DoublyLinkedNode(DataType& aValue)
 	{
 		fValue = &aValue;
 		fNext = &NIL;
 		fPrevious = &NIL;
+	}
+
+	void setValue(DataType& aValue)
+	{
+		fValue = &aValue;
 	}
 
 	void insertAfter(Node& aNode)

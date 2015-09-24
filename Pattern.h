@@ -8,6 +8,10 @@ enum DataState { NOT_SET, SET };
 class Pattern
 {
 public:
+	Pattern()
+	{
+		_state = NOT_SET;
+	}
 
 	Pattern(DataState state)
 	{

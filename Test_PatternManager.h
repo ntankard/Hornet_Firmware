@@ -7,7 +7,7 @@
 test(PatternManager_Setup)
 {
 	PatternManager* _patternManager = new PatternManager();
-	assertEqual(_patternManager->getEnterPattern()->getState(), NOT_SET);
+	assertEqual(_patternManager->getEntryPattern()->getState(), NOT_SET);
 	assertEqual(_patternManager->getExitPattern()->getState(), NOT_SET);
 }
 

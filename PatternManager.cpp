@@ -4,8 +4,6 @@
 
 PatternManager::PatternManager()
 {
-	_enterPattern = new Pattern(NOT_SET);
-	_exitPattern = new Pattern(NOT_SET);
 	_setup = false;
 }
 
@@ -17,22 +15,22 @@ void PatternManager::addPattern(Point* startPoint, Point* endPoint)
 	}
 	else
 	{
-		Pattern* temp = _enterPattern;
+		Pattern temp = _enterPattern;
 		_enterPattern = _exitPattern;
 		_exitPattern = temp;
-		_exitPattern->setPattern(startPoint, endPoint);
+		_exitPattern.setPattern(startPoint, endPoint);
 	}
 }
 
 void PatternManager::setupPattern(Point* startPoint, Point* endPoint)
 {
-	if (_enterPattern->getState() == NOT_SET)
+	if (_enterPattern.getState() == NOT_SET)
 	{
-		_enterPattern->setPattern(startPoint, endPoint, SET);
+		_enterPattern.setPattern(startPoint, endPoint, SET);
 	} 
-	else if (_exitPattern->getState() == NOT_SET)
+	else if (_exitPattern.getState() == NOT_SET)
 	{
-		_exitPattern->setPattern(startPoint, endPoint, SET);
+		_exitPattern.setPattern(startPoint, endPoint, SET);
 		_setup = true;
 	}	
 }
@@ -41,11 +39,11 @@ bool PatternManager::isFeature()
 {
 	if (_setup)
 	{
-		if (abs(_enterPattern->getEndCoordX() - _exitPattern->getStartCoordX()) <= L_PATTERN_RANGE_IN_FEATURE)
+		if (abs(_enterPattern.getEndCoordX() - _exitPattern.getStartCoordX()) <= L_PATTERN_RANGE_IN_FEATURE)
 		{
-			if (abs(_enterPattern->getEndCoordY() - _exitPattern->getStartCoordY()) <= L_PATTERN_RANGE_IN_FEATURE)
+			if (abs(_enterPattern.getEndCoordY() - _exitPattern.getStartCoordY()) <= L_PATTERN_RANGE_IN_FEATURE)
 			{
-				if (abs(_enterPattern->getAngle() - _exitPattern->getAngle()) < 90 + L_FEATURE_CORNER_ANGLE_TOLERANCE && abs(_enterPattern->getAngle() - _exitPattern->getAngle()) > 90 - L_FEATURE_CORNER_ANGLE_TOLERANCE)
+				if (abs(_enterPattern.getAngle() - _exitPattern.getAngle()) < 90 + L_FEATURE_CORNER_ANGLE_TOLERANCE && abs(_enterPattern.getAngle() - _exitPattern.getAngle()) > 90 - L_FEATURE_CORNER_ANGLE_TOLERANCE)
 				{
 					return true;
 				}
@@ -55,14 +53,14 @@ bool PatternManager::isFeature()
 	return false;
 }
 
-Pattern* PatternManager::getEnterPattern()
+Pattern* PatternManager::getEntryPattern()
 {
-	return _enterPattern;
+	return &_enterPattern;
 }
 
 Pattern* PatternManager::getExitPattern()
 {
-	return _exitPattern;
+	return &_exitPattern;
 }
 
 bool PatternManager::isSetup()

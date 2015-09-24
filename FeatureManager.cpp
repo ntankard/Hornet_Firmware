@@ -4,22 +4,23 @@
 
 FeatureManager::FeatureManager()
 {
-	Feature* headFeature = new Feature(FEATURE_HEAD);
-	_featureList = new FeatureNode(*headFeature);
-	Feature* tailFeature = new Feature(FEATURE_TAIL);
-	FeatureNode* tail = new FeatureNode(*tailFeature);
-	_featureList->insertAfter(*tail);
+	_features[0] = Feature(FEATURE_HEAD); //headPoint
+	_nodes[0].setValue(_features[0]);
+	_features[L_FEATURES_STORED + 1] = Feature(FEATURE_TAIL); //tailPoint
+	_nodes[L_FEATURES_STORED + 1].setValue(_features[L_FEATURES_STORED + 1]);
+	_featureList = &_nodes[0];
+	_featureList->insertAfter(_nodes[L_FEATURES_STORED + 1]);
 	for (int i = 0; i < L_FEATURES_STORED; i++)
 	{
-		Feature* feature = new Feature(FEATURE_NULL);
-		FeatureNode* node = new FeatureNode(*feature);
-		_featureList->insertAfter(*node);
+		_features[i + 1] = Feature(FEATURE_NULL);
+		_nodes[i + 1].setValue(_features[i + 1]);
+		_featureList->insertAfter(_nodes[i + 1]);
 	}
 }
 
 void FeatureManager::addFeature(Pattern* entryPattern, Pattern* exitPattern)
 {
-	manageFeatureList();
+	//manageFeatureList();
 	DoublyLinkedNodeIterator<Feature> iter = DoublyLinkedNodeIterator<Feature>(*_featureList);
 	iter = iter.first();
 	for (iter; iter.getNode()->getValue().getState() != FEATURE_NULL; iter++)
@@ -60,27 +61,32 @@ void FeatureManager::manageFeatureList()
 		if (iter.getNode()->getValue().getLife() <= 0)
 		{
 			iter.getNode()->getValue().setState(FEATURE_NULL);
+			removeFeatures(i);
 		}
 		iter++;
 	}
-	removeFeatures(size);
 }
 
-void FeatureManager::removeFeatures(int listSize)
+void FeatureManager::removeFeatures(int position)
 {
 	DoublyLinkedNodeIterator<Feature> iter = DoublyLinkedNodeIterator<Feature>(*_featureList);
 	iter++;
-	for (int i = 0; i < listSize; i++)
+	for (position; position > 0; position--)
 	{
-		if (iter.getNode()->getValue().getState() == FEATURE_NULL)
-		{
-			DoublyLinkedNodeIterator<Feature> tempIter = iter;
-			FeatureNode* node = tempIter.getNode();
-			tempIter.getNode()->dropNode();
-			iter = tempIter;
-			tempIter = tempIter.last();
-			tempIter.getNode()->insertBefore(*node);
-		}
 		iter++;
 	}
+	FeatureNode* node = iter.getNode();
+	iter.getNode()->dropNode();
+	iter = iter.last();
+	iter.getNode()->insertBefore(*node);
+}
+
+FeatureNode* FeatureManager::getFeatureList()
+{
+	return _featureList;
+}
+
+bool FeatureManager::isAnchor()
+{
+
 }

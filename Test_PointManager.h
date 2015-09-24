@@ -36,6 +36,26 @@ test(PointManager_Setup_Points)
 	assertEqual(iter.getNode()->getValue().getState(), TAIL);
 }
 
+test(PointManager_Get_startPoint)
+{
+	PointManager* _pointManager = new PointManager();
+	for (int i = 0; i < L_POINTS_IN_PATTERN; i++)
+	{
+		_pointManager->addPoint(i, i);
+	}
+	assertEqual(_pointManager->getStartPoint()->getAngle(), 0);
+}
+
+test(PointManager_Get_endPoint)
+{
+	PointManager* _pointManager = new PointManager();
+	for (int i = 0; i < L_POINTS_IN_PATTERN; i++)
+	{
+		_pointManager->addPoint(i, i);
+	}
+	assertEqual(_pointManager->getEndPoint()->getAngle(), 9);
+}
+
 test(PointManager_Adding_Points)
 {
 	PointManager* _pointManager = new PointManager();

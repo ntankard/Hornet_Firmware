@@ -10,11 +10,11 @@ public:
 	void addPattern(Point* startPoint, Point* endPoint);
 	void setupPattern(Point* startPoint, Point* endPoint);
 	bool isFeature();
-	Pattern* getEnterPattern();
+	Pattern* getEntryPattern();
 	Pattern* getExitPattern();
 	bool isSetup();
 private:
 	bool _setup;
-	Pattern* _enterPattern;
-	Pattern* _exitPattern;
+	Pattern _enterPattern;
+	Pattern _exitPattern;
 };

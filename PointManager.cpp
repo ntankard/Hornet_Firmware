@@ -4,16 +4,17 @@
 
 PointManager::PointManager()
 {
-	Point* headPoint = new Point(HEAD);
-	_pointList = new PointNode(*headPoint);
-	Point* tailPoint = new Point(TAIL);
-	PointNode* tail = new PointNode(*tailPoint);
-	_pointList->insertAfter(*tail);
+	_points[0] = Point(HEAD); //headPoint
+	_nodes[0].setValue(_points[0]);
+	_points[L_POINTS_IN_PATTERN + 1] = Point(TAIL); //tailPoint
+	_nodes[L_POINTS_IN_PATTERN + 1].setValue(_points[L_POINTS_IN_PATTERN + 1]);
+	_pointList = &_nodes[0];
+	_pointList->insertAfter(_nodes[L_POINTS_IN_PATTERN + 1]);
 	for (int i = 0; i < L_POINTS_IN_PATTERN; i++)
 	{
-		Point* point = new Point(NULLPOINT);
-		PointNode* node = new PointNode(*point);
-		_pointList->insertAfter(*node);
+		_points[i+1] = Point(NULLPOINT);
+		_nodes[i+1].setValue(_points[i+1]);
+		_pointList->insertAfter(_nodes[i + 1]);
 	}
 	_setup = false;
 }
@@ -94,6 +95,21 @@ bool PointManager::isPattern()
 		return true;
 	}
 	return false;
+}
+
+Point* PointManager::getStartPoint()
+{
+	DoublyLinkedNodeIterator<Point> iter = DoublyLinkedNodeIterator<Point>(*_pointList);
+	iter++;
+	return &iter.getNode()->getValue();
+}
+
+Point* PointManager::getEndPoint()
+{
+	DoublyLinkedNodeIterator<Point> iter = DoublyLinkedNodeIterator<Point>(*_pointList);
+	iter = iter.last();
+	iter--;
+	return &iter.getNode()->getValue();
 }
 
 PointNode* PointManager::getPointList()

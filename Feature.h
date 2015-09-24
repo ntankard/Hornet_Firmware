@@ -7,6 +7,11 @@ enum FeatureState { FEATURE_HEAD, FEATURE_TAIL, FEATURE_NULL, FEATURE_DATA };
 class Feature
 {
 public:
+	Feature()
+	{
+		_state = FEATURE_NULL;
+	}
+
 	Feature(FeatureState state)
 	{
 		_state = state;
@@ -91,6 +96,11 @@ public:
 	void loseLife()
 	{
 		_life--;
+	}
+
+	void setLife(int life)
+	{
+		_life = life;
 	}
 
 	int getLife()

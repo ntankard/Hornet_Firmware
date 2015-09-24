@@ -7,6 +7,12 @@ enum PointState { HEAD, TAIL, NULLPOINT, DATA };
 class Point
 {
 public:
+	Point()
+	{
+		_angle = 0;
+		_distance = 0;
+		_state = NULLPOINT;
+	}
 
 	Point(float angle, float distance) 
 	{
