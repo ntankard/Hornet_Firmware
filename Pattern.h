@@ -13,28 +13,9 @@ public:
 		_state = NOT_SET;
 	}
 
-	Pattern(DataState state)
-	{
-		_state = state;
-		_start_coorX = 0;
-		_start_coorY = 0;
-		_end_coorX = 0;
-		_end_coorY = 0;
-		_angle = 0;
-	}
-
 	void setPattern(Point* start, Point* end)
 	{
-		_start_coorX = start->getX();
-		_start_coorY = start->getY();
-		_end_coorX = end->getX();
-		_end_coorY = end->getY();
-		_angle = atan((_end_coorY - _start_coorY) / (_end_coorX - _start_coorX)) * 180 / PI;
-	}
-
-	void setPattern(Point* start, Point* end, DataState state)
-	{
-		_state = state;
+		_state = SET;
 		_start_coorX = start->getX();
 		_start_coorY = start->getY();
 		_end_coorX = end->getX();

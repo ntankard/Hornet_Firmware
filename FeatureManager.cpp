@@ -43,6 +43,8 @@ bool FeatureManager::featureExists(Pattern* entryPattern, Pattern* exitPattern)
 				{
 					if (abs(iter.getNode()->getValue().getExitStartY() - exitPattern->getStartCoordY()) <= L_FEATURE_RANGE_TOLERANCE)
 					{
+						//TODO CHECK THE ANGLES OF THE PATTERNS TO SEE IF THEY CLOSELY RESEMBLE A PREVIOUSLY KNOWN PATTERN
+
 						iter.getNode()->getValue().updateOccurances();
 						return true;
 					}
@@ -117,7 +119,31 @@ FeatureNode* FeatureManager::getFeatureList()
 	return _featureList;
 }
 
+Feature* FeatureManager::getReccuringFeature()
+{
+	DoublyLinkedNodeIterator<Feature> iter(*_featureList);
+	iter++;
+	Feature* anchor = &iter.getNode()->getValue();
+	removeFeatures(0);
+	return anchor;
+}
+
 bool FeatureManager::isAnchor()
 {
-
+	DoublyLinkedNodeIterator<Feature> iter(*_featureList);
+	iter++;
+	for (int i = featureListSize(); i > 0; i--)
+	{
+		if (iter.getNode()->getValue().getOccurances() >= L_FEATURE_OCCURANCES)
+		{
+			//move the anchor to the start of the feature list for easy collection
+			FeatureNode* node = iter.getNode();
+			iter.getNode()->dropNode();
+			iter = iter.first();
+			iter.getNode()->insertAfter(*node);
+			return true;
+		}
+		iter++;
+	}
+	return false;
 }

@@ -22,10 +22,10 @@ void LidarNavigation::processLidarData(float angle, float distance)
 			{
 				_featureManager.addFeature(_patternManager.getEntryPattern(), _patternManager.getExitPattern());
 			}
-			//if (_featureManager->isAnchor())
-			//{
-			//	_anchorManager->addAnchor(_featureManager->getRecurringFeature());
-			//}
+			else if (_featureManager.isAnchor())
+			{
+				_anchorManager.addAnchor(_featureManager.getReccuringFeature());
+			}
 		}
 	}
 }

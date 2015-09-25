@@ -26,11 +26,11 @@ void PatternManager::setupPattern(Point* startPoint, Point* endPoint)
 {
 	if (_enterPattern.getState() == NOT_SET)
 	{
-		_enterPattern.setPattern(startPoint, endPoint, SET);
+		_enterPattern.setPattern(startPoint, endPoint);
 	} 
 	else if (_exitPattern.getState() == NOT_SET)
 	{
-		_exitPattern.setPattern(startPoint, endPoint, SET);
+		_exitPattern.setPattern(startPoint, endPoint);
 		_setup = true;
 	}	
 }

@@ -6,8 +6,8 @@
 
 test(PointManager_Setup)
 {
-	PointManager* _pointManager = new PointManager();
-	DoublyLinkedNodeIterator<Point> iter = DoublyLinkedNodeIterator<Point>(*_pointManager->getPointList());
+	PointManager _pointManager;
+	DoublyLinkedNodeIterator<Point> iter(*_pointManager.getPointList());
 	assertEqual(iter.getNode()->getValue().getState(), HEAD);
 	for (int i = 0; i < L_POINTS_IN_PATTERN; i++)
 	{
@@ -20,12 +20,12 @@ test(PointManager_Setup)
 
 test(PointManager_Setup_Points)
 {
-	PointManager* _pointManager = new PointManager();
+	PointManager _pointManager;
 	for (int i = 0; i < L_POINTS_IN_PATTERN; i++)
 	{
-		_pointManager->addPoint(i, i);
+		_pointManager.addPoint(i, i);
 	}
-	DoublyLinkedNodeIterator<Point> iter = DoublyLinkedNodeIterator<Point>(*_pointManager->getPointList());
+	DoublyLinkedNodeIterator<Point> iter(*_pointManager.getPointList());
 	iter++;
 	for (int i = 0; i < L_POINTS_IN_PATTERN; i++)
 	{
@@ -38,32 +38,32 @@ test(PointManager_Setup_Points)
 
 test(PointManager_Get_startPoint)
 {
-	PointManager* _pointManager = new PointManager();
+	PointManager _pointManager;
 	for (int i = 0; i < L_POINTS_IN_PATTERN; i++)
 	{
-		_pointManager->addPoint(i, i);
+		_pointManager.addPoint(i, i);
 	}
-	assertEqual(_pointManager->getStartPoint()->getAngle(), 0);
+	assertEqual(_pointManager.getStartPoint()->getAngle(), 0);
 }
 
 test(PointManager_Get_endPoint)
 {
-	PointManager* _pointManager = new PointManager();
+	PointManager _pointManager;
 	for (int i = 0; i < L_POINTS_IN_PATTERN; i++)
 	{
-		_pointManager->addPoint(i, i);
+		_pointManager.addPoint(i, i);
 	}
-	assertEqual(_pointManager->getEndPoint()->getAngle(), 9);
+	assertEqual(_pointManager.getEndPoint()->getAngle(), 9);
 }
 
 test(PointManager_Adding_Points)
 {
-	PointManager* _pointManager = new PointManager();
+	PointManager _pointManager;
 	for (int i = 0; i < L_POINTS_IN_PATTERN * 2; i++)
 	{
-		_pointManager->addPoint(i, i);
+		_pointManager.addPoint(i, i);
 	}
-	DoublyLinkedNodeIterator<Point> iter = DoublyLinkedNodeIterator<Point>(*_pointManager->getPointList());
+	DoublyLinkedNodeIterator<Point> iter(*_pointManager.getPointList());
 	iter++;
 	for (int i = L_POINTS_IN_PATTERN; i < L_POINTS_IN_PATTERN * 2; i++)
 	{
@@ -74,30 +74,30 @@ test(PointManager_Adding_Points)
 
 test(PointManager_isPattern_StraightLine)
 {
-	PointManager* _pointManager = new PointManager();
+	PointManager _pointManager;
 	for (int i = 0; i < L_POINTS_IN_PATTERN; i++)
 	{
-		_pointManager->addPoint(i, i);
+		_pointManager.addPoint(i, i);
 	}
-	DoublyLinkedNodeIterator<Point> iter = DoublyLinkedNodeIterator<Point>(*_pointManager->getPointList());
+	DoublyLinkedNodeIterator<Point> iter(*_pointManager.getPointList());
 	iter++;
 	for (int i = 0; i < L_POINTS_IN_PATTERN; i++)
 	{
 		iter.getNode()->getValue().setXY(i, i);
 		iter++;
 	}
-	assertTrue(_pointManager->isPattern());
+	assertTrue(_pointManager.isPattern());
 }
 
 test(PointManager_isPattern_MinorDeviation)
 {
 	//a line that has slight noise
-	PointManager* _pointManager = new PointManager();
+	PointManager _pointManager;
 	for (int i = 0; i < L_POINTS_IN_PATTERN; i++)
 	{
-		_pointManager->addPoint(i, i);
+		_pointManager.addPoint(i, i);
 	}
-	DoublyLinkedNodeIterator<Point> iter = DoublyLinkedNodeIterator<Point>(*_pointManager->getPointList());
+	DoublyLinkedNodeIterator<Point> iter(*_pointManager.getPointList());
 	iter++;
 	for (int i = 0; i < L_POINTS_IN_PATTERN; i++)
 	{
@@ -112,19 +112,19 @@ test(PointManager_isPattern_MinorDeviation)
 			iter++;
 		}
 	}
-	assertTrue(_pointManager->isPattern());
+	assertTrue(_pointManager.isPattern());
 }
 
 test(PointManager_isPattern_HeavyDeviation)
 {
 	//a line that has alot of noise
 	//probably not a line
-	PointManager* _pointManager = new PointManager();
+	PointManager _pointManager;
 	for (int i = 0; i < L_POINTS_IN_PATTERN; i++)
 	{
-		_pointManager->addPoint(i, i);
+		_pointManager.addPoint(i, i);
 	}
-	DoublyLinkedNodeIterator<Point> iter = DoublyLinkedNodeIterator<Point>(*_pointManager->getPointList());
+	DoublyLinkedNodeIterator<Point> iter(*_pointManager.getPointList());
 	iter++;
 	for (int i = 0; i < L_POINTS_IN_PATTERN; i++)
 	{
@@ -139,19 +139,19 @@ test(PointManager_isPattern_HeavyDeviation)
 			iter++;
 		}
 	}
-	assertFalse(_pointManager->isPattern());
+	assertFalse(_pointManager.isPattern());
 }
 
 test(PointManager_isPattern_SlightCurve)
 {
 	//minor curvature to line
 	//should be a line still
-	PointManager* _pointManager = new PointManager();
+	PointManager _pointManager;
 	for (int i = 0; i < L_POINTS_IN_PATTERN; i++)
 	{
-		_pointManager->addPoint(i, i);
+		_pointManager.addPoint(i, i);
 	}
-	DoublyLinkedNodeIterator<Point> iter = DoublyLinkedNodeIterator<Point>(*_pointManager->getPointList());
+	DoublyLinkedNodeIterator<Point> iter(*_pointManager.getPointList());
 	iter++;
 	for (int i = 0; i < L_POINTS_IN_PATTERN; i++)
 	{
@@ -166,19 +166,19 @@ test(PointManager_isPattern_SlightCurve)
 			iter++;
 		}
 	}
-	assertTrue(_pointManager->isPattern());
+	assertTrue(_pointManager.isPattern());
 }
 
 test(PointManager_isPattern_HeavyCurve)
 {
 	//heavy curvature to line
 	//should not be a line pattern
-	PointManager* _pointManager = new PointManager();
+	PointManager _pointManager;
 	for (int i = 0; i < L_POINTS_IN_PATTERN; i++)
 	{
-		_pointManager->addPoint(i, i);
+		_pointManager.addPoint(i, i);
 	}
-	DoublyLinkedNodeIterator<Point> iter = DoublyLinkedNodeIterator<Point>(*_pointManager->getPointList());
+	DoublyLinkedNodeIterator<Point> iter(*_pointManager.getPointList());
 	iter++;
 	for (int i = 0; i < L_POINTS_IN_PATTERN; i++)
 	{
@@ -193,18 +193,18 @@ test(PointManager_isPattern_HeavyCurve)
 			iter++;
 		}
 	}
-	assertFalse(_pointManager->isPattern());
+	assertFalse(_pointManager.isPattern());
 }
 
 test(PointManager_isPattern_LineBroken)
 {
 	//broken line - noise in background
-	PointManager* _pointManager = new PointManager();
+	PointManager _pointManager;
 	for (int i = 0; i < L_POINTS_IN_PATTERN; i++)
 	{
-		_pointManager->addPoint(i, i);
+		_pointManager.addPoint(i, i);
 	}
-	DoublyLinkedNodeIterator<Point> iter = DoublyLinkedNodeIterator<Point>(*_pointManager->getPointList());
+	DoublyLinkedNodeIterator<Point> iter(*_pointManager.getPointList());
 	iter++;
 	for (int i = 0; i < L_POINTS_IN_PATTERN; i++)
 	{
@@ -219,7 +219,7 @@ test(PointManager_isPattern_LineBroken)
 			iter++;
 		}
 	}
-	assertFalse(_pointManager->isPattern());
+	assertFalse(_pointManager.isPattern());
 }
 
 #endif

@@ -5,7 +5,7 @@
 #include "PointManager.h"
 #include "PatternManager.h"
 #include "FeatureManager.h"
-//#include "AnchorManager.h"
+#include "AnchorManager.h"
 
 class LidarNavigation
 {
@@ -18,7 +18,7 @@ private:
 	PointManager _pointManager;
 	PatternManager _patternManager;
 	FeatureManager _featureManager;
-	//AnchorManager _anchorManager;
+	AnchorManager _anchorManager;
 };
 
 

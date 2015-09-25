@@ -33,12 +33,16 @@ public:
 	{
 		_angle = angle;
 		_distance = distance;
+		_coorX = distance * cos(angle * PI / 180);
+		_coorY = distance * sin(angle * PI / 180);
 	}
 
 	void setPoint(float angle, float distance, PointState state)
 	{
 		_angle = angle;
 		_distance = distance;
+		_coorX = distance * cos(angle * PI / 180);
+		_coorY = distance * sin(angle * PI / 180);
 		_state = state;
 	}
 
