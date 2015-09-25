@@ -2,6 +2,7 @@
 
 #include "Drone.h"
 #include "MessageBuffer_Passer.h"
+//#include "PID_v1.h"
 
 class Stabilizer
 {
@@ -30,6 +31,25 @@ private:
 	int16_t targetRoll;
 	int16_t targetPitch;
 	int16_t targetYaw;
+
+	//PID _PIDRoll;
+	//PID _PIDPitch;
+	//PID _PIDYaw;
+
+	double _targetRoll;
+	double _currentRoll;
+	double _outRoll;
+
+	double _targetPitch;
+	double _currentPitch;
+	double _outPitch;
+
+	double _targetYaw;
+	double _currentYaw;
+	double _outYaw;
+
+
+
 
 	Drone _theDrone;
 

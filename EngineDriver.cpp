@@ -15,6 +15,7 @@ EngineDriver::EngineDriver()
 void EngineDriver::attach(int PWMPin)
 {
 	_engine.attach(PWMPin);
+	_engine.write(0);
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------
@@ -25,6 +26,7 @@ void EngineDriver::on()
 	{
 		_engine.write(MIN);
 	}
+	_isOn = true;
 	
 }
 
@@ -38,7 +40,7 @@ void EngineDriver::off()
 		delay(500);				// prevents a hard stop of the motors
 		_engine.write(0);
 	}
-	
+	_isOn = false;
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------

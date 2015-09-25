@@ -41,7 +41,7 @@ void FlightController::newGyro(volatile MessageBuffer_Passer *gyro)
 
 void FlightController::newJoyXY(volatile MessageBuffer_Passer *XY)
 {
-	int16_t MAX_ANGLE = 80;
+	int16_t MAX_ANGLE = 40;
 
 	_theStabilizer.newTargetPos(MAX_ANGLE * XY->getData()[0], MAX_ANGLE * XY->getData()[1]);
 }

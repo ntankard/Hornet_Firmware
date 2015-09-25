@@ -63,6 +63,15 @@ int Coms::run()
 	{
 		if (_outstandingSent)
 		{
+			// packet send failure, retry
+			_xbee.send(_tx16);
+			_resendCount++;
+			if (_resendCount >= C_COMMS_MAX_RETRY)
+			{
+				_comsDecoder.sendFailure();	//@TODO make this do sompthing useful
+				_outstandingSent = false;
+			}
+
 			if (_sendTimeOut.hasTimeOut())
 			{
 				_outstandingSent = false;
