@@ -4,15 +4,15 @@
 
 PointManager::PointManager()
 {
-	_points[0] = Point(HEAD); //headPoint
+	_points[0].setState(HEAD); //headPoint
 	_nodes[0].setValue(_points[0]);
-	_points[L_POINTS_IN_PATTERN + 1] = Point(TAIL); //tailPoint
+	_points[L_POINTS_IN_PATTERN + 1].setState(TAIL); //tailPoint
 	_nodes[L_POINTS_IN_PATTERN + 1].setValue(_points[L_POINTS_IN_PATTERN + 1]);
 	_pointList = &_nodes[0];
 	_pointList->insertAfter(_nodes[L_POINTS_IN_PATTERN + 1]);
 	for (int i = 0; i < L_POINTS_IN_PATTERN; i++)
 	{
-		_points[i+1] = Point(NULLPOINT);
+		_points[i+1].setState(NULLPOINT);
 		_nodes[i+1].setValue(_points[i+1]);
 		_pointList->insertAfter(_nodes[i + 1]);
 	}
@@ -27,7 +27,7 @@ void PointManager::addPoint(float angle, float distance)
 	}
 	else
 	{
-		DoublyLinkedNodeIterator<Point> iter = DoublyLinkedNodeIterator<Point>(*_pointList);
+		DoublyLinkedNodeIterator<Point> iter(*_pointList);
 		iter++;
 		PointNode* node = iter.getNode();
 		iter.getNode()->dropNode();
@@ -41,7 +41,7 @@ void PointManager::addPoint(float angle, float distance)
 
 void PointManager::setupPoint(float angle, float distance)
 {
-	DoublyLinkedNodeIterator<Point> iter = DoublyLinkedNodeIterator<Point>(*_pointList);
+	DoublyLinkedNodeIterator<Point> iter(*_pointList);
 	iter = iter.first();
 	for (iter; iter.getNode()->getValue().getState() != NULLPOINT; iter++)
 	{
@@ -68,7 +68,7 @@ bool PointManager::isPattern()
 		float x2;
 		float y1;
 		float y2;
-		DoublyLinkedNodeIterator<Point> iter = DoublyLinkedNodeIterator<Point>(*_pointList);
+		DoublyLinkedNodeIterator<Point> iter(*_pointList);
 		iter++;
 		for (int i = 0; i < L_POINTS_IN_PATTERN - 1; i++)
 		{
@@ -99,14 +99,14 @@ bool PointManager::isPattern()
 
 Point* PointManager::getStartPoint()
 {
-	DoublyLinkedNodeIterator<Point> iter = DoublyLinkedNodeIterator<Point>(*_pointList);
+	DoublyLinkedNodeIterator<Point> iter(*_pointList);
 	iter++;
 	return &iter.getNode()->getValue();
 }
 
 Point* PointManager::getEndPoint()
 {
-	DoublyLinkedNodeIterator<Point> iter = DoublyLinkedNodeIterator<Point>(*_pointList);
+	DoublyLinkedNodeIterator<Point> iter(*_pointList);
 	iter = iter.last();
 	iter--;
 	return &iter.getNode()->getValue();

@@ -48,6 +48,11 @@ public:
 		_coorY = y;
 	}
 
+	void setState(PointState state)
+	{
+		_state = state;
+	}
+
 	PointState getState() const
 	{
 		return _state;

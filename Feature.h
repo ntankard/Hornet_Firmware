@@ -1,6 +1,7 @@
 #pragma once 
 #include "Arduino.h"
 #include "Pattern.h"
+#include "CONFIG.h"
 
 enum FeatureState { FEATURE_HEAD, FEATURE_TAIL, FEATURE_NULL, FEATURE_DATA };
 
@@ -10,12 +11,6 @@ public:
 	Feature()
 	{
 		_state = FEATURE_NULL;
-	}
-
-	Feature(FeatureState state)
-	{
-		_state = state;
-
 		_enter_start_coorX = 0;
 		_enter_start_coorY = 0;
 		_enter_end_coorX = 0;
@@ -46,6 +41,16 @@ public:
 
 		_life = L_FEATURE_LIFE;
 		_occurances = 0;
+	}
+
+	void updateOccurances()
+	{
+		_occurances++;
+	}
+
+	int getOccurances()
+	{
+		return _occurances;
 	}
 
 	FeatureState getState()

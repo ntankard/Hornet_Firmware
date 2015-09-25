@@ -4,15 +4,15 @@
 
 FeatureManager::FeatureManager()
 {
-	_features[0] = Feature(FEATURE_HEAD); //headPoint
+	_features[0].setState(FEATURE_HEAD); //headPoint
 	_nodes[0].setValue(_features[0]);
-	_features[L_FEATURES_STORED + 1] = Feature(FEATURE_TAIL); //tailPoint
+	_features[L_FEATURES_STORED + 1].setState(FEATURE_TAIL); //tailPoint
 	_nodes[L_FEATURES_STORED + 1].setValue(_features[L_FEATURES_STORED + 1]);
 	_featureList = &_nodes[0];
 	_featureList->insertAfter(_nodes[L_FEATURES_STORED + 1]);
 	for (int i = 0; i < L_FEATURES_STORED; i++)
 	{
-		_features[i + 1] = Feature(FEATURE_NULL);
+		_features[i + 1].setState(FEATURE_NULL);
 		_nodes[i + 1].setValue(_features[i + 1]);
 		_featureList->insertAfter(_nodes[i + 1]);
 	}
@@ -20,8 +20,7 @@ FeatureManager::FeatureManager()
 
 void FeatureManager::addFeature(Pattern* entryPattern, Pattern* exitPattern)
 {
-	//manageFeatureList();
-	DoublyLinkedNodeIterator<Feature> iter = DoublyLinkedNodeIterator<Feature>(*_featureList);
+	DoublyLinkedNodeIterator<Feature> iter(*_featureList);
 	iter = iter.first();
 	for (iter; iter.getNode()->getValue().getState() != FEATURE_NULL; iter++)
 	{
@@ -30,10 +29,35 @@ void FeatureManager::addFeature(Pattern* entryPattern, Pattern* exitPattern)
 	iter.getNode()->getValue().setFeature(entryPattern, exitPattern);
 }
 
+bool FeatureManager::featureExists(Pattern* entryPattern, Pattern* exitPattern)
+{
+	DoublyLinkedNodeIterator<Feature> iter(*_featureList);
+	iter++;
+	for (int i = featureListSize(); i > 0; i--)
+	{
+		if (abs(iter.getNode()->getValue().getEnterEndX() - entryPattern->getEndCoordX()) <= L_FEATURE_RANGE_TOLERANCE)
+		{
+			if (abs(iter.getNode()->getValue().getEnterEndY() - entryPattern->getEndCoordY()) <= L_FEATURE_RANGE_TOLERANCE)
+			{
+				if (abs(iter.getNode()->getValue().getExitStartX() - exitPattern->getStartCoordX()) <= L_FEATURE_RANGE_TOLERANCE)
+				{
+					if (abs(iter.getNode()->getValue().getExitStartY() - exitPattern->getStartCoordY()) <= L_FEATURE_RANGE_TOLERANCE)
+					{
+						iter.getNode()->getValue().updateOccurances();
+						return true;
+					}
+				}
+			}
+		}
+		iter++;
+	}
+	return false;
+}
+
 int FeatureManager::featureListSize()
 {
 	int count = 0;
-	DoublyLinkedNodeIterator<Feature> iter = DoublyLinkedNodeIterator<Feature>(*_featureList);
+	DoublyLinkedNodeIterator<Feature> iter(*_featureList);
 	iter = iter.first();
 	iter++;
 	for (iter; iter.getNode()->getValue().getState() != FEATURE_NULL; iter++)
@@ -46,7 +70,7 @@ int FeatureManager::featureListSize()
 
 void FeatureManager::manageFeatureList()
 {
-	DoublyLinkedNodeIterator<Feature> iter = DoublyLinkedNodeIterator<Feature>(*_featureList);
+	DoublyLinkedNodeIterator<Feature> iter(*_featureList);
 	iter++;
 	int size = featureListSize();
 	for (int i = 0; i < size; i++)
@@ -60,21 +84,28 @@ void FeatureManager::manageFeatureList()
 	{
 		if (iter.getNode()->getValue().getLife() <= 0)
 		{
-			iter.getNode()->getValue().setState(FEATURE_NULL);
+			iter--;
 			removeFeatures(i);
+			iter++;
+			size--;
 		}
-		iter++;
+		else
+		{
+			iter++;
+		}
+		
 	}
 }
 
 void FeatureManager::removeFeatures(int position)
 {
-	DoublyLinkedNodeIterator<Feature> iter = DoublyLinkedNodeIterator<Feature>(*_featureList);
+	DoublyLinkedNodeIterator<Feature> iter(*_featureList);
 	iter++;
 	for (position; position > 0; position--)
 	{
 		iter++;
 	}
+	iter.getNode()->getValue().setState(FEATURE_NULL);
 	FeatureNode* node = iter.getNode();
 	iter.getNode()->dropNode();
 	iter = iter.last();

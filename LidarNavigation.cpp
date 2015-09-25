@@ -18,7 +18,10 @@ void LidarNavigation::processLidarData(float angle, float distance)
 		_patternManager.addPattern(_pointManager.getStartPoint(), _pointManager.getEndPoint());
 		if (_patternManager.isFeature())
 		{
-			_featureManager.addFeature(_patternManager.getEntryPattern(), _patternManager.getExitPattern());
+			if (!_featureManager.featureExists(_patternManager.getEntryPattern(), _patternManager.getExitPattern()))
+			{
+				_featureManager.addFeature(_patternManager.getEntryPattern(), _patternManager.getExitPattern());
+			}
 			//if (_featureManager->isAnchor())
 			//{
 			//	_anchorManager->addAnchor(_featureManager->getRecurringFeature());

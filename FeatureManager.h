@@ -15,6 +15,7 @@ public:
 	void removeFeatures(int position);
 	int featureListSize();
 	void manageFeatureList();
+	bool featureExists(Pattern* entryPattern, Pattern* exitPattern);
 	bool isAnchor();
 	FeatureNode* getFeatureList();
 private:
