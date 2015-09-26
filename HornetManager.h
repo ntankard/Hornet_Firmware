@@ -28,7 +28,7 @@ private:
 
 	void runConnect();
 
-	void changeState(State newState, int indicatorPriority, int comEncoderPri, int gyroPri, int lightSetting, int lightBlinks, int lightRate);
+	void changeState(State newState, int indicatorPriority, int comEncoderPri, int gyroPri,int flightPri, int lightSetting, int lightBlinks, int lightRate);
 
 	State _state;
 	unsigned long _C_last;

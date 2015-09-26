@@ -9,10 +9,10 @@ Drone::Drone()
 	_yaw = 0;
 	_throttle = 0;
 
-	_engines[0].attach(C_ENGINE_FRONT_LEFT);
-	_engines[1].attach(C_ENGINE_FRONT_RIGHT);
-	_engines[2].attach(C_ENGINE_REAR_RIGHT);
-	_engines[3].attach(C_ENGINE_REAR_LEFT);
+	//_engines[0].attach(C_ENGINE_FRONT_LEFT);
+	//_engines[1].attach(C_ENGINE_FRONT_RIGHT);
+	//_engines[2].attach(C_ENGINE_REAR_RIGHT);
+	//_engines[3].attach(C_ENGINE_REAR_LEFT);
 
 	for (int i = 0; i < 4; i++)
 	{

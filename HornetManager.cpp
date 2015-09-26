@@ -18,6 +18,7 @@ void HornetManager::start()
 	_scheduler.addRunable(C_SCHEDULER_INDICATOR_THREAD, &_indicator);
 	_scheduler.addRunable(C_SCHEDULER_COMENCODER_THREAD, &_comsEncoder);
 	_scheduler.addRunable(C_SCHEDULER_GYRO_THREAD, &_gyro);
+	_scheduler.addRunable(C_SCHEDULER_FLIGHT_THREAD, &_theDrone);
 
 	// start all objects
 	if (!_scheduler.finish() || !_scheduler.startAll())
@@ -138,7 +139,6 @@ void HornetManager::newData(volatile MessageBuffer_Passer* data)
 	case MB_JOY_XY:
 		//_theDrone.newPitchRoll(data->getData()[0], data->getData()[1]);
 		_theDrone.newJoyXY(data);
-		newData(_theDrone.getCurrent());
 		break;
 	case MB_JOY_Z:
 		//_theDrone.newYaw(data->getData()[0]);
@@ -148,11 +148,9 @@ void HornetManager::newData(volatile MessageBuffer_Passer* data)
 		//_theDrone.newThrottle(data->getData()[0]);
 		//newData(_theDrone.newThrottle(data->getData()[0]));
 		_theDrone.newJoyThrottle(data);
-		newData(_theDrone.getCurrent());
 		break;
 	case MB_ROLL_PITCH_YAW:
 		_theDrone.newGyro(data);
-		newData(_theDrone.getCurrent());
 		break;
 	default:
 		break;
@@ -161,13 +159,14 @@ void HornetManager::newData(volatile MessageBuffer_Passer* data)
 
 //-----------------------------------------------------------------------------------------------------------------------------
 
-void HornetManager::changeState(State newState, int indicatorPriority, int comEncoderPri, int gyroPri, int lightSetting, int lightBlinks, int lightRate)
+void HornetManager::changeState(State newState, int indicatorPriority, int comEncoderPri, int gyroPri, int flightPri, int lightSetting, int lightBlinks, int lightRate)
 {
 	_state = newState;
 
 	_scheduler.setPriority(C_SCHEDULER_INDICATOR_THREAD, indicatorPriority);
 	_scheduler.setPriority(C_SCHEDULER_COMENCODER_THREAD, comEncoderPri);
 	_scheduler.setPriority(C_SCHEDULER_GYRO_THREAD, gyroPri);
+	_scheduler.setPriority(C_SCHEDULER_FLIGHT_THREAD, flightPri);
 
 	_indicator.setDisplay(0, lightSetting, lightBlinks, lightRate);
 

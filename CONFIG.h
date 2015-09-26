@@ -95,28 +95,29 @@
 // ----------------------------------------------------------------------------------------------------------------------------
 
 // THe build depends on there being this many threads and them being from 0 to C_SCHEDULER_THREAD_NUM -1 with no repeats
-#define C_SCHEDULER_THREAD_NUM 3
+#define C_SCHEDULER_THREAD_NUM 4
 
 // must be in required start order
 #define C_SCHEDULER_INDICATOR_THREAD 0
 #define C_SCHEDULER_COMENCODER_THREAD 1
 #define C_SCHEDULER_GYRO_THREAD 2
+#define C_SCHEDULER_FLIGHT_THREAD 3
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // ----------------------------------------------------- STATE SETTINGS -------------------------------------------------------
 // ----------------------------------------------------------------------------------------------------------------------------
 
 
-//							____________|			  Thread Priority		|_______________________
-//							| State		| INDICATOR		| COM EN	|GYRO	| LIGHT	|BLINKS| RATE
+//							____________|			  Thread Priority				|_______________________
+//							| State		| INDICATOR		| COM EN	|GYRO	|FLIGHT	| LIGHT	|BLINKS| RATE
 //							-----------------------------------------------------------------
-#define ST_TO_CONNECT		Connect,	10,				1,			0,		0,		1,		1000
-#define ST_TO_IDLE			Idle,		10,				1,			5,		5,		2,		250
-#define ST_TO_TAKEOFF		TakeOff,	10,				1,			5,		10,		3,		500
-#define ST_TO_FLIGHT		Flight,		10,				1,			5,		15,		1,		1000
-#define ST_TO_LAND			Land,		10,				1,			5,		20,		1,		1000
-#define ST_TO_EMERGENCY		Emergency,	10,				1,			5,		21,		1,		1000
-#define ST_TO_CRACH			Crash,		10,				1,			5,		22,		1,		1000
+#define ST_TO_CONNECT		Connect,	10,				1,			0,		5,		0,		1,		1000
+#define ST_TO_IDLE			Idle,		10,				1,			5,		5,		5,		2,		250
+#define ST_TO_TAKEOFF		TakeOff,	10,				1,			5,		5,		10,		3,		500
+#define ST_TO_FLIGHT		Flight,		10,				1,			5,		5,		15,		1,		1000
+#define ST_TO_LAND			Land,		10,				1,			5,		5,		20,		1,		1000
+#define ST_TO_EMERGENCY		Emergency,	10,				1,			5,		5,		21,		1,		1000
+#define ST_TO_CRACH			Crash,		10,				1,			5,		5,		22,		1,		1000
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // ----------------------------------------------------- PIN SETTINGS ---------------------------------------------------------
@@ -143,10 +144,11 @@
 #define C_MAG_DRDY 11
 #define C_MAG_RESET 12
 
-#define C_ENGINE_FRONT_LEFT		10
-#define C_ENGINE_FRONT_RIGHT	11
-#define C_ENGINE_REAR_RIGHT		12
-#define C_ENGINE_REAR_LEFT		13
+#define C_APM_ROLL		10
+#define C_APM_PITCH		11
+#define C_APM_THROTTLE	12
+#define C_APM_YAW		13
+
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // --------------------------------------------------- MESSAGE SETTINGS -------------------------------------------------------
