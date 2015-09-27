@@ -141,7 +141,7 @@ void HornetManager::newData(volatile MessageBuffer_Passer* data)
 		_theDrone.newJoyXY(data);
 		break;
 	case MB_JOY_Z:
-		//_theDrone.newYaw(data->getData()[0]);
+		_theDrone.newJoyZ(data);
 		//newData(_theDrone.newYaw(data->getData()[0]));
 		break;
 	case MB_JOY_THROTTLE:

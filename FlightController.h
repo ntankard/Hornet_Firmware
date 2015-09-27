@@ -24,6 +24,8 @@ public:
 
 	void newJoyXY(volatile MessageBuffer_Passer *XY);
 
+	void newJoyZ(volatile MessageBuffer_Passer *Z);
+
 	void newJoyThrottle(volatile MessageBuffer_Passer *throttle);
 
 
