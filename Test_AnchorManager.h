@@ -20,4 +20,9 @@ test(AnchorManager_setup)
 	assertEqual(iter.getNode()->getValue().getState(), ANCHOR_TAIL);
 }
 
+test(AnchorManager_listSize)
+{
+
+}
+
 #endif

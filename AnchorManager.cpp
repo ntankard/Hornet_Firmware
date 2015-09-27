@@ -33,3 +33,17 @@ AnchorNode* AnchorManager::getAnchorList()
 {
 	return _anchorList;
 }
+
+int AnchorManager::anchorListSize()
+{
+	int count = 0;
+	DoublyLinkedNodeIterator<Anchor> iter(*_anchorList);
+	iter = iter.first();
+	iter++;
+	for (iter; iter.getNode()->getValue().getState() != ANCHOR_NULL; iter++)
+	{
+		//goes to the next ANCHOR_NULL
+		count++;
+	}
+	return count;
+}

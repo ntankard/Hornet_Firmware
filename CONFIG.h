@@ -149,10 +149,10 @@
 // ----------------------------------------------------------------------------------------------------------------------------
 
 #define L_LINE_TO_LINE_OFFSET 5
-#define L_POINTS_IN_PATTERN 10
+#define L_POINTS_IN_PATTERN 5
 #define L_PATTERNS_IN_CORNER_FEATURE 2
-#define L_PATTERN_RANGE_IN_FEATURE 4
-#define L_FEATURE_CORNER_ANGLE_TOLERANCE 4
+#define L_PATTERN_RANGE_IN_FEATURE 100
+#define L_FEATURE_CORNER_ANGLE_TOLERANCE 5
 #define L_PATTERNS_STORED 10
 #define L_FEATURES_STORED 30
 #define L_FEATURE_RANGE_TOLERANCE 5

@@ -12,6 +12,7 @@ public:
 	AnchorManager();
 	void addAnchor(Feature* reccuringFeature);
 	AnchorNode* getAnchorList();
+	int anchorListSize();
 private:
 	AnchorNode* _anchorList;
 	Anchor _anchors[L_ANCHORS_STORED + 2];
