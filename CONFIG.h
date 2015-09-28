@@ -155,9 +155,9 @@
 
 //----------------------------------------Feature recognition values-----------------------------------------------------------
 #define L_LINE_TO_LINE_OFFSET 5
-#define L_POINTS_IN_PATTERN 5
+#define L_POINTS_IN_PATTERN 10
 #define L_PATTERNS_IN_CORNER_FEATURE 2
-#define L_PATTERN_RANGE_IN_FEATURE 100
+#define L_PATTERN_RANGE_IN_FEATURE 50
 #define L_FEATURE_CORNER_ANGLE_TOLERANCE 5
 #define L_PATTERNS_STORED 10
 #define L_FEATURES_STORED 30
@@ -165,7 +165,7 @@
 #define L_FEATURE_LIFE 5
 #define L_FEATURE_OCCURANCES 3
 #define L_ANCHORS_STORED 10
-#define L_PATTERN_DEFINITION L_START_TO_POINT
+#define L_PATTERN_DEFINITION L_LINE_OF_BEST_FIT
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // ---------------------------------------------------- COMM SETTINGS ---------------------------------------------------------

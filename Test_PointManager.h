@@ -53,7 +53,7 @@ test(PointManager_Get_endPoint)
 	{
 		_pointManager.addPoint(i, i);
 	}
-	assertEqual(_pointManager.getEndPoint()->getAngle(), 9);
+	assertEqual(_pointManager.getEndPoint()->getAngle(), L_POINTS_IN_PATTERN - 1);
 }
 
 test(PointManager_Adding_Points)

@@ -108,12 +108,12 @@ void loop()
 #else
 
 //#include "Test_CircularBuffer.h"
-#include "Test_LidarNavigation.h"
+//#include "Test_LidarNavigation.h"
 //#include "Test_DoublyLinkedNodeIterator.h"
 //#include "Test_Point.h"
 //#include "Test_PointManager.h"
 //#include "Test_Pattern.h"
-//#include "Test_PatternManager.h"
+#include "Test_PatternManager.h"
 //#include "Test_Feature.h"
 //#include "Test_FeatureManager.h"
 //#include "Test_Anchor.h"
