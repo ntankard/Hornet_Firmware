@@ -78,7 +78,7 @@ bool Lidar::start()
 	}
 	// Lidar checks completed, start scan
 	_lidarComs.sendRequest(RPLIDAR_CMD_SCAN);
-
+	return true;
 }
 
 
