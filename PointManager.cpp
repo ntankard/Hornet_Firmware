@@ -72,7 +72,7 @@ bool PointManager::isPattern()
 		float y2;
 		DoublyLinkedNodeIterator<Point> iter(*_pointList);
 		iter++;
-		for (int i = 0; i < L_POINTS_IN_PATTERN - 1; i++)
+		for (int i = 0; i <= L_POINTS_IN_PATTERN - 1; i++)
 		{
 			x1 = iter.getNode()->getValue().getX();
 			y1 = iter.getNode()->getValue().getY();
@@ -127,12 +127,13 @@ bool PointManager::isPattern()
 		y2 = iter.getNode()->getValue().getY();
 		pointToPointAngle = atan((y2 - y1) / (x2 - x1)) * 180 / PI;
 
-		for (int i = 1; i < L_POINTS_IN_PATTERN - 1; i++)
+		for (int i = 0; i <= L_POINTS_IN_PATTERN - 1; i++)
 		{
 			if (!((abs(angles[i]) - abs(pointToPointAngle)) < L_LINE_TO_LINE_OFFSET))
 			{
 				return false;
 			}
+			return true;
 		}
 
 		#endif
@@ -154,7 +155,7 @@ bool PointManager::isPattern()
 		//reset iter
 		iter = iter.first();
 		iter++;
-		for (int i = 0; i < L_POINTS_IN_PATTERN - 1; i++)
+		for (int i = 0; i <= L_POINTS_IN_PATTERN - 1; i++)
 		{
 			x1 = iter.getNode()->getValue().getX();
 			y1 = iter.getNode()->getValue().getY();
@@ -169,6 +170,7 @@ bool PointManager::isPattern()
 			{
 				return false;
 			}
+			return true;
 		}
 		#endif
 
@@ -181,14 +183,14 @@ bool PointManager::isPattern()
 		float y1;
 		float y2;
 		DoublyLinkedNodeIterator<Point> iter(*_pointList);
-		//store start point as x2 and y2
+		//store start point as x1 and y1
 		iter++;
 		x1 = iter.getNode()->getValue().getX();
 		y1 = iter.getNode()->getValue().getY();
 		
 		iter++;
 
-		for (int i = 0; i < L_POINTS_IN_PATTERN - 1; i++)
+		for (int i = 0; i <= L_POINTS_IN_PATTERN - 1; i++)
 		{
 			x2 = iter.getNode()->getValue().getX();
 			y2 = iter.getNode()->getValue().getY();
@@ -196,15 +198,16 @@ bool PointManager::isPattern()
 			angles[i] = atan((y2 - y1) / (x2 - x1)) * 180 / PI;
 		}
 		//store line from start to end
-		startToPointAngle = angles[L_POINTS_IN_PATTERN - 1];
+		startToPointAngle = angles[L_POINTS_IN_PATTERN - 2];
 
-		for (int i = 1; i < L_POINTS_IN_PATTERN - 1; i++)
+		for (int i = 0; i < L_POINTS_IN_PATTERN - 1; i++)
 		{
 			if (!((abs(angles[i]) - abs(startToPointAngle)) < L_LINE_TO_LINE_OFFSET))
 			{
 				return false;
 			}
 		}
+		return true;
 		#endif
 	}
 	return false;
