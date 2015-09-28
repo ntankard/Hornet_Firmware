@@ -35,15 +35,9 @@ test(Point_All_Quadrants)
 	Point pointQ3(200.00, 15);
 	Point pointQ4(354.45, 18);
 
-	//Check points are made correctly
+	// -------------  Q1 -------------
 	assertEqual(pointQ1.getDistance(), 7);
-	assertEqual(pointQ2.getDistance(), 25);
-	assertEqual(pointQ3.getDistance(), 15);
-	assertEqual(pointQ4.getDistance(), 18);
 	assertEqual(pointQ1.getAngle(), 36.87);
-	assertEqual(pointQ2.getAngle(), 111.34);
-	assertEqual(pointQ3.getAngle(), 200.00);
-	assertEqual(pointQ4.getAngle(), 354.45);
 	if (!pointQ1.getX() == 5.6)
 	{
 		assertTrue(false);
@@ -52,6 +46,10 @@ test(Point_All_Quadrants)
 	{
 		assertTrue(false);
 	}
+
+	// -------------  Q2 -------------
+	assertEqual(pointQ2.getDistance(), 25);
+	assertEqual(pointQ2.getAngle(), 111.34);
 	if (!pointQ2.getX() == -9.10)
 	{
 		assertTrue(false);
@@ -60,6 +58,10 @@ test(Point_All_Quadrants)
 	{
 		assertTrue(false);
 	}
+
+	// -------------  Q3 -------------
+	assertEqual(pointQ3.getDistance(), 15);
+	assertEqual(pointQ3.getAngle(), 200.00);
 	if (!pointQ3.getX() == -14.10)
 	{
 		assertTrue(false);
@@ -68,6 +70,10 @@ test(Point_All_Quadrants)
 	{
 		assertTrue(false);
 	}
+
+	// -------------  Q4 -------------
+	assertEqual(pointQ4.getDistance(), 18);
+	assertEqual(pointQ4.getAngle(), 354.45);
 	if (!pointQ4.getX() == 17.92)
 	{
 		assertTrue(false);
