@@ -62,6 +62,8 @@ bool PointManager::isPattern()
 	//the L_LINE_TO_LINE_OFFSET then you can return true otherwise return false
 	if (_setup)
 	{
+		#if L_PATTERN_DEFINITION == L_LINE_OF_BEST_FIT
+		
 		float angleOfBestFit = 0;
 		float angles[L_POINTS_IN_PATTERN - 1];
 		float x1;
@@ -93,6 +95,117 @@ bool PointManager::isPattern()
 			}
 		}
 		return true;
+		#endif
+
+		#if L_PATTERN_DEFINITION == L_POINT_TO_POINT 
+		
+		float pointToPointAngle = 0;
+		float angles[L_POINTS_IN_PATTERN - 1];
+		float x1;
+		float x2;
+		float y1;
+		float y2;
+		DoublyLinkedNodeIterator<Point> iter(*_pointList);
+		iter++;
+		for (int i = 0; i < L_POINTS_IN_PATTERN - 1; i++)
+		{
+			x1 = iter.getNode()->getValue().getX();
+			y1 = iter.getNode()->getValue().getY();
+			iter++;
+			x2 = iter.getNode()->getValue().getX();
+			y2 = iter.getNode()->getValue().getY();
+			angles[i] = atan((y2 - y1) / (x2 - x1)) * 180 / PI;
+		}
+		//Get line from start to end of pattern
+		iter = iter.first();
+		iter++;
+		x1 = iter.getNode()->getValue().getX();
+		y1 = iter.getNode()->getValue().getY();
+		iter = iter.last();
+		iter--;
+		x2 = iter.getNode()->getValue().getX();
+		y2 = iter.getNode()->getValue().getY();
+		pointToPointAngle = atan((y2 - y1) / (x2 - x1)) * 180 / PI;
+
+		for (int i = 1; i < L_POINTS_IN_PATTERN - 1; i++)
+		{
+			if (!((abs(angles[i]) - abs(pointToPointAngle)) < L_LINE_TO_LINE_OFFSET))
+			{
+				return false;
+			}
+		}
+
+		#endif
+
+		#if L_PATTERN_DEFINITION == L_END_TO_POINT 
+		
+		float endToPointAngle = 0;
+		float angles[L_POINTS_IN_PATTERN - 1];
+		float x1;
+		float x2;
+		float y1;
+		float y2;
+		DoublyLinkedNodeIterator<Point> iter(*_pointList);
+		//store end point as x2 and y2
+		iter = iter.last();
+		iter--;
+		x2 = iter.getNode()->getValue().getX();
+		y2 = iter.getNode()->getValue().getY();
+		//reset iter
+		iter = iter.first();
+		iter++;
+		for (int i = 0; i < L_POINTS_IN_PATTERN - 1; i++)
+		{
+			x1 = iter.getNode()->getValue().getX();
+			y1 = iter.getNode()->getValue().getY();
+			iter++;
+			angles[i] = atan((y2 - y1) / (x2 - x1)) * 180 / PI;
+		}
+		//store line from end to start
+		endToPointAngle = angles[0];
+		for (int i = 1; i < L_POINTS_IN_PATTERN - 1; i++)
+		{
+			if (!((abs(angles[i]) - abs(endToPointAngle)) < L_LINE_TO_LINE_OFFSET))
+			{
+				return false;
+			}
+		}
+		#endif
+
+		#if L_PATTERN_DEFINITION == L_START_TO_POINT 
+
+		float startToPointAngle = 0;
+		float angles[L_POINTS_IN_PATTERN - 1];
+		float x1;
+		float x2;
+		float y1;
+		float y2;
+		DoublyLinkedNodeIterator<Point> iter(*_pointList);
+		//store start point as x2 and y2
+		iter++;
+		x1 = iter.getNode()->getValue().getX();
+		y1 = iter.getNode()->getValue().getY();
+		
+		iter++;
+
+		for (int i = 0; i < L_POINTS_IN_PATTERN - 1; i++)
+		{
+			x2 = iter.getNode()->getValue().getX();
+			y2 = iter.getNode()->getValue().getY();
+			iter++;
+			angles[i] = atan((y2 - y1) / (x2 - x1)) * 180 / PI;
+		}
+		//store line from start to end
+		startToPointAngle = angles[L_POINTS_IN_PATTERN - 1];
+
+		for (int i = 1; i < L_POINTS_IN_PATTERN - 1; i++)
+		{
+			if (!((abs(angles[i]) - abs(startToPointAngle)) < L_LINE_TO_LINE_OFFSET))
+			{
+				return false;
+			}
+		}
+		#endif
 	}
 	return false;
 }

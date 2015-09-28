@@ -148,6 +148,12 @@
 // ---------------------------------------------------- LIDAR SETTINGS --------------------------------------------------------
 // ----------------------------------------------------------------------------------------------------------------------------
 
+#define L_LINE_OF_BEST_FIT 1
+#define L_POINT_TO_POINT 2
+#define L_END_TO_POINT 3
+#define L_START_TO_POINT 4
+
+//----------------------------------------Feature recognition values-----------------------------------------------------------
 #define L_LINE_TO_LINE_OFFSET 5
 #define L_POINTS_IN_PATTERN 5
 #define L_PATTERNS_IN_CORNER_FEATURE 2
@@ -159,6 +165,7 @@
 #define L_FEATURE_LIFE 5
 #define L_FEATURE_OCCURANCES 3
 #define L_ANCHORS_STORED 10
+#define L_PATTERN_DEFINITION L_START_TO_POINT
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // ---------------------------------------------------- COMM SETTINGS ---------------------------------------------------------
