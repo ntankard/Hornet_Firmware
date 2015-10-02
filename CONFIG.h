@@ -20,7 +20,7 @@
 #define ENABLE_INDICATOR	ENABLE
 #define ENABLE_GYRO			ENABLE
 
-#define COM_MODE			SERIAL
+#define COM_MODE			XBEE
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // ---------------------------------------------------- BOARD FEATURES --------------------------------------------------------
@@ -55,10 +55,10 @@
 #endif
 
 #if COM_MODE == XBEE
-#define USER_XBEE_COMS
+//#define USER_XBEE_COMS
 #endif
 #if COM_MODE == SERIAL
-#define USER_SERIAL_COMS
+//#define USER_SERIAL_COMS
 #endif
 
 

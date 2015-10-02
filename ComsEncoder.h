@@ -6,6 +6,7 @@
 #include "Error.h"
 #include "MessageBuffer_Passer.h"
 #include "CircularBuffer_Manager.h"
+#include "Coms.h"
 
 /**
 * \brief	An object to buffer messages for sending

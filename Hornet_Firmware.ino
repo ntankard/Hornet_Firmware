@@ -56,7 +56,7 @@ void loop()
 
 #include <ArduinoUnit.h>
 
-#include "Test_Scheduler.h"
+#include "Test_Scheduler.h" 
 #include "Test_Error.h"
 #include "Test_SequenceGenerator.h"
 #include "Test_CircularBuffer.h"
@@ -116,5 +116,28 @@ void loop()
 #endif
 
 #if BUILD_TYPE == OTHER
+
+#include <Arduino.h>
+#include "Coms.h"
+
+Coms toTest;
+
+void setup()
+{
+	Serial.begin(9600);	//@TODO this should be in the USB serial
+	Serial.clearWriteError();
+	Serial.flush();
+	while (Serial.available())
+	{
+		Serial.read();
+	}
+}
+
+int i = 0;
+
+void loop()
+{
+	toTest.run();
+}
 
 #endif
