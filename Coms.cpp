@@ -16,10 +16,14 @@ void Coms::send(uint8_t *data, uint8_t length)
 	checkSum += (sendId * length);
 	sendId++;
 
+	COM_SERIAL.write(_sendCount);
+	checkSum += (sendId * _sendCount);
+	sendId++;
+
 	for (int i = 0; i < length;i++)
 	{
 		COM_SERIAL.write(data[i]);
-		checkSum += (data[i] * length);
+		checkSum += (data[i] * sendId);
 		sendId++;
 	}
 
@@ -40,13 +44,16 @@ int Coms::run()
 
 		if (read == END_BYTE)
 		{
+			// remove the last byte from the checksum
+			_checkSum -= _readMessage[_readCount - 1] * _readCount;
+
 			// end of a packet
-			if (_readCount <= 4)
+			if (_readCount <= 3)
 			{
 				// corupt packet
 				TP("PACKET TO SMALL");
 			}
-			else if (_readCount != (_readMessage[2] + 4))
+			else if (_readCount != (_readMessage[0] + 3))
 			{
 				// corupt packet
 				TP("Count mismatch");
@@ -54,18 +61,22 @@ int Coms::run()
 			else if (_checkSum != _readMessage[_readCount - 1])
 			{
 				// corupt packet
-				TP("Checksum fail");
+				/*for (int i = 0; i < _readCount; i++)
+				{
+					Serial.write(_readMessage[i]);
+				}
+				Serial.print('/n');*/
+				TP("CHECK SUM FAIL");
 			}
 			else
 			{
 				// valid paket
 				_pendingMessage = _comsDecoder.processMessage(_readMessage, _readCount);
-				TP("Valid packet");
+				TP("Valid");
+				_readCount = 0;
+				_checkSum = 0;
+				return 1;
 			}
-
-
-
-
 			_readCount = 0;
 			_checkSum = 0;
 			break;
@@ -83,6 +94,7 @@ int Coms::run()
 			_checkSum += read*_readCount;
 		}
 	}
+	return 0;
 }
 bool Coms::canSend()
 {
