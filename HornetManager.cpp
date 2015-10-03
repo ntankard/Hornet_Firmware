@@ -184,7 +184,7 @@ void HornetManager::runConnect()
 	if (_C_last + C_CONNECT_PULSE_TIME <= current)
 	{
 		_C_last = current;
-		_comsEncoder.sendChar(C_COMS_CODE_CONNECT_REQUEST);
+//	_comsEncoder.sendChar(C_COMS_CODE_CONNECT_REQUEST);
 	}
 
 }

@@ -12,7 +12,7 @@ volatile MessageBuffer_Passer* ComsDecoder::processMessage(uint8_t *data, uint8_
 {
 	volatile MessageBuffer_Passer* toSend;
 
-	switch (data[0])
+	switch (data[2])
 	{
 	case C_COMS_CODE_CONNECT_CONFIRM:
 		_charMessage.setID(data[0]);
@@ -28,7 +28,7 @@ volatile MessageBuffer_Passer* ComsDecoder::processMessage(uint8_t *data, uint8_
 		toSend = _XYJoySender.getAvailable();
 		for (int i = 0; i < dataLength; i++)
 		{
-			toSend->getPacket()[i] = data[i];
+			toSend->getPacket()[i] = data[i+2];
 		}
 		return toSend;
 	case MB_JOY_THROTTLE:
@@ -39,7 +39,7 @@ volatile MessageBuffer_Passer* ComsDecoder::processMessage(uint8_t *data, uint8_
 		toSend = _throttleJoySender.getAvailable();
 		for (int i = 0; i < dataLength; i++)
 		{
-			toSend->getPacket()[i] = data[i];
+			toSend->getPacket()[i] = data[i + 2];
 		}
 		return toSend;
 	case MB_JOY_Z:
@@ -50,7 +50,7 @@ volatile MessageBuffer_Passer* ComsDecoder::processMessage(uint8_t *data, uint8_
 		toSend = _ZJoySender.getAvailable();
 		for (int i = 0; i < dataLength; i++)
 		{
-			toSend->getPacket()[i] = data[i];
+			toSend->getPacket()[i] = data[i + 2];
 		}
 		return toSend;
 	default:

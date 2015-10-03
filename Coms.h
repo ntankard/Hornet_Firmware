@@ -2,7 +2,6 @@
 
 #include <stdint.h>
 #include <Arduino.h>
-#include "Runnable.h"
 #include "CONFIG.h"
 #include "ComsDecoder.h"
 
@@ -12,28 +11,29 @@
 #define END_BYTE	'\n'
 #define MAX_PACKET_SIZE	50
 
-class Coms:public Runnable
+class Coms
 {
 public:
 
 	Coms();
-	bool start(){ return true; }
-	int run();
-	bool canSend();
+
+	void send(volatile MessageBuffer_Passer* data);
 	void send(uint8_t *data, uint8_t dataLength);
+
+	int run();
 	volatile MessageBuffer_Passer* getMessage()volatile { return _pendingMessage; }
 
-
-
 private:
+
 	uint8_t _sendCount;
 
 	int _readCount;
-	uint8_t _readMessage[MAX_PACKET_SIZE];
 	uint8_t _checkSum;
-
+	uint8_t _readMessage[MAX_PACKET_SIZE];
+	
 	ComsDecoder _comsDecoder;
 
 	volatile MessageBuffer_Passer* _pendingMessage;
+	volatile MessageBuffer_Empty _pendingMessageDefault;
 };
 

@@ -18,7 +18,7 @@
 #define DEBUG_BUILD ENABLE
 
 #define ENABLE_INDICATOR	ENABLE
-#define ENABLE_GYRO			DISABLE
+#define ENABLE_GYRO			ENABLE
 
 #define COM_MODE			XBEE
 
@@ -154,10 +154,12 @@
 // --------------------------------------------------- MESSAGE SETTINGS -------------------------------------------------------
 // ----------------------------------------------------------------------------------------------------------------------------
 
+#define MB_OUTBOUND_COUTN	3
+
 // outbound	 com IDS
-#define MB_ROLL_PITCH_YAW	'y'
-#define MB_STATUS			's'
-#define MB_MOTOR			'm'
+#define MB_ROLL_PITCH_YAW	0
+#define MB_STATUS			1
+#define MB_MOTOR			2
 
 // inbound coms IDS
 #define MB_JOY_XY			'j'
