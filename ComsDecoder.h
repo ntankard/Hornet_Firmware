@@ -53,5 +53,9 @@ private:
 	volatile MessageBuffer_Manager<MB_JOY_THROTTLE_SETTING> _throttleJoySender;
 	volatile MessageBuffer_Manager<MB_JOY_Z_SETTING> _ZJoySender;
 
+	volatile MessageBuffer_Manager<MB_ARM_DISARM_SETTING> _ArmDisarmSender;
+
+	int test;
+
 };
 

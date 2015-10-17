@@ -152,6 +152,23 @@ void HornetManager::newData(volatile MessageBuffer_Passer* data)
 	case MB_ROLL_PITCH_YAW:
 		_theDrone.newGyro(data);
 		break;
+	case MB_ARM_DISARM:
+		if (data->getData()[0] == 1)
+		{
+			if (_state == Idle)
+			{
+				_theDrone.arm();
+				TP("ARM");
+			}
+		}
+		else
+		{
+			if (_state == Flight)
+			{
+				_theDrone.disarm();
+				TP("DISARM");
+			}
+		}
 	default:
 		break;
 	}

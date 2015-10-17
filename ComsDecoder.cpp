@@ -6,11 +6,21 @@
 
 ComsDecoder::ComsDecoder()
 {
+	test = 0;
 }
 
 volatile MessageBuffer_Passer* ComsDecoder::processMessage(uint8_t *data, uint8_t dataLength)
 {
 	volatile MessageBuffer_Passer* toSend;
+	/*TP("EOPs");
+
+	for (int i = 0; i < dataLength; i++)
+	{
+		Serial.write(data[i]);
+	}
+	Serial.write('\n');
+
+	TP("EOPe");*/
 
 	switch (data[2])
 	{
@@ -18,8 +28,18 @@ volatile MessageBuffer_Passer* ComsDecoder::processMessage(uint8_t *data, uint8_
 		_charMessage.setID(data[0]);
 		return &_charMessage;
 	case MB_ARM_DISARM:
-		_charMessage.setID(data[0]);
-		return &_charMessage;
+		test++;
+		TP("RAW COM" + (String)test);
+		if (dataLength != 2)
+		{
+			break;//@TODO throw
+		}
+		toSend = _ArmDisarmSender.getAvailable();
+		for (int i = 0; i < dataLength; i++)
+		{
+			toSend->getPacket()[i] = data[i + 2];
+		}
+		return toSend;
 	case MB_JOY_XY:
 		if (dataLength != 5)
 		{
