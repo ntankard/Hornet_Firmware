@@ -4,8 +4,11 @@
 class Runnable
 {
 public:
+	virtual int getNORegisters() = 0;
+	virtual volatile MessageBuffer_Passer* getRegister() = 0;
+	virtual void addRegister(MessageBuffer_Passer* newRegister) = 0;
+
 	virtual bool start()  = 0;
-	virtual int run() = 0;
-	virtual volatile MessageBuffer_Passer* getMessage()volatile = 0;
+	virtual bool run() = 0;
 };
 

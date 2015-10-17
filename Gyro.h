@@ -5,7 +5,7 @@
 #ifdef USE_GYRO
 
 #include "MPU6050.h"
-#include "MessageBuffer_Manager.h"
+#include "MessageBuffer.h"
 
 class Gyro : public Runnable
 {
@@ -13,8 +13,10 @@ public:
 
 	Gyro();
 	bool start();
-	int run();
-	volatile MessageBuffer_Passer* getMessage()volatile;
+	int getNORegisters();
+	volatile MessageBuffer_Passer* getRegister()volatile;
+	void addRegister(MessageBuffer_Passer* newRegister){}
+	bool run();
 
 private:
 
@@ -33,8 +35,10 @@ private:
 	VectorFloat gravity;    // [x, y, z]            gravity vector
 	float ypr[3];           // [yaw, pitch, roll]   yaw/pitch/roll container and gravity vector
 
-	volatile MessageBuffer_Manager<MB_ROLL_PITCH_YAW_SETTINGS> _rollPitchYawSender;
-	volatile MessageBuffer_Passer* _toSend;
+	volatile MessageBuffer<MB_ROLL_PITCH_YAW, 3> _rollPitchYaw_Register;
+
+	//volatile MessageBuffer_Manager<MB_ROLL_PITCH_YAW_SETTINGS> _rollPitchYawSender;
+	//volatile MessageBuffer_Passer* _toSend;
 };
 
 #else

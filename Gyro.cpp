@@ -62,7 +62,17 @@ bool Gyro::start()
 	return true;
 }
 
-int Gyro::run()
+int Gyro::getNORegisters()
+{
+	return 1;
+}
+
+volatile MessageBuffer_Passer* Gyro::getRegister()volatile
+{
+	return &_rollPitchYaw_Register;
+}
+
+bool Gyro::run()
 {
 	fifoCount = mpu.getFIFOCount();
 
@@ -77,7 +87,7 @@ int Gyro::run()
 	{
 		mpu.resetFIFO();	//@TODO may need to do more here
 		DEBUG_PRINTLN("FIFO overflow!");
-		return 0;
+		return false;
 	}
 
 	// empty all but 1 of the packets ( to prevent a cascading overflow)
@@ -94,18 +104,11 @@ int Gyro::run()
 	mpu.dmpGetGravity(&gravity, &q);
 	mpu.dmpGetYawPitchRoll(ypr, &q, &gravity);
 
+	_rollPitchYaw_Register.getData()[0] = ypr[2] * 10000;
+	_rollPitchYaw_Register.getData()[1] = ypr[1] * 10000;
+	_rollPitchYaw_Register.getData()[2] = ypr[0] * 10000;
 
-	_toSend = _rollPitchYawSender.getAvailable();
-	_toSend->getData()[0] = ypr[2]*10000;
-	_toSend->getData()[1] = ypr[1]*10000;
-	_toSend->getData()[2] = ypr[0]*10000;
-
-	return 1;
-}
-
-volatile MessageBuffer_Passer* Gyro::getMessage()volatile
-{
-	return _toSend;
+	return true;
 }
 
 #endif

@@ -9,7 +9,7 @@
 * \param	ComPri	The comunications prioroty of the message (if monitor is true)
 * \param	Size	The number of int16_t in the message
 */
-template<uint8_t ID, uint8_t ComPri, int Size>
+template<uint8_t theID, int Size>
 class MessageBuffer : public MessageBuffer_Passer
 {
 public:
@@ -19,29 +19,32 @@ public:
 		struct
 		{
 			uint8_t dump;	// needed to acoutn for arduino DUE page size (i think)
-			uint8_t comID;
+			uint8_t length;
+			uint8_t count;
+			uint8_t ID;
 			int16_t data[Size];
+			uint8_t check;
+			uint8_t EOM;
 		}value;
 		struct
 		{
 			uint8_t dump;
-			uint8_t comID;
-			uint8_t data[Size * sizeof(int16_t)];
-		}raw;
-		struct
-		{
-			uint8_t dump;
-			uint8_t data[Size * sizeof(int16_t) + 1];
-		}packet ;
+			uint8_t data[(Size * sizeof(int16_t)) + 4];
+		}packet;
 	};
 
 	//-----------------------------------------------------------------------------------------------------------------------------
 
 	MessageBuffer()
 	{
-		_message.value.comID = ID;
-		_isLocked = false;
-		_monitor = false;
+		_message.value.comID = theID;
+		_message.value.length = (Size * 2) + 3;
+		_message.value.EOM = '\n';
+		for (int i = 0; i < Size; i++)
+		{
+			_message.value.data[i] = 0;
+		}
+		_message.value.check = getCheckSum();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------------------
@@ -53,12 +56,12 @@ public:
 
 	//-----------------------------------------------------------------------------------------------------------------------------
 
-	volatile uint8_t getComPri()volatile
+	volatile uint8_t* getPacket()volatile
 	{
-		return ComPri;
+		return _message.packet.data;
 	}
 
-	//------------------------------------------------------------ DATA ------------------------------------------------------------
+	//-----------------------------------------------------------------------------------------------------------------------------
 
 	volatile int16_t* getData()volatile
 	{
@@ -67,116 +70,87 @@ public:
 
 	//-----------------------------------------------------------------------------------------------------------------------------
 
-	void copyData(int16_t* data)volatile
+	volatile bool setPacket(uint8_t* data, int size)
 	{
-		for (int i = 0; i < getDataSize(); i++)
+		// validate size for the file type
+		if (size != ((Size * sizeof(int16_t)) + 4))
 		{
-			getData()[i] = data[i];
+			return false;
 		}
-	}
 
-	//-----------------------------------------------------------------------------------------------------------------------------
-
-	int getDataSize()volatile
-	{
-		return Size;
-	}
-
-	//----------------------------------------------------------- BYTES ------------------------------------------------------------
-
-	volatile uint8_t* getBytes()volatile
-	{
-		return _message.raw.data;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------------------
-
-	void copyBytes(uint8_t* data)volatile
-	{
-		for (int i = 0; i < getBytesSize(); i++)
+		// validate size against the packets reported length
+		if (data[1] != ((Size * sizeof(int16_t)) + 1))
 		{
-			getBytes()[i] = data[i];
+			return false;
 		}
-	}
 
-	//-----------------------------------------------------------------------------------------------------------------------------
-
-	int getBytesSize()volatile
-	{
-		return Size * sizeof(int16_t);
-	}
-
-	//----------------------------------------------------------- PACKET -----------------------------------------------------------
-
-	volatile uint8_t* getPacket()volatile
-	{
-		return _message.packet.data;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------------------
-
-	void copyPacket(uint8_t* data)volatile
-	{
-		for (int i = 0; i < getPacketSize(); i++)
+		// validate the ID 
+		if (data[2] != _message.value.ID)
 		{
-			getPacket()[i] = data[i];
+			return false;
 		}
+
+		// validate the checksum
+		if (getCheckSum(data) != data[((Size * sizeof(int16_t)) + 3)])
+		{
+			return false;
+		}
+
+		// all checks pass, update the data
+		for (int i = 0; i < size; i++)
+		{
+			_message.packet.data[i] = data[i];
+		}
+
+		return true;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------------------
 
-	int getPacketSize()volatile
+	volatile void setData(int16_t* data)
 	{
-		return Size * sizeof(int16_t) + 1;
-	}
-
-	//----------------------------------------------------------- LOCK -----------------------------------------------------------
-
-	void lock()volatile
-	{
-		_isLocked = true;
+		for (int i = 0; i < Size; i++)
+		{
+			_message.value.data[i] = data[i];
+		}
+		_message.value.check = getCheckSum();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------------------
 
-	void unlock()volatile
+	volatile void setSendCOunt(uint8_t count)
 	{
-		_isLocked = false;
+		_message.value.check -= _message.value.count * 2;
+		_message.value.count = count;
+		_message.value.check += _message.value.count * 2;
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------------------
-
-	volatile bool isLocked()volatile
-	{
-		return _isLocked;
-	}
-
-	//---------------------------------------------------------- MONITOR ----------------------------------------------------------
-
-	void monitor()volatile
-	{
-		_monitor = true;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------------------
-
-	void dontMonitor()volatile
-	{
-		_monitor = false;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------------------
-
-	volatile bool isMonitor()volatile
-	{
-		return _monitor;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------------------
 
 private:
 
+	//-----------------------------------------------------------------------------------------------------------------------------
+
+	volatile uint8_t getCheckSum()volatile
+	{
+		uint8_t check;
+		for (int i = 0; i < ((Size * sizeof(int16_t)) + 4); i++)
+		{
+			check += _message.packet.data[i] * (i + 1);
+		}
+		return check;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------------------
+
+	volatile uint8_t getCheckSum(uint8_t* data)volatile
+	{
+		uint8_t check;
+		for (int i = 0; i < ((Size * sizeof(int16_t)) + 4); i++)
+		{
+			check += data[i] * (i + 1);
+		}
+		return check;
+	}
+
 	volatile  MemoryMap _message;
-	volatile bool _isLocked;
-	volatile bool _monitor;
+
 };
