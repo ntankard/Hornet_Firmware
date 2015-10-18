@@ -20,6 +20,9 @@ void HornetManager::start()
 	_scheduler.addRunable(C_SCHEDULER_GYRO_THREAD, &_gyro);
 	_scheduler.addRunable(C_SCHEDULER_FLIGHT_THREAD, &_theDrone);
 
+	// log all non runnable registers
+	_comsEncoder.addRegister(&_statusRegister);
+
 	// start all objects
 	if (!_scheduler.finish() || !_scheduler.startAll())
 	{
@@ -47,13 +50,9 @@ void HornetManager::run()
 	unsigned long current = millis();
 	_loopCount++;
 
-
 	// exicute the threads
-	int toRead = _scheduler.run(); 
-	for (int i = 0; i < toRead; i++)
-	{
-		newData(_scheduler.getData());
-	}
+	_scheduler.run(); 
+
 
 	// check for special logic
 	if (_state == Connect)
@@ -76,101 +75,11 @@ void HornetManager::run()
 	// update the status
 	if (_statusLast + 1000 <= current)
 	{
-		volatile MessageBuffer_Passer* toSend = _statusSender.getAvailable();
-		toSend->getData()[0] = _state;
-		toSend->getData()[1] = _loopCount;
-		newData(toSend);
-		//newData(_theDrone.getCurrent());
+		_statusRegister.getData()[0] = _state;
+		_statusRegister.getData()[1] = _loopCount;
+
 		_statusLast += 1000;
 		_loopCount = 0;
-	}
-
-	//@TODO remove
-}
-
-void HornetManager::newMessage(uint8_t data)
-{
-	switch (data)
-	{
-	case C_COMS_CODE_CONNECT_CONFIRM:
-		if (_state == Connect)
-		{
-			changeState(ST_TO_IDLE);
-		}
-		break;
-	case MB_ARM_DISARM:
-		if (_state == Idle)
-		{
-			_theDrone.arm();
-			takeOff();
-		}
-		else if (_state = Flight)
-		{
-			_theDrone.disarm();
-			changeState(ST_TO_IDLE);
-		}
-		break;
-	default:
-		break;
-	}
-}
-
-void HornetManager::takeOff()
-{
-	changeState(ST_TO_TAKEOFF);
-
-	changeState(ST_TO_FLIGHT);
-}
-
-void HornetManager::newData(volatile MessageBuffer_Passer* data)
-{
-	if (data->isMonitor())
-	{
-		_comsEncoder.sendData(data);
-	}
-
-	if (data->getDataSize() == 0)
-	{
-		newMessage(data->getID());
-	}
-
-	switch (data->getID())
-	{
-	case MB_JOY_XY:
-		//_theDrone.newPitchRoll(data->getData()[0], data->getData()[1]);
-		_theDrone.newJoyXY(data);
-		break;
-	case MB_JOY_Z:
-		_theDrone.newJoyZ(data);
-		//newData(_theDrone.newYaw(data->getData()[0]));
-		break;
-	case MB_JOY_THROTTLE:
-		//_theDrone.newThrottle(data->getData()[0]);
-		//newData(_theDrone.newThrottle(data->getData()[0]));
-		_theDrone.newJoyThrottle(data);
-		break;
-	case MB_ROLL_PITCH_YAW:
-		_theDrone.newGyro(data);
-		break;
-	case MB_ARM_DISARM:
-		if (data->getData()[0] == 1)
-		{
-			if (_state == Idle)
-			{
-				_theDrone.arm();
-				TP("ARM");
-			}
-		}
-		else
-		{
-			if (_state == Flight)
-			{
-				_theDrone.disarm();
-				TP("DISARM");
-			}
-		}
-	default:
-		break;
 	}
 }
 
@@ -187,9 +96,7 @@ void HornetManager::changeState(State newState, int indicatorPriority, int comEn
 
 	_indicator.setDisplay(0, lightSetting, lightBlinks, lightRate);
 
-	volatile MessageBuffer_Passer* toSend = _statusSender.getAvailable();
-	toSend->getData()[0] = _state;
-	newData(toSend);
+	_statusRegister.getData()[0] = _state;
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------
@@ -205,3 +112,91 @@ void HornetManager::runConnect()
 	}
 
 }
+
+/*
+
+void HornetManager::newMessage(uint8_t data)
+{
+switch (data)
+{
+case C_COMS_CODE_CONNECT_CONFIRM:
+if (_state == Connect)
+{
+changeState(ST_TO_IDLE);
+}
+break;
+case MB_ARM_DISARM:
+if (_state == Idle)
+{
+_theDrone.arm();
+takeOff();
+}
+else if (_state = Flight)
+{
+_theDrone.disarm();
+changeState(ST_TO_IDLE);
+}
+break;
+default:
+break;
+}
+}
+
+void HornetManager::takeOff()
+{
+changeState(ST_TO_TAKEOFF);
+
+changeState(ST_TO_FLIGHT);
+}
+
+void HornetManager::newData(volatile MessageBuffer_Passer* data)
+{
+if (data->isMonitor())
+{
+_comsEncoder.sendData(data);
+}
+
+if (data->getDataSize() == 0)
+{
+newMessage(data->getID());
+}
+
+switch (data->getID())
+{
+case MB_JOY_XY:
+//_theDrone.newPitchRoll(data->getData()[0], data->getData()[1]);
+_theDrone.newJoyXY(data);
+break;
+case MB_JOY_Z:
+_theDrone.newJoyZ(data);
+//newData(_theDrone.newYaw(data->getData()[0]));
+break;
+case MB_JOY_THROTTLE:
+//_theDrone.newThrottle(data->getData()[0]);
+//newData(_theDrone.newThrottle(data->getData()[0]));
+_theDrone.newJoyThrottle(data);
+break;
+case MB_ROLL_PITCH_YAW:
+_theDrone.newGyro(data);
+break;
+case MB_ARM_DISARM:
+if (data->getData()[0] == 1)
+{
+if (_state == Idle)
+{
+_theDrone.arm();
+TP("ARM");
+}
+}
+else
+{
+if (_state == Flight)
+{
+_theDrone.disarm();
+TP("DISARM");
+}
+}
+default:
+break;
+}
+}*/

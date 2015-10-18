@@ -1,5 +1,5 @@
 #pragma once
-#include "Stabilizer.h"
+
 #include "Runnable.h"
 #include "MessageBuffer.h"
 #include "TimeOut.h"
@@ -10,26 +10,19 @@ class FlightController : public Runnable
 public:
 	FlightController();
 
+	int getNORegisters(){ return 0; }
+	volatile MessageBuffer_Passer* getRegister(){ return &_empty; }
+	void addRegister(volatile MessageBuffer_Passer* newRegister);
+
 	bool start();
 
-	int run();
+	bool run();
 
-	volatile MessageBuffer_Passer* getMessage()volatile { return &_empty; }
-
-
+private:
+	MessageBuffer<0, 1> _empty;
 	void arm();
 	void disarm();
 
-	void newGyro(volatile MessageBuffer_Passer *gyro);
-
-	void newJoyXY(volatile MessageBuffer_Passer *XY);
-
-	void newJoyZ(volatile MessageBuffer_Passer *Z);
-
-	void newJoyThrottle(volatile MessageBuffer_Passer *throttle);
-
-
-private:
 	//Stabilizer _theStabilizer;
 	//uint16_t _lastYaw;
 
@@ -38,12 +31,15 @@ private:
 	bool _isArming;
 	TimeOut _armTime;
 
-	volatile MessageBuffer<0,0,1> _empty;
-
 	Servo _roll;
 	Servo _pitch;
 	Servo _yaw;
 	Servo _throttle;
 
+
+	volatile MessageBuffer_Passer* _throttleJoyRegister;
+	volatile MessageBuffer_Passer* _XYJoyRegister;
+	volatile MessageBuffer_Passer* _ZJoyRegister;
+	volatile MessageBuffer_Passer* _ArmDisarmRegister;
 };
 

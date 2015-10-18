@@ -1,5 +1,7 @@
 #include "FlightController.h"
 
+#include "CONFIG.h"
+
 #define MIN 1000
 #define MAX 2000
 #define MULTIPLYER 10
@@ -24,16 +26,48 @@ FlightController::FlightController()
 
 //-----------------------------------------------------------------------------------------------------------------------------
 
+void FlightController::addRegister(volatile MessageBuffer_Passer* newRegister)
+{
+	switch (newRegister->getID())
+	{
+	case MB_JOY_XY:
+		_XYJoyRegister = newRegister;
+		break;
+	case MB_JOY_THROTTLE:
+		_throttleJoyRegister = newRegister;
+		break;
+	case MB_JOY_Z:
+		_ZJoyRegister = newRegister;
+		break;
+	case MB_ARM_DISARM:
+		_ArmDisarmRegister = newRegister;
+		break;
+	default:
+		break;
+	}
+}
+
+//-----------------------------------------------------------------------------------------------------------------------------
+
 bool FlightController::start()
 {
 	disarm();
+	if (_XYJoyRegister->getID() != MB_JOY_XY ||
+		_throttleJoyRegister->getID() != MB_JOY_THROTTLE ||
+		_ZJoyRegister->getID() != MB_JOY_Z ||
+		_ArmDisarmRegister->getID() != MB_ARM_DISARM)
+	{
+		return false;
+	}
+
 	return true;
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------
 
-int FlightController::run()
+bool FlightController::run()
 {
+	// check ongoing arm/disarm
 	if (_isArmingDisArming)
 	{
 		if (_armTime.hasTimeOut())
@@ -61,7 +95,35 @@ int FlightController::run()
 			}
 		}
 	}
-	return 0;
+
+
+	// check for new arm/disarm
+	if (!_isArmingDisArming)
+	{
+		// check for new arm/disarm
+		if (_ArmDisarmRegister->getData()[0] != _isArmed)
+		{
+			if (_isArmed)
+			{
+				disarm();
+			}
+			else
+			{
+				arm();
+			}
+		}
+	}
+
+	// update joystick values
+	if (!_isArmingDisArming)
+	{
+		_roll.writeMicroseconds(_XYJoyRegister->getData()[0] * MULTIPLYER + MIN);
+		_pitch.writeMicroseconds(_XYJoyRegister->getData()[1] * MULTIPLYER + MIN);
+		_yaw.writeMicroseconds(_ZJoyRegister->getData()[0] * MULTIPLYER + MIN);
+		_throttle.writeMicroseconds(_throttleJoyRegister->getData()[0] * MULTIPLYER + MIN);
+	}
+
+	return false;
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------
@@ -98,43 +160,5 @@ void FlightController::disarm()
 		_pitch.writeMicroseconds(MIN + ((MAX - MIN) / 2));
 		_yaw.writeMicroseconds(MIN);
 		_throttle.writeMicroseconds(MIN);
-	}
-}
-
-//-----------------------------------------------------------------------------------------------------------------------------
-
-void FlightController::newGyro(volatile MessageBuffer_Passer *gyro)
-{
-	
-}
-
-//-----------------------------------------------------------------------------------------------------------------------------
-
-void FlightController::newJoyXY(volatile MessageBuffer_Passer *XY)
-{
-	if (_isArmed)
-	{
-		_roll.writeMicroseconds(XY->getData()[0] * MULTIPLYER + MIN);
-		_pitch.writeMicroseconds(XY->getData()[1] * MULTIPLYER + MIN);
-	}
-}
-
-//-----------------------------------------------------------------------------------------------------------------------------
-
-void FlightController::newJoyZ(volatile MessageBuffer_Passer *Z)
-{
-	if (_isArmed)
-	{
-		_yaw.writeMicroseconds(Z->getData()[0] * MULTIPLYER + MIN);
-	}
-}
-
-//-----------------------------------------------------------------------------------------------------------------------------
-
-void FlightController::newJoyThrottle(volatile MessageBuffer_Passer *throttle)
-{
-	if (_isArmed)
-	{
-		_throttle.writeMicroseconds(throttle->getData()[0] * MULTIPLYER + MIN);
 	}
 }

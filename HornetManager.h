@@ -2,8 +2,6 @@
 #include "Error.h"
 #include "Scheduler.h"
 #include "DM_Indicator.h"
-#include "Serial_Coms.h"
-#include "XBee_Coms.h"
 #include "ComsEncoder.h"
 #include "Gyro.h"
 #include "FlightController.h"
@@ -41,13 +39,14 @@ private:
 	Indicator _indicator;
 	ComsEncoder _comsEncoder;
 	Gyro _gyro;
+	FlightController _theDrone;
 
 	unsigned long _statusLast;
-	MessageBuffer_Manager<MB_STATUS_SETTINGS> _statusSender;
+	MessageBuffer<MB_STATUS, 2> _statusRegister;
 
 	int _loopCount;
 
-	FlightController _theDrone;
+	
 	
 };
 

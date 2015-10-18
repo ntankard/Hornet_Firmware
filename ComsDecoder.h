@@ -1,13 +1,8 @@
 #pragma once
 #include <inttypes.h>
 
-#include "MessageBuffer_Empty.h"
-#include "MessageBuffer_Manager.h"
+#include "MessageBuffer.h"
 #include "CONFIG.h"
-
-
-
-class HornetManager;
 
 /**
 * \brief	An object to process incoming messages
@@ -26,13 +21,17 @@ public:
 	*/
 	ComsDecoder();
 
+	int getNORegisters();
+
+	volatile MessageBuffer_Passer* getNextRegister();
+
 	/**
 	* \brief	Process a new incoming message
 	*
 	* \param	data		The received message
 	* \param	dataLength	The number of bytes received
 	*/
-	volatile MessageBuffer_Passer* processMessage(uint8_t *data, uint8_t dataLength);
+	bool processMessage(uint8_t *data, uint8_t dataLength, uint8_t checksum);
 
 	/**
 	* \brief	A message failed to be sent corectly
@@ -46,16 +45,13 @@ public:
 
 private:
 
-	// reusable message buffer
-	volatile MessageBuffer_Empty _charMessage;
+	volatile MessageBuffer<MB_JOY_THROTTLE, 1> _throttleJoyRegister;
+	volatile MessageBuffer<MB_JOY_XY, 2> _XYJoyRegister;
+	volatile MessageBuffer<MB_JOY_Z, 1> _ZJoyRegister;
+	volatile MessageBuffer<MB_ARM_DISARM, 1> _ArmDisarmRegister;
 
-	volatile MessageBuffer_Manager<MB_JOY_XY_SETTING> _XYJoySender;
-	volatile MessageBuffer_Manager<MB_JOY_THROTTLE_SETTING> _throttleJoySender;
-	volatile MessageBuffer_Manager<MB_JOY_Z_SETTING> _ZJoySender;
+	volatile MessageBuffer_Passer*	_registers[MB_INBOUND_COUNT];
 
-	volatile MessageBuffer_Manager<MB_ARM_DISARM_SETTING> _ArmDisarmSender;
-
-	int test;
-
+	int _registerAccsessed;
 };
 

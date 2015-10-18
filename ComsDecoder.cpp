@@ -6,92 +6,73 @@
 
 ComsDecoder::ComsDecoder()
 {
-	test = 0;
+	_registerAccsessed = 0;
+
+	int addCount = 0;
+
+	_registers[MB_JOY_THROTTLE - MB_INBOUND_OFFSET] = &_throttleJoyRegister;
+	addCount++;
+	_registers[MB_JOY_XY - MB_INBOUND_OFFSET] = &_XYJoyRegister;
+	addCount++;
+	_registers[MB_JOY_Z - MB_INBOUND_OFFSET] = &_ZJoyRegister;
+	addCount++;
+	_registers[MB_ARM_DISARM - MB_INBOUND_OFFSET] = &_ArmDisarmRegister;
+	addCount++;
+
+	//@TODO add message check here
 }
 
-volatile MessageBuffer_Passer* ComsDecoder::processMessage(uint8_t *data, uint8_t dataLength)
+//-----------------------------------------------------------------------------------------------------------------------------
+
+int ComsDecoder::getNORegisters()
 {
-	volatile MessageBuffer_Passer* toSend;
-	/*TP("EOPs");
+	return MB_INBOUND_COUNT;
+}
 
-	for (int i = 0; i < dataLength; i++)
+//-----------------------------------------------------------------------------------------------------------------------------
+
+volatile MessageBuffer_Passer* ComsDecoder::getNextRegister()
+{
+	volatile MessageBuffer_Passer* toReturn = _registers[_registerAccsessed];
+
+	_registerAccsessed++;
+	if (_registerAccsessed >= MB_INBOUND_COUNT)
 	{
-		Serial.write(data[i]);
-	}
-	Serial.write('\n');
-
-	TP("EOPe");*/
-
-	switch (data[2])
-	{
-	case C_COMS_CODE_CONNECT_CONFIRM:
-		_charMessage.setID(data[0]);
-		return &_charMessage;
-	case MB_ARM_DISARM:
-		test++;
-		TP("RAW COM" + (String)test);
-		if (dataLength != 2)
-		{
-			break;//@TODO throw
-		}
-		toSend = _ArmDisarmSender.getAvailable();
-		for (int i = 0; i < dataLength; i++)
-		{
-			toSend->getPacket()[i] = data[i + 2];
-		}
-		return toSend;
-	case MB_JOY_XY:
-		if (dataLength != 5)
-		{
-			break;//@TODO throw
-		}
-		toSend = _XYJoySender.getAvailable();
-		for (int i = 0; i < dataLength; i++)
-		{
-			toSend->getPacket()[i] = data[i+2];
-		}
-		return toSend;
-	case MB_JOY_THROTTLE:
-		if (dataLength != 3)
-		{
-			break;//@TODO throw
-		}
-		toSend = _throttleJoySender.getAvailable();
-		for (int i = 0; i < dataLength; i++)
-		{
-			toSend->getPacket()[i] = data[i + 2];
-		}
-		return toSend;
-	case MB_JOY_Z:
-		if (dataLength != 3)
-		{
-			break;//@TODO throw
-		}
-		toSend = _ZJoySender.getAvailable();
-		for (int i = 0; i < dataLength; i++)
-		{
-			toSend->getPacket()[i] = data[i + 2];
-		}
-		return toSend;
-	default:
-		//@TODO message error
-		break;
+		_registerAccsessed == 0;
 	}
 
-	// unknown message, forward it on (ADD ERROR HERE)
-	_charMessage.setID(data[0]);
-	return &_charMessage;
+	return toReturn;
 }
 
-int16_t toInt16_t(uint8_t *data)
+//-----------------------------------------------------------------------------------------------------------------------------
+
+bool ComsDecoder::processMessage(uint8_t *data, uint8_t dataLength, uint8_t checksum)
 {
-	return (data[1] << 8) || data[0];
+	int ID = data[2] - MB_INBOUND_OFFSET;
+	if (ID < MB_INBOUND_COUNT)
+	{
+		if (!_registers[ID]->setPacket(data, dataLength, checksum))
+		{
+			// corrupt packet
+			return false;
+		}
+	}
+	else
+	{
+		// corrupt packet
+		return false;
+	}
+	return true;
 }
+
+//-----------------------------------------------------------------------------------------------------------------------------
 
 void ComsDecoder::sendFailure()
 {
 	//@TODO this
 }
+
+//-----------------------------------------------------------------------------------------------------------------------------
 
 void ComsDecoder::receiveFailure()
 {

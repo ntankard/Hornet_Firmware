@@ -16,12 +16,13 @@ class Coms
 public:
 
 	Coms();
+	int getNORegisters();
+	volatile MessageBuffer_Passer* getNextRegister();
 
 	void send(volatile MessageBuffer_Passer* data);
 	void send(uint8_t *data, uint8_t dataLength);
 
-	int run();
-	volatile MessageBuffer_Passer* getMessage()volatile { return _pendingMessage; }
+	bool run();
 
 private:
 
@@ -32,8 +33,5 @@ private:
 	uint8_t _readMessage[MAX_PACKET_SIZE];
 	
 	ComsDecoder _comsDecoder;
-
-	volatile MessageBuffer_Passer* _pendingMessage;
-	volatile MessageBuffer_Empty _pendingMessageDefault;
 };
 

@@ -29,7 +29,7 @@ public:
 		struct
 		{
 			uint8_t dump;
-			uint8_t data[(Size * sizeof(int16_t)) + 4];
+			uint8_t data[(Size * sizeof(int16_t)) + 5];
 		}packet;
 	};
 
@@ -37,7 +37,7 @@ public:
 
 	MessageBuffer()
 	{
-		_message.value.comID = theID;
+		_message.value.ID = theID;
 		_message.value.length = (Size * 2) + 3;
 		_message.value.EOM = '\n';
 		for (int i = 0; i < Size; i++)
@@ -51,7 +51,7 @@ public:
 	
 	volatile uint8_t getID()volatile
 	{
-		return _message.value.comID;
+		return _message.value.ID;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------------------
@@ -70,7 +70,7 @@ public:
 
 	//-----------------------------------------------------------------------------------------------------------------------------
 
-	volatile bool setPacket(uint8_t* data, int size)
+	volatile bool setPacket(uint8_t* data, int size, int countedChecksum)volatile
 	{
 		// validate size for the file type
 		if (size != ((Size * sizeof(int16_t)) + 4))
@@ -91,7 +91,7 @@ public:
 		}
 
 		// validate the checksum
-		if (getCheckSum(data) != data[((Size * sizeof(int16_t)) + 3)])
+		if (countedChecksum != data[((Size * sizeof(int16_t)) + 3)])
 		{
 			return false;
 		}
@@ -107,7 +107,7 @@ public:
 
 	//-----------------------------------------------------------------------------------------------------------------------------
 
-	volatile void setData(int16_t* data)
+	volatile void setData(int16_t* data)volatile
 	{
 		for (int i = 0; i < Size; i++)
 		{
@@ -118,11 +118,16 @@ public:
 
 	//-----------------------------------------------------------------------------------------------------------------------------
 
-	volatile void setSendCOunt(uint8_t count)
+	volatile void setSendCount(uint8_t count)volatile
 	{
 		_message.value.check -= _message.value.count * 2;
 		_message.value.count = count;
 		_message.value.check += _message.value.count * 2;
+	}
+
+	volatile int getPacketSize()volatile
+	{
+		return (Size * sizeof(int16_t)) + 5;
 	}
 
 private:
@@ -139,18 +144,9 @@ private:
 		return check;
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------------------
 
-	volatile uint8_t getCheckSum(uint8_t* data)volatile
-	{
-		uint8_t check;
-		for (int i = 0; i < ((Size * sizeof(int16_t)) + 4); i++)
-		{
-			check += data[i] * (i + 1);
-		}
-		return check;
-	}
 
 	volatile  MemoryMap _message;
+
 
 };

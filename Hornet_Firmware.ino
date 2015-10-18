@@ -17,11 +17,16 @@ HornetManager hornetManager;
 
 void setup()
 {
-
+	delay(1000);
 	Serial.begin(9600);	//@TODO this should be in the USB serial
 	Serial.clearWriteError();
 	Serial.flush();
-	while (Serial.available())
+	while (Serial.available()!=0)
+	{
+		Serial.read();
+	}
+	delay(1000);
+	while (Serial.available()!=0)
 	{
 		Serial.read();
 	}
@@ -38,17 +43,21 @@ void setup()
 	delay(500);
 	Wire.begin();	// no idea why this needs to be here
 
-
-	DEBUG_PRINT("Start Setup");
+	//TP((String)Serial.available());
+	Serial.println(F("Start Setup"));
 
 	hornetManager.start();
 
-	DEBUG_PRINT("End Setup");
+	Serial.println(F("End Setup"));
 }
+
+int a = 0;
 
 void loop()
 {
-	hornetManager.run();
+	a++;
+	//hornetManager.run();
+	//TP((String)a);
 }
 
 #endif

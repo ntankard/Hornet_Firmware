@@ -7,56 +7,65 @@ ComsEncoder::ComsEncoder( volatile Error *e)
 	_sendId = 0;
 	for (int i = 0; i < MB_OUTBOUND_COUTN; i++)
 	{
-		_default[i].setID(0xff);
-		_buffer[i] = &(_default[i]);
+		_internalRegisters_addCount[i] = false;
 	}
-
-	_toReturnDefault.setID(0xff);
-	_toReturn = &_toReturnDefault;
 }
 
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-int ComsEncoder::run()
+int ComsEncoder::getNORegisters()
+{
+	return _coms.getNORegisters();
+}
+
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+volatile MessageBuffer_Passer* ComsEncoder::getRegister()
+{
+	return _coms.getNextRegister();
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+void ComsEncoder::addRegister(volatile MessageBuffer_Passer* newRegister)
+{
+	uint8_t ID = newRegister->getID() - MB_OUTBOUND_OFFSET;
+	if (ID < MB_OUTBOUND_COUTN)
+	{
+		_internalRegisters_addCount[ID] = true;
+		_internalRegisters[ID] = newRegister;
+	}
+}
+
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+bool ComsEncoder::start()
+{
+	for (int i = 0; i < MB_OUTBOUND_COUTN; i++)
+	{
+		if (!_internalRegisters_addCount[i])
+		{
+			return false;	// not all registers have been attached
+		}	
+	}
+	return true;
+}
+
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+bool ComsEncoder::run()
 {
 	// resend one of the packets
-	_coms.send(_buffer[_sendId]);
+	_coms.send(_internalRegisters[_sendId]);
 	_sendId++;
 	if (_sendId >= MB_OUTBOUND_COUTN)
 	{
 		_sendId = 0;
 	}
-	
 
 	// attempt to read any packets
-	if (_coms.run() != 0)
-	{
-		_toReturn = _coms.getMessage();
-		return 1;
-	}
-	return 0;
+	return _coms.run();
 }
 
-//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-bool ComsEncoder::sendData(volatile MessageBuffer_Passer *data)
-{
-	// check for valid pacekts
-	if (data->getID() >= MB_OUTBOUND_COUTN)
-	{
-		return false;
-	}
-
-	// swich over the data
-	_buffer[data->getID()]->unlock();
-	_buffer[data->getID()] = data;
-	_buffer[data->getID()]->lock();
-
-	// send the data once
-	_coms.send(data);
-
-	return true;
-}
 
 
 

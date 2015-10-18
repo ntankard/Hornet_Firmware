@@ -3,9 +3,20 @@
 Coms::Coms()
 {
 	_sendCount = 0;
+}
 
-	_pendingMessageDefault.setID(0xff);
-	_pendingMessage = &_pendingMessageDefault;
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+int Coms::getNORegisters()
+{
+	return _comsDecoder.getNORegisters();
+}
+
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+volatile MessageBuffer_Passer* Coms::getNextRegister()
+{
+	return _comsDecoder.getNextRegister();
 }
 
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -19,39 +30,12 @@ void Coms::send(volatile MessageBuffer_Passer* data)
 
 void Coms::send(uint8_t *data, uint8_t length)
 {
-	uint8_t checkSum = 0;
-	int sendId = 1;
-
-	// langth of the data (payload (ID and payload))
-	COM_SERIAL.write(length);
-	checkSum += (sendId * length);
-	sendId++;
-
-	// send count for packet loss on the receiver side
-	COM_SERIAL.write(_sendCount);
-	checkSum += (sendId * _sendCount);
-	sendId++;
-
-	// packet payload (ID and payload)
-	for (int i = 0; i < length;i++)
-	{
-		COM_SERIAL.write(data[i]);
-		checkSum += (data[i] * sendId);
-		sendId++;
-	}
-
-	// cumulative checksum
-	COM_SERIAL.write(checkSum);
-
-	// cut the end of the packet
-	COM_SERIAL.write(END_BYTE);
-
-	_sendCount++;
+	COM_SERIAL.write(data, length);
 }
 
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-int Coms::run()
+bool Coms::run()
 {
 	// take a snapshot of the byte to prevent this locking if we receive more that we can process @TODO add overflow check 
 	int readCount = COM_SERIAL.available();
@@ -65,32 +49,18 @@ int Coms::run()
 			// remove the last byte from the checksum (it is the checksum)
 			_checkSum -= _readMessage[_readCount - 1] * _readCount;
 
-			if (_readCount <= 3)
+			if (_comsDecoder.processMessage(_readMessage, _readCount, _checkSum))
 			{
-				// packet is imposibly small
-			}
-			else if (_readCount != (_readMessage[0] + 3))
-			{
-				// packet is the wrong side
-			}
-			else if (_checkSum != _readMessage[_readCount - 1])
-			{
-				// checksum fail
+				_readCount = 0;
+				_checkSum = 0;
+				return true;
 			}
 			else
 			{
-				// valid paket
-				_pendingMessage = _comsDecoder.processMessage(_readMessage, _readCount);
-
 				_readCount = 0;
 				_checkSum = 0;
-
-				return 1;
+				return false;
 			}
-
-			_readCount = 0;
-			_checkSum = 0;
-			return 0;
 		}
 		else
 		{
@@ -105,5 +75,5 @@ int Coms::run()
 			_checkSum += read*_readCount;
 		}
 	}
-	return 0;
+	return false;
 }

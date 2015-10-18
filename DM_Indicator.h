@@ -2,6 +2,7 @@
 #include "Config.h"
 #include "Runnable.h"
 #include "Error.h"
+#include "MessageBuffer.h"
 
 #ifdef USE_DM_INDICATOR
 
@@ -37,6 +38,10 @@ public:
 	*/
 	bool start();
 
+	int getNORegisters();
+	volatile MessageBuffer_Passer* getRegister();
+	void addRegister(volatile MessageBuffer_Passer* newRegister);
+
 	/**
 	* \brief	Turn on (and reset) the indicator
 	*
@@ -71,12 +76,8 @@ public:
 	*
 	* \return	0 (never passes a message)
 	*/
-	int run();
+	bool run();
 
-	/**
-	* \brief	Unimplimented
-	*/
-	volatile MessageBuffer_Passer* getMessage()volatile { return NULL; }
 
 	/**
 	* \brief	Swich on the safe light (a light thats not effected by the otehr blinking lights)
@@ -89,6 +90,8 @@ public:
 	void safeOff();
 
 private:
+
+	MessageBuffer<0, 1> _empty;
 
 	/**
 	* \brief	Turn on a sequence of lights

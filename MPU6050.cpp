@@ -1776,7 +1776,7 @@ void MPU6050::getMotion6(int16_t* ax, int16_t* ay, int16_t* az, int16_t* gx, int
  *
  * The data within the accelerometer sensors' internal register set is always
  * updated at the Sample Rate. Meanwhile, the user-facing read register set
- * duplicates the internal register set's data values whenever the serial
+ * duplicates the internal register set's data values whenever the //Serial
  * interface is idle. This guarantees that a burst read of sensor registers will
  * read measurements from the same sampling instant. Note that if burst reads
  * are not used, the user is responsible for ensuring a set of single byte reads
@@ -1854,7 +1854,7 @@ int16_t MPU6050::getTemperature() {
  * set and a user-facing read register set.
  * The data within the gyroscope sensors' internal register set is always
  * updated at the Sample Rate. Meanwhile, the user-facing read register set
- * duplicates the internal register set's data values whenever the serial
+ * duplicates the internal register set's data values whenever the //Serial
  * interface is idle. This guarantees that a burst read of sensor registers will
  * read measurements from the same sampling instant. Note that if burst reads
  * are not used, the user is responsible for ensuring a set of single byte reads
@@ -1930,7 +1930,7 @@ int16_t MPU6050::getRotationZ() {
  * and a user-facing read register set.
  *
  * The data within the external sensors' internal register set is always updated
- * at the Sample Rate (or the reduced access rate) whenever the serial interface
+ * at the Sample Rate (or the reduced access rate) whenever the //Serial interface
  * is idle. This guarantees that a burst read of sensor registers will read
  * measurements from the same sampling instant. Note that if burst reads are not
  * used, the user is responsible for ensuring a set of single byte reads
@@ -2393,7 +2393,7 @@ void MPU6050::reset() {
 }
 /** Get sleep mode status.
  * Setting the SLEEP bit in the register puts the device into very low power
- * sleep mode. In this mode, only the serial interface and internal registers
+ * sleep mode. In this mode, only the //Serial interface and internal registers
  * remain active, allowing for a very low standby current. Clearing this bit
  * puts the device back into normal mode. To save power, the individual standby
  * selections for each of the gyros should be used if any gyro axis is not used
@@ -3031,23 +3031,23 @@ bool MPU6050::writeMemoryBlock(const uint8_t *data, uint16_t dataSize, uint8_t b
             setMemoryStartAddress(address);
             I2Cdev::readBytes(devAddr, MPU6050_RA_MEM_R_W, chunkSize, verifyBuffer);
             if (memcmp(progBuffer, verifyBuffer, chunkSize) != 0) {
-                /*Serial.print("Block write verification error, bank ");
-                Serial.print(bank, DEC);
-                Serial.print(", address ");
-                Serial.print(address, DEC);
-                Serial.print("!\nExpected:");
+                /*//Serial.print("Block write verification error, bank ");
+                //Serial.print(bank, DEC);
+                //Serial.print(", address ");
+                //Serial.print(address, DEC);
+                //Serial.print("!\nExpected:");
                 for (j = 0; j < chunkSize; j++) {
-                    Serial.print(" 0x");
-                    if (progBuffer[j] < 16) Serial.print("0");
-                    Serial.print(progBuffer[j], HEX);
+                    //Serial.print(" 0x");
+                    if (progBuffer[j] < 16) //Serial.print("0");
+                    //Serial.print(progBuffer[j], HEX);
                 }
-                Serial.print("\nReceived:");
+                //Serial.print("\nReceived:");
                 for (uint8_t j = 0; j < chunkSize; j++) {
-                    Serial.print(" 0x");
-                    if (verifyBuffer[i + j] < 16) Serial.print("0");
-                    Serial.print(verifyBuffer[i + j], HEX);
+                    //Serial.print(" 0x");
+                    if (verifyBuffer[i + j] < 16) //Serial.print("0");
+                    //Serial.print(verifyBuffer[i + j], HEX);
                 }
-                Serial.print("\n");*/
+                //Serial.print("\n");*/
                 free(verifyBuffer);
                 if (useProgMem) free(progBuffer);
                 return false; // uh oh.
@@ -3099,12 +3099,12 @@ bool MPU6050::writeDMPConfigurationSet(const uint8_t *data, uint16_t dataSize, b
         // write data or perform special action
         if (length > 0) {
             // regular block of data to write
-            /*Serial.print("Writing config block to bank ");
-            Serial.print(bank);
-            Serial.print(", offset ");
-            Serial.print(offset);
-            Serial.print(", length=");
-            Serial.println(length);*/
+            /*//Serial.print("Writing config block to bank ");
+            //Serial.print(bank);
+            //Serial.print(", offset ");
+            //Serial.print(offset);
+            //Serial.print(", length=");
+            //Serial.println(length);*/
             if (useProgMem) {
                 if (sizeof(progBuffer) < length) progBuffer = (uint8_t *)realloc(progBuffer, length);
                 for (j = 0; j < length; j++) progBuffer[j] = pgm_read_byte(data + i + j);
@@ -3124,9 +3124,9 @@ bool MPU6050::writeDMPConfigurationSet(const uint8_t *data, uint16_t dataSize, b
             } else {
                 special = data[i++];
             }
-            /*Serial.print("Special command code ");
-            Serial.print(special, HEX);
-            Serial.println(" found...");*/
+            /*//Serial.print("Special command code ");
+            //Serial.print(special, HEX);
+            //Serial.println(" found...");*/
             if (special == 0x01) {
                 // enable DMP-related interrupts
                 
@@ -3439,99 +3439,99 @@ const unsigned char dmpUpdates[MPU6050_DMP_UPDATES_SIZE] PROGMEM = {
 
 uint8_t MPU6050::dmpInitialize() {
 	// reset device
-	DEBUG_PRINT("\n\nResetting MPU6050...");
+	//DEBUG_PRINT("\n\nResetting MPU6050...");
 	reset();
 	delay(30); // wait after reset
 
 	// enable sleep mode and wake cycle
-	/*Serial.println(("Enabling sleep mode...");
+	/*//Serial.println(("Enabling sleep mode...");
 	setSleepEnabled(true);
-	Serial.println(("Enabling wake cycle...");
+	//Serial.println(("Enabling wake cycle...");
 	setWakeCycleEnabled(true);*/
 
 	// disable sleep mode
-	DEBUG_PRINTLN("Disabling sleep mode...");
+	//DEBUG_PRINTLN("Disabling sleep mode...");
 	setSleepEnabled(false);
 
 	// get MPU hardware revision
-	DEBUG_PRINTLN("Selecting user bank 16...");
+	//DEBUG_PRINTLN("Selecting user bank 16...");
 	setMemoryBank(0x10, true, true);
-	DEBUG_PRINTLN("Selecting memory byte 6...");
+	//DEBUG_PRINTLN("Selecting memory byte 6...");
 	setMemoryStartAddress(0x06);
-	DEBUG_PRINTLN("Checking hardware revision...");
+	//DEBUG_PRINTLN("Checking hardware revision...");
 	uint8_t hwRevision = readMemoryByte();
-	DEBUG_PRINT("Revision @ user[16][6] = ");
-	DEBUG_PRINTLN("Resetting memory bank selection to 0...");
+	//DEBUG_PRINT("Revision @ user[16][6] = ");
+	//DEBUG_PRINTLN("Resetting memory bank selection to 0...");
 	setMemoryBank(0, false, false);
 
 	// check OTP bank valid
-	DEBUG_PRINTLN("Reading OTP bank valid flag...");
+	//DEBUG_PRINTLN("Reading OTP bank valid flag...");
 	uint8_t otpValid = getOTPBankValid();
-	DEBUG_PRINT("OTP bank is ");
+	//DEBUG_PRINT("OTP bank is ");
 
 	// get X/Y/Z gyro offsets
-	DEBUG_PRINTLN("Reading gyro offset TC values...");
+	//DEBUG_PRINTLN("Reading gyro offset TC values...");
 	int8_t xgOffsetTC = getXGyroOffsetTC();
 	int8_t ygOffsetTC = getYGyroOffsetTC();
 	int8_t zgOffsetTC = getZGyroOffsetTC();
-	DEBUG_PRINT("X gyro offset = ");
-	DEBUG_PRINTLN(xgOffsetTC);
-	DEBUG_PRINT("Y gyro offset = ");
-	DEBUG_PRINTLN(ygOffsetTC);
-	DEBUG_PRINT("Z gyro offset = ");
-	DEBUG_PRINTLN(zgOffsetTC);
+	//DEBUG_PRINT("X gyro offset = ");
+	//DEBUG_PRINTLN(xgOffsetTC);
+	//DEBUG_PRINT("Y gyro offset = ");
+	//DEBUG_PRINTLN(ygOffsetTC);
+	//DEBUG_PRINT("Z gyro offset = ");
+	//DEBUG_PRINTLN(zgOffsetTC);
 
 	// setup weird slave stuff (?)
-	DEBUG_PRINTLN("Setting slave 0 address to 0x7F...");
+	//DEBUG_PRINTLN("Setting slave 0 address to 0x7F...");
 	setSlaveAddress(0, 0x7F);
-	DEBUG_PRINTLN("Disabling I2C Master mode...");
+	//DEBUG_PRINTLN("Disabling I2C Master mode...");
 	setI2CMasterModeEnabled(false);
-	DEBUG_PRINTLN("Setting slave 0 address to 0x68 (self)...");
+	//DEBUG_PRINTLN("Setting slave 0 address to 0x68 (self)...");
 	setSlaveAddress(0, 0x68);
-	DEBUG_PRINTLN("Resetting I2C Master control...");
+	//DEBUG_PRINTLN("Resetting I2C Master control...");
 	resetI2CMaster();
 	delay(20);
 
 	// load DMP code into memory banks
-	DEBUG_PRINT("Writing DMP code to MPU memory banks (");
-	DEBUG_PRINT(MPU6050_DMP_CODE_SIZE);
-	DEBUG_PRINTLN(" bytes)");
+	//DEBUG_PRINT("Writing DMP code to MPU memory banks (");
+	//DEBUG_PRINT(MPU6050_DMP_CODE_SIZE);
+	//DEBUG_PRINTLN(" bytes)");
 	if (writeProgMemoryBlock(dmpMemory, MPU6050_DMP_CODE_SIZE)) {
-		DEBUG_PRINTLN("Success! DMP code written and verified.");
+		//DEBUG_PRINTLN("Success! DMP code written and verified.");
 
 		// write DMP configuration
-		DEBUG_PRINT("Writing DMP configuration to MPU memory banks (");
-		DEBUG_PRINT(MPU6050_DMP_CONFIG_SIZE);
-		DEBUG_PRINTLN(" bytes in config def)");
+		//DEBUG_PRINT("Writing DMP configuration to MPU memory banks (");
+		//DEBUG_PRINT(MPU6050_DMP_CONFIG_SIZE);
+		//DEBUG_PRINTLN(" bytes in config def)");
 		if (writeProgDMPConfigurationSet(dmpConfig, MPU6050_DMP_CONFIG_SIZE)) {
-			DEBUG_PRINTLN("Success! DMP configuration written and verified.");
+			//DEBUG_PRINTLN("Success! DMP configuration written and verified.");
 
-			DEBUG_PRINTLN("Setting clock source to Z Gyro...");
+			//DEBUG_PRINTLN("Setting clock source to Z Gyro...");
 			setClockSource(MPU6050_CLOCK_PLL_ZGYRO);
 
-			DEBUG_PRINTLN("Setting DMP and FIFO_OFLOW interrupts enabled...");
+		//	DEBUG_PRINTLN("Setting DMP and FIFO_OFLOW interrupts enabled...");
 			setIntEnabled(0x12);
-			Serial.flush();
-			DEBUG_PRINTLN("Setting sample rate to 200Hz...");
+			//Serial.flush();
+			//DEBUG_PRINTLN("Setting sample rate to 200Hz...");
 			setRate(4); // 1khz / (1 + 4) = 200 Hz
 
-			DEBUG_PRINTLN("Setting external frame sync to TEMP_OUT_L[0]...");
+			//DEBUG_PRINTLN("Setting external frame sync to TEMP_OUT_L[0]...");
 			setExternalFrameSync(MPU6050_EXT_SYNC_TEMP_OUT_L);
 
-			DEBUG_PRINTLN("Setting DLPF bandwidth to 42Hz...");
+			//DEBUG_PRINTLN("Setting DLPF bandwidth to 42Hz...");
 			setDLPFMode(MPU6050_DLPF_BW_42);
 
-			DEBUG_PRINTLN("Setting gyro sensitivity to +/- 2000 deg/sec...");
+			//DEBUG_PRINTLN("Setting gyro sensitivity to +/- 2000 deg/sec...");
 			setFullScaleGyroRange(MPU6050_GYRO_FS_2000);
 
-			DEBUG_PRINTLN("Setting DMP configuration bytes (function unknown)...");
+			//DEBUG_PRINTLN("Setting DMP configuration bytes (function unknown)...");
 			setDMPConfig1(0x03);
 			setDMPConfig2(0x00);
 
-			DEBUG_PRINTLN("Clearing OTP Bank flag...");
+			//DEBUG_PRINTLN("Clearing OTP Bank flag...");
 			setOTPBankValid(false);
-			Serial.flush();
-			DEBUG_PRINTLN("Setting X/Y/Z gyro offset TCs to previous values...");
+			//Serial.flush();
+			//DEBUG_PRINTLN("Setting X/Y/Z gyro offset TCs to previous values...");
 			setXGyroOffsetTC(xgOffsetTC);
 			setYGyroOffsetTC(ygOffsetTC);
 			setZGyroOffsetTC(zgOffsetTC);
@@ -3541,121 +3541,121 @@ uint8_t MPU6050::dmpInitialize() {
 			//setYGyroOffset(0);
 			//setZGyroOffset(0);
 
-			DEBUG_PRINTLN("Writing final memory update 1/7 (function unknown)...");
+			//DEBUG_PRINTLN("Writing final memory update 1/7 (function unknown)...");
 			uint8_t dmpUpdate[16], j;
 			uint16_t pos = 0;
 			for (j = 0; j < 4 || j < dmpUpdate[2] + 3; j++, pos++) dmpUpdate[j] = pgm_read_byte(&dmpUpdates[pos]);
 			writeMemoryBlock(dmpUpdate + 3, dmpUpdate[2], dmpUpdate[0], dmpUpdate[1]);
-			Serial.flush();
-			DEBUG_PRINTLN("Writing final memory update 2/7 (function unknown)...");
+			//Serial.flush();
+			//DEBUG_PRINTLN("Writing final memory update 2/7 (function unknown)...");
 			for (j = 0; j < 4 || j < dmpUpdate[2] + 3; j++, pos++) dmpUpdate[j] = pgm_read_byte(&dmpUpdates[pos]);
 			writeMemoryBlock(dmpUpdate + 3, dmpUpdate[2], dmpUpdate[0], dmpUpdate[1]);
 
-			DEBUG_PRINTLN("Resetting FIFO...");
+			//DEBUG_PRINTLN("Resetting FIFO...");
 			resetFIFO();
 
-			DEBUG_PRINTLN("Reading FIFO count...");
+			//DEBUG_PRINTLN("Reading FIFO count...");
 			uint16_t fifoCount = getFIFOCount();
 			uint8_t fifoBuffer[128];
 
-			DEBUG_PRINT("Current FIFO count=");
-			DEBUG_PRINTLN(fifoCount);
+			//DEBUG_PRINT("Current FIFO count=");
+			//DEBUG_PRINTLN(fifoCount);
 			getFIFOBytes(fifoBuffer, fifoCount);
-			Serial.flush();
-			DEBUG_PRINTLN("Setting motion detection threshold to 2...");
+			//Serial.flush();
+			//DEBUG_PRINTLN("Setting motion detection threshold to 2...");
 			setMotionDetectionThreshold(2);
 
-			DEBUG_PRINTLN("Setting zero-motion detection threshold to 156...");
+			//DEBUG_PRINTLN("Setting zero-motion detection threshold to 156...");
 			setZeroMotionDetectionThreshold(156);
 
-			DEBUG_PRINTLN("Setting motion detection duration to 80...");
+			//DEBUG_PRINTLN("Setting motion detection duration to 80...");
 			setMotionDetectionDuration(80);
 
-			DEBUG_PRINTLN("Setting zero-motion detection duration to 0...");
+			//DEBUG_PRINTLN("Setting zero-motion detection duration to 0...");
 			setZeroMotionDetectionDuration(0);
-			Serial.flush();
-			DEBUG_PRINTLN("Resetting FIFO...");
+			////Serial.flush();
+			//DEBUG_PRINTLN("Resetting FIFO...");
 			resetFIFO();
 
-			DEBUG_PRINTLN("Enabling FIFO...");
+			//DEBUG_PRINTLN("Enabling FIFO...");
 			setFIFOEnabled(true);
 
-			DEBUG_PRINTLN("Enabling DMP...");
+			//DEBUG_PRINTLN("Enabling DMP...");
 			setDMPEnabled(true);
-			Serial.flush();
-			DEBUG_PRINTLN("Resetting DMP...");
+			////Serial.flush();
+			//DEBUG_PRINTLN("Resetting DMP...");
 			resetDMP();
 
-			DEBUG_PRINTLN("Writing final memory update 3/7 (function unknown)...");
+			//DEBUG_PRINTLN("Writing final memory update 3/7 (function unknown)...");
 			for (j = 0; j < 4 || j < dmpUpdate[2] + 3; j++, pos++) dmpUpdate[j] = pgm_read_byte(&dmpUpdates[pos]);
 			writeMemoryBlock(dmpUpdate + 3, dmpUpdate[2], dmpUpdate[0], dmpUpdate[1]);
 
-			DEBUG_PRINTLN("Writing final memory update 4/7 (function unknown)...");
+			//DEBUG_PRINTLN("Writing final memory update 4/7 (function unknown)...");
+			for (j = 0; j < 4 || j < dmpUpdate[2] + 3; j++, pos++) dmpUpdate[j] = pgm_read_byte(&dmpUpdates[pos]);
+			writeMemoryBlock(dmpUpdate + 3, dmpUpdate[2], dmpUpdate[0], dmpUpdate[1]);
+			
+			//DEBUG_PRINTLN("Writing final memory update 5/7 (function unknown)...");
 			for (j = 0; j < 4 || j < dmpUpdate[2] + 3; j++, pos++) dmpUpdate[j] = pgm_read_byte(&dmpUpdates[pos]);
 			writeMemoryBlock(dmpUpdate + 3, dmpUpdate[2], dmpUpdate[0], dmpUpdate[1]);
 
-			DEBUG_PRINTLN("Writing final memory update 5/7 (function unknown)...");
-			for (j = 0; j < 4 || j < dmpUpdate[2] + 3; j++, pos++) dmpUpdate[j] = pgm_read_byte(&dmpUpdates[pos]);
-			writeMemoryBlock(dmpUpdate + 3, dmpUpdate[2], dmpUpdate[0], dmpUpdate[1]);
-
-			DEBUG_PRINTLN("Waiting for FIFO count > 2...");
+			//DEBUG_PRINTLN("Waiting for FIFO count > 2...");
 			while ((fifoCount = getFIFOCount()) < 3);
 
-			DEBUG_PRINT("Current FIFO count=");
-			DEBUG_PRINTLN(fifoCount);
-			DEBUG_PRINTLN("Reading FIFO data...");
+			//DEBUG_PRINT("Current FIFO count=");
+			//DEBUG_PRINTLN(fifoCount);
+			//DEBUG_PRINTLN("Reading FIFO data...");
 			getFIFOBytes(fifoBuffer, fifoCount);
 
-			DEBUG_PRINTLN("Reading interrupt status...");
+			//DEBUG_PRINTLN("Reading interrupt status...");
 			uint8_t mpuIntStatus = getIntStatus();
 
-			DEBUG_PRINT("Current interrupt status=");
+			//DEBUG_PRINT("Current interrupt status=");
 
-			DEBUG_PRINTLN("Reading final memory update 6/7 (function unknown)...");
+			//DEBUG_PRINTLN("Reading final memory update 6/7 (function unknown)...");
 			for (j = 0; j < 4 || j < dmpUpdate[2] + 3; j++, pos++) dmpUpdate[j] = pgm_read_byte(&dmpUpdates[pos]);
 			readMemoryBlock(dmpUpdate + 3, dmpUpdate[2], dmpUpdate[0], dmpUpdate[1]);
 
-			DEBUG_PRINTLN("Waiting for FIFO count > 2...");
+			//DEBUG_PRINTLN("Waiting for FIFO count > 2...");
 			while ((fifoCount = getFIFOCount()) < 3);
 
-			DEBUG_PRINT("Current FIFO count=");
-			DEBUG_PRINTLN(fifoCount);
+			//DEBUG_PRINT("Current FIFO count=");
+			//DEBUG_PRINTLN(fifoCount);
 
-			DEBUG_PRINTLN("Reading FIFO data...");
+			//DEBUG_PRINTLN("Reading FIFO data...");
 			getFIFOBytes(fifoBuffer, fifoCount);
 
-			DEBUG_PRINTLN("Reading interrupt status...");
+			//DEBUG_PRINTLN("Reading interrupt status...");
 			mpuIntStatus = getIntStatus();
 
-			DEBUG_PRINT("Current interrupt status=");
+			//DEBUG_PRINT("Current interrupt status=");
 
-			DEBUG_PRINTLN("Writing final memory update 7/7 (function unknown)...");
+			//DEBUG_PRINTLN("Writing final memory update 7/7 (function unknown)...");
 			for (j = 0; j < 4 || j < dmpUpdate[2] + 3; j++, pos++) dmpUpdate[j] = pgm_read_byte(&dmpUpdates[pos]);
 			writeMemoryBlock(dmpUpdate + 3, dmpUpdate[2], dmpUpdate[0], dmpUpdate[1]);
 
-			DEBUG_PRINTLN("DMP is good to go! Finally.");
+			//DEBUG_PRINTLN("DMP is good to go! Finally.");
 
-			DEBUG_PRINTLN("Disabling DMP (you turn it on later)...");
+			//DEBUG_PRINTLN("Disabling DMP (you turn it on later)...");
 			setDMPEnabled(false);
-			Serial.flush();
-			Serial.clearWriteError();
-			DEBUG_PRINTLN("Setting up internal 42-byte (default) DMP packet buffer...");
+			//Serial.flush();
+			//Serial.clearWriteError();
+			//DEBUG_PRINTLN("Setting up internal 42-byte (default) DMP packet buffer...");
 			dmpPacketSize = 42;
 			/*if ((dmpPacketBuffer = (uint8_t *)malloc(42)) == 0) {
 			return 3; // TODO: proper error code for no memory
 			}*/
 
-			DEBUG_PRINTLN("Resetting FIFO and clearing INT status one last time...");
+			//DEBUG_PRINTLN("Resetting FIFO and clearing INT status one last time...");
 			resetFIFO();
 			getIntStatus();
 		}
 		else {
-			DEBUG_PRINTLN("ERROR! DMP configuration verification failed.");
+			//DEBUG_PRINTLN("ERROR! DMP configuration verification failed.");
 			return 2; // configuration block loading failed
 		}
 	}
 	else {
-		DEBUG_PRINTLN("ERROR! DMP code verification failed.");
+		//DEBUG_PRINTLN("ERROR! DMP code verification failed.");
 		return 1; // main binary block loading failed
 	}
 	return 0; // success
@@ -3823,12 +3823,12 @@ uint8_t MPU6050::dmpGetYawPitchRoll(float *data, Quaternion *q, VectorFloat *gra
 
 uint8_t MPU6050::dmpProcessFIFOPacket(const unsigned char *dmpData) {
 	/*for (uint8_t k = 0; k < dmpPacketSize; k++) {
-	if (dmpData[k] < 0x10) Serial.print("0");
-	Serial.print(dmpData[k], HEX);
-	Serial.print(" ");
+	if (dmpData[k] < 0x10) //Serial.print("0");
+	//Serial.print(dmpData[k], HEX);
+	//Serial.print(" ");
 	}
-	Serial.print("\n");*/
-	//Serial.println((uint16_t)dmpPacketBuffer);
+	//Serial.print("\n");*/
+	////Serial.println((uint16_t)dmpPacketBuffer);
 	return 0;
 }
 uint8_t MPU6050::dmpReadAndProcessFIFOPacket(uint8_t numPackets, uint8_t *processed) {

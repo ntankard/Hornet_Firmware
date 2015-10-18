@@ -20,7 +20,7 @@
 #define ENABLE_INDICATOR	ENABLE
 #define ENABLE_GYRO			ENABLE
 
-#define COM_MODE			XBEE
+#define COM_MODE			SERIAL
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // ---------------------------------------------------- BOARD FEATURES --------------------------------------------------------
@@ -154,6 +154,22 @@
 // --------------------------------------------------- MESSAGE SETTINGS -------------------------------------------------------
 // ----------------------------------------------------------------------------------------------------------------------------
 
+#define MB_INBOUND_COUNT	4			// must match below!!
+#define MB_INBOUND_OFFSET	100			// must match the lowest ID
+
+#define MB_JOY_XY			100
+#define MB_JOY_THROTTLE		101
+#define MB_JOY_Z			102
+#define MB_ARM_DISARM		103
+
+
+#define MB_OUTBOUND_COUTN	2
+#define MB_OUTBOUND_OFFSET	0
+
+#define MB_ROLL_PITCH_YAW	0
+#define MB_STATUS			1
+
+/*
 #define MB_OUTBOUND_COUTN	3
 
 // outbound	 com IDS
@@ -193,3 +209,4 @@
 #define	MB_MOTOR_SETTING			MB_MOTOR,			4,		10,			C_CL_NAV_INFO,	20
 #define MB_ARM_DISARM_SETTING		MB_ARM_DISARM,		2,		10,			C_CL_NAV_INFO,	2
 
+*/

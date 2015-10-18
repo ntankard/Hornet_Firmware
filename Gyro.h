@@ -14,8 +14,8 @@ public:
 	Gyro();
 	bool start();
 	int getNORegisters();
-	volatile MessageBuffer_Passer* getRegister()volatile;
-	void addRegister(MessageBuffer_Passer* newRegister){}
+	volatile MessageBuffer_Passer* getRegister();
+	void addRegister(volatile MessageBuffer_Passer* newRegister){}
 	bool run();
 
 private:

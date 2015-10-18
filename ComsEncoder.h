@@ -4,7 +4,6 @@
 #include "Runnable.h"
 #include "Error.h"
 #include "MessageBuffer_Passer.h"
-#include "MessageBuffer_Empty.h"
 #include "Coms.h"
 
 /**
@@ -21,26 +20,18 @@ public:
 	*/
 	ComsEncoder(volatile Error *e);
 
+	int getNORegisters();
+	volatile MessageBuffer_Passer* getRegister();
+	void addRegister(volatile MessageBuffer_Passer* newRegister);
+
+	bool start();
+
 	/**
 	* \brief	Sends one of the waiting messages
 	*/
-	int run();
+	bool run();
 
-	volatile MessageBuffer_Passer* getMessage()volatile { return _toReturn; }
 
-	/**
-	* \brief	DO NOTHING
-	*/
-	bool start(){ return true; }
-
-	/**
-	* \brief	Add one message to the queue
-	*
-	* \param	data	The message to send
-	*
-	* \return	Was there enough room in the buffers to send the message
-	*/
-	bool sendData(volatile MessageBuffer_Passer *data);
 
 private:
 
@@ -50,12 +41,10 @@ private:
 	/** \brief	The shared error object */
 	volatile Error *_e;
 
-	int _sendId;
-	volatile MessageBuffer_Passer* _buffer[MB_OUTBOUND_COUTN];
-	volatile MessageBuffer_Empty _default[MB_OUTBOUND_COUTN];
+	volatile MessageBuffer_Passer* _internalRegisters[MB_OUTBOUND_COUTN];
+	bool _internalRegisters_addCount[MB_OUTBOUND_COUTN];
 
-	volatile MessageBuffer_Passer* _toReturn;
-	volatile MessageBuffer_Empty _toReturnDefault;
+	int _sendId;
 };
 
 

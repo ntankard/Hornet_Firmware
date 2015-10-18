@@ -13,6 +13,10 @@ Indicator::Indicator(volatile Error *e)
 	_e = e;
 }
 
+int Indicator::getNORegisters(){ return 0; }
+volatile MessageBuffer_Passer* Indicator::getRegister(){ return &_empty; }
+void Indicator::addRegister(volatile MessageBuffer_Passer* newRegister){}
+
 //-----------------------------------------------------------------------------------------------------------------------------
 
 bool Indicator::start()
@@ -104,7 +108,7 @@ void Indicator::setDisplay(int setting_1, int setting_2, int blinks, int rate)
 
 //-----------------------------------------------------------------------------------------------------------------------------
 
-int Indicator::run()
+bool Indicator::run()
 {
 	if (_isOn)
 	{
@@ -120,7 +124,7 @@ int Indicator::run()
 			}
 		}
 	}
-	return 0;
+	return false;
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------
