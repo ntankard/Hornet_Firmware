@@ -53,7 +53,7 @@ volatile MessageBuffer_Passer* ComsDecoder::getNextRegister()
 
 bool ComsDecoder::processMessage(uint8_t *data, uint8_t dataLength, uint8_t checksum)
 {
-	int arrayID = data[2] - MB_INBOUND_OFFSET;
+	uint8_t arrayID = data[2] - MB_INBOUND_OFFSET;
 	if (arrayID < MB_INBOUND_COUNT)
 	{
 		if (!_registers[arrayID]->setPacket(data, dataLength, checksum))

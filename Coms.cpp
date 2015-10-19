@@ -3,6 +3,7 @@
 Coms::Coms(volatile Error *e) :_comsDecoder(e)
 {
 	_sendCount = 0;
+	_readCount = 0;
 }
 
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -48,7 +49,6 @@ bool Coms::run()
 		{
 			// remove the last byte from the checksum (it is the checksum)
 			_checkSum -= _readMessage[_readCount - 1] * _readCount;
-
 			if (_comsDecoder.processMessage(_readMessage, _readCount, _checkSum))
 			{
 				_readCount = 0;

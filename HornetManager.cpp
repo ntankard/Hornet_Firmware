@@ -53,7 +53,6 @@ void HornetManager::run()
 	// exicute the threads
 	_scheduler.run(); 
 
-
 	// check for special logic
 	if (_state == Connect)
 	{
@@ -81,6 +80,7 @@ void HornetManager::run()
 		_statusLast += 1000;
 		_loopCount = 0;
 	}
+
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------

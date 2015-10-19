@@ -61,6 +61,7 @@ public:
 
 	volatile uint8_t* getPacket()volatile
 	{
+		_message.value.check = getCheckSum();
 		return _message.packet.data;
 	}
 
@@ -130,7 +131,7 @@ private:
 
 	uint8_t getCheckSum()volatile
 	{
-		uint8_t check;
+		uint8_t check =0;
 		for (int i = 0; i < (PACKET_SIZE_IN - 1); i++)
 		{
 			check += _message.packet.data[i] * (i + 1);

@@ -50,7 +50,7 @@ void setup()
 	Serial.println(F("End Setup"));
 }
 
-int a = 0;
+//int a = 0;
 
 void loop()
 {
