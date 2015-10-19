@@ -4,18 +4,17 @@
 #include <Arduino.h>
 #include "CONFIG.h"
 #include "ComsDecoder.h"
+#include "Error.h"
 
-#define COM_SERIAL Serial
-//#define START_BYTE	0b10101010
-//#define END_BYTE	0b10101010
-#define END_BYTE	'\n'
+#define COM_SERIAL		Serial
+#define END_BYTE		'\n'
 #define MAX_PACKET_SIZE	50
 
 class Coms
 {
 public:
 
-	Coms();
+	Coms(volatile Error *e);
 	int getNORegisters();
 	volatile MessageBuffer_Passer* getNextRegister();
 

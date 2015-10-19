@@ -4,8 +4,10 @@
 #include "HornetManager.h"
 
 
-ComsDecoder::ComsDecoder()
+ComsDecoder::ComsDecoder(volatile Error *e)
 {
+	_e = e;
+
 	_registerAccsessed = 0;
 
 	int addCount = 0;
@@ -19,7 +21,10 @@ ComsDecoder::ComsDecoder()
 	_registers[MB_ARM_DISARM - MB_INBOUND_OFFSET] = &_ArmDisarmRegister;
 	addCount++;
 
-	//@TODO add message check here
+	if (addCount != MB_INBOUND_COUNT)
+	{
+		_e->add(E_NULL_PTR, __LINE__);
+	}
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------
@@ -38,7 +43,7 @@ volatile MessageBuffer_Passer* ComsDecoder::getNextRegister()
 	_registerAccsessed++;
 	if (_registerAccsessed >= MB_INBOUND_COUNT)
 	{
-		_registerAccsessed == 0;
+		_registerAccsessed = 0;
 	}
 
 	return toReturn;
@@ -48,10 +53,10 @@ volatile MessageBuffer_Passer* ComsDecoder::getNextRegister()
 
 bool ComsDecoder::processMessage(uint8_t *data, uint8_t dataLength, uint8_t checksum)
 {
-	int ID = data[2] - MB_INBOUND_OFFSET;
-	if (ID < MB_INBOUND_COUNT)
+	int arrayID = data[2] - MB_INBOUND_OFFSET;
+	if (arrayID < MB_INBOUND_COUNT)
 	{
-		if (!_registers[ID]->setPacket(data, dataLength, checksum))
+		if (!_registers[arrayID]->setPacket(data, dataLength, checksum))
 		{
 			// corrupt packet
 			return false;

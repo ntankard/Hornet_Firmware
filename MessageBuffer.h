@@ -5,14 +5,16 @@
 /**
 * \brief	A dynamic size message container for int16_t
 *
-* \param	ID		The message ID
-* \param	ComPri	The comunications prioroty of the message (if monitor is true)
-* \param	Size	The number of int16_t in the message
+* \param	THE_ID			The message ID
+* \param	PAYLOAD_SIZE	The number of int16_t in the message
 */
-template<uint8_t theID, int Size>
+template<uint8_t THE_ID, int PAYLOAD_SIZE>
 class MessageBuffer : public MessageBuffer_Passer
 {
 public:
+
+	static const int PACKET_SIZE_OUT = (PAYLOAD_SIZE * sizeof(int16_t)) + 5;
+	static const int PACKET_SIZE_IN = (PAYLOAD_SIZE * sizeof(int16_t)) + 4;
 
 	typedef union MemoryMap
 	{
@@ -22,14 +24,14 @@ public:
 			uint8_t length;
 			uint8_t count;
 			uint8_t ID;
-			int16_t data[Size];
+			int16_t data[PAYLOAD_SIZE];
 			uint8_t check;
 			uint8_t EOM;
 		}value;
 		struct
 		{
 			uint8_t dump;
-			uint8_t data[(Size * sizeof(int16_t)) + 5];
+			uint8_t data[PACKET_SIZE_OUT];
 		}packet;
 	};
 
@@ -37,10 +39,11 @@ public:
 
 	MessageBuffer()
 	{
-		_message.value.ID = theID;
-		_message.value.length = (Size * 2) + 3;
+		_message.value.ID = THE_ID;
+		_message.value.length = (PAYLOAD_SIZE * 2) + 1;
 		_message.value.EOM = '\n';
-		for (int i = 0; i < Size; i++)
+		_message.value.count = 0;
+		for (int i = 0; i < PAYLOAD_SIZE; i++)
 		{
 			_message.value.data[i] = 0;
 		}
@@ -73,13 +76,13 @@ public:
 	bool setPacket(uint8_t* data, int size, int countedChecksum)volatile
 	{
 		// validate size for the file type
-		if (size != ((Size * sizeof(int16_t)) + 4))
+		if (size != PACKET_SIZE_IN)
 		{
 			return false;
 		}
 
 		// validate size against the packets reported length
-		if (data[1] != ((Size * sizeof(int16_t)) + 1))
+		if (data[1] != ((PAYLOAD_SIZE * sizeof(int16_t)) + 1))
 		{
 			return false;
 		}
@@ -91,7 +94,7 @@ public:
 		}
 
 		// validate the checksum
-		if (countedChecksum != data[((Size * sizeof(int16_t)) + 3)])
+		if (countedChecksum != data[PACKET_SIZE_IN -1])
 		{
 			return false;
 		}
@@ -107,17 +110,6 @@ public:
 
 	//-----------------------------------------------------------------------------------------------------------------------------
 
-	void setData(int16_t* data)volatile
-	{
-		for (int i = 0; i < Size; i++)
-		{
-			_message.value.data[i] = data[i];
-		}
-		_message.value.check = getCheckSum();
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------------------
-
 	void setSendCount(uint8_t count)volatile
 	{
 		_message.value.check -= _message.value.count * 2;
@@ -125,9 +117,11 @@ public:
 		_message.value.check += _message.value.count * 2;
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------------------
+
 	int getPacketSize()volatile
 	{
-		return (Size * sizeof(int16_t)) + 5;
+		return PACKET_SIZE_OUT;
 	}
 
 private:
@@ -137,16 +131,15 @@ private:
 	uint8_t getCheckSum()volatile
 	{
 		uint8_t check;
-		for (int i = 0; i < ((Size * sizeof(int16_t)) + 4); i++)
+		for (int i = 0; i < (PACKET_SIZE_IN - 1); i++)
 		{
 			check += _message.packet.data[i] * (i + 1);
 		}
 		return check;
 	}
 
-
+	//-----------------------------------------------------------------------------------------------------------------------------
 
 	volatile  MemoryMap _message;
-
 
 };

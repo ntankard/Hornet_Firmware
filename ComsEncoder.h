@@ -41,6 +41,7 @@ private:
 	/** \brief	The shared error object */
 	volatile Error *_e;
 
+	MessageBuffer<0, 1> _empty[MB_OUTBOUND_COUTN];
 	volatile MessageBuffer_Passer* _internalRegisters[MB_OUTBOUND_COUTN];
 	bool _internalRegisters_addCount[MB_OUTBOUND_COUTN];
 

@@ -36,7 +36,6 @@ private:
 	Servo _yaw;
 	Servo _throttle;
 
-
 	volatile MessageBuffer_Passer* _throttleJoyRegister;
 	volatile MessageBuffer_Passer* _XYJoyRegister;
 	volatile MessageBuffer_Passer* _ZJoyRegister;

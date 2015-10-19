@@ -1,6 +1,6 @@
 #include "Coms.h"
 
-Coms::Coms()
+Coms::Coms(volatile Error *e) :_comsDecoder(e)
 {
 	_sendCount = 0;
 }
@@ -64,15 +64,12 @@ bool Coms::run()
 		}
 		else
 		{
-			if (_readCount >= MAX_PACKET_SIZE)
+			if (_readCount < MAX_PACKET_SIZE)
 			{
-				// packet overflow
+				_readMessage[_readCount] = read;
+				_readCount++;
+				_checkSum += read*_readCount;
 			}
-
-			// part of a packet
-			_readMessage[_readCount] = read;
-			_readCount++;
-			_checkSum += read*_readCount;
 		}
 	}
 	return false;

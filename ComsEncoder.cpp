@@ -1,12 +1,13 @@
 #include "ComsEncoder.h"
 
-ComsEncoder::ComsEncoder( volatile Error *e)
+ComsEncoder::ComsEncoder(volatile Error *e) :_coms(e)
 {
 	_e = e;
 
 	_sendId = 0;
 	for (int i = 0; i < MB_OUTBOUND_COUTN; i++)
 	{
+		_internalRegisters[i] = &_empty[i];
 		_internalRegisters_addCount[i] = false;
 	}
 }
@@ -46,6 +47,10 @@ bool ComsEncoder::start()
 		{
 			return false;	// not all registers have been attached
 		}	
+		if (_internalRegisters[i]->getID() == 0)
+		{
+			return false;
+		}
 	}
 	return true;
 }

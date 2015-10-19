@@ -37,8 +37,6 @@ private:
 
 	volatile MessageBuffer<MB_ROLL_PITCH_YAW, 3> _rollPitchYaw_Register;
 
-	//volatile MessageBuffer_Manager<MB_ROLL_PITCH_YAW_SETTINGS> _rollPitchYawSender;
-	//volatile MessageBuffer_Passer* _toSend;
 };
 
 #else

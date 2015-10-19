@@ -3,6 +3,7 @@
 
 #include "MessageBuffer.h"
 #include "CONFIG.h"
+#include "Error.h"
 
 /**
 * \brief	An object to process incoming messages
@@ -19,7 +20,7 @@ public:
 	* \author	Nicholas
 	* \date	1/08/2015
 	*/
-	ComsDecoder();
+	ComsDecoder(volatile Error *e);
 
 	int getNORegisters();
 
@@ -44,6 +45,8 @@ public:
 	void receiveFailure();
 
 private:
+
+	volatile Error * _e;
 
 	volatile MessageBuffer<MB_JOY_THROTTLE, 1> _throttleJoyRegister;
 	volatile MessageBuffer<MB_JOY_XY, 2> _XYJoyRegister;
