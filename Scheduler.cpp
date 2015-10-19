@@ -58,20 +58,22 @@ bool Scheduler::finish()
 				}
 			}
 		}
-		//return true;
+		return true;
 	}
 	return false;
+	//this gets called twice, mby this is a problem? try manuly seting the registers and try seting the registers to an empty one befor attach, if not cry
+
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------
 
 bool Scheduler::startAll()
 {
-	if (!finish())
+	/*if (!finish())
 	{
 		_e->add(E_NULL_PTR, __LINE__);
 		return false;
-	}
+	}*/
 
 	for (int i = 0; i < C_SCHEDULER_THREAD_NUM;i++)
 	{

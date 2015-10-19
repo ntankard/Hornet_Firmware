@@ -8,7 +8,7 @@
 */
 struct thread_settings
 {
-	Runnable *thread;
+	Runnable * volatile thread;
 	int priority;
 };
 

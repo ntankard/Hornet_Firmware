@@ -43,7 +43,6 @@ void setup()
 	delay(500);
 	Wire.begin();	// no idea why this needs to be here
 
-	//TP((String)Serial.available());
 	Serial.println(F("Start Setup"));
 
 	hornetManager.start();
@@ -55,8 +54,9 @@ int a = 0;
 
 void loop()
 {
-	a++;
-	//hornetManager.run();
+	//a++;
+	//Serial.println((String)freeRam());
+	hornetManager.run();
 	//TP((String)a);
 }
 

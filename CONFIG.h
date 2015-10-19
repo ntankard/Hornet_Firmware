@@ -164,10 +164,10 @@
 
 
 #define MB_OUTBOUND_COUTN	2
-#define MB_OUTBOUND_OFFSET	0
+#define MB_OUTBOUND_OFFSET	1
 
-#define MB_ROLL_PITCH_YAW	0
-#define MB_STATUS			1
+#define MB_ROLL_PITCH_YAW	1
+#define MB_STATUS			2
 
 /*
 #define MB_OUTBOUND_COUTN	3

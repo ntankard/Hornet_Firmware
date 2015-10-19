@@ -49,7 +49,7 @@ public:
 
 	//-----------------------------------------------------------------------------------------------------------------------------
 	
-	volatile uint8_t getID()volatile
+	uint8_t getID()volatile
 	{
 		return _message.value.ID;
 	}
@@ -70,7 +70,7 @@ public:
 
 	//-----------------------------------------------------------------------------------------------------------------------------
 
-	volatile bool setPacket(uint8_t* data, int size, int countedChecksum)volatile
+	bool setPacket(uint8_t* data, int size, int countedChecksum)volatile
 	{
 		// validate size for the file type
 		if (size != ((Size * sizeof(int16_t)) + 4))
@@ -107,7 +107,7 @@ public:
 
 	//-----------------------------------------------------------------------------------------------------------------------------
 
-	volatile void setData(int16_t* data)volatile
+	void setData(int16_t* data)volatile
 	{
 		for (int i = 0; i < Size; i++)
 		{
@@ -118,14 +118,14 @@ public:
 
 	//-----------------------------------------------------------------------------------------------------------------------------
 
-	volatile void setSendCount(uint8_t count)volatile
+	void setSendCount(uint8_t count)volatile
 	{
 		_message.value.check -= _message.value.count * 2;
 		_message.value.count = count;
 		_message.value.check += _message.value.count * 2;
 	}
 
-	volatile int getPacketSize()volatile
+	int getPacketSize()volatile
 	{
 		return (Size * sizeof(int16_t)) + 5;
 	}
@@ -134,7 +134,7 @@ private:
 
 	//-----------------------------------------------------------------------------------------------------------------------------
 
-	volatile uint8_t getCheckSum()volatile
+	uint8_t getCheckSum()volatile
 	{
 		uint8_t check;
 		for (int i = 0; i < ((Size * sizeof(int16_t)) + 4); i++)
