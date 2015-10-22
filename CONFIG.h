@@ -15,7 +15,7 @@
 // ----------------------------------------------------- BUILD CONFIG ---------------------------------------------------------
 // ----------------------------------------------------------------------------------------------------------------------------
 
-#define DEBUG_BUILD ENABLE
+#define DEBUG_BUILD			ENABLE
 
 #define ENABLE_INDICATOR	ENABLE
 #define ENABLE_GYRO			ENABLE
@@ -29,16 +29,14 @@
 #if DEBUG_BUILD == ENABLE
 
 #define DEBUG_PRINT(x) Serial.print(x)
-//#define DEBUG_PRINTF(x, y) Serial.print('d'+x, y)
 #define DEBUG_PRINTLN(x) Serial.println(x)
-//#define DEBUG_PRINTLNF(x, y) Serial.println('d'+x, y)
 #define TP(message) Serial.println(message);
 
 #else
+
 #define DEBUG_PRINT(x)
-#define DEBUG_PRINTF(x, y)
 #define DEBUG_PRINTLN(x)
-#define DEBUG_PRINTLNF(x, y)
+
 #endif
 
 //-----------------------------------------------------------------------------------------------------------------------------
@@ -55,29 +53,18 @@
 #endif
 
 #if COM_MODE == XBEE
-//#define USER_XBEE_COMS
+	#define COM_SERIAL		XBEE_SERIAL
 #endif
 #if COM_MODE == SERIAL
-//#define USER_SERIAL_COMS
+	#define COM_SERIAL		Serial
 #endif
-
-
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // --------------------------------------------------- GENERAL SETTINGS -------------------------------------------------------
 // ----------------------------------------------------------------------------------------------------------------------------
 
 #define C_ERROR_BUFFER 10
-#define C_COMS_BUFFER 10
-#define C_SERIAL_COMS_PORT Serial		//@TODO make this dynamic
-#define C_XBEE_COMS_PORT Serial2		//@TODO make this dynamic
-#define C_COMENCODER_SIZE 10
-#define C_COMENCODER_M_SIZE 20
 #define C_CONNECT_PULSE_TIME 1000
-#define C_COMS_BAUD_RATE 9600
-#define C_COMMS_BSTATION_ADDRESS 0x0000
-#define C_COMMS_MAX_RETRY 3
-
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // ----------------------------------------------------- ERROR CODES ----------------------------------------------------------
@@ -94,7 +81,7 @@
 // --------------------------------------------------- SCHEDULER SETTINS ------------------------------------------------------
 // ----------------------------------------------------------------------------------------------------------------------------
 
-// THe build depends on there being this many threads and them being from 0 to C_SCHEDULER_THREAD_NUM -1 with no repeats
+// The build depends on there being this many threads and them being from 0 to C_SCHEDULER_THREAD_NUM -1 with no repeats
 #define C_SCHEDULER_THREAD_NUM 4
 
 // must be in required start order
@@ -149,64 +136,26 @@
 #define C_APM_THROTTLE	12
 #define C_APM_YAW		13
 
+#define XBEE_SERIAL		Serial2
+
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // --------------------------------------------------- MESSAGE SETTINGS -------------------------------------------------------
 // ----------------------------------------------------------------------------------------------------------------------------
 
-#define MB_INBOUND_COUNT	4			// must match below!!
-#define MB_INBOUND_OFFSET	100			// must match the lowest ID
+// inbound
+#define MB_INBOUND_COUNT	4		// must match the numebr of packets!!
+#define MB_INBOUND_OFFSET	100		// must match the lowest ID
 
 #define MB_JOY_XY			100
 #define MB_JOY_THROTTLE		101
 #define MB_JOY_Z			102
 #define MB_ARM_DISARM		103
 
-
-#define MB_OUTBOUND_COUTN	2
-#define MB_OUTBOUND_OFFSET	1
+// outbound
+#define MB_OUTBOUND_COUTN	2		// must match the numebr of packets!!
+#define MB_OUTBOUND_OFFSET	1		// must match the lowest ID
 
 #define MB_ROLL_PITCH_YAW	1
 #define MB_STATUS			2
 
-/*
-#define MB_OUTBOUND_COUTN	3
-
-// outbound	 com IDS
-#define MB_ROLL_PITCH_YAW	0
-#define MB_STATUS			1
-#define MB_MOTOR			2
-
-// inbound coms IDS
-#define MB_JOY_XY			'j'
-#define MB_JOY_THROTTLE		't'
-#define MB_JOY_Z			'z'
-#define MB_ARM_DISARM		'd'
-
-// com priorities
-#define C_CL			6
-#define C_CL_COMS		0
-#define C_CL_SYSTEM_CMD 1
-#define C_CL_NAV_CMD	2
-#define C_CL_NAV_INFO	3
-#define C_CL_NAV_USE	4
-#define C_CL_DEBUG		5
-
-// removed
-#define C_COMS_CODE_CONNECT_REQUEST 'a'
-#define C_COMS_CODE_CONNECT_CONFIRM 'b'
-
-
-
-//									_________________________________________________________________
-//									| ID				| SIZE	| MONITOR	| COM PRI		| BUFFER SIZE
-//									-----------------------------------------------------------------
-#define MB_ROLL_PITCH_YAW_SETTINGS	MB_ROLL_PITCH_YAW,	3,		10,			C_CL_NAV_INFO,	10
-#define MB_STATUS_SETTINGS			MB_STATUS,			2,		1,			C_CL_SYSTEM_CMD,3
-#define	MB_JOY_XY_SETTING			MB_JOY_XY,			2,		0,			C_CL_NAV_CMD,	1
-#define	MB_JOY_THROTTLE_SETTING		MB_JOY_THROTTLE,	1,		0,			C_CL_NAV_CMD,	1
-#define	MB_JOY_Z_SETTING			MB_JOY_Z,			1,		0,			C_CL_NAV_CMD,	1
-#define	MB_MOTOR_SETTING			MB_MOTOR,			4,		10,			C_CL_NAV_INFO,	20
-#define MB_ARM_DISARM_SETTING		MB_ARM_DISARM,		2,		10,			C_CL_NAV_INFO,	2
-
-*/

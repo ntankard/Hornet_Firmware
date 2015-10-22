@@ -13,6 +13,7 @@ public:
 	int getNORegisters(){ return 0; }
 	volatile MessageBuffer_Passer* getRegister(){ return &_empty; }
 	void addRegister(volatile MessageBuffer_Passer* newRegister);
+	bool isArmed(){ return _isArmed; }
 
 	bool start();
 

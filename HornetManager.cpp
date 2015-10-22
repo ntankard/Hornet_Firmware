@@ -58,6 +58,20 @@ void HornetManager::run()
 	{
 		runConnect();
 	}
+	else if (_state == Idle)
+	{
+		if (_theDrone.isArmed())
+		{
+			changeState(ST_TO_FLIGHT);
+		}
+	}
+	else if (_state == Flight)
+	{
+		if (!_theDrone.isArmed())
+		{
+			changeState(ST_TO_IDLE);
+		}
+	}
 
 	// catch exeption
 	if (_e.isError())

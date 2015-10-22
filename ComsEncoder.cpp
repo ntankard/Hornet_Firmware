@@ -52,6 +52,7 @@ bool ComsEncoder::start()
 			return false;
 		}
 	}
+	_throttle.start(1);
 	return true;
 }
 
@@ -59,12 +60,16 @@ bool ComsEncoder::start()
 
 bool ComsEncoder::run()
 {
-	// resend one of the packets
-	_coms.send(_internalRegisters[_sendId]);
-	_sendId++;
-	if (_sendId >= MB_OUTBOUND_COUTN)
+	if (_throttle.hasTimeOut())
 	{
-		_sendId = 0;
+		_throttle.start(1);
+		// resend one of the packets
+		_coms.send(_internalRegisters[_sendId]);
+		_sendId++;
+		if (_sendId >= MB_OUTBOUND_COUTN)
+		{
+			_sendId = 0;
+		}
 	}
 
 	// attempt to read any packets

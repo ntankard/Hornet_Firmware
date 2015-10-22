@@ -117,10 +117,13 @@ bool FlightController::run()
 	// update joystick values
 	if (!_isArmingDisArming)
 	{
-		_roll.writeMicroseconds(_XYJoyRegister->getData()[0] * MULTIPLYER + MIN);
-		_pitch.writeMicroseconds(_XYJoyRegister->getData()[1] * MULTIPLYER + MIN);
-		_yaw.writeMicroseconds(_ZJoyRegister->getData()[0] * MULTIPLYER + MIN);
-		_throttle.writeMicroseconds(_throttleJoyRegister->getData()[0] * MULTIPLYER + MIN);
+		if (_isArmed)
+		{
+			_roll.writeMicroseconds(_XYJoyRegister->getData()[0] * MULTIPLYER + MIN);
+			_pitch.writeMicroseconds(_XYJoyRegister->getData()[1] * MULTIPLYER + MIN);
+			_yaw.writeMicroseconds(_ZJoyRegister->getData()[0] * MULTIPLYER + MIN);
+			_throttle.writeMicroseconds(_throttleJoyRegister->getData()[0] * MULTIPLYER + MIN);
+		}
 	}
 
 	return false;

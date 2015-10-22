@@ -1,7 +1,7 @@
 #pragma once
 
 #include "MessageBuffer_Passer.h"
-
+#include "CONFIG.h"
 /**
 * \brief	A dynamic size message container for int16_t
 *
@@ -83,7 +83,7 @@ public:
 		}
 
 		// validate size against the packets reported length
-		if (data[1] != ((PAYLOAD_SIZE * sizeof(int16_t)) + 1))
+		if (data[0] != ((PAYLOAD_SIZE * sizeof(int16_t)) + 1))
 		{
 			return false;
 		}

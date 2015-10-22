@@ -5,6 +5,7 @@
 #include "Error.h"
 #include "MessageBuffer_Passer.h"
 #include "Coms.h"
+#include "TimeOut.h"
 
 /**
 * \brief	An object to buffer messages for sending
@@ -46,6 +47,8 @@ private:
 	bool _internalRegisters_addCount[MB_OUTBOUND_COUTN];
 
 	int _sendId;
+
+	TimeOut _throttle;
 };
 
 

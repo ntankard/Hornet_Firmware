@@ -24,6 +24,8 @@ volatile MessageBuffer_Passer* Coms::getNextRegister()
 
 void Coms::send(volatile MessageBuffer_Passer* data)
 {
+	data->setSendCount(_sendCount);
+	_sendCount++;
 	send((uint8_t*)data->getPacket(), data->getPacketSize());
 }
 

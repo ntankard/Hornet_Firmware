@@ -6,7 +6,6 @@
 #include "ComsDecoder.h"
 #include "Error.h"
 
-#define COM_SERIAL		Serial
 #define END_BYTE		'\n'
 #define MAX_PACKET_SIZE	50
 

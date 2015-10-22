@@ -18,7 +18,7 @@ HornetManager hornetManager;
 void setup()
 {
 	delay(1000);
-	Serial.begin(9600);	//@TODO this should be in the USB serial
+	Serial.begin(115200);	//@TODO this should be in the USB serial
 	Serial.clearWriteError();
 	Serial.flush();
 	while (Serial.available()!=0)
@@ -31,12 +31,12 @@ void setup()
 		Serial.read();
 	}
 #if COM_MODE == XBEE
-	C_XBEE_COMS_PORT.begin(9600);	//@TODO this should be in the USB serial
-	C_XBEE_COMS_PORT.clearWriteError();
-	C_XBEE_COMS_PORT.flush();
-	while (C_XBEE_COMS_PORT.available())
+	XBEE_SERIAL.begin(115200);	//@TODO this should be in the USB serial
+	XBEE_SERIAL.clearWriteError();
+	XBEE_SERIAL.flush();
+	while (XBEE_SERIAL.available())
 	{
-		C_XBEE_COMS_PORT.read();
+		XBEE_SERIAL.read();
 	}
 #endif
 
