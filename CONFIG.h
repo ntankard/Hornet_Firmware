@@ -8,16 +8,19 @@
 #define ENABLE	1
 #define DISABLE 2
 
+#define XBEE	1
+#define SERIAL	2
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // ----------------------------------------------------- BUILD CONFIG ---------------------------------------------------------
 // ----------------------------------------------------------------------------------------------------------------------------
 
-#define DEBUG_BUILD ENABLE
+#define DEBUG_BUILD			ENABLE
 
-#define ENABLE_INDICATOR	DISABLE
-#define ENABLE_GYRO			DISABLE
-#define ENABLE_LIDAR		ENABLE
+#define ENABLE_INDICATOR	ENABLE
+#define ENABLE_GYRO			ENABLE
+
+#define COM_MODE			SERIAL
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // ---------------------------------------------------- BOARD FEATURES --------------------------------------------------------
@@ -26,17 +29,14 @@
 #if DEBUG_BUILD == ENABLE
 
 #define DEBUG_PRINT(x) Serial.print(x)
-//#define DEBUG_PRINTF(x, y) Serial.print('d'+x, y)
 #define DEBUG_PRINTLN(x) Serial.println(x)
-//#define DEBUG_PRINTLNF(x, y) Serial.println('d'+x, y)
-#define TP(message) Serial.println(message)
-#define LOCK while(true){}
+#define TP(message) Serial.println(message);
 
 #else
+
 #define DEBUG_PRINT(x)
-#define DEBUG_PRINTF(x, y)
 #define DEBUG_PRINTLN(x)
-#define DEBUG_PRINTLNF(x, y)
+
 #endif
 
 //-----------------------------------------------------------------------------------------------------------------------------
@@ -52,25 +52,19 @@
 #define USE_MPU6050
 #endif
 
-#if ENABLE_LIDAR == ENABLE
-#define USE_LIDAR
+#if COM_MODE == XBEE
+	#define COM_SERIAL		XBEE_SERIAL
 #endif
-
-#define USER_SERIAL_COMS
+#if COM_MODE == SERIAL
+	#define COM_SERIAL		Serial
+#endif
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // --------------------------------------------------- GENERAL SETTINGS -------------------------------------------------------
 // ----------------------------------------------------------------------------------------------------------------------------
 
 #define C_ERROR_BUFFER 10
-#define C_COMS_BUFFER 10
-#define C_COMS_PORT Serial
-#define C_COMENCODER_SIZE 10
-#define C_COMENCODER_M_SIZE 20
 #define C_CONNECT_PULSE_TIME 1000
-#define C_LIDAR_SERIAL Serial1
-#define C_LIDAR_MOTOCTL 3
-
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // ----------------------------------------------------- ERROR CODES ----------------------------------------------------------
@@ -82,20 +76,19 @@
 #define E_INDEX_OUT_BOUNDS	0x07
 #define E_BUFFER_OVERFLOW   0x08
 #define E_BUS_FAIL			0x09
-#define E_PACKET_CORRUPTION 0x0A
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // --------------------------------------------------- SCHEDULER SETTINS ------------------------------------------------------
 // ----------------------------------------------------------------------------------------------------------------------------
 
-// THe build depends on there being this many threads and them being from 0 to C_SCHEDULER_THREAD_NUM -1 with no repeats
+// The build depends on there being this many threads and them being from 0 to C_SCHEDULER_THREAD_NUM -1 with no repeats
 #define C_SCHEDULER_THREAD_NUM 4
 
 // must be in required start order
 #define C_SCHEDULER_INDICATOR_THREAD 0
 #define C_SCHEDULER_COMENCODER_THREAD 1
 #define C_SCHEDULER_GYRO_THREAD 2
-#define C_SCHEDULER_LIDAR_THREAD 3
+#define C_SCHEDULER_FLIGHT_THREAD 3
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // ----------------------------------------------------- STATE SETTINGS -------------------------------------------------------
@@ -103,15 +96,15 @@
 
 
 //							____________|			  Thread Priority				|_______________________
-//							| State		| INDICATOR		| COM EN	|GYRO	|LIDAR	| LIGHT	|BLINKS| RATE
+//							| State		| INDICATOR		| COM EN	|GYRO	|FLIGHT	| LIGHT	|BLINKS| RATE
 //							-----------------------------------------------------------------
-#define ST_TO_CONNECT		Connect,	10,				1,			0,		1,		0,		1,		1000
-#define ST_TO_IDLE			Idle,		10,				1,			5,		1,		5,		2,		250
-#define ST_TO_TAKEOFF		TakeOff,	10,				1,			5,		1,		10,		3,		500
-#define ST_TO_FLIGHT		Flight,		10,				1,			5,		1,		15,		1,		1000
-#define ST_TO_LAND			Land,		10,				1,			5,		1,		20,		1,		1000
-#define ST_TO_EMERGENCY		Emergency,	10,				1,			5,		1,		21,		1,		1000
-#define ST_TO_CRACH			Crash,		10,				1,			5,		1,		22,		1,		1000
+#define ST_TO_CONNECT		Connect,	10,				1,			0,		5,		0,		1,		1000
+#define ST_TO_IDLE			Idle,		10,				1,			5,		5,		5,		2,		250
+#define ST_TO_TAKEOFF		TakeOff,	10,				1,			5,		5,		10,		3,		500
+#define ST_TO_FLIGHT		Flight,		10,				1,			5,		5,		15,		1,		1000
+#define ST_TO_LAND			Land,		10,				1,			5,		5,		20,		1,		1000
+#define ST_TO_EMERGENCY		Emergency,	10,				1,			5,		5,		21,		1,		1000
+#define ST_TO_CRACH			Crash,		10,				1,			5,		5,		22,		1,		1000
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // ----------------------------------------------------- PIN SETTINGS ---------------------------------------------------------
@@ -138,44 +131,31 @@
 #define C_MAG_DRDY 11
 #define C_MAG_RESET 12
 
+#define C_APM_ROLL		10
+#define C_APM_PITCH		11
+#define C_APM_THROTTLE	12
+#define C_APM_YAW		13
+
+#define XBEE_SERIAL		Serial2
+
+
 //-----------------------------------------------------------------------------------------------------------------------------
 // --------------------------------------------------- MESSAGE SETTINGS -------------------------------------------------------
 // ----------------------------------------------------------------------------------------------------------------------------
 
-// outbound	 com IDS
-#define MB_ROLL_PITCH_YAW	'y'
-#define MB_STATUS			's'
-#define MB_MOTOR			'm'
-#define MB_LIDAR			'l'
+// inbound
+#define MB_INBOUND_COUNT	4		// must match the numebr of packets!!
+#define MB_INBOUND_OFFSET	100		// must match the lowest ID
 
-// inbound coms IDS
-#define MB_JOY_XY			'j'
-#define MB_JOY_THROTTLE		't'
-#define MB_JOY_Z			'z'
-#define MB_ARM_DISARM		'd'
+#define MB_JOY_XY			100
+#define MB_JOY_THROTTLE		101
+#define MB_JOY_Z			102
+#define MB_ARM_DISARM		103
 
-// com priorities
-#define C_CL			6
-#define C_CL_COMS		0
-#define C_CL_SYSTEM_CMD 1
-#define C_CL_NAV_CMD	2
-#define C_CL_NAV_INFO	3
-#define C_CL_NAV_USE	4
-#define C_CL_DEBUG		5
+// outbound
+#define MB_OUTBOUND_COUTN	2		// must match the numebr of packets!!
+#define MB_OUTBOUND_OFFSET	1		// must match the lowest ID
 
-// removed
-#define C_COMS_CODE_CONNECT_REQUEST 'a'
-#define C_COMS_CODE_CONNECT_CONFIRM 'b'
+#define MB_ROLL_PITCH_YAW	1
+#define MB_STATUS			2
 
-
-
-//									_________________________________________________________________
-//									| ID				| SIZE	| MONITOR	| COM PRI		| BUFFER SIZE
-//									-----------------------------------------------------------------
-#define MB_ROLL_PITCH_YAW_SETTINGS	MB_ROLL_PITCH_YAW,	3,		10,			C_CL_NAV_INFO,	10
-#define MB_STATUS_SETTINGS			MB_STATUS,			1,		1,			C_CL_SYSTEM_CMD,3
-#define	MB_JOY_XY_SETTING			MB_JOY_XY,			2,		0,			C_CL_NAV_CMD,	1
-#define	MB_JOY_THROTTLE_SETTING		MB_JOY_THROTTLE,	1,		0,			C_CL_NAV_CMD,	1
-#define	MB_JOY_Z_SETTING			MB_JOY_Z,			1,		0,			C_CL_NAV_CMD,	1
-#define	MB_MOTOR_SETTING			MB_MOTOR,			4,		1,			C_CL_NAV_INFO,	20
-#define	MB_LIDAR_SETTING			MB_LIDAR,			2,		1,			C_CL_NAV_INFO,	30

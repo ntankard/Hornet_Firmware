@@ -6,3 +6,9 @@ Hornet_Firmware.vcxproj.filters
 Hornet_Firmware.opensdf
 __vm/Upload.vmps.xml
 __vm/
+Debug/Hornet_Firmware.tlog/CL.read.1.tlog
+Debug/Hornet_Firmware.tlog/CL.write.1.tlog
+Debug/Hornet_Firmware.tlog/Hornet_Firmware.lastbuildstate
+Debug/Hornet_Firmware.tlog/cl.command.1.tlog
+Debug/Hornet_Firmware.tlog/unsuccessfulbuild
+Debug/vc120.idb

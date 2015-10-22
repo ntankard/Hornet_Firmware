@@ -39,18 +39,41 @@ void Scheduler::addRunable(int ID, Runnable *theRunnable)
 
 bool Scheduler::finish()
 {
-	return (_setCount == C_SCHEDULER_THREAD_NUM);
+	//TP("YES");
+	if ((_setCount == C_SCHEDULER_THREAD_NUM))
+	{
+		//TP("YES");
+		for (int i = 0; i < C_SCHEDULER_THREAD_NUM; i++)
+		{
+			for (int r = 0; r < _threads[i].thread->getNORegisters(); r++)
+			{
+				volatile MessageBuffer_Passer* toDistribute = _threads[i].thread->getRegister();
+				for (int j = 0; j < C_SCHEDULER_THREAD_NUM; j++)
+				{
+					if (i != j)
+					{
+						//TP((String)i + " " + (String)j);
+						_threads[j].thread->addRegister(toDistribute);
+					}
+				}
+			}
+		}
+		return true;
+	}
+	return false;
+	//this gets called twice, mby this is a problem? try manuly seting the registers and try seting the registers to an empty one befor attach, if not cry
+
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------
 
 bool Scheduler::startAll()
 {
-	if (!finish())
+	/*if (!finish())
 	{
 		_e->add(E_NULL_PTR, __LINE__);
 		return false;
-	}
+	}*/
 
 	for (int i = 0; i < C_SCHEDULER_THREAD_NUM;i++)
 	{
@@ -75,7 +98,7 @@ void Scheduler::setPriority(int ID, int p)
 
 //-----------------------------------------------------------------------------------------------------------------------------
 
-int Scheduler::run()
+bool Scheduler::run()
 {
 
 	// keep looping until a thread runs (this will lock if all thread are 0)
@@ -102,8 +125,3 @@ int Scheduler::run()
 	}
 }
 
-volatile MessageBuffer_Passer *Scheduler::getData()
-{
-	//@TODO add count check here
-	return _threads[_currentThread].thread->getMessage();
-}

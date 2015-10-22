@@ -4,74 +4,80 @@
 #include "HornetManager.h"
 
 
-ComsDecoder::ComsDecoder()
+ComsDecoder::ComsDecoder(volatile Error *e)
 {
+	_e = e;
+
+	_registerAccsessed = 0;
+
+	int addCount = 0;
+
+	_registers[MB_JOY_THROTTLE - MB_INBOUND_OFFSET] = &_throttleJoyRegister;
+	addCount++;
+	_registers[MB_JOY_XY - MB_INBOUND_OFFSET] = &_XYJoyRegister;
+	addCount++;
+	_registers[MB_JOY_Z - MB_INBOUND_OFFSET] = &_ZJoyRegister;
+	addCount++;
+	_registers[MB_ARM_DISARM - MB_INBOUND_OFFSET] = &_ArmDisarmRegister;
+	addCount++;
+
+	if (addCount != MB_INBOUND_COUNT)
+	{
+		_e->add(E_NULL_PTR, __LINE__);
+	}
 }
 
-volatile MessageBuffer_Passer* ComsDecoder::processMessage(uint8_t *data, uint8_t dataLength)
-{
-	volatile MessageBuffer_Passer* toSend;
+//-----------------------------------------------------------------------------------------------------------------------------
 
-	switch (data[0])
+int ComsDecoder::getNORegisters()
+{
+	return MB_INBOUND_COUNT;
+}
+
+//-----------------------------------------------------------------------------------------------------------------------------
+
+volatile MessageBuffer_Passer* ComsDecoder::getNextRegister()
+{
+	volatile MessageBuffer_Passer* toReturn = _registers[_registerAccsessed];
+
+	_registerAccsessed++;
+	if (_registerAccsessed >= MB_INBOUND_COUNT)
 	{
-	case C_COMS_CODE_CONNECT_CONFIRM:
-		_charMessage.setID(data[0]);
-		return &_charMessage;
-	case MB_ARM_DISARM:
-		_charMessage.setID(data[0]);
-		return &_charMessage;
-	case MB_JOY_XY:
-		if (dataLength != 5)
-		{
-			break;//@TODO throw
-		}
-		toSend = _XYJoySender.getAvailable();
-		for (int i = 0; i < dataLength; i++)
-		{
-			toSend->getPacket()[i] = data[i];
-		}
-		return toSend;
-	case MB_JOY_THROTTLE:
-		if (dataLength != 3)
-		{
-			break;//@TODO throw
-		}
-		toSend = _throttleJoySender.getAvailable();
-		for (int i = 0; i < dataLength; i++)
-		{
-			toSend->getPacket()[i] = data[i];
-		}
-		return toSend;
-	case MB_JOY_Z:
-		if (dataLength != 3)
-		{
-			break;//@TODO throw
-		}
-		toSend = _throttleJoySender.getAvailable();
-		for (int i = 0; i < dataLength; i++)
-		{
-			toSend->getPacket()[i] = data[i];
-		}
-		return toSend;
-	default:
-		//@TODO message error
-		break;
+		_registerAccsessed = 0;
 	}
 
-	// unknown message, forward it on (ADD ERROR HERE)
-	_charMessage.setID(data[0]);
-	return &_charMessage;
+	return toReturn;
 }
 
-int16_t toInt16_t(uint8_t *data)
+//-----------------------------------------------------------------------------------------------------------------------------
+
+bool ComsDecoder::processMessage(uint8_t *data, uint8_t dataLength, uint8_t checksum)
 {
-	return (data[1] << 8) || data[0];
+	uint8_t arrayID = data[2] - MB_INBOUND_OFFSET;
+	if (arrayID < MB_INBOUND_COUNT)
+	{
+		if (!_registers[arrayID]->setPacket(data, dataLength, checksum))
+		{
+			// corrupt packet
+			return false;
+		}
+	}
+	else
+	{
+		// corrupt packet
+		return false;
+	}
+	return true;
 }
+
+//-----------------------------------------------------------------------------------------------------------------------------
 
 void ComsDecoder::sendFailure()
 {
 	//@TODO this
 }
+
+//-----------------------------------------------------------------------------------------------------------------------------
 
 void ComsDecoder::receiveFailure()
 {

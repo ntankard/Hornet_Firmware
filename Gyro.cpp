@@ -9,20 +9,20 @@ Gyro::Gyro()
 bool Gyro::start()
 {
 	// initialize device
-	DEBUG_PRINTLN("Initializing I2C devices...");
+	//DEBUG_PRINTLN("Initializing I2C devices...");
 	mpu.initialize();
 
 	// verify connection
-	DEBUG_PRINTLN("Testing device connections...");
+	//DEBUG_PRINTLN("Testing device connections...");
 	if (!mpu.testConnection())
 	{
-		DEBUG_PRINTLN("MPU6050 connection failed");
+		//DEBUG_PRINTLN("MPU6050 connection failed");
 		return false;
 	}
-	DEBUG_PRINTLN("MPU6050 connection successful");
+	//DEBUG_PRINTLN("MPU6050 connection successful");
 
 	// load and configure the DMP
-	DEBUG_PRINTLN("Initializing DMP...");
+	//DEBUG_PRINTLN("Initializing DMP...");
 	devStatus = mpu.dmpInitialize();
 
 	// supply your own gyro offsets here, scaled for min sensitivity
@@ -34,7 +34,7 @@ bool Gyro::start()
 	// make sure it worked (returns 0 if so)
 	if (devStatus == 0) {
 		// turn on the DMP, now that it's ready
-		DEBUG_PRINTLN("Enabling DMP...");
+		//DEBUG_PRINTLN("Enabling DMP...");
 		mpu.setDMPEnabled(true);
 
 		// enable Arduino interrupt detection
@@ -43,7 +43,7 @@ bool Gyro::start()
 		//mpuIntStatus = mpu.getIntStatus();
 
 		// set our DMP Ready flag so the main loop() function knows it's okay to use it
-		DEBUG_PRINTLN("DMP ready!");
+		//DEBUG_PRINTLN("DMP ready!");
 
 		// get expected DMP packet size for later comparison
 		packetSize = mpu.dmpGetFIFOPacketSize();
@@ -53,16 +53,26 @@ bool Gyro::start()
 		// 1 = initial memory load failed
 		// 2 = DMP configuration updates failed
 		// (if it's going to break, usually the code will be 1)
-		DEBUG_PRINT("DMP Initialization failed (code ");
-		DEBUG_PRINT(devStatus);
-		DEBUG_PRINTLN(")");
+		//DEBUG_PRINT("DMP Initialization failed (code ");
+		//DEBUG_PRINT(devStatus);
+		//DEBUG_PRINTLN(")");
 		return false;
 	}
 
 	return true;
 }
 
-int Gyro::run()
+int Gyro::getNORegisters()
+{
+	return 1;
+}
+
+volatile MessageBuffer_Passer* Gyro::getRegister()
+{
+	return &_rollPitchYaw_Register;
+}
+
+bool Gyro::run()
 {
 	fifoCount = mpu.getFIFOCount();
 
@@ -76,8 +86,8 @@ int Gyro::run()
 	if (fifoCount >= 1024)
 	{
 		mpu.resetFIFO();	//@TODO may need to do more here
-		DEBUG_PRINTLN("FIFO overflow!");
-		return 0;
+		//DEBUG_PRINTLN("FIFO overflow!");
+		return false;
 	}
 
 	// empty all but 1 of the packets ( to prevent a cascading overflow)
@@ -94,18 +104,11 @@ int Gyro::run()
 	mpu.dmpGetGravity(&gravity, &q);
 	mpu.dmpGetYawPitchRoll(ypr, &q, &gravity);
 
+	_rollPitchYaw_Register.getData()[0] = ypr[2] * 10000;
+	_rollPitchYaw_Register.getData()[1] = ypr[1] * 10000;
+	_rollPitchYaw_Register.getData()[2] = ypr[0] * 10000;
 
-	_toSend = _rollPitchYawSender.getAvailable();
-	_toSend->getData()[0] = ypr[0]*10000;
-	_toSend->getData()[1] = ypr[1]*10000;
-	_toSend->getData()[2] = ypr[2]*10000;
-
-	return 1;
-}
-
-volatile MessageBuffer_Passer* Gyro::getMessage()volatile
-{
-	return _toSend;
+	return true;
 }
 
 #endif

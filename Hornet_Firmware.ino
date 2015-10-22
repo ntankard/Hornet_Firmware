@@ -1,3 +1,4 @@
+
 #define FOR_HARDWARE 1
 #define FOR_MANUAL_TEST 2
 #define FOR_TEST 3
@@ -8,46 +9,55 @@
 #if BUILD_TYPE == FOR_HARDWARE
 
 #include <Wire.h>
+#include <Servo.h>
 #include "Config.h"
 #include "HornetManager.h"
-#include "Arduino.h"
 
 HornetManager hornetManager;
 
 void setup()
 {
-
+	delay(1000);
 	Serial.begin(115200);	//@TODO this should be in the USB serial
 	Serial.clearWriteError();
 	Serial.flush();
-	while (Serial.available())
+	while (Serial.available()!=0)
 	{
 		Serial.read();
 	}
+	delay(1000);
+	while (Serial.available()!=0)
+	{
+		Serial.read();
+	}
+#if COM_MODE == XBEE
+	XBEE_SERIAL.begin(115200);	//@TODO this should be in the USB serial
+	XBEE_SERIAL.clearWriteError();
+	XBEE_SERIAL.flush();
+	while (XBEE_SERIAL.available())
+	{
+		XBEE_SERIAL.read();
+	}
+#endif
+
 	delay(500);
 	Wire.begin();	// no idea why this needs to be here
 
-#ifdef USE_LIDAR
-	C_LIDAR_SERIAL.begin(115200);	//@TODO this should be in the USB serial
-	C_LIDAR_SERIAL.clearWriteError();
-	C_LIDAR_SERIAL.flush();
-	while (C_LIDAR_SERIAL.available())
-	{
-		C_LIDAR_SERIAL.read();
-	}
-	delay(500);
-
-#endif
-	DEBUG_PRINT("Start Setup");
+	Serial.println(F("Start Setup"));
 
 	hornetManager.start();
 
-	DEBUG_PRINT("End Setup");
+	Serial.println(F("End Setup"));
 }
+
+//int a = 0;
 
 void loop()
 {
+	//a++;
+	//Serial.println((String)freeRam());
 	hornetManager.run();
+	//TP((String)a);
 }
 
 #endif
@@ -55,13 +65,16 @@ void loop()
 
 #include <ArduinoUnit.h>
 
-#include "Test_Scheduler.h"
+#include "Test_Scheduler.h" 
 #include "Test_Error.h"
 #include "Test_SequenceGenerator.h"
 #include "Test_CircularBuffer.h"
 #include "Test_CircularBuffer_Manager.h"
 #include "Test_MessageBuffer.h"
 #include "Test_MessageBuffer_Manager.h"
+
+// will affect the hardware!!
+#include "Test_Drone.h"
 
 void setup()
 {
@@ -79,15 +92,12 @@ void loop()
 
 #include <Wire.h>
 
-#include "MTest_DM_Indicator.h"
+//#include "MTest_DM_Indicator.h"
 #include "MTest_Gyro.h"
-#include "MTest_LidarComs.h"
-#include "MTest_Lidar.h"
-#include "CONFIG.h"
 
 void setup()
 {
-	Serial.begin(115200);	//@TODO this should be in the USB serial
+	Serial.begin(9600);	//@TODO this should be in the USB serial
 	Serial.clearWriteError();
 	Serial.flush();
 	while (Serial.available())
@@ -97,18 +107,6 @@ void setup()
 	delay(500);
 	Wire.begin();	// no idea why this needs to be here
 
-#ifdef USE_LIDAR
-	C_LIDAR_SERIAL.begin(115200);	//@TODO this should be in the USB serial
-	C_LIDAR_SERIAL.clearWriteError();
-	C_LIDAR_SERIAL.flush();
-	while (C_LIDAR_SERIAL.available())
-	{
-		C_LIDAR_SERIAL.read();
-	}
-	delay(500);
-
-#endif
-
 	//MTest_DM_Indicator_Points();
 	//MTest_DM_Indicator_Safe();
 	//MTest_DM_Indicator_SafeWithBlink();
@@ -117,13 +115,7 @@ void setup()
 	//MTest_DM_Indicator_Blink();
 	//MTest_DM_Indicator_Sequence();
 
-	//MTest_Gyro_Print();
-
-
-	//MTest_LidarComs_Print();
-	//MTest_LidarComs_PrintAll();
-
-	MTest_Lidar_Print();
+	MTest_Gyro_Print();
 }
 
 void loop()
@@ -134,5 +126,27 @@ void loop()
 
 #if BUILD_TYPE == OTHER
 
+#include <Arduino.h>
+#include "Coms.h"
+
+Coms toTest;
+
+void setup()
+{
+	Serial.begin(9600);	//@TODO this should be in the USB serial
+	Serial.clearWriteError();
+	Serial.flush();
+	while (Serial.available())
+	{
+		Serial.read();
+	}
+}
+
+int i = 0;
+
+void loop()
+{
+	toTest.run();
+}
 
 #endif

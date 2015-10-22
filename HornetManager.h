@@ -2,11 +2,9 @@
 #include "Error.h"
 #include "Scheduler.h"
 #include "DM_Indicator.h"
-#include "Serial_Coms.h"
 #include "ComsEncoder.h"
 #include "Gyro.h"
-#include "Drone.h"
-#include "Lidar.h"
+#include "FlightController.h"
 
 enum State{ Init = 0, Connect = 1, Idle =2,TakeOff=3,Flight=4,Land=5,Emergency=6,Crash=7};
 
@@ -28,7 +26,7 @@ private:
 
 	void runConnect();
 
-	void changeState(State newState, int indicatorPriority, int comEncoderPri, int gyroPri, int lidarPri, int lightSetting, int lightBlinks, int lightRate);
+	void changeState(State newState, int indicatorPriority, int comEncoderPri, int gyroPri,int flightPri, int lightSetting, int lightBlinks, int lightRate);
 
 	State _state;
 	unsigned long _C_last;
@@ -41,13 +39,14 @@ private:
 	Indicator _indicator;
 	ComsEncoder _comsEncoder;
 	Gyro _gyro;
-	Lidar _lidar;
+	FlightController _theDrone;
 
 	unsigned long _statusLast;
-	MessageBuffer_Manager<MB_STATUS_SETTINGS> _statusSender;
+	MessageBuffer<MB_STATUS, 2> _statusRegister;
 
-	//@TODO remove
-	Drone _theDrone;
+	int _loopCount;
+
+	
 	
 };
 

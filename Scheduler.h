@@ -8,7 +8,7 @@
 */
 struct thread_settings
 {
-	Runnable *thread;
+	Runnable * volatile thread;
 	int priority;
 };
 
@@ -63,9 +63,8 @@ public:
 	/**
 	* \brief	Exicute each thread at its priority
 	*/
-	int run();
+	bool run();
 
-	volatile MessageBuffer_Passer *getData();
 
 private:
 	volatile Error *_e;
