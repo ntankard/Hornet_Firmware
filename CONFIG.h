@@ -19,6 +19,7 @@
 
 #define ENABLE_INDICATOR	ENABLE
 #define ENABLE_GYRO			ENABLE
+#define	ENABLE_LIDAR		ENABLE
 
 #define COM_MODE			SERIAL
 
@@ -44,12 +45,16 @@
 // ----------------------------------------------------------------------------------------------------------------------------
 
 #if ENABLE_INDICATOR == ENABLE
-#define USE_DM_INDICATOR
+	#define USE_DM_INDICATOR
 #endif
 
 #if ENABLE_GYRO == ENABLE
-#define USE_GYRO
-#define USE_MPU6050
+	#define USE_GYRO
+	#define USE_MPU6050
+#endif
+
+#if ENABLE_LIDAR == ENABLE
+	#define  USE_LIDAR
 #endif
 
 #if COM_MODE == XBEE
@@ -76,35 +81,37 @@
 #define E_INDEX_OUT_BOUNDS	0x07
 #define E_BUFFER_OVERFLOW   0x08
 #define E_BUS_FAIL			0x09
+#define E_PACKET_CORRUPTION	0x0A
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // --------------------------------------------------- SCHEDULER SETTINS ------------------------------------------------------
 // ----------------------------------------------------------------------------------------------------------------------------
 
 // The build depends on there being this many threads and them being from 0 to C_SCHEDULER_THREAD_NUM -1 with no repeats
-#define C_SCHEDULER_THREAD_NUM 4
+#define C_SCHEDULER_THREAD_NUM 5
 
 // must be in required start order
 #define C_SCHEDULER_INDICATOR_THREAD 0
 #define C_SCHEDULER_COMENCODER_THREAD 1
 #define C_SCHEDULER_GYRO_THREAD 2
 #define C_SCHEDULER_FLIGHT_THREAD 3
+#define C_SCHEDULER_LIDAR_THREAD 4
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // ----------------------------------------------------- STATE SETTINGS -------------------------------------------------------
 // ----------------------------------------------------------------------------------------------------------------------------
 
 
-//							____________|			  Thread Priority				|_______________________
-//							| State		| INDICATOR		| COM EN	|GYRO	|FLIGHT	| LIGHT	|BLINKS| RATE
+//							____________|			  Thread Priority						|_______________________
+//							| State		| INDICATOR		| COM EN	|GYRO	|FLIGHT	|LIDAR	| LIGHT	|BLINKS| RATE
 //							-----------------------------------------------------------------
-#define ST_TO_CONNECT		Connect,	10,				1,			0,		5,		0,		1,		1000
-#define ST_TO_IDLE			Idle,		10,				1,			5,		5,		5,		2,		250
-#define ST_TO_TAKEOFF		TakeOff,	10,				1,			5,		5,		10,		3,		500
-#define ST_TO_FLIGHT		Flight,		10,				1,			5,		5,		15,		1,		1000
-#define ST_TO_LAND			Land,		10,				1,			5,		5,		20,		1,		1000
-#define ST_TO_EMERGENCY		Emergency,	10,				1,			5,		5,		21,		1,		1000
-#define ST_TO_CRACH			Crash,		10,				1,			5,		5,		22,		1,		1000
+#define ST_TO_CONNECT		Connect,	10,				1,			0,		5,		1,		0,		1,		1000
+#define ST_TO_IDLE			Idle,		10,				1,			5,		5,		1,		5,		2,		250
+#define ST_TO_TAKEOFF		TakeOff,	10,				1,			5,		5,		1,		10,		3,		500
+#define ST_TO_FLIGHT		Flight,		10,				1,			5,		5,		1,		15,		1,		1000
+#define ST_TO_LAND			Land,		10,				1,			5,		5,		1,		20,		1,		1000
+#define ST_TO_EMERGENCY		Emergency,	10,				1,			5,		5,		1,		21,		1,		1000
+#define ST_TO_CRACH			Crash,		10,				1,			5,		5,		1,		22,		1,		1000
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // ----------------------------------------------------- PIN SETTINGS ---------------------------------------------------------
@@ -137,6 +144,8 @@
 #define C_APM_YAW		13
 
 #define XBEE_SERIAL		Serial2
+
+#define C_LIDAR_SERIAL	Serial1
 
 
 //-----------------------------------------------------------------------------------------------------------------------------

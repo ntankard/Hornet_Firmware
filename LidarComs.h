@@ -8,13 +8,10 @@
 #include "Error.h"
 #include "CONFIG.h"
 
-#define RPLIDAR_CMD_GET_DEVICE_INFO 0x50
-#define RPLIDAR_CMD_GET_DEVICE_HEALTH 0x52
-#define RPLIDAR_CMD_SCAN 0x20
-#define RPLIDAR_CMD_FORCE_SCAN 0x21
-#define RPLIDAR_CMD_RESET 0x40
 
-enum RequestType{None = 4, Scan = 0, Force_Scan = 1, Get_Info = 2, Get_Health = 3};
+
+enum RequestType{ Scan = 0, Force_Scan = 1, Get_Info = 2, Get_Health = 3, Reset = 4,None =5 };
+
 union InfoPacket
 {
 	uint8_t rawData[20];
@@ -27,11 +24,17 @@ union InfoPacket
 	}data;	
 };
 
+
 union HealthPacket
 {
-	uint8_t rawData[3];
+	struct Raw
+	{
+		uint8_t dump;
+		uint8_t rawData[3];
+	}raw;
 	struct Payload
 	{
+		uint8_t dump;
 		uint8_t status;
 		uint16_t error_code;
 	} data;
@@ -39,20 +42,27 @@ union HealthPacket
 
 union DataPacket
 {
-	uint8_t rawData[5];
+	struct Raw
+	{
+		uint8_t dump;
+		uint8_t rawData[5];
+	}raw;
+
 	struct Payload
 	{
+		uint8_t dump;
 		uint8_t sync_quality;
 		uint16_t angle;
 		uint16_t distance;
 	} data;
 };
 
+
 class LidarComs
 {
 public:
 	LidarComs(volatile Error* e);
-	void sendRequest(uint8_t packet);
+	void sendRequest(RequestType packet);
 	bool run();
 	bool getIsDone(){ return (!(_dataCount == 0)); }
 	InfoPacket getLastInfoPacket(){ return _lastInfoPacket; }

@@ -4,7 +4,7 @@
 // ---------------------------------------------------- CONSTRUCTION ----------------------------------------------------------
 // ----------------------------------------------------------------------------------------------------------------------------
 
-HornetManager::HornetManager() :_scheduler(&_e), _indicator(&_e), _comsEncoder(&_e)
+HornetManager::HornetManager() :_scheduler(&_e), _indicator(&_e), _comsEncoder(&_e), _LIDAR(&_e)
 {
 	_state = Init;
 }
@@ -19,6 +19,7 @@ void HornetManager::start()
 	_scheduler.addRunable(C_SCHEDULER_COMENCODER_THREAD, &_comsEncoder);
 	_scheduler.addRunable(C_SCHEDULER_GYRO_THREAD, &_gyro);
 	_scheduler.addRunable(C_SCHEDULER_FLIGHT_THREAD, &_theDrone);
+	_scheduler.addRunable(C_SCHEDULER_LIDAR_THREAD, &_LIDAR);
 
 	// log all non runnable registers
 	_comsEncoder.addRegister(&_statusRegister);
@@ -51,6 +52,7 @@ void HornetManager::run()
 	_loopCount++;
 
 	// exicute the threads
+	_LIDAR.run();
 	_scheduler.run(); 
 
 	// check for special logic
@@ -99,7 +101,7 @@ void HornetManager::run()
 
 //-----------------------------------------------------------------------------------------------------------------------------
 
-void HornetManager::changeState(State newState, int indicatorPriority, int comEncoderPri, int gyroPri, int flightPri, int lightSetting, int lightBlinks, int lightRate)
+void HornetManager::changeState(State newState, int indicatorPriority, int comEncoderPri, int gyroPri, int flightPri,int lidarPri, int lightSetting, int lightBlinks, int lightRate)
 {
 	_state = newState;
 
@@ -107,6 +109,7 @@ void HornetManager::changeState(State newState, int indicatorPriority, int comEn
 	_scheduler.setPriority(C_SCHEDULER_COMENCODER_THREAD, comEncoderPri);
 	_scheduler.setPriority(C_SCHEDULER_GYRO_THREAD, gyroPri);
 	_scheduler.setPriority(C_SCHEDULER_FLIGHT_THREAD, flightPri);
+	_scheduler.setPriority(C_SCHEDULER_LIDAR_THREAD, lidarPri);
 
 	_indicator.setDisplay(0, lightSetting, lightBlinks, lightRate);
 

@@ -40,6 +40,16 @@ void setup()
 	}
 #endif
 
+#ifdef USE_LIDAR
+	C_LIDAR_SERIAL.begin(115200);	//@TODO this should be in the USB serial
+	C_LIDAR_SERIAL.clearWriteError();
+	C_LIDAR_SERIAL.flush();
+	while (C_LIDAR_SERIAL.available())
+	{
+		C_LIDAR_SERIAL.read();
+	}
+#endif
+
 	delay(500);
 	Wire.begin();	// no idea why this needs to be here
 

@@ -107,7 +107,7 @@ bool Gyro::run()
 	_rollPitchYaw_Register.getData()[0] = ypr[2] * 10000;
 	_rollPitchYaw_Register.getData()[1] = ypr[1] * 10000;
 	_rollPitchYaw_Register.getData()[2] = ypr[0] * 10000;
-
+	
 	return true;
 }
 
