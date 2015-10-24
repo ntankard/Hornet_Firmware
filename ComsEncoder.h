@@ -32,8 +32,6 @@ public:
 	*/
 	bool run();
 
-
-
 private:
 
 	/** \brief	The object to send messages */
@@ -50,43 +48,3 @@ private:
 
 	TimeOut _throttle;
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/**
-* \brief	Add a single char to the queu (top priority)
-*
-* \param	message	The message to send
-*
-* \return	Was there enough room in the buffers to send the message
-*/
-//bool sendChar(uint8_t message);
-
-/** \brief	The buffer of messages to send */
-//volatile MessageBuffer_Passer* _buffer[C_CL][C_COMENCODER_SIZE];
-
-/** \brief	The manger for the queue of messages */
-//CircularBuffer_Manager<C_COMENCODER_SIZE> _buffer_man[C_CL];
-
-
-
-/** \brief	The buffer of bytes to send */
-//uint8_t _messageBuffer[C_COMENCODER_M_SIZE];
-
-/** \brief	The manager for the byte buffer */
-//CircularBuffer_Manager<C_COMENCODER_M_SIZE> _messageBuffer_man;

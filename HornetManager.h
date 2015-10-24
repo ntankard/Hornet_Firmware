@@ -9,7 +9,6 @@
 
 enum State{ Init = 0, Connect = 1, Idle =2,TakeOff=3,Flight=4,Land=5,Emergency=6,Crash=7};
 
-
 class HornetManager
 {
 public:
@@ -18,21 +17,13 @@ public:
 	void start();
 	void run();
 
-	void newMessage(uint8_t data);
-	void newData(volatile MessageBuffer_Passer* data);
-
 private:
-
-	void takeOff();
-
-	void runConnect();
 
 	void changeState(State newState, int indicatorPriority, int comEncoderPri, int gyroPri, int flightPri, int lidarPri, int lightSetting, int lightBlinks, int lightRate);
 
 	State _state;
-	unsigned long _C_last;
 
-
+	// core objects
 	Scheduler _scheduler;
 	volatile Error _e;
 
@@ -43,12 +34,9 @@ private:
 	FlightController _theDrone;
 	Lidar _LIDAR;
 
+	// status monitor
+	int _loopCount;
 	unsigned long _statusLast;
 	MessageBuffer<MB_STATUS, 2> _statusRegister;
-
-	int _loopCount;
-
-	
-	
 };
 

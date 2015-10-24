@@ -57,4 +57,3 @@ private:
 
 	int _registerAccsessed;
 };
-

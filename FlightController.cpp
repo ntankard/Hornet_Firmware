@@ -9,9 +9,7 @@
 
 FlightController::FlightController()
 {
-	_isArmed = false;
-	_isArmingDisArming = false;
-	_isArming = false;
+	_state = Disarmed;
 
 	_roll.attach(C_APM_ROLL);
 	_pitch.attach(C_APM_PITCH);
@@ -67,63 +65,55 @@ bool FlightController::start()
 
 bool FlightController::run()
 {
-	// check ongoing arm/disarm
-	if (_isArmingDisArming)
+	// check for state transitions
+	if (_armTime.hasTimeOut())
 	{
-		if (_armTime.hasTimeOut())
+		switch (_state)
 		{
-			if (_isArming)
+		case Arming:
+			if (_armTime.hasTimeOut())
 			{
-				// end arm
-				_isArmed = true;
-				_isArmingDisArming = false;
+				_state = Armed;
 
 				_roll.writeMicroseconds(MIN + ((MAX - MIN) / 2));
 				_pitch.writeMicroseconds(MIN + ((MAX - MIN) / 2));
 				_yaw.writeMicroseconds(MIN + ((MAX - MIN) / 2));
 				_throttle.writeMicroseconds(MIN);
 			}
-			else
+			break;
+		case Disarming:
+			if (_armTime.hasTimeOut())
 			{
-				// end disarm
-				_isArmingDisArming = false;
+				_state = Disarmed;
 
 				_roll.writeMicroseconds(MIN + ((MAX - MIN) / 2));
 				_pitch.writeMicroseconds(MIN + ((MAX - MIN) / 2));
 				_yaw.writeMicroseconds(MIN + ((MAX - MIN) / 2));
 				_throttle.writeMicroseconds(MIN);
 			}
-		}
-	}
-
-
-	// check for new arm/disarm
-	if (!_isArmingDisArming)
-	{
-		// check for new arm/disarm
-		if (_ArmDisarmRegister->getData()[0] != _isArmed)
-		{
-			if (_isArmed)
-			{
-				disarm();
-			}
-			else
+			break;
+		case Disarmed:
+			if (_ArmDisarmRegister->getData()[0] == 1)
 			{
 				arm();
 			}
+			break;
+		case Armed:
+			if (_ArmDisarmRegister->getData()[0] == 0)
+			{
+				disarm();
+			}
+			break;
 		}
 	}
 
 	// update joystick values
-	if (!_isArmingDisArming)
+	if (_state == Armed)
 	{
-		if (_isArmed)
-		{
-			_roll.writeMicroseconds(_XYJoyRegister->getData()[0] * MULTIPLYER + MIN);
-			_pitch.writeMicroseconds(_XYJoyRegister->getData()[1] * MULTIPLYER + MIN);
-			_yaw.writeMicroseconds(_ZJoyRegister->getData()[0] * MULTIPLYER + MIN);
-			_throttle.writeMicroseconds(_throttleJoyRegister->getData()[0] * MULTIPLYER + MIN);
-		}
+		_roll.writeMicroseconds(_XYJoyRegister->getData()[0] * MULTIPLYER + MIN);
+		_pitch.writeMicroseconds(_XYJoyRegister->getData()[1] * MULTIPLYER + MIN);
+		_yaw.writeMicroseconds(_ZJoyRegister->getData()[0] * MULTIPLYER + MIN);
+		_throttle.writeMicroseconds(_throttleJoyRegister->getData()[0] * MULTIPLYER + MIN);
 	}
 
 	return false;
@@ -133,12 +123,11 @@ bool FlightController::run()
 
 void FlightController::arm()
 {
-	if (!_isArmingDisArming && !_isArmed)
+	if (_state = Disarmed)
 	{
 		// start arm
 		_armTime.start(5000);
-		_isArming = true;
-		_isArmingDisArming = true;
+		_state = Arming;
 
 		_roll.writeMicroseconds(MIN + ((MAX - MIN) / 2));
 		_pitch.writeMicroseconds(MIN + ((MAX - MIN) / 2));
@@ -151,13 +140,11 @@ void FlightController::arm()
 
 void FlightController::disarm()
 {
-	if (!_isArmingDisArming && _isArmed)
+	if (_state = Armed)
 	{
 		// start disarm
 		_armTime.start(3000);
-		_isArmed = false;
-		_isArming = false;
-		_isArmingDisArming = true;
+		_state = Disarming;
 
 		_roll.writeMicroseconds(MIN + ((MAX - MIN) / 2));
 		_pitch.writeMicroseconds(MIN + ((MAX - MIN) / 2));

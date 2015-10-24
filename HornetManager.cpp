@@ -13,8 +13,7 @@ HornetManager::HornetManager() :_scheduler(&_e), _indicator(&_e), _comsEncoder(&
 
 void HornetManager::start()
 {
-
-	// setup all scedual objects
+	// link all scedual objects
 	_scheduler.addRunable(C_SCHEDULER_INDICATOR_THREAD, &_indicator);
 	_scheduler.addRunable(C_SCHEDULER_COMENCODER_THREAD, &_comsEncoder);
 	_scheduler.addRunable(C_SCHEDULER_GYRO_THREAD, &_gyro);
@@ -24,24 +23,33 @@ void HornetManager::start()
 	// log all non runnable registers
 	_comsEncoder.addRegister(&_statusRegister);
 
-	// start all objects
-	if (!_scheduler.finish() || !_scheduler.startAll())
+	// finalize the linking process
+	if (!_scheduler.finish())
 	{
 		_indicator.safeOn();
 		while (true)
 		{
-			Serial1.println("Test");
-			DEBUG_PRINTLN("Not all objects attached");//@TODO add build exeption here
+			COM_SERIAL.println("Not all objects attached");
+			DEBUG_PRINTLN("Not all objects attached");
+			delay(500);
+		}
+	}
+
+	// start all threads
+	if (!_scheduler.startAll())
+	{
+		_indicator.safeOn();
+		while (true)
+		{
+			COM_SERIAL.println("Object failed to start");
+			DEBUG_PRINTLN("Object failed to start");
 			delay(500);
 		}
 	}
 
 	// transition to an operating state
-	changeState(ST_TO_IDLE);			//@TODO conection state is bypasses
-	_C_last = millis();
-	_statusLast = _C_last;
+	changeState(ST_TO_IDLE);
 }
-
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // ----------------------------------------------------- MAIN LOOP ------------------------------------------------------------
@@ -49,55 +57,66 @@ void HornetManager::start()
 
 void HornetManager::run()
 {	
-	unsigned long current = millis();
-	_loopCount++;
-
-	// exicute the threads
-//	_LIDAR.run();
+	// run the main program
 	_scheduler.run(); 
 
-	// check for special logic
-	if (_state == Connect)
+	// check for state change
+	switch (_theDrone.getState())
 	{
-		runConnect();
-	}
-	else if (_state == Idle)
-	{
-		if (_theDrone.isArmed())
+	case Armed:
+		if (_state != Flight)
 		{
 			changeState(ST_TO_FLIGHT);
 		}
-	}
-	else if (_state == Flight)
-	{
-		if (!_theDrone.isArmed())
+		break;
+	case Arming:
+		if (_state != TakeOff)
+		{
+			changeState(ST_TO_TAKEOFF);
+		}
+		break;
+	case Disarmed:
+		if (_state != Idle)
 		{
 			changeState(ST_TO_IDLE);
 		}
+		break;
+	case Disarming:
+		if (_state != Land)
+		{
+			changeState(ST_TO_LAND);
+		}
+		break;
+	default:
+		break;
 	}
 
 	// catch exeption
 	if (_e.isError())
 	{
-		int line = _e.getError();
-		_indicator.safeOn();
-		while (true){
-			DEBUG_PRINTLN("ERROR");
-			DEBUG_PRINTLN((String)line);
-			delay(500);
+		if (_state != Armed)
+		{
+			int line = _e.getError();
+			_indicator.safeOn();
+			while (true){
+				COM_SERIAL.println("ERROR");
+				COM_SERIAL.println((String)line);
+				DEBUG_PRINTLN("ERROR");
+				DEBUG_PRINTLN((String)line);
+				delay(500);
+			}
 		}
 	}
 
-	// update the status
+	// monitor the speed of the program
+	unsigned long current = millis();
+	_loopCount++;
 	if (_statusLast + 1000 <= current)
 	{
-		_statusRegister.getData()[0] = _state;
 		_statusRegister.getData()[1] = _loopCount;
-
 		_statusLast += 1000;
 		_loopCount = 0;
 	}
-
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------
@@ -105,6 +124,7 @@ void HornetManager::run()
 void HornetManager::changeState(State newState, int indicatorPriority, int comEncoderPri, int gyroPri, int flightPri,int lidarPri, int lightSetting, int lightBlinks, int lightRate)
 {
 	_state = newState;
+	_statusRegister.getData()[0] = _state;
 
 	_scheduler.setPriority(C_SCHEDULER_INDICATOR_THREAD, indicatorPriority);
 	_scheduler.setPriority(C_SCHEDULER_COMENCODER_THREAD, comEncoderPri);
@@ -117,107 +137,4 @@ void HornetManager::changeState(State newState, int indicatorPriority, int comEn
 #else
 	_indicator.setDisplay(lightSetting, lightBlinks, lightRate);
 #endif
-	_statusRegister.getData()[0] = _state;
 }
-
-//-----------------------------------------------------------------------------------------------------------------------------
-
-void HornetManager::runConnect()
-{
-	unsigned long current = millis();
-
-	if (_C_last + C_CONNECT_PULSE_TIME <= current)
-	{
-		_C_last = current;
-//	_comsEncoder.sendChar(C_COMS_CODE_CONNECT_REQUEST);
-	}
-
-}
-
-/*
-
-void HornetManager::newMessage(uint8_t data)
-{
-switch (data)
-{
-case C_COMS_CODE_CONNECT_CONFIRM:
-if (_state == Connect)
-{
-changeState(ST_TO_IDLE);
-}
-break;
-case MB_ARM_DISARM:
-if (_state == Idle)
-{
-_theDrone.arm();
-takeOff();
-}
-else if (_state = Flight)
-{
-_theDrone.disarm();
-changeState(ST_TO_IDLE);
-}
-break;
-default:
-break;
-}
-}
-
-void HornetManager::takeOff()
-{
-changeState(ST_TO_TAKEOFF);
-
-changeState(ST_TO_FLIGHT);
-}
-
-void HornetManager::newData(volatile MessageBuffer_Passer* data)
-{
-if (data->isMonitor())
-{
-_comsEncoder.sendData(data);
-}
-
-if (data->getDataSize() == 0)
-{
-newMessage(data->getID());
-}
-
-switch (data->getID())
-{
-case MB_JOY_XY:
-//_theDrone.newPitchRoll(data->getData()[0], data->getData()[1]);
-_theDrone.newJoyXY(data);
-break;
-case MB_JOY_Z:
-_theDrone.newJoyZ(data);
-//newData(_theDrone.newYaw(data->getData()[0]));
-break;
-case MB_JOY_THROTTLE:
-//_theDrone.newThrottle(data->getData()[0]);
-//newData(_theDrone.newThrottle(data->getData()[0]));
-_theDrone.newJoyThrottle(data);
-break;
-case MB_ROLL_PITCH_YAW:
-_theDrone.newGyro(data);
-break;
-case MB_ARM_DISARM:
-if (data->getData()[0] == 1)
-{
-if (_state == Idle)
-{
-_theDrone.arm();
-TP("ARM");
-}
-}
-else
-{
-if (_state == Flight)
-{
-_theDrone.disarm();
-TP("DISARM");
-}
-}
-default:
-break;
-}
-}*/

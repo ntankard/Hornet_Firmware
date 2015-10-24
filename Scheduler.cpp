@@ -1,7 +1,5 @@
 #include "Scheduler.h"
 
-
-
 Scheduler::Scheduler(volatile Error *e)
 {
 	_e = e;
@@ -39,10 +37,8 @@ void Scheduler::addRunable(int ID, Runnable *theRunnable)
 
 bool Scheduler::finish()
 {
-	//TP("YES");
 	if ((_setCount == C_SCHEDULER_THREAD_NUM))
 	{
-		//TP("YES");
 		for (int i = 0; i < C_SCHEDULER_THREAD_NUM; i++)
 		{
 			for (int r = 0; r < _threads[i].thread->getNORegisters(); r++)
@@ -52,7 +48,6 @@ bool Scheduler::finish()
 				{
 					if (i != j)
 					{
-						//TP((String)i + " " + (String)j);
 						_threads[j].thread->addRegister(toDistribute);
 					}
 				}
@@ -61,20 +56,12 @@ bool Scheduler::finish()
 		return true;
 	}
 	return false;
-	//this gets called twice, mby this is a problem? try manuly seting the registers and try seting the registers to an empty one befor attach, if not cry
-
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------
 
 bool Scheduler::startAll()
 {
-	/*if (!finish())
-	{
-		_e->add(E_NULL_PTR, __LINE__);
-		return false;
-	}*/
-
 	for (int i = 0; i < C_SCHEDULER_THREAD_NUM;i++)
 	{
 		if (!_threads[i].thread->start())

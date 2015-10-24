@@ -5,6 +5,8 @@
 #include "TimeOut.h"
 #include <Servo.h>
 
+enum FlightState{ Disarmed = 0, Arming = 1, Armed = 2, Disarming = 3};
+
 class FlightController : public Runnable
 {
 public:
@@ -13,7 +15,7 @@ public:
 	int getNORegisters(){ return 0; }
 	volatile MessageBuffer_Passer* getRegister(){ return &_empty; }
 	void addRegister(volatile MessageBuffer_Passer* newRegister);
-	bool isArmed(){ return _isArmed; }
+	FlightState getState(){ return _state; }
 
 	bool start();
 
@@ -27,9 +29,10 @@ private:
 	//Stabilizer _theStabilizer;
 	//uint16_t _lastYaw;
 
-	bool _isArmed;
-	bool _isArmingDisArming;
-	bool _isArming;
+	//bool _isArmed;
+	//bool _isArmingDisArming;
+	//bool _isArming;
+	FlightState _state;
 	TimeOut _armTime;
 
 	Servo _roll;

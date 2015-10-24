@@ -1,6 +1,7 @@
 #pragma once
 #include "Config.h"
 #include "Arduino.h"
+
 #define Throw_Check(toReturn)	if(_e->isError()){return toReturn;}
 #define Could_Throw(function, toReturn)	function;if(_e->isError()){return toReturn;}
 

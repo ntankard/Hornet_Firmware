@@ -3,7 +3,6 @@
 #include "CONFIG.h"
 #include "HornetManager.h"
 
-
 ComsDecoder::ComsDecoder(volatile Error *e)
 {
 	_e = e;

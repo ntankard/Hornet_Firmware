@@ -46,7 +46,7 @@
 
 #if ENABLE_INDICATOR == ENABLE
 	//#define USE_DM_INDICATOR
-#define USE_RBG_INDICATOR
+	#define USE_RBG_INDICATOR
 #endif
 
 #if ENABLE_GYRO == ENABLE
@@ -70,7 +70,6 @@
 // ----------------------------------------------------------------------------------------------------------------------------
 
 #define C_ERROR_BUFFER 10
-#define C_CONNECT_PULSE_TIME 1000
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // ----------------------------------------------------- ERROR CODES ----------------------------------------------------------
@@ -108,9 +107,9 @@
 //							-----------------------------------------------------------------
 #define ST_TO_CONNECT		Connect,	10,				1,			0,		5,		1,		0,		1,		1000
 #define ST_TO_IDLE			Idle,		10,				1,			5,		5,		1,		1,		2,		250
-#define ST_TO_TAKEOFF		TakeOff,	10,				1,			5,		5,		1,		3,		3,		500
+#define ST_TO_TAKEOFF		TakeOff,	10,				1,			5,		5,		1,		3,		3,		100
 #define ST_TO_FLIGHT		Flight,		10,				1,			5,		5,		1,		2,		1,		1000
-#define ST_TO_LAND			Land,		10,				1,			5,		5,		1,		3,		1,		1000
+#define ST_TO_LAND			Land,		10,				1,			5,		5,		1,		3,		4,		100
 #define ST_TO_EMERGENCY		Emergency,	10,				1,			5,		5,		1,		3,		1,		1000
 #define ST_TO_CRACH			Crash,		10,				1,			5,		5,		1,		3,		1,		1000
 
@@ -139,18 +138,16 @@
 #define RBG_RED 51
 #define RBG_BLUE 49
 
-// mag
-#define C_MAG_SSNOT 10
-#define C_MAG_DRDY 11
-#define C_MAG_RESET 12
-
+// APM conections
 #define C_APM_ROLL		10
 #define C_APM_PITCH		11
 #define C_APM_THROTTLE	12
 #define C_APM_YAW		13
 
+// Coms
 #define XBEE_SERIAL		Serial1
 
+// LIDAR
 #define C_LIDAR_SERIAL	Serial2
 
 
