@@ -17,6 +17,9 @@ HornetManager hornetManager;
 
 void setup()
 {
+	pinMode(38, OUTPUT);
+	digitalWrite(38, HIGH);
+
 	delay(1000);
 	Serial.begin(115200);	//@TODO this should be in the USB serial
 	Serial.clearWriteError();

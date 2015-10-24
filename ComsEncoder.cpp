@@ -52,7 +52,7 @@ bool ComsEncoder::start()
 			return false;
 		}
 	}
-	_throttle.start(1);
+	_throttle.start(100);
 	return true;
 }
 
@@ -62,7 +62,7 @@ bool ComsEncoder::run()
 {
 	if (_throttle.hasTimeOut())
 	{
-		_throttle.start(1);
+		_throttle.start(100);
 		// resend one of the packets
 		_coms.send(_internalRegisters[_sendId]);
 		_sendId++;

@@ -45,7 +45,8 @@
 // ----------------------------------------------------------------------------------------------------------------------------
 
 #if ENABLE_INDICATOR == ENABLE
-	#define USE_DM_INDICATOR
+	//#define USE_DM_INDICATOR
+#define USE_RBG_INDICATOR
 #endif
 
 #if ENABLE_GYRO == ENABLE
@@ -106,12 +107,12 @@
 //							| State		| INDICATOR		| COM EN	|GYRO	|FLIGHT	|LIDAR	| LIGHT	|BLINKS| RATE
 //							-----------------------------------------------------------------
 #define ST_TO_CONNECT		Connect,	10,				1,			0,		5,		1,		0,		1,		1000
-#define ST_TO_IDLE			Idle,		10,				1,			5,		5,		1,		5,		2,		250
-#define ST_TO_TAKEOFF		TakeOff,	10,				1,			5,		5,		1,		10,		3,		500
-#define ST_TO_FLIGHT		Flight,		10,				1,			5,		5,		1,		15,		1,		1000
-#define ST_TO_LAND			Land,		10,				1,			5,		5,		1,		20,		1,		1000
-#define ST_TO_EMERGENCY		Emergency,	10,				1,			5,		5,		1,		21,		1,		1000
-#define ST_TO_CRACH			Crash,		10,				1,			5,		5,		1,		22,		1,		1000
+#define ST_TO_IDLE			Idle,		10,				1,			5,		5,		1,		1,		2,		250
+#define ST_TO_TAKEOFF		TakeOff,	10,				1,			5,		5,		1,		3,		3,		500
+#define ST_TO_FLIGHT		Flight,		10,				1,			5,		5,		1,		2,		1,		1000
+#define ST_TO_LAND			Land,		10,				1,			5,		5,		1,		3,		1,		1000
+#define ST_TO_EMERGENCY		Emergency,	10,				1,			5,		5,		1,		3,		1,		1000
+#define ST_TO_CRACH			Crash,		10,				1,			5,		5,		1,		3,		1,		1000
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // ----------------------------------------------------- PIN SETTINGS ---------------------------------------------------------
@@ -133,6 +134,11 @@
 #define CANODE_13 49
 #define CANODE_14 47
 
+// RBG indicator
+#define RBG_GREEN 53
+#define RBG_RED 51
+#define RBG_BLUE 49
+
 // mag
 #define C_MAG_SSNOT 10
 #define C_MAG_DRDY 11
@@ -143,9 +149,9 @@
 #define C_APM_THROTTLE	12
 #define C_APM_YAW		13
 
-#define XBEE_SERIAL		Serial2
+#define XBEE_SERIAL		Serial1
 
-#define C_LIDAR_SERIAL	Serial1
+#define C_LIDAR_SERIAL	Serial2
 
 
 //-----------------------------------------------------------------------------------------------------------------------------
@@ -162,9 +168,10 @@
 #define MB_ARM_DISARM		103
 
 // outbound
-#define MB_OUTBOUND_COUTN	2		// must match the numebr of packets!!
+#define MB_OUTBOUND_COUTN	3		// must match the numebr of packets!!
 #define MB_OUTBOUND_OFFSET	1		// must match the lowest ID
 
 #define MB_ROLL_PITCH_YAW	1
 #define MB_STATUS			2
+#define MB_LAST_LIDAR		3
 

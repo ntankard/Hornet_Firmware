@@ -1,7 +1,7 @@
 #pragma once
 #include "Error.h"
 #include "Scheduler.h"
-#include "DM_Indicator.h"
+#include "Indicator.h"
 #include "ComsEncoder.h"
 #include "Gyro.h"
 #include "FlightController.h"

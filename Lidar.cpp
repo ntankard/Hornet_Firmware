@@ -6,6 +6,8 @@ Lidar::Lidar(volatile Error* e) :_lidarComs(e)
 {
 }
 
+//-----------------------------------------------------------------------------------------------------------------------------
+
 bool Lidar::start()
 {
 	// Activate motor
@@ -14,24 +16,22 @@ bool Lidar::start()
 
 	// Reset
 	_lidarComs.sendRequest(Reset);
-	TP("Rest");
 	_lidarComs.run();
 
 	//Empty buffer (extra data that was sent before the reset)
 	delay(2000);
 	while (C_LIDAR_SERIAL.available())
 	{
-		char t = C_LIDAR_SERIAL.read();
-
+		C_LIDAR_SERIAL.read();
 	}
 
 	// Check device health
 	TimeOut timeOut;
 	timeOut.start(1000);
 	_lidarComs.sendRequest(Get_Health);
-	TP("Health");
 	while (true)
 	{
+		// wait for the return packet
 		_lidarComs.run();
 		if (_lidarComs.getIsDone())
 		{
@@ -56,9 +56,9 @@ bool Lidar::start()
 	// Check device info
 	timeOut.start(1000);
 	_lidarComs.sendRequest(Get_Info);
-	TP("Info");
 	while (true)
 	{
+		// wait for the responce
 		_lidarComs.run();
 		if (_lidarComs.getIsDone())
 		{
@@ -79,16 +79,17 @@ bool Lidar::start()
 			return false;
 		}
 	}
+
 	// Lidar checks completed, start scan
 	_lidarComs.sendRequest(Scan);
-	TP("Start");
 	return true;
 }
 
+//-----------------------------------------------------------------------------------------------------------------------------
 
 bool Lidar::run()
 {
-		
+	// wait for a packet
 	_lidarComs.run();
 	if (_lidarComs.getIsDone())
 	{
@@ -97,11 +98,9 @@ bool Lidar::run()
 		float angle = ((theData.data.angle >> 1) / 64);
 		float distance = ((theData.data.distance) / 4.0f);
 
-		TP((String)angle);
+		_lastLidarRegister.getData()[0] = angle * 90;
+		_lastLidarRegister.getData()[1] = distance;
 
-		/*_toSend = _lidarSender.getAvailable();
-		_toSend->getData()[0] = angle * 80;
-		_toSend->getData()[1] = distance;*/
 		return true;
 	}
 	return false;

@@ -12,8 +12,8 @@ class Lidar : public Runnable
 public:
 	Lidar(volatile Error* e);
 
-	int getNORegisters(){ return 0; }
-	volatile MessageBuffer_Passer* getRegister(){ return &_empty; }
+	int getNORegisters(){ return 1; }
+	volatile MessageBuffer_Passer* getRegister(){ return &_lastLidarRegister; }
 	void addRegister(volatile MessageBuffer_Passer* newRegister){}
 
 	bool start();
@@ -29,8 +29,7 @@ public:
 
 private:
 
-	MessageBuffer<0, 1> _empty;
-
+	MessageBuffer<MB_LAST_LIDAR, 2> _lastLidarRegister;
 
 	LidarComs _lidarComs;
 	

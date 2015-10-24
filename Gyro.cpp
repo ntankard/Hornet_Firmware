@@ -79,14 +79,14 @@ bool Gyro::run()
 	// is there a full packets worth of data?
 	if (fifoCount < packetSize)
 	{
-		return 0;	//@TODO add timeout check
+		return false;	//@TODO add timeout check
 	}
 
 	// check for overflow
 	if (fifoCount >= 1024)
 	{
 		mpu.resetFIFO();	//@TODO may need to do more here
-		//DEBUG_PRINTLN("FIFO overflow!");
+		DEBUG_PRINTLN("FIFO overflow!");
 		return false;
 	}
 

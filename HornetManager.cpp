@@ -30,6 +30,7 @@ void HornetManager::start()
 		_indicator.safeOn();
 		while (true)
 		{
+			Serial1.println("Test");
 			DEBUG_PRINTLN("Not all objects attached");//@TODO add build exeption here
 			delay(500);
 		}
@@ -52,7 +53,7 @@ void HornetManager::run()
 	_loopCount++;
 
 	// exicute the threads
-	_LIDAR.run();
+//	_LIDAR.run();
 	_scheduler.run(); 
 
 	// check for special logic
@@ -111,8 +112,11 @@ void HornetManager::changeState(State newState, int indicatorPriority, int comEn
 	_scheduler.setPriority(C_SCHEDULER_FLIGHT_THREAD, flightPri);
 	_scheduler.setPriority(C_SCHEDULER_LIDAR_THREAD, lidarPri);
 
+#ifdef USE_DM_INDICATOR
 	_indicator.setDisplay(0, lightSetting, lightBlinks, lightRate);
-
+#else
+	_indicator.setDisplay(lightSetting, lightBlinks, lightRate);
+#endif
 	_statusRegister.getData()[0] = _state;
 }
 
