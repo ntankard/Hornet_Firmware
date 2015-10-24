@@ -1,4 +1,3 @@
-
 #define FOR_HARDWARE 1
 #define FOR_MANUAL_TEST 2
 #define FOR_TEST 3
@@ -17,24 +16,22 @@ HornetManager hornetManager;
 
 void setup()
 {
+	// turn on one of the pins to act as a refrence for a logic converter to the XBee
 	pinMode(38, OUTPUT);
 	digitalWrite(38, HIGH);
 
-	delay(1000);
-	Serial.begin(115200);	//@TODO this should be in the USB serial
+	// setup debug serial (also primary coms if XBee is off)
+	Serial.begin(115200);
 	Serial.clearWriteError();
 	Serial.flush();
 	while (Serial.available()!=0)
 	{
 		Serial.read();
 	}
-	delay(1000);
-	while (Serial.available()!=0)
-	{
-		Serial.read();
-	}
+
+	// setup XBee coms
 #if COM_MODE == XBEE
-	XBEE_SERIAL.begin(115200);	//@TODO this should be in the USB serial
+	XBEE_SERIAL.begin(115200);
 	XBEE_SERIAL.clearWriteError();
 	XBEE_SERIAL.flush();
 	while (XBEE_SERIAL.available())
@@ -43,6 +40,7 @@ void setup()
 	}
 #endif
 
+	// setup LIDAR coms
 #ifdef USE_LIDAR
 	C_LIDAR_SERIAL.begin(115200);	//@TODO this should be in the USB serial
 	C_LIDAR_SERIAL.clearWriteError();
@@ -53,8 +51,9 @@ void setup()
 	}
 #endif
 
+	// setupd I2C coms for accseleromiter
 	delay(500);
-	Wire.begin();	// no idea why this needs to be here
+	Wire.begin();	
 
 	Serial.println(F("Start Setup"));
 
@@ -63,14 +62,11 @@ void setup()
 	Serial.println(F("End Setup"));
 }
 
-//int a = 0;
+//-----------------------------------------------------------------------------------------------------------------------------
 
 void loop()
 {
-	//a++;
-	//Serial.println((String)freeRam());
 	hornetManager.run();
-	//TP((String)a);
 }
 
 #endif
