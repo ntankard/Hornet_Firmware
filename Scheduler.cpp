@@ -19,18 +19,16 @@ void Scheduler::addRunable(int ID, Runnable *theRunnable)
 	if (ID >= C_SCHEDULER_THREAD_NUM || ID <0)
 	{
 		_e->add(E_INDEX_OUT_BOUNDS, __LINE__);
-		return;
-	}
-
-	if (_threads[ID].priority != -1)
+	}else if (_threads[ID].priority != -1)
 	{
 		_e->add(E_INDEX_OUT_BOUNDS, __LINE__);
-		return;
 	}
+	else{
 
-	_threads[ID].thread = theRunnable;
-	_threads[ID].priority = 1;
-	_setCount++;
+		_threads[ID].thread = theRunnable;
+		_threads[ID].priority = 1;
+		_setCount++;
+	}
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------
@@ -62,14 +60,19 @@ bool Scheduler::finish()
 
 bool Scheduler::startAll()
 {
-	for (int i = 0; i < C_SCHEDULER_THREAD_NUM;i++)
+	if (_setCount == C_SCHEDULER_THREAD_NUM)
 	{
-		if (!_threads[i].thread->start())
+		for (int i = 0; i < C_SCHEDULER_THREAD_NUM; i++)
 		{
-			return false;
+			if (!_threads[i].thread->start())
+			{
+				return false;
+			}
 		}
+		return true;
 	}
-	return true;
+	_e->add(E_NULL_PTR, __LINE__);
+	return false;
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------
@@ -87,7 +90,6 @@ void Scheduler::setPriority(int ID, int p)
 
 bool Scheduler::run()
 {
-
 	// keep looping until a thread runs (this will lock if all thread are 0)
 	while (true){
 
@@ -110,5 +112,6 @@ bool Scheduler::run()
 			_runCount[_currentThread] = 0;
 		}
 	}
+	return false;
 }
 

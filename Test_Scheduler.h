@@ -40,9 +40,9 @@ public:
 	MessageBuffer<0, 1> _empty;
 };
 
-test(Scheduler_Setup)
+test(Scheduler_Setup)	// killer function
 {
-	Error e;
+	volatile Error e;
 
 	Scheduler toTest(&e);
 
@@ -55,9 +55,10 @@ test(Scheduler_Setup)
 	assertFalse(e.isError());
 }
 
+
 test(Scheduler_ValidPopulate)
 {
-	Error e;
+	volatile Error e;
 
 	Scheduler toTest(&e);
 	TestRunnable tests[C_SCHEDULER_THREAD_NUM];
@@ -91,9 +92,10 @@ test(Scheduler_ValidPopulate)
 	assertFalse(e.isError());
 }
 
+
 test(Scheduler_BadPopulate)
 {
-	Error e;
+	volatile Error e;
 
 	Scheduler toTest(&e);
 	TestRunnable tests[C_SCHEDULER_THREAD_NUM];
@@ -156,7 +158,7 @@ int factorial(int x, int result = 1) {
 
 test(Scheduler_Run)
 {
-	Error e;
+	volatile Error e;
 
 	Scheduler toTest(&e);
 	TestRunnable tests[C_SCHEDULER_THREAD_NUM];

@@ -74,13 +74,13 @@ void loop()
 
 #include <ArduinoUnit.h>
 
-/*
-#include "Test_Scheduler.h" 
-#include "Test_Error.h"
+#include "Test_MessageBuffer.h"
 #include "Test_SequenceGenerator.h"
 #include "Test_CircularBuffer.h"
 #include "Test_CircularBuffer_Manager.h"
-#include "Test_MessageBuffer.h"*/
+#include "Test_Error.h"
+#include "Test_Scheduler.h" 
+
 
 #include "Test_Point.h"
 #include "Test_Anchor.h"
@@ -92,6 +92,7 @@ void loop()
 #include "Test_PatternManager.h"
 #include "Test_Point.h"
 #include "Test_PointManager.h"
+
 
 void setup()
 {
