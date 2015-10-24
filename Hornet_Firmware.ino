@@ -3,7 +3,7 @@
 #define FOR_TEST 3
 #define OTHER 4
 
-#define BUILD_TYPE FOR_HARDWARE
+#define BUILD_TYPE FOR_TEST
 
 #if BUILD_TYPE == FOR_HARDWARE
 
@@ -74,21 +74,36 @@ void loop()
 
 #include <ArduinoUnit.h>
 
+/*
 #include "Test_Scheduler.h" 
 #include "Test_Error.h"
 #include "Test_SequenceGenerator.h"
 #include "Test_CircularBuffer.h"
 #include "Test_CircularBuffer_Manager.h"
-#include "Test_MessageBuffer.h"
-#include "Test_MessageBuffer_Manager.h"
+#include "Test_MessageBuffer.h"*/
 
-// will affect the hardware!!
-#include "Test_Drone.h"
+#include "Test_Point.h"
+#include "Test_Anchor.h"
+#include "Test_AnchorManager.h"
+#include "Test_DoublyLinkedNodeIterator.h"
+#include "Test_Feature.h"
+#include "Test_FeatureManager.h"
+#include "Test_Pattern.h"
+#include "Test_PatternManager.h"
+#include "Test_Point.h"
+#include "Test_PointManager.h"
 
 void setup()
 {
-	Serial.begin(9600);
-	delay(2000);
+	Serial.begin(115200);
+	Serial.clearWriteError();
+	Serial.flush();
+	while (Serial.available() != 0)
+	{
+		Serial.read();
+	}
+
+	delay(4000);
 }
 
 void loop()

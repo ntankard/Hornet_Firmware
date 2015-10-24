@@ -5,6 +5,7 @@
 #include <ArduinoUnit.h>
 #include "Scheduler.h"
 #include "Runnable.h"
+#include "MessageBuffer.h"
 
 class TestRunnable :public Runnable
 {
@@ -26,13 +27,17 @@ public:
 		return startMode;
 	}
 
-	int run()
+	bool run()
 	{
 		runCount++;
-		return 1;
+		return false;
 	}
 
-	volatile MessageBuffer_Passer* getMessage()volatile{ return NULL; }
+	int getNORegisters() {return 0;}
+	volatile MessageBuffer_Passer* getRegister(){ return &_empty; }
+	void addRegister(volatile MessageBuffer_Passer* newRegister) {}
+
+	MessageBuffer<0, 1> _empty;
 };
 
 test(Scheduler_Setup)

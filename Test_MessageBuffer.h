@@ -1,7 +1,7 @@
 #pragma once
 
 #if BUILD_TYPE == FOR_TEST
-
+/*
 #include "MessageBuffer.h"
 
 test(MessageBuffer_int16_t)
@@ -45,6 +45,6 @@ test(MessageBuffer_int16_t)
 		assertEqual(outBuffer[i], toTest.getPacket()[i +1]);
 	}
 }
-
+*/
 #endif;
  
