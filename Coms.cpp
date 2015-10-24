@@ -1,123 +1,78 @@
 #include "Coms.h"
-#include "ComsDecoder.h"
-#include "CONFIG.h"
-#include "Arduino.h"
 
-
-
-Coms::Coms(ComsDecoder* comsDecoder)
+Coms::Coms(volatile Error *e) :_comsDecoder(e)
 {
-	// setupt the object to notify on incoming messages
-	_comsDecoder = comsDecoder;
-
-	// create a resusable TX packet to save space
-#if COM_MODE == COM_MODE_XBEE
-	uint8_t *data = new uint8_t();
-	_tx16 = Tx16Request(C_COMMS_BSTATION_ADDRESS, data, 1);
-
-	// setup the conection to the XBEE
-	C_COMS_PORT.begin(C_COMS_BAUD_RATE);
-	_xbee.begin(C_COMS_PORT);
-	_outstandingSent = false;
-#endif
-
-#if COM_MODE == COM_MODE_SERIAL
-	C_COMS_PORT.begin(C_COMS_BAUD_RATE);
-	_readData = 0;
-#endif
-
+	_sendCount = 0;
+	_readCount = 0;
 }
 
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-void Coms::run()
+int Coms::getNORegisters()
 {
-#if COM_MODE == COM_MODE_XBEE
-	_xbee.readPacket();
-	if (_xbee.getResponse().isAvailable())
+	return _comsDecoder.getNORegisters();
+}
+
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+volatile MessageBuffer_Passer* Coms::getNextRegister()
+{
+	return _comsDecoder.getNextRegister();
+}
+
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+void Coms::send(volatile MessageBuffer_Passer* data)
+{
+	data->setSendCount(_sendCount);
+	_sendCount++;
+	send((uint8_t*)data->getPacket(), data->getPacketSize());
+}
+
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+void Coms::send(uint8_t *data, uint8_t length)
+{
+	COM_SERIAL.write(data, length);
+}
+
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+bool Coms::run()
+{
+	// take a snapshot of the byte to prevent this locking if we receive more that we can process @TODO add overflow check 
+	int readCount = COM_SERIAL.available();
+
+	for (int i = 0; i < readCount; i++)
 	{
-		if (_xbee.getResponse().getApiId() == RX_16_RESPONSE)
+		uint8_t read = COM_SERIAL.read();
+
+		if (read == END_BYTE)
 		{
-			// new message
-			_xbee.getResponse().getRx16Response(_rx16);
-			_comsDecoder->processMessage(_rx16.getData(), _rx16.getDataLength());
-		}
-		else if (_xbee.getResponse().getApiId() == TX_STATUS_RESPONSE)
-		{
-			_xbee.getResponse().getTxStatusResponse(_txStatus);
-			if (_txStatus.getStatus() == SUCCESS)
+			// remove the last byte from the checksum (it is the checksum)
+			_checkSum -= _readMessage[_readCount - 1] * _readCount;
+			if (_comsDecoder.processMessage(_readMessage, _readCount, _checkSum))
 			{
-				// last sent packet was sucsesful
-				_outstandingSent = false;
+				_readCount = 0;
+				_checkSum = 0;
+				return true;
 			}
 			else
 			{
-				// packet send failure, retry
-				_xbee.send(_tx16);
-				_resendCount++;
-				if (_resendCount >= C_COMMS_MAX_RETRY)
-				{
-					_comsDecoder->sendFailure();
-					_outstandingSent = false;
-				}
+				_readCount = 0;
+				_checkSum = 0;
+				return false;
 			}
 		}
 		else
 		{
-			_comsDecoder->receiveFailure();
+			if (_readCount < MAX_PACKET_SIZE)
+			{
+				_readMessage[_readCount] = read;
+				_readCount++;
+				_checkSum += read*_readCount;
+			}
 		}
 	}
-#endif
-#if COM_MODE == COM_MODE_SERIAL
-	while (C_COMS_PORT.available())
-	{
-		uint8_t read = C_COMS_PORT.read();
-		if (read == '\n')
-		{
-			_comsDecoder->processMessage(_buffer, _readData);
-			_readData = 0;
-		}
-		else
-		{
-			_buffer[_readData] = read;
-			_readData++;
-		}
-	}
-#endif
+	return false;
 }
-
-//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-bool Coms::canSend()
-{
-#if COM_MODE == COM_MODE_XBEE
-	return !_outstandingSent;
-#endif
-	return true;
-}
-
-//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-void Coms::send(uint8_t *data, uint8_t dataLength)
-{
-#if COM_MODE == COM_MODE_XBEE
-	if (!_outstandingSent)
-	{
-		_resendCount = 0;
-		_outstandingSent = true;
-
-		// send the message
-		_tx16.setPayload(data);
-		_tx16.setPayloadLength(dataLength);
-		_xbee.send(_tx16);
-	}
-#endif
-#if COM_MODE == COM_MODE_SERIAL
-	for (int i = 0; i < dataLength; i++)
-	{
-		C_COMS_PORT.write(data[i]);
-	}
-	C_COMS_PORT.write("\n");
-#endif
-}
-

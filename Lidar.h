@@ -1,31 +1,37 @@
 #pragma once
-#include "HornetManager.h"
+
+#include "Runnable.h"
 #include "Arduino.h"
-#include <RPLidar.h>
+#include "LidarComs.h"
+#include "Error.h"
+#include "CONFIG.h"
+#include "MessageBuffer.h"
 
-#if ENABLE_LIDAR == ENABLED
-
-class Lidar
+class Lidar : public Runnable
 {
 public:
-	Lidar(HornetManager* theManager);
-	void start();
-	void run();
+	Lidar(volatile Error* e);
+
+	int getNORegisters(){ return 1; }
+	volatile MessageBuffer_Passer* getRegister(){ return &_lastLidarRegister; }
+	void addRegister(volatile MessageBuffer_Passer* newRegister){}
+
+	bool start();
+	bool run();
+
+
+
+
+
+	/*bool start();
+	int run();
+	volatile MessageBuffer_Passer* getMessage()volatile { return _toSend; }*/
 
 private:
-	HornetManager* _hornetManager;
-	RPLidar _lidar;
 
+	MessageBuffer<MB_LAST_LIDAR, 2> _lastLidarRegister;
+
+	LidarComs _lidarComs;
+	
 };
 
-#else
-
-class Lidar
-{
-public:
-	Lidar(HornetManager* theManager){}
-	void start(){}
-	void run(){}
-};
-
-#endif

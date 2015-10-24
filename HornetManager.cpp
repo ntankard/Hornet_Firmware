@@ -1,282 +1,140 @@
 #include "HornetManager.h"
-#include "Coms.h"
-#include "ComsEncoder.h"
-#include "AccGyro.h"
-#include "Monitor.h"
-#include "Indicator.h"
-#include "Scheduler.h"
-#include <Arduino.h>
-#include "Servo.h"
-#include "Drone.h"
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // ---------------------------------------------------- CONSTRUCTION ----------------------------------------------------------
 // ----------------------------------------------------------------------------------------------------------------------------
 
-HornetManager::HornetManager(Error *theError)
-{
-	_e = theError;
-	S_enterInit();
-	_isReset = false;
-}
-
-//-----------------------------------------------------------------------------------------------------------------------------
-
-void HornetManager::attachComs(Coms* theComs){_coms = theComs;}
-void HornetManager::attachComsEncoder(ComsEncoder* theComsEncoder){_comsEncoder = theComsEncoder;}
-void HornetManager::attachAccGyro(AccGyro* theAccGyro){	_accGyro = theAccGyro;}
-void HornetManager::attachMonitor(Monitor* theMonitor){	_monitor = theMonitor;}
-void HornetManager::attachIndicator(Indicator* theIndicator){	_indicator = theIndicator;}
-void HornetManager::attachLidar(Lidar* theLidar){ _lidar = theLidar; }
-void HornetManager::attachDrone(Drone* theDrone){ _drone = theDrone; }
-void HornetManager::attachScheduler(Scheduler* theScheduler){	_scheduler = theScheduler;}
-
-//-----------------------------------------------------------------------------------------------------------------------------
-
-void HornetManager::start()
-{
-	S_initToConnect();
-}
-
-//-----------------------------------------------------------------------------------------------------------------------------
-// --------------------------------------------------- NOTIFICATIONS ----------------------------------------------------------
-// ----------------------------------------------------------------------------------------------------------------------------
-
-void HornetManager::ND_RawAccGyro(float accel[3], float gyro[3])
-{
-	_monitor->newRawAccGyro(accel, gyro);
-}
-
-void HornetManager::ND_Throttle(int t)
-{
-	if (_state == Flight)
-	{
-		_drone->setThrottle(t);
-	}
-}
-
-void HornetManager::ND_PitchRoll(float pitch, float roll)
-{
-	_monitor->newPitchRoll(pitch, roll);
-}
-
-void HornetManager::ND_LidarPoint(float angle, float distance)
-{
-	_monitor->newLidarPoint(angle, distance);
-}
-
-void HornetManager::ND_LidarEOSweep(float pitch, float roll, float yaw)
-{
-	_monitor->newLidarEOSweep(pitch, roll, yaw);
-}
-
-//-----------------------------------------------------------------------------------------------------------------------------
-
-void HornetManager::M_ConnectionConfirmed()
-{
-	S_connectToIdle();
-}
-
-void HornetManager::M_Reset()
-{
-	if (_state == Idle)
-	{
-		_isReset = true;	//@TODO add saftey check
-	}
-	else
-	{
-		//@TODO notify the base station that eh reset has been rejected for saftey reasons
-	}
-}
-
-void HornetManager::M_ArmDisarm()
-{
-	if (_state == Idle)
-	{
-		S_idleToTakeOff();
-		return;
-	}
-
-	if (_state == Flight)
-	{
-		//@TODO add can land check to prevent crash
-		S_flightToLand();
-		return;
-	}
-}
-
-//-----------------------------------------------------------------------------------------------------------------------------
-// ----------------------------------------------------- MAIN LOOP ------------------------------------------------------------
-// ----------------------------------------------------------------------------------------------------------------------------
-
-bool HornetManager::run()
-{	
-	// run the threads
-	if (_state != Init)
-	{
-		_scheduler->run();
-	}
-
-	// check for special logic
-	if (_state == Connect)
-	{
-		runConnect();
-	}
-
-	// catch exeption
-	if (_e->isError())
-	{
-		//@TODO add error handeling here
-	}
-
-	// end if reset
-	return !_isReset;
-}
-
-//-----------------------------------------------------------------------------------------------------------------------------
-
-void HornetManager::runConnect()
-{
-	unsigned long current = millis();
-
-	if (_C_last + C_CONNECT_PULSE_TIME <= current)
-	{
-		_C_last = current;
-		_comsEncoder->sendChar(C_COMS_CODE_CONNECT_REQUEST);
-	}
-
-}
-
-//-----------------------------------------------------------------------------------------------------------------------------
-// ------------------------------------------------------- STATES -------------------------------------------------------------
-// ----------------------------------------------------------------------------------------------------------------------------
-
-//------------------------------------------------------ INIT STATE -----------------------------------------------------------
-
-void HornetManager::S_enterInit()
+HornetManager::HornetManager() :_scheduler(&_e), _indicator(&_e), _comsEncoder(&_e), _LIDAR(&_e)
 {
 	_state = Init;
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------
 
-void HornetManager::S_initToConnect()
+void HornetManager::start()
 {
-	if (_state == Init)
+	// link all scedual objects
+	_scheduler.addRunable(C_SCHEDULER_INDICATOR_THREAD, &_indicator);
+	_scheduler.addRunable(C_SCHEDULER_COMENCODER_THREAD, &_comsEncoder);
+	_scheduler.addRunable(C_SCHEDULER_GYRO_THREAD, &_gyro);
+	_scheduler.addRunable(C_SCHEDULER_FLIGHT_THREAD, &_theDrone);
+	_scheduler.addRunable(C_SCHEDULER_LIDAR_THREAD, &_LIDAR);
+
+	// log all non runnable registers
+	_comsEncoder.addRegister(&_statusRegister);
+
+	// finalize the linking process
+	if (!_scheduler.finish())
 	{
-		_accGyro->start();
-		_drone->start();
-		_C_last = millis();
-		S_enterConnect();
+		_indicator.safeOn();
+		while (true)
+		{
+			COM_SERIAL.println("Not all objects attached");
+			DEBUG_PRINTLN("Not all objects attached");
+			delay(500);
+		}
 	}
-	else
+
+	// start all threads
+	if (!_scheduler.startAll())
 	{
-		_e->add(E_STATE_ERROR, "S_initToConnect called from a non init state");
+		_indicator.safeOn();
+		while (true)
+		{
+			COM_SERIAL.println("Object failed to start");
+			DEBUG_PRINTLN("Object failed to start");
+			delay(500);
+		}
 	}
+
+	// transition to an operating state
+	changeState(ST_TO_IDLE);
 }
 
-//---------------------------------------------------- CONNECT STATE ---------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------------------------
+// ----------------------------------------------------- MAIN LOOP ------------------------------------------------------------
+// ----------------------------------------------------------------------------------------------------------------------------
 
-void HornetManager::S_enterConnect()
-{
-	// threads
-	_scheduler->setAccPriority(0);
-	_scheduler->setIndicatorPriority(2);
-	_scheduler->setLidarPriority(0);
+void HornetManager::run()
+{	
+	// run the main program
+	_scheduler.run(); 
 
-	// extra systems
-	_monitor->off();
-	_indicator->on();
-	_indicator->setDisplay(C_STATE_INDICATE_CONNECT);
+	// check for state change
+	switch (_theDrone.getState())
+	{
+	case Armed:
+		if (_state != Flight)
+		{
+			changeState(ST_TO_FLIGHT);
+		}
+		break;
+	case Arming:
+		if (_state != TakeOff)
+		{
+			changeState(ST_TO_TAKEOFF);
+		}
+		break;
+	case Disarmed:
+		if (_state != Idle)
+		{
+			changeState(ST_TO_IDLE);
+		}
+		break;
+	case Disarming:
+		if (_state != Land)
+		{
+			changeState(ST_TO_LAND);
+		}
+		break;
+	default:
+		break;
+	}
 
-	// state indicator
-	_state = Connect;
+	// catch exeption
+	if (_e.isError())
+	{
+		if (_state != Armed)
+		{
+			int line = _e.getError();
+			_indicator.safeOn();
+			while (true){
+				COM_SERIAL.println("ERROR");
+				COM_SERIAL.println((String)line);
+				DEBUG_PRINTLN("ERROR");
+				DEBUG_PRINTLN((String)line);
+				delay(500);
+			}
+		}
+	}
+
+	// monitor the speed of the program
+	unsigned long current = millis();
+	_loopCount++;
+	if (_statusLast + 1000 <= current)
+	{
+		_statusRegister.getData()[1] = _loopCount;
+		_statusLast += 1000;
+		_loopCount = 0;
+	}
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------
 
-void HornetManager::S_connectToIdle()
+void HornetManager::changeState(State newState, int indicatorPriority, int comEncoderPri, int gyroPri, int flightPri,int lidarPri, int lightSetting, int lightBlinks, int lightRate)
 {
-	if (_state == Connect)
-	{
-		_state = Idle;
-		_monitor->on();
-		S_enterIdle();
-		_lidar->start();
-	}
-	else
-	{
-		_e->add(E_STATE_ERROR, "S_connectToIdle called from a non Connect state");
-	}
+	_state = newState;
+	_statusRegister.getData()[0] = _state;
+
+	_scheduler.setPriority(C_SCHEDULER_INDICATOR_THREAD, indicatorPriority);
+	_scheduler.setPriority(C_SCHEDULER_COMENCODER_THREAD, comEncoderPri);
+	_scheduler.setPriority(C_SCHEDULER_GYRO_THREAD, gyroPri);
+	_scheduler.setPriority(C_SCHEDULER_FLIGHT_THREAD, flightPri);
+	_scheduler.setPriority(C_SCHEDULER_LIDAR_THREAD, lidarPri);
+
+#ifdef USE_DM_INDICATOR
+	_indicator.setDisplay(0, lightSetting, lightBlinks, lightRate);
+#else
+	_indicator.setDisplay(lightSetting, lightBlinks, lightRate);
+#endif
 }
-
-//------------------------------------------------------ IDLE STATE -----------------------------------------------------------
-
-void HornetManager::S_enterIdle()
-{
-	// threads
-	_scheduler->setAccPriority(2);
-	_scheduler->setIndicatorPriority(10);
-	_scheduler->setLidarPriority(2);
-
-	// extra systems
-	_monitor->on();
-	_indicator->on();
-	_indicator->setDisplay(C_STATE_INDICATE_IDLE);
-
-	// state indicator
-	_state = Idle;
-}
-void HornetManager::S_idleToConnect(){}
-void HornetManager::S_idleToInit(){}
-void HornetManager::S_idleToTakeOff()
-{
-	_drone->arm();
-	S_enterTakeOff();
-}
-
-void HornetManager::S_enterTakeOff()
-{
-	S_takeOffToFlight();	//@do nothing
-}
-void HornetManager::S_takeOffToFlight()
-{
-	S_enterFlight();
-}
-
-void HornetManager::S_enterFlight()
-{
-	// threads
-	_scheduler->setAccPriority(2);
-	_scheduler->setIndicatorPriority(10);
-	_scheduler->setLidarPriority(2);
-
-	// extra systems
-	_monitor->on();
-	_indicator->on();
-	_indicator->setDisplay(C_STATE_INDICATE_FLIGHT);
-
-	// state indicator
-	_state = Flight;
-}
-void HornetManager::S_flightToLand()
-{
-	S_enterLand();
-}
-void HornetManager::S_flightToEmergency(){}
-
-void HornetManager::S_enterLand()
-{
-	S_landToIdle();
-}
-void HornetManager::S_landToIdle()
-{
-	_drone->disarm();
-	S_enterIdle();
-}
-
-void HornetManager::S_enterEmergency(){}
-void HornetManager::S_emergencyToCrash(){}
-
-void HornetManager::S_enterCrash(){}
-void HornetManager::S_crashToInit(){}

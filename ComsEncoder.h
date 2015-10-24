@@ -1,40 +1,50 @@
 #pragma once
-#include "Coms.h"
-#include "CircularBuffer_Manager.h"
-#include "Error.h"
 
-class ComsEncoder
+#include "CONFIG.h"
+#include "Runnable.h"
+#include "Error.h"
+#include "MessageBuffer_Passer.h"
+#include "Coms.h"
+#include "TimeOut.h"
+
+/**
+* \brief	An object to buffer messages for sending
+*/
+class ComsEncoder:public Runnable
 {
 public:
-	ComsEncoder(Coms* coms, Error *e);
 
-	void run();
+	/**
+	* \brief	Default constructor.
+	*
+	* \param	e		The shared error object
+	*/
+	ComsEncoder(volatile Error *e);
 
-	void sendChar(uint8_t message);
+	int getNORegisters();
+	volatile MessageBuffer_Passer* getRegister();
+	void addRegister(volatile MessageBuffer_Passer* newRegister);
 
-	void sendRawAccGyro(float accel[3], float gyro[3]);
+	bool start();
 
-	void sendPitchRoll(float pitch, float roll);
-
-	void sendLidarPoint(float angle, float distance);
-
-	void sendLidarEOSweep(float pitch, float roll, float yaw);
+	/**
+	* \brief	Sends one of the waiting messages
+	*/
+	bool run();
 
 private:
-	Coms *_coms;
-	Error *_e;
 
+	/** \brief	The object to send messages */
+	Coms _coms;
 
-	uint8_t _messageBuffer[20];
-	CircularBuffer_Manager<20> _messageBuffer_man;
+	/** \brief	The shared error object */
+	volatile Error *_e;
 
-	uint8_t _rawAccGyro[10][25];
-	CircularBuffer_Manager<10> _rawAccGyro_man;
+	MessageBuffer<0, 1> _empty[MB_OUTBOUND_COUTN];
+	volatile MessageBuffer_Passer* _internalRegisters[MB_OUTBOUND_COUTN];
+	bool _internalRegisters_addCount[MB_OUTBOUND_COUTN];
 
-	uint8_t _pitchRoll[10][9];
-	CircularBuffer_Manager<10> _pitchRoll_man;
+	int _sendId;
 
-	uint8_t _lidarData[10][9];
-	CircularBuffer_Manager<10> _lidarData_man;
+	TimeOut _throttle;
 };
-

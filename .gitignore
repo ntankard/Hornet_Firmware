@@ -1,7 +1,14 @@
 Hornet_Firmware.sdf
+Visual Micro/
 Hornet_Firmware.sln
 Hornet_Firmware.vcxproj
 Hornet_Firmware.vcxproj.filters
-Visual Micro/
 Hornet_Firmware.opensdf
-Hornet_Firmware.v12.suo
+__vm/Upload.vmps.xml
+__vm/
+Debug/Hornet_Firmware.tlog/CL.read.1.tlog
+Debug/Hornet_Firmware.tlog/CL.write.1.tlog
+Debug/Hornet_Firmware.tlog/Hornet_Firmware.lastbuildstate
+Debug/Hornet_Firmware.tlog/cl.command.1.tlog
+Debug/Hornet_Firmware.tlog/unsuccessfulbuild
+Debug/vc120.idb

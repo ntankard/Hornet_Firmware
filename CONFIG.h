@@ -1,172 +1,174 @@
 #pragma once
-#include "APM_2_5_PINS.h"
+#include <Arduino.h>
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // ------------------------------------------------------ BASE TYPES ----------------------------------------------------------
 // ----------------------------------------------------------------------------------------------------------------------------
 
-#define BOARD_TYPE_APM 1
-#define BOARD_TYPE_MEGA 2
-#define BOARD_TYPE_DUO 3
-#define BOARD_TYPE_UNO 4
+#define ENABLE	1
+#define DISABLE 2
 
-#define COM_MODE_SERIAL 1
-#define COM_MODE_XBEE 2
-
-#define ENABLED 1
-#define DISABLED 2
+#define XBEE	1
+#define SERIAL	2
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // ----------------------------------------------------- BUILD CONFIG ---------------------------------------------------------
 // ----------------------------------------------------------------------------------------------------------------------------
 
-// Pick wich board to use
-#define BOARD_TYPE BOARD_TYPE_MEGA
+#define DEBUG_BUILD			ENABLE
 
-// Pick wich coms to use (XBEE not avalible for uno, will default to SERIAL)
-#define COM_MODE COM_MODE_SERIAL
+#define ENABLE_INDICATOR	ENABLE
+#define ENABLE_GYRO			ENABLE
+#define	ENABLE_LIDAR		ENABLE
 
-// Enable relevent systems (some will be automaticaly disabled for certain board)
-#define ENABLE_ACC			DISABLED
-#define ENABLE_LIDAR		DISABLED
-#define ENABLE_INDICATOR	DISABLED
+#define COM_MODE			SERIAL
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // ---------------------------------------------------- BOARD FEATURES --------------------------------------------------------
 // ----------------------------------------------------------------------------------------------------------------------------
 
-#if BOARD_TYPE == BOARD_TYPE_UNO
-	//UNO overrride components that are not suported
-	#define ENABLE_ACC			DISABLED
-	#define ENABLE_LIDAR		DISABLED
-	#define ENABLE_INDICATOR	DISABLED
-	#define COM_MODE			COM_MODE_SERIAL
-#endif
+#if DEBUG_BUILD == ENABLE
 
-#if BOARD_TYPE == BOARD_TYPE_APM
-	#define ENABLE_LIDAR		DISABLED
-#endif
+#define DEBUG_PRINT(x) Serial.print(x)
+#define DEBUG_PRINTLN(x) Serial.println(x)
+#define TP(message) Serial.println(message);
 
-#if BOARD_TYPE == BOARD_TYPE_MEGA
-	#define ENABLE_ACC			DISABLED
-	#define ENABLE_INDICATOR	DISABLED
-#endif
+#else
 
-#if BOARD_TYPE == BOARD_TYPE_DUO
-	#define ENABLE_ACC			DISABLED
-	#define ENABLE_LIDAR		DISABLED
-	#define ENABLE_INDICATOR	DISABLED
+#define DEBUG_PRINT(x)
+#define DEBUG_PRINTLN(x)
+
 #endif
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // ------------------------------------------------------ COMPONENTS ----------------------------------------------------------
 // ----------------------------------------------------------------------------------------------------------------------------
 
-#if ENABLE_ACC == DISABLED
-	#if BOARD_TYPE == BOARD_TYPE_APM
-		#define USE_MPU6000
-	#endif
+#if ENABLE_INDICATOR == ENABLE
+	//#define USE_DM_INDICATOR
+	#define USE_RBG_INDICATOR
+#endif
+
+#if ENABLE_GYRO == ENABLE
+	#define USE_GYRO
+	#define USE_MPU6050
+#endif
+
+#if ENABLE_LIDAR == ENABLE
+	#define  USE_LIDAR
+#endif
+
+#if COM_MODE == XBEE
+	#define COM_SERIAL		XBEE_SERIAL
+#endif
+#if COM_MODE == SERIAL
+	#define COM_SERIAL		Serial
 #endif
 
 //-----------------------------------------------------------------------------------------------------------------------------
-// ----------------------------------------------------- PIN SETTINGS ---------------------------------------------------------
+// --------------------------------------------------- GENERAL SETTINGS -------------------------------------------------------
 // ----------------------------------------------------------------------------------------------------------------------------
 
-#if COM_MODE == COM_MODE_XBEE
-	#define C_COMS_PORT Serial1
-#endif
-#if COM_MODE == COM_MODE_SERIAL
-	#define C_COMS_PORT Serial
-#endif
-
-#if ENABLE_LIDAR == DISABLED
-	#if BOARD_TYPE == BOARD_TYPE_APM
-		#define C_LIDAR_MOTOCTL 3
-		#define C_LIDAR_SERIAL Serial2
-	#else
-		#define C_LIDAR_MOTOCTL 3
-		#define C_LIDAR_SERIAL Serial2
-	#endif
-#endif
-
-
-//-----------------------------------------------------------------------------------------------------------------------------
-// ------------------------------------------------------ COMM CODES ----------------------------------------------------------
-// ----------------------------------------------------------------------------------------------------------------------------
-
-#define C_COMS_CODE_CONNECT_REQUEST 'a'
-#define C_COMS_CODE_CONNECT_CONFIRM 'b'
-#define C_COMS_CODE_RESET			'r'
-#define C_COMS_CODE_THROTTLE		't'
-#define C_COMS_CODE_ARM_DISARM		'd'
-#define C_COMS_CODE_ACCGYRO			'g'
-#define C_COMS_CODE_PITCH_ROLL		'p'
-#define C_COMS_CODE_LIDAR_POINT		'l'
-#define C_COMS_CODE_LIDAR_EOS1		'e'
-#define C_COMS_CODE_LIDAR_EOS2		'f'
+#define C_ERROR_BUFFER 10
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // ----------------------------------------------------- ERROR CODES ----------------------------------------------------------
 // ----------------------------------------------------------------------------------------------------------------------------
 
-#define E_ILLEGAL_ACCESS 1
-#define E_STATE_ERROR 2
+#define E_NULL_PTR			0x01
+#define E_TIMEOUT			0x05
+#define E_HARDWARE_FAILURE	0x06
+#define E_INDEX_OUT_BOUNDS	0x07
+#define E_BUFFER_OVERFLOW   0x08
+#define E_BUS_FAIL			0x09
+#define E_PACKET_CORRUPTION	0x0A
 
 //-----------------------------------------------------------------------------------------------------------------------------
-// --------------------------------------------------- GENERAL SETTINGS --------------------------------------------------------
+// --------------------------------------------------- SCHEDULER SETTINS ------------------------------------------------------
+// ----------------------------------------------------------------------------------------------------------------------------
+
+// The build depends on there being this many threads and them being from 0 to C_SCHEDULER_THREAD_NUM -1 with no repeats
+#define C_SCHEDULER_THREAD_NUM 5
+
+// must be in required start order
+#define C_SCHEDULER_INDICATOR_THREAD 0
+#define C_SCHEDULER_COMENCODER_THREAD 1
+#define C_SCHEDULER_GYRO_THREAD 2
+#define C_SCHEDULER_FLIGHT_THREAD 3
+#define C_SCHEDULER_LIDAR_THREAD 4
+
+//-----------------------------------------------------------------------------------------------------------------------------
+// ----------------------------------------------------- STATE SETTINGS -------------------------------------------------------
 // ----------------------------------------------------------------------------------------------------------------------------
 
 
-#define C_ERROR_BUFFER 100
-#define C_LOGGER_ACC_RATE 10
-#define C_CONNECT_PULSE_TIME 1000
+//							____________|			  Thread Priority						|_______________________
+//							| State		| INDICATOR		| COM EN	|GYRO	|FLIGHT	|LIDAR	| LIGHT	|BLINKS| RATE
+//							-----------------------------------------------------------------
+#define ST_TO_CONNECT		Connect,	10,				1,			0,		5,		1,		0,		1,		1000
+#define ST_TO_IDLE			Idle,		10,				1,			5,		5,		1,		1,		2,		250
+#define ST_TO_TAKEOFF		TakeOff,	10,				1,			5,		5,		1,		3,		3,		100
+#define ST_TO_FLIGHT		Flight,		10,				1,			5,		5,		1,		2,		1,		1000
+#define ST_TO_LAND			Land,		10,				1,			5,		5,		1,		3,		4,		100
+#define ST_TO_EMERGENCY		Emergency,	10,				1,			5,		5,		1,		3,		1,		1000
+#define ST_TO_CRACH			Crash,		10,				1,			5,		5,		1,		3,		1,		1000
 
-#if COM_MODE == COM_MODE_XBEE
-	#define C_COMS_BAUD_RATE 9600
-	#define C_COMMS_BSTATION_ADDRESS 0x0000
-	#define C_COMMS_MAX_RETRY 3
-#endif 
+//-----------------------------------------------------------------------------------------------------------------------------
+// ----------------------------------------------------- PIN SETTINGS ---------------------------------------------------------
+// ----------------------------------------------------------------------------------------------------------------------------
 
-#if COM_MODE == COM_MODE_SERIAL
-	#define C_COMS_BAUD_RATE 9600
-	#define C_COMS_BUFFER 100
-#endif
+// dot matrix
+#define CANODE_1 A6
+#define CANODE_2 A5
+#define CANODE_3 A4
+#define CANODE_4 A3
+#define CANODE_5 A2
+#define CANODE_6 A1
+#define CANODE_7 A0
+#define CANODE_8 9
+#define CANODE_9 8
+#define CANODE_10 7
+#define CANODE_11 6
+#define CANODE_12 5
+#define CANODE_13 49
+#define CANODE_14 47
 
+// RBG indicator
+#define RBG_GREEN 53
+#define RBG_RED 51
+#define RBG_BLUE 49
 
-#define C_STATE_INDICATE_CONNECT Indicator::MAGENTA,1,500
-#define C_STATE_INDICATE_IDLE Indicator::PURPLE,2,100
-#define C_STATE_INDICATE_FLIGHT Indicator::BLUE,2,100
+// APM conections
+#define C_APM_ROLL		10
+#define C_APM_PITCH		11
+#define C_APM_THROTTLE	12
+#define C_APM_YAW		13
 
-#define C_ACC_CS ACC_CS
+// Coms
+#define XBEE_SERIAL		Serial1
 
-#define C_PITCH_ROLL_WINDOW_AVE_WIDTH 10
-
-#define C_LOGGER_PITCH_ROLL_RATE 10
+// LIDAR
+#define C_LIDAR_SERIAL	Serial2
 
 
 //-----------------------------------------------------------------------------------------------------------------------------
-// ---------------------------------------------------- LIDAR SETTINGS --------------------------------------------------------
+// --------------------------------------------------- MESSAGE SETTINGS -------------------------------------------------------
 // ----------------------------------------------------------------------------------------------------------------------------
 
-#define L_LINE_OF_BEST_FIT 1
-#define L_POINT_TO_POINT 2
-#define L_END_TO_POINT 3
-#define L_START_TO_POINT 4
+// inbound
+#define MB_INBOUND_COUNT	4		// must match the numebr of packets!!
+#define MB_INBOUND_OFFSET	100		// must match the lowest ID
 
-//----------------------------------------Feature recognition values-----------------------------------------------------------
-#define L_LINE_TO_LINE_OFFSET 5
-#define L_POINTS_IN_PATTERN 10
-#define L_PATTERNS_IN_CORNER_FEATURE 2
-#define L_PATTERN_RANGE_IN_FEATURE 50
-#define L_FEATURE_CORNER_ANGLE_TOLERANCE 5
-#define L_PATTERNS_STORED 10
-#define L_FEATURES_STORED 30
-#define L_FEATURE_RANGE_TOLERANCE 5
-#define L_FEATURE_LIFE 5
-#define L_FEATURE_OCCURANCES 3
-#define L_ANCHORS_STORED 10
-#define L_PATTERN_DEFINITION L_LINE_OF_BEST_FIT
+#define MB_JOY_XY			100
+#define MB_JOY_THROTTLE		101
+#define MB_JOY_Z			102
+#define MB_ARM_DISARM		103
 
-//-----------------------------------------------------------------------------------------------------------------------------
-// ---------------------------------------------------- COMM SETTINGS ---------------------------------------------------------
-// ----------------------------------------------------------------------------------------------------------------------------
+// outbound
+#define MB_OUTBOUND_COUTN	3		// must match the numebr of packets!!
+#define MB_OUTBOUND_OFFSET	1		// must match the lowest ID
+
+#define MB_ROLL_PITCH_YAW	1
+#define MB_STATUS			2
+#define MB_LAST_LIDAR		3
+
