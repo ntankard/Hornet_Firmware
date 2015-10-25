@@ -37,6 +37,6 @@ private:
 	// status monitor
 	int _loopCount;
 	unsigned long _statusLast;
-	MessageBuffer<MB_STATUS, 2> _statusRegister;
+	volatile MessageBuffer<MB_STATUS, 3> _statusRegister;
 };
 

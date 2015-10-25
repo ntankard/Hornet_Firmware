@@ -24,6 +24,8 @@ public:
 	int getNORegisters();
 	volatile MessageBuffer_Passer* getRegister();
 	void addRegister(volatile MessageBuffer_Passer* newRegister);
+	int getSendCount(){ return _coms.getSendCount(); }
+	void setSendCound(int toSet){ _coms.setSendCound(toSet); }
 
 	bool start();
 

@@ -22,10 +22,14 @@ public:
 
 	bool run();
 
+	int getSendCount(){ return _totalSend; }
+	void setSendCound(int toSet){ _totalSend = toSet; }
+
 private:
 
 	uint8_t _sendCount;
 
+	int _totalSend;
 	int _readCount;
 	uint8_t _checkSum;
 	uint8_t _readMessage[MAX_PACKET_SIZE];

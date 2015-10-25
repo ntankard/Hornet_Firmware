@@ -114,6 +114,8 @@ void HornetManager::run()
 	if (_statusLast + 1000 <= current)
 	{
 		_statusRegister.getData()[1] = _loopCount;
+		_statusRegister.getData()[2] = _comsEncoder.getSendCount();
+		_comsEncoder.setSendCound(0);
 		_statusLast += 1000;
 		_loopCount = 0;
 	}

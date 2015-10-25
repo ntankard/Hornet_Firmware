@@ -3,7 +3,7 @@
 #define FOR_TEST 3
 #define OTHER 4
 
-#define BUILD_TYPE FOR_TEST
+#define BUILD_TYPE FOR_HARDWARE
 
 #if BUILD_TYPE == FOR_HARDWARE
 

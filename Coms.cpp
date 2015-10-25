@@ -4,6 +4,7 @@ Coms::Coms(volatile Error *e) :_comsDecoder(e)
 {
 	_sendCount = 0;
 	_readCount = 0;
+	_totalSend = 0;
 }
 
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -33,6 +34,7 @@ void Coms::send(volatile MessageBuffer_Passer* data)
 
 void Coms::send(uint8_t *data, uint8_t length)
 {
+	_totalSend++;
 	COM_SERIAL.write(data, length);
 }
 
