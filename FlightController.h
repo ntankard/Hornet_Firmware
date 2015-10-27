@@ -12,8 +12,19 @@ class FlightController : public Runnable
 public:
 	FlightController();
 
-	int getNORegisters(){ return 0; }
-	volatile MessageBuffer_Passer* getRegister(){ return &_empty; }
+	int getNORegisters(){ return 2; }
+	volatile MessageBuffer_Passer* getRegister()
+	{ 
+		if (_regReadCount == 0)
+		{
+			_regReadCount++;
+			return &_JoyVector;
+		}
+		else
+		{
+			return &_TotalVector;
+		}
+	}
 	void addRegister(volatile MessageBuffer_Passer* newRegister);
 	FlightState getState(){ return _state; }
 
@@ -22,7 +33,6 @@ public:
 	bool run();
 
 private:
-	MessageBuffer<0, 1> _empty;
 	void arm();
 	void disarm();
 
@@ -44,5 +54,10 @@ private:
 	volatile MessageBuffer_Passer* _XYJoyRegister;
 	volatile MessageBuffer_Passer* _ZJoyRegister;
 	volatile MessageBuffer_Passer* _ArmDisarmRegister;
+	volatile MessageBuffer_Passer* _CompensationVector;
+
+	int _regReadCount;
+	volatile MessageBuffer<MB_JOY_VECTOR, 2> _JoyVector;
+	volatile MessageBuffer<MB_TOTAL_VECTOR, 2> _TotalVector;
 };
 

@@ -72,6 +72,11 @@ bool ComsEncoder::run()
 		}
 	//}
 
+	/*for (int i = 0; i < MB_OUTBOUND_COUTN; i++)
+	{
+		_coms.send(_internalRegisters[i]);
+	}*/
+
 	// attempt to read any packets
 	return _coms.run();
 }

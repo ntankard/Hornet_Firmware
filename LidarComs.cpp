@@ -38,6 +38,9 @@ LidarComs::LidarComs(volatile Error* e)
 	_requestType = None;
 	_descriptorReceived = false;
 	_dataCount = 0;
+
+	_totalReceived = 0;
+	_missed = 0;
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------
@@ -104,6 +107,10 @@ bool LidarComs::run()
 
 					// dump and extra packets
 					int loop = bufferSize - i - 1;
+
+					_totalReceived++;
+					_missed += (loop / 5);
+
 					for (int i = 0; i < (((loop / 5)) * 5); i++)
 					{
 						C_LIDAR_SERIAL.read();
@@ -126,6 +133,10 @@ bool LidarComs::run()
 
 					// dump and extra packets
 					int loop = bufferSize - i - 1;
+
+					_totalReceived++;
+					_missed += (loop / 5);
+
 					for (int i = 0; i < (((loop / 5)) * 5); i++)
 					{
 						C_LIDAR_SERIAL.read();

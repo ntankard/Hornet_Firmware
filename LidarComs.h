@@ -70,6 +70,11 @@ public:
 	DataPacket getLastDataPacket(){ _dataCount--; return _lastDataPacket; }
 	int getDataCount(){ return _dataCount; }
 
+	int getTotalCount(){ return _totalReceived; }
+	int getMissed(){ return _missed; }
+	void setTotalCount(int toSet){ _totalReceived = toSet; }
+	void setMissed(int toSet){ _missed = toSet; }
+
 private:
 	volatile Error* _e;
 	RequestType _requestType;
@@ -80,6 +85,9 @@ private:
 	DataPacket _lastDataPacket;
 	DataPacket _buildDataPacket;
 	int _dataCount;
+
+	int _totalReceived;
+	int _missed;
 	
 	bool processIncomingData();
 

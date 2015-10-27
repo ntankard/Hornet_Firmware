@@ -4,6 +4,9 @@
 
 Lidar::Lidar(volatile Error* e) :_lidarComs(e)
 {
+	_lastAngle = 0;
+	_registerRead = 0;
+
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------
@@ -95,11 +98,25 @@ bool Lidar::run()
 	{
 		DataPacket theData = _lidarComs.getLastDataPacket();
 
-		float angle = ((theData.data.angle >> 1) / 64);
-		float distance = ((theData.data.distance) / 4.0f);
+		double angle = ((theData.data.angle >> 1) / 64);
+		double distance = ((theData.data.distance) / 4.0f);
 
+		// store for base stattion
 		_lastLidarRegister.getData()[0] = angle * 90;
 		_lastLidarRegister.getData()[1] = distance;
+
+		if (distance > LA_MIN_RADIUS)
+		{
+			// process colision avoidance 
+			_avoidance.newPoint(angle, distance);
+		}
+
+		if (_lastAngle > 300 && angle < 20 && _lastAngle > angle)
+		{
+			_avoidance.endOfSweep();
+		}
+
+		_lastAngle = angle;
 
 		return true;
 	}

@@ -20,6 +20,8 @@ FlightController::FlightController()
 	_pitch.writeMicroseconds(MIN + ((MAX - MIN) / 2));
 	_yaw.writeMicroseconds(MIN + ((MAX - MIN) / 2));
 	_throttle.writeMicroseconds(MIN);
+
+	_regReadCount = 0;
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------
@@ -40,6 +42,8 @@ void FlightController::addRegister(volatile MessageBuffer_Passer* newRegister)
 	case MB_ARM_DISARM:
 		_ArmDisarmRegister = newRegister;
 		break;
+	case MB_COMPENSATOR_VECTOR:
+		_CompensationVector = newRegister;
 	default:
 		break;
 	}

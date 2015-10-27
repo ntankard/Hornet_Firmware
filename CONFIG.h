@@ -90,6 +90,10 @@
 #define L_ANCHORS_STORED 10
 #define L_PATTERN_DEFINITION L_LINE_OF_BEST_FIT
 
+#define LA_MOUNT_OFFSET		0.0
+#define LA_SAFTEY_RADIUS	1000.0
+#define LA_MIN_RADIUS		100.0
+
 //-----------------------------------------------------------------------------------------------------------------------------
 // ----------------------------------------------------- ERROR CODES ----------------------------------------------------------
 // ----------------------------------------------------------------------------------------------------------------------------
@@ -121,16 +125,22 @@
 // ----------------------------------------------------------------------------------------------------------------------------
 
 
-//							____________|			  Thread Priority						|_______________________
-//							| State		| INDICATOR		| COM EN	|GYRO	|FLIGHT	|LIDAR	| LIGHT	|BLINKS| RATE
-//							-----------------------------------------------------------------
-#define ST_TO_CONNECT		Connect,	10,				1,			0,		5,		1,		0,		1,		1000
-#define ST_TO_IDLE			Idle,		10,				1,			5,		5,		1,		1,		2,		250
-#define ST_TO_TAKEOFF		TakeOff,	10,				1,			5,		5,		1,		3,		3,		100
-#define ST_TO_FLIGHT		Flight,		10,				1,			5,		5,		1,		2,		1,		1000
-#define ST_TO_LAND			Land,		10,				1,			5,		5,		1,		3,		4,		100
-#define ST_TO_EMERGENCY		Emergency,	10,				1,			5,		5,		1,		3,		1,		1000
-#define ST_TO_CRACH			Crash,		10,				1,			5,		5,		1,		3,		1,		1000
+#define INDICATOR_PRI	100
+#define COM_PRI			1
+#define GYRO_PRI		50
+#define FLIGHT_PRI		40
+#define LIDAR_PRI		1
+
+//							____________|			  Thread Priority									|_______________________
+//							| State		| INDICATOR		| COM EN	|GYRO		|FLIGHT		|LIDAR		| LIGHT	|BLINKS| RATE
+//							----------------------------------------------------------------------------------------------------
+#define ST_TO_CONNECT		Connect,	INDICATOR_PRI,	COM_PRI,	GYRO_PRI,	FLIGHT_PRI,	LIDAR_PRI,	0,		1,		1000
+#define ST_TO_IDLE			Idle,		INDICATOR_PRI,	COM_PRI,	GYRO_PRI,	FLIGHT_PRI,	LIDAR_PRI,	1,		2,		250
+#define ST_TO_TAKEOFF		TakeOff,	INDICATOR_PRI,	COM_PRI,	GYRO_PRI,	FLIGHT_PRI,	LIDAR_PRI,	3,		3,		100
+#define ST_TO_FLIGHT		Flight,		INDICATOR_PRI,	COM_PRI,	GYRO_PRI,	FLIGHT_PRI,	LIDAR_PRI,	2,		1,		1000
+#define ST_TO_LAND			Land,		INDICATOR_PRI,	COM_PRI,	GYRO_PRI,	FLIGHT_PRI,	LIDAR_PRI,	3,		4,		100
+#define ST_TO_EMERGENCY		Emergency,	INDICATOR_PRI,	COM_PRI,	GYRO_PRI,	FLIGHT_PRI,	LIDAR_PRI,	3,		1,		1000
+#define ST_TO_CRACH			Crash,		INDICATOR_PRI,	COM_PRI,	GYRO_PRI,	FLIGHT_PRI,	LIDAR_PRI,	3,		1,		1000
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // ----------------------------------------------------- PIN SETTINGS ---------------------------------------------------------
@@ -184,10 +194,13 @@
 #define MB_ARM_DISARM		103
 
 // outbound
-#define MB_OUTBOUND_COUTN	3		// must match the numebr of packets!!
-#define MB_OUTBOUND_OFFSET	1		// must match the lowest ID
+#define MB_OUTBOUND_COUTN		6		// must match the numebr of packets!!
+#define MB_OUTBOUND_OFFSET		1		// must match the lowest ID
 
-#define MB_ROLL_PITCH_YAW	1
-#define MB_STATUS			2
-#define MB_LAST_LIDAR		3
+#define MB_ROLL_PITCH_YAW		1
+#define MB_STATUS				2
+#define MB_LAST_LIDAR			3
+#define MB_COMPENSATOR_VECTOR	4
+#define MB_JOY_VECTOR			5
+#define MB_TOTAL_VECTOR			6
 

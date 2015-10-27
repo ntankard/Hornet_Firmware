@@ -115,7 +115,11 @@ void HornetManager::run()
 	{
 		_statusRegister.getData()[1] = _loopCount;
 		_statusRegister.getData()[2] = _comsEncoder.getSendCount();
+		_statusRegister.getData()[3] = _LIDAR.getTotalCount();
+		_statusRegister.getData()[4] = _LIDAR.getMissed();
 		_comsEncoder.setSendCound(0);
+		_LIDAR.setMissed(0);
+		_LIDAR.setTotalCount(0);
 		_statusLast += 1000;
 		_loopCount = 0;
 	}
