@@ -21,7 +21,7 @@
 #define ENABLE_GYRO			ENABLE
 #define	ENABLE_LIDAR		ENABLE
 
-#define COM_MODE			SERIAL
+#define COM_MODE			XBEE
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // ---------------------------------------------------- BOARD FEATURES --------------------------------------------------------
@@ -60,9 +60,11 @@
 
 #if COM_MODE == XBEE
 	#define COM_SERIAL		XBEE_SERIAL
+	#define C_COM_SEND_RATE 12
 #endif
 #if COM_MODE == SERIAL
 	#define COM_SERIAL		Serial
+	#define C_COM_SEND_RATE 1
 #endif
 
 //-----------------------------------------------------------------------------------------------------------------------------
@@ -90,9 +92,9 @@
 #define L_ANCHORS_STORED 10
 #define L_PATTERN_DEFINITION L_LINE_OF_BEST_FIT
 
-#define LA_MOUNT_OFFSET		0.0
-#define LA_SAFTEY_RADIUS	1000.0
-#define LA_MIN_RADIUS		100.0
+#define LA_MOUNT_OFFSET		60.0
+#define LA_SAFTEY_RADIUS	1500.0
+#define LA_MIN_RADIUS		500.0
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // ----------------------------------------------------- ERROR CODES ----------------------------------------------------------
@@ -128,7 +130,7 @@
 #define INDICATOR_PRI	100
 #define COM_PRI			1
 #define GYRO_PRI		50
-#define FLIGHT_PRI		40
+#define FLIGHT_PRI		30
 #define LIDAR_PRI		1
 
 //							____________|			  Thread Priority									|_______________________
@@ -185,13 +187,14 @@
 // ----------------------------------------------------------------------------------------------------------------------------
 
 // inbound
-#define MB_INBOUND_COUNT	4		// must match the numebr of packets!!
+#define MB_INBOUND_COUNT	5		// must match the numebr of packets!!
 #define MB_INBOUND_OFFSET	100		// must match the lowest ID
 
 #define MB_JOY_XY			100
 #define MB_JOY_THROTTLE		101
 #define MB_JOY_Z			102
 #define MB_ARM_DISARM		103
+#define MB_AVOID			104
 
 // outbound
 #define MB_OUTBOUND_COUTN		6		// must match the numebr of packets!!

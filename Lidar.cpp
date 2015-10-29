@@ -101,6 +101,12 @@ bool Lidar::run()
 		double angle = ((theData.data.angle >> 1) / 64);
 		double distance = ((theData.data.distance) / 4.0f);
 
+		angle += LA_MOUNT_OFFSET;
+		if (angle > 360)
+		{
+			angle = angle - 360;
+		}
+
 		// store for base stattion
 		_lastLidarRegister.getData()[0] = angle * 90;
 		_lastLidarRegister.getData()[1] = distance;

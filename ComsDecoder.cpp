@@ -19,6 +19,8 @@ ComsDecoder::ComsDecoder(volatile Error *e)
 	addCount++;
 	_registers[MB_ARM_DISARM - MB_INBOUND_OFFSET] = &_ArmDisarmRegister;
 	addCount++;
+	_registers[MB_AVOID - MB_INBOUND_OFFSET] = &_AvoidRegister;
+	addCount++;
 
 	if (addCount != MB_INBOUND_COUNT)
 	{

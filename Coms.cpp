@@ -44,7 +44,6 @@ bool Coms::run()
 {
 	// take a snapshot of the byte to prevent this locking if we receive more that we can process @TODO add overflow check 
 	int readCount = COM_SERIAL.available();
-
 	for (int i = 0; i < readCount; i++)
 	{
 		uint8_t read = COM_SERIAL.read();

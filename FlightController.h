@@ -54,6 +54,7 @@ private:
 	volatile MessageBuffer_Passer* _XYJoyRegister;
 	volatile MessageBuffer_Passer* _ZJoyRegister;
 	volatile MessageBuffer_Passer* _ArmDisarmRegister;
+	volatile MessageBuffer_Passer* _AvoidRegister;
 	volatile MessageBuffer_Passer* _CompensationVector;
 
 	int _regReadCount;

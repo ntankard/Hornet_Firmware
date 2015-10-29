@@ -21,6 +21,11 @@ FlightController::FlightController()
 	_yaw.writeMicroseconds(MIN + ((MAX - MIN) / 2));
 	_throttle.writeMicroseconds(MIN);
 
+	_TotalVector.getData()[0] = 50;
+	_TotalVector.getData()[1] = 50;
+	_JoyVector.getData()[0] = 50;
+	_JoyVector.getData()[1] = 50;
+
 	_regReadCount = 0;
 }
 
@@ -44,6 +49,10 @@ void FlightController::addRegister(volatile MessageBuffer_Passer* newRegister)
 		break;
 	case MB_COMPENSATOR_VECTOR:
 		_CompensationVector = newRegister;
+		break;
+	case MB_AVOID:
+		_AvoidRegister = newRegister;
+		break;
 	default:
 		break;
 	}
@@ -70,54 +79,76 @@ bool FlightController::start()
 bool FlightController::run()
 {
 	// check for state transitions
-	if (_armTime.hasTimeOut())
+	switch (_state)
 	{
-		switch (_state)
+	case Arming:
+		if (_armTime.hasTimeOut())
 		{
-		case Arming:
-			if (_armTime.hasTimeOut())
-			{
-				_state = Armed;
+			_state = Armed;
 
-				_roll.writeMicroseconds(MIN + ((MAX - MIN) / 2));
-				_pitch.writeMicroseconds(MIN + ((MAX - MIN) / 2));
-				_yaw.writeMicroseconds(MIN + ((MAX - MIN) / 2));
-				_throttle.writeMicroseconds(MIN);
-			}
-			break;
-		case Disarming:
-			if (_armTime.hasTimeOut())
-			{
-				_state = Disarmed;
-
-				_roll.writeMicroseconds(MIN + ((MAX - MIN) / 2));
-				_pitch.writeMicroseconds(MIN + ((MAX - MIN) / 2));
-				_yaw.writeMicroseconds(MIN + ((MAX - MIN) / 2));
-				_throttle.writeMicroseconds(MIN);
-			}
-			break;
-		case Disarmed:
-			if (_ArmDisarmRegister->getData()[0] == 1)
-			{
-				arm();
-			}
-			break;
-		case Armed:
-			if (_ArmDisarmRegister->getData()[0] == 0)
-			{
-				disarm();
-			}
-			break;
+			_roll.writeMicroseconds(MIN + ((MAX - MIN) / 2));
+			_pitch.writeMicroseconds(MIN + ((MAX - MIN) / 2));
+			_yaw.writeMicroseconds(MIN + ((MAX - MIN) / 2));
+			_throttle.writeMicroseconds(MIN);
 		}
+		break;
+	case Disarming:
+		if (_armTime.hasTimeOut())
+		{
+			_state = Disarmed;
+
+			_roll.writeMicroseconds(MIN + ((MAX - MIN) / 2));
+			_pitch.writeMicroseconds(MIN + ((MAX - MIN) / 2));
+			_yaw.writeMicroseconds(MIN + ((MAX - MIN) / 2));
+			_throttle.writeMicroseconds(MIN);
+		}
+		break;
 	}
+	
+	switch (_state)
+	{
+	case Disarmed:
+		if (_ArmDisarmRegister->getData()[0] != 0)
+		{
+			arm();
+		}
+		break;
+	case Armed:
+		if (_ArmDisarmRegister->getData()[0] == 0)
+		{
+			disarm();
+		}
+		break;
+	}
+	
 
 	// update joystick values
 	if (_state == Armed)
 	{
-		_roll.writeMicroseconds(_XYJoyRegister->getData()[0] * MULTIPLYER + MIN);
-		_pitch.writeMicroseconds(_XYJoyRegister->getData()[1] * MULTIPLYER + MIN);
+		_JoyVector.getData()[0] = _XYJoyRegister->getData()[0];
+		_JoyVector.getData()[1] = _XYJoyRegister->getData()[1];
+
+		int roll;
+		int pitch;
+
+		if (_AvoidRegister->getData()[0] == 0)
+		{
+			roll = _XYJoyRegister->getData()[0];
+			pitch = _XYJoyRegister->getData()[1];
+		}
+		else
+		{
+			roll = (((_XYJoyRegister->getData()[0]-50)*2) + ((_CompensationVector->getData()[0]-50)*2))/2 +50;
+			pitch = (((_XYJoyRegister->getData()[1] - 50) * 2) + ((_CompensationVector->getData()[1] - 50) * 2))/2+50;
+		}
+
+		_roll.writeMicroseconds(roll* MULTIPLYER + MIN);
+		_pitch.writeMicroseconds(pitch* MULTIPLYER + MIN);
 		_yaw.writeMicroseconds(_ZJoyRegister->getData()[0] * MULTIPLYER + MIN);
 		_throttle.writeMicroseconds(_throttleJoyRegister->getData()[0] * MULTIPLYER + MIN);
+
+		_TotalVector.getData()[0] = roll;
+		_TotalVector.getData()[1] = pitch;
 	}
 
 	return false;
@@ -127,7 +158,7 @@ bool FlightController::run()
 
 void FlightController::arm()
 {
-	if (_state = Disarmed)
+	if (_state == Disarmed)
 	{
 		// start arm
 		_armTime.start(5000);
@@ -144,7 +175,7 @@ void FlightController::arm()
 
 void FlightController::disarm()
 {
-	if (_state = Armed)
+	if (_state == Armed)
 	{
 		// start disarm
 		_armTime.start(3000);
@@ -154,5 +185,10 @@ void FlightController::disarm()
 		_pitch.writeMicroseconds(MIN + ((MAX - MIN) / 2));
 		_yaw.writeMicroseconds(MIN);
 		_throttle.writeMicroseconds(MIN);
+
+		_TotalVector.getData()[0] = 50;
+		_TotalVector.getData()[1] = 50;
+		_JoyVector.getData()[0] = 50;
+		_JoyVector.getData()[1] = 50;
 	}
 }

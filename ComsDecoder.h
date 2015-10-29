@@ -52,6 +52,7 @@ private:
 	volatile MessageBuffer<MB_JOY_XY, 2> _XYJoyRegister;
 	volatile MessageBuffer<MB_JOY_Z, 1> _ZJoyRegister;
 	volatile MessageBuffer<MB_ARM_DISARM, 1> _ArmDisarmRegister;
+	volatile MessageBuffer<MB_AVOID, 1> _AvoidRegister;
 
 	volatile MessageBuffer_Passer*	_registers[MB_INBOUND_COUNT];
 
