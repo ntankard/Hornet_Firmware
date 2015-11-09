@@ -94,6 +94,7 @@ bool PointManager::isPattern()
 				return false;
 			}
 		}
+		TP("FOUND PATTERN");
 		return true;
 		#endif
 

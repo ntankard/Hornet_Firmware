@@ -19,9 +19,9 @@
 
 #define ENABLE_INDICATOR	ENABLE
 #define ENABLE_GYRO			ENABLE
-#define	ENABLE_LIDAR		ENABLE
+#define	ENABLE_LIDAR		DISABLE
 
-#define COM_MODE			XBEE
+#define COM_MODE			SERIAL
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // ---------------------------------------------------- BOARD FEATURES --------------------------------------------------------
@@ -73,23 +73,25 @@
 
 #define C_ERROR_BUFFER 10
 
+#define C_MIN_LINE_POINTS 10
+
 #define L_LINE_OF_BEST_FIT 1
 #define L_POINT_TO_POINT 2
 #define L_END_TO_POINT 3
 #define L_START_TO_POINT 4
 
 //----------------------------------------Feature recognition values-----------------------------------------------------------
-#define L_LINE_TO_LINE_OFFSET 5
+#define L_LINE_TO_LINE_OFFSET 5			// point to point max angle
 #define L_POINTS_IN_PATTERN 10
-#define L_PATTERNS_IN_CORNER_FEATURE 2
-#define L_PATTERN_RANGE_IN_FEATURE 50
-#define L_FEATURE_CORNER_ANGLE_TOLERANCE 5
-#define L_PATTERNS_STORED 10
+#define L_PATTERNS_IN_CORNER_FEATURE 2	
+#define L_PATTERN_RANGE_IN_FEATURE 50		// max distance between deature
+#define L_FEATURE_CORNER_ANGLE_TOLERANCE 5	// degree varience on the corner
+#define L_PATTERNS_STORED 10				
 #define L_FEATURES_STORED 30
-#define L_FEATURE_RANGE_TOLERANCE 5
-#define L_FEATURE_LIFE 5
-#define L_FEATURE_OCCURANCES 3
-#define L_ANCHORS_STORED 10
+#define L_FEATURE_RANGE_TOLERANCE 5			// shift between sweeps
+#define L_FEATURE_LIFE 5					// not find befor die
+#define L_FEATURE_OCCURANCES 3				// befor ancor
+#define L_ANCHORS_STORED 10			
 #define L_PATTERN_DEFINITION L_LINE_OF_BEST_FIT
 
 #define LA_MOUNT_OFFSET		60.0
@@ -127,10 +129,10 @@
 // ----------------------------------------------------------------------------------------------------------------------------
 
 
-#define INDICATOR_PRI	100
+#define INDICATOR_PRI	1
 #define COM_PRI			1
-#define GYRO_PRI		50
-#define FLIGHT_PRI		30
+#define GYRO_PRI		10
+#define FLIGHT_PRI		1
 #define LIDAR_PRI		1
 
 //							____________|			  Thread Priority									|_______________________
@@ -197,7 +199,7 @@
 #define MB_AVOID			104
 
 // outbound
-#define MB_OUTBOUND_COUTN		6		// must match the numebr of packets!!
+#define MB_OUTBOUND_COUTN		7		// must match the numebr of packets!!
 #define MB_OUTBOUND_OFFSET		1		// must match the lowest ID
 
 #define MB_ROLL_PITCH_YAW		1
@@ -206,4 +208,5 @@
 #define MB_COMPENSATOR_VECTOR	4
 #define MB_JOY_VECTOR			5
 #define MB_TOTAL_VECTOR			6
+#define MB_SCHEDULAR_MONITOR	7
 

@@ -3,13 +3,13 @@
 #include "CircularBuffer.h"
 
 /**
-* \brief	A Moving window average
+* \brief	A Rollwing window buffer
 *
 * \tparam	T		The type of the object
 * \tparam	Size	Size of the Window
 */
 template<class T, int Size>
-class MovingAverage
+class RollingWindow
 {
 public:
 
@@ -18,10 +18,9 @@ public:
 	*
 	* \param	e	The shared error object
 	*/
-	MovingAverage(Error *e) :_window(e)
+	RollingWindow(volatile Error *e) :_window(e)
 	{
 		_e = e;
-		_sum = 0;
 	}
 
 	/**
@@ -31,45 +30,37 @@ public:
 	*/
 	T add(T toAdd)
 	{
-
+		T toReturn;
 		if (_window.isFull())
 		{
 			// full window
-			_sum -= _window.remove();
-			_sum += toAdd;
+			toReturn = _window.remove();
 			_window.add(toAdd);
 
-			return _sum / ((float)_window.size());
+			return toReturn;
 		}
 		else
 		{
-			if (_window.isEmpty())
-			{
-				// first time
-				_sum = toAdd;
-				_window.add(toAdd);
-				return toAdd;
-			}
-			else
-			{
-				// filling up
-				_sum += toAdd;
-				_window.add(toAdd);
-
-				return _sum/((float)_window.size());
-			}
+			_window.add(toAdd);
+			return toAdd;	
 		}
 	}
-	
+
+	bool isFull()
+	{
+		return _window.isFull();
+	}
+
+	int getSize()
+	{
+		_window.size();
+	}
+
 private:
 
 	/** \brief	The Window */
 	CircularBuffer<T, Size> _window;
 
-	/** \brief	The sum of all elemnts int the wondow */
-	T _sum;
-
 	/** \brief	The systems error object */
-	Error *_e;
+	volatile Error *_e;
 };
-

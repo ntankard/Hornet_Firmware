@@ -121,10 +121,11 @@ public:
 	*/
 	T remove()
 	{
+		T empty;
 		if (isEmpty())
 		{
 			_e->add(E_BUFFER_OVERFLOW, __LINE__);
-			return 0;
+			return empty;
 		}
 
 		_size--;

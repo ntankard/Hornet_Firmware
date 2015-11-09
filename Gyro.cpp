@@ -76,6 +76,8 @@ bool Gyro::run()
 {
 	fifoCount = mpu.getFIFOCount();
 
+	//TP("FIFO :" + (String)fifoCount);
+
 	// is there a full packets worth of data?
 	if (fifoCount < packetSize)
 	{
@@ -91,6 +93,7 @@ bool Gyro::run()
 	}
 
 	// empty all but 1 of the packets ( to prevent a cascading overflow)
+	//mpu.resetFIFO();
 	for (int i = 0; i < ((fifoCount / packetSize)-1); i++)
 	{
 		mpu.getFIFOBytes(fifoBuffer, packetSize);

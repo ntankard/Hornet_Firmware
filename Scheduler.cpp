@@ -4,11 +4,13 @@ Scheduler::Scheduler(volatile Error *e)
 {
 	_e = e;
 	_setCount = 0;
-	_currentThread = C_SCHEDULER_THREAD_NUM;
+	//_currentThread = C_SCHEDULER_THREAD_NUM;
 	for (int i = 0; i < C_SCHEDULER_THREAD_NUM; i++)
 	{
-		_runCount[i] = 0;
+		_currentThreadI.setPriority(i, -1);
+		//_runCount[i] = 0;
 		_threads[i].priority = -1;
+		_threadCount[i] = 0;
 	}
 }
 
@@ -27,6 +29,7 @@ void Scheduler::addRunable(int ID, Runnable *theRunnable)
 
 		_threads[ID].thread = theRunnable;
 		_threads[ID].priority = 1;
+		_currentThreadI.setPriority(ID, 1);
 		_setCount++;
 	}
 }
@@ -51,6 +54,12 @@ bool Scheduler::finish()
 				}
 			}
 		}
+
+		for (int j = 0; j < C_SCHEDULER_THREAD_NUM; j++)
+		{
+			_threads[j].thread->addRegister(&_schedularRegister);
+		}
+
 		return true;
 	}
 	return false;
@@ -83,6 +92,7 @@ void Scheduler::setPriority(int ID, int p)
 	{
 		_e->add(E_INDEX_OUT_BOUNDS, __LINE__);
 	}
+	_currentThreadI.setPriority(ID, p);
 	_threads[ID].priority = p;
 }
 
@@ -90,8 +100,12 @@ void Scheduler::setPriority(int ID, int p)
 
 bool Scheduler::run()
 {
+	int i = _currentThreadI.getNextIndex();
+	_threadCount[i]++;
+	return _threads[i].thread->run();
+
 	// keep looping until a thread runs (this will lock if all thread are 0)
-	while (true){
+	/*while (true){
 
 		_currentThread++;
 		if (_currentThread >= C_SCHEDULER_THREAD_NUM)
@@ -111,7 +125,17 @@ bool Scheduler::run()
 		{
 			_runCount[_currentThread] = 0;
 		}
-	}
-	return false;
+	}*/
+	//return false;
 }
 
+//-----------------------------------------------------------------------------------------------------------------------------
+
+void Scheduler::resetCount()
+{
+	for (int i = 0; i < C_SCHEDULER_THREAD_NUM; i++)
+	{
+		_schedularRegister.getData()[i] = _threadCount[i];
+		_threadCount[i] = 0;
+	}
+}

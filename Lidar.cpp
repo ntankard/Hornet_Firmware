@@ -1,6 +1,6 @@
 #include "Lidar.h"
 #include "TimeOut.h"
-
+#ifdef USE_LIDAR
 
 Lidar::Lidar(volatile Error* e) :_lidarComs(e)
 {
@@ -115,11 +115,13 @@ bool Lidar::run()
 		{
 			// process colision avoidance 
 			_avoidance.newPoint(angle, distance);
+			//_nav.processLidarData(angle, distance);
 		}
 
 		if (_lastAngle > 300 && angle < 20 && _lastAngle > angle)
 		{
 			_avoidance.endOfSweep();
+			//_nav.EOSweep(0,0,0);
 		}
 
 		_lastAngle = angle;
@@ -129,3 +131,4 @@ bool Lidar::run()
 	return false;
 }
 
+#endif

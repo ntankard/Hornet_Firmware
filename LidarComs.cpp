@@ -77,6 +77,7 @@ bool LidarComs::run()
 {
 	// check for buffer overflow
 	int bufferSize = C_LIDAR_SERIAL.available();
+	//TP("BUFFER :" + (String)bufferSize);
 	if (bufferSize >= 250)
 	{
 		_e->add(E_BUFFER_OVERFLOW, __LINE__);
@@ -94,74 +95,26 @@ bool LidarComs::run()
 			case None:
 				break;
 			case Scan:
-				_buildDataPacket.raw.rawData[_readCount] = currentByte;
-				_readCount++;
-				if (_readCount >= 5)
+				if (processScan(currentByte))
 				{
-					_readCount = 0;
-					_dataCount++;
-					for (int i = 0; i < 5; i++)
-					{
-						_lastDataPacket.raw.rawData[i] = _buildDataPacket.raw.rawData[i];
-					}
-
-					// dump and extra packets
-					int loop = bufferSize - i - 1;
-
-					_totalReceived++;
-					_missed += (loop / 5);
-
-					for (int i = 0; i < (((loop / 5)) * 5); i++)
-					{
-						C_LIDAR_SERIAL.read();
-					}
-
 					return true;
 				}
 				break;
 			case Force_Scan:
-				_buildDataPacket.raw.rawData[_readCount] = currentByte;
-				_readCount++;
-				if (_readCount >= 5)
+				if (processScan(currentByte))
 				{
-					_dataCount++;
-					_readCount = 0;
-					for (int i = 0; i < 5; i++)
-					{
-						_lastDataPacket.raw.rawData[i] = _buildDataPacket.raw.rawData[i];
-					}
-
-					// dump and extra packets
-					int loop = bufferSize - i - 1;
-
-					_totalReceived++;
-					_missed += (loop / 5);
-
-					for (int i = 0; i < (((loop / 5)) * 5); i++)
-					{
-						C_LIDAR_SERIAL.read();
-					}
-
 					return true;
 				}
 				break;
 			case Get_Info:
-				_lastInfoPacket.rawData[_readCount] = currentByte;
-				_readCount++;
-				if (_readCount >= 20)
+				if (processInfo(currentByte))
 				{
-					_readCount = 0;
-					_dataCount = 1;
 					return true;
 				}
 				break;
 			case Get_Health:
-				_lastHealthPacket.raw.rawData[_readCount] = currentByte;
-				_readCount++;
-				if (_readCount >= 3)
+				if (processHealth(currentByte))
 				{
-					_readCount = 0;
-					_dataCount = 1;
 					return true;
 				}
 				break;
@@ -192,4 +145,70 @@ bool LidarComs::run()
 	}
 	return true;
 }
+
+//-----------------------------------------------------------------------------------------------------------------------------
+
+bool LidarComs::processScan(uint8_t newByte)
+{
+	_buildDataPacket.raw.rawData[_readCount] = newByte;
+	_readCount++;
+	if (_readCount >= 5)
+	{
+		_dataCount++;
+		_readCount = 0;
+		for (int i = 0; i < 5; i++)
+		{
+			_lastDataPacket.raw.rawData[i] = _buildDataPacket.raw.rawData[i];
+		}
+		_totalReceived++;
+
+		// dump and extra packets
+		int loop = C_LIDAR_SERIAL.available();
+		int packets = loop / 10;
+
+		if (packets > 10)
+		{
+			int toRemove = packets - 5;
+			_missed += toRemove;
+
+			for (int i = 0; i < (toRemove * 5); i++)
+			{
+				C_LIDAR_SERIAL.read();
+			}
+		}
+		return true;
+	}
+	return false;
+}
+
+//-----------------------------------------------------------------------------------------------------------------------------
+
+bool LidarComs::processInfo(uint8_t newByte)
+{
+	_lastInfoPacket.rawData[_readCount] = newByte;
+	_readCount++;
+	if (_readCount >= 20)
+	{
+		_readCount = 0;
+		_dataCount = 1;
+		return true;
+	}
+	return false;
+}
+
+//-----------------------------------------------------------------------------------------------------------------------------
+
+bool LidarComs::processHealth(uint8_t newByte)
+{
+	_lastHealthPacket.raw.rawData[_readCount] = newByte;
+	_readCount++;
+	if (_readCount >= 3)
+	{
+		_readCount = 0;
+		_dataCount = 1;
+		return true;
+	}
+	return false;
+}
+
 #endif

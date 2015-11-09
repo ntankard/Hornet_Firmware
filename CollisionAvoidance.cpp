@@ -9,8 +9,8 @@ CollisionAvoidance::CollisionAvoidance()
 	_yComp = 0;
 	_minDistance = LA_SAFTEY_RADIUS;
 
-	_CompensatorRegister.getData()[0] = 0;
-	_CompensatorRegister.getData()[1] = 0;
+	_CompensatorRegister.getData()[0] = 50;
+	_CompensatorRegister.getData()[1] = 50;
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------

@@ -122,6 +122,7 @@ void HornetManager::run()
 		_LIDAR.setTotalCount(0);
 		_statusLast += 1000;
 		_loopCount = 0;
+		_scheduler.resetCount();
 	}
 }
 

@@ -2,6 +2,8 @@
 #include "Runnable.h"
 #include "Config.h"
 #include "Error.h"
+#include "PriorityManager.h"
+#include "MessageBuffer.h"
 
 /**
 * \brief	A thread and its priority
@@ -65,12 +67,18 @@ public:
 	*/
 	bool run();
 
+	void resetCount();
+
 
 private:
 	volatile Error *_e;
 	Thread_Settings _threads[C_SCHEDULER_THREAD_NUM];
 	int _setCount;
-	int _runCount[C_SCHEDULER_THREAD_NUM];
-	int _currentThread;
+	//int _runCount[C_SCHEDULER_THREAD_NUM];
+	//int _currentThread;
+	PriorityManager<C_SCHEDULER_THREAD_NUM> _currentThreadI;
+
+	volatile MessageBuffer<MB_SCHEDULAR_MONITOR, C_SCHEDULER_THREAD_NUM> _schedularRegister;
+	int _threadCount[C_SCHEDULER_THREAD_NUM];
 };
 

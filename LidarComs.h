@@ -76,6 +76,11 @@ public:
 	void setMissed(int toSet){ _missed = toSet; }
 
 private:
+
+	bool processScan(uint8_t newByte);
+	bool processInfo(uint8_t newByte);
+	bool processHealth(uint8_t newByte);
+
 	volatile Error* _e;
 	RequestType _requestType;
 	bool _descriptorReceived;

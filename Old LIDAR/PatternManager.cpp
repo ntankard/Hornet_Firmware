@@ -45,6 +45,7 @@ bool PatternManager::isFeature()
 			{
 				if (abs(_enterPattern.getAngle() - _exitPattern.getAngle()) < 90 + L_FEATURE_CORNER_ANGLE_TOLERANCE && abs(_enterPattern.getAngle() - _exitPattern.getAngle()) > 90 - L_FEATURE_CORNER_ANGLE_TOLERANCE)
 				{
+					TP("FOUND FEATURE");
 					return true;
 				}
 			}
