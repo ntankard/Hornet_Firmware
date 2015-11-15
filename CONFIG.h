@@ -19,7 +19,7 @@
 
 #define ENABLE_INDICATOR	ENABLE
 #define ENABLE_GYRO			ENABLE
-#define	ENABLE_LIDAR		DISABLE
+#define	ENABLE_LIDAR		ENABLE
 
 #define COM_MODE			SERIAL
 
@@ -61,6 +61,7 @@
 #if COM_MODE == XBEE
 	#define COM_SERIAL		XBEE_SERIAL
 	#define C_COM_SEND_RATE 12
+	#define THROTTLE_COMS
 #endif
 #if COM_MODE == SERIAL
 	#define COM_SERIAL		Serial
@@ -130,8 +131,8 @@
 
 
 #define INDICATOR_PRI	1
-#define COM_PRI			1
-#define GYRO_PRI		10
+#define COM_PRI			5
+#define GYRO_PRI		20
 #define FLIGHT_PRI		1
 #define LIDAR_PRI		1
 
@@ -176,6 +177,11 @@
 #define C_APM_PITCH		11
 #define C_APM_THROTTLE	12
 #define C_APM_YAW		13
+
+#define C_APM_ROLL_IN		4
+#define C_APM_PITCH_IN		5
+#define C_APM_THROTTLE_IN	6
+#define C_APM_YAW_IN		7
 
 // Coms
 #define XBEE_SERIAL		Serial1

@@ -33,10 +33,10 @@ public:
 			_XMean /= pastSize;
 			_YMean /= pastSize;
 		}
-
+		Point removed;
 		if (_points.isFull())
 		{
-			Point removed = _points.add(p);
+			removed = _points.add(p);
 			_ab_yx -= (removed.getX()* removed.getY());
 			_ab_xmy -= removed.getX()*pastYMean;
 			_ab_ymx -= removed.getY()*pastXMean;
@@ -44,15 +44,20 @@ public:
 			_XMean -= removed.getX();
 			_YMean -= removed.getY();
 		}
+		else
+		{
+			removed = _points.add(p);
+		}
 
-		Point removed = _points.add(p);
+
+		
 
 		_YMean += p.getY();
 		_XMean += p.getX();
 		TP((String)_YMean);
 		_YMean *= _points.getSize();
 		_XMean *= _points.getSize();
-		TP((String)_points.getSize());
+		TP("Size " + (String)_points.getSize());
 
 		_ab_yx += (p.getX()* p.getY());
 

@@ -90,10 +90,11 @@ public:
 	{
 		if (isFull())
 		{
+			TP("FULL");
 			_e->add(E_BUFFER_OVERFLOW, __LINE__);
 			return;
 		}
-
+		TP("INC");
 		_size++;
 
 		int toRemove = _start;

@@ -60,9 +60,11 @@ bool ComsEncoder::start()
 
 bool ComsEncoder::run()
 {
+#ifdef THROTTLE_COMS
 	if (_throttle.hasTimeOut())
 	{
 		_throttle.start(C_COM_SEND_RATE);
+#endif
 		// resend one of the packets
 		_coms.send(_internalRegisters[_sendId]);
 		_sendId++;
@@ -70,7 +72,9 @@ bool ComsEncoder::run()
 		{
 			_sendId = 0;
 		}
+#ifdef THROTTLE_COMS
 	}
+#endif
 
 	/*for (int i = 0; i < MB_OUTBOUND_COUTN; i++)
 	{
