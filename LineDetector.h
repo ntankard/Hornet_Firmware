@@ -1,30 +1,25 @@
 #pragma once
 
-#include "RollingWindow.h"
+#include "RollingCorrelation.h"
+#include "Line.h"
+
+#define C_CORRELATION_SIZE 10
+#define C_THRESHOLD 0.95
+#define C_MIN_SIZE 10
 
 class LineDetector
 {
 public:
-	LineDetector();
-	~LineDetector();
+	LineDetector(volatile Error *e);
+	bool newPoint(Point p);
+	Line getLast();
 private:
-	//RollingWindow<Point, C_MIN_LINE_POINTS> _lead;
-
-	// line caculations
-	float _sumX;
-	float _sumY;
-	float _sumXY;
-	float _sumXX;
-
-	// total corelation
-	float _TXMean;
-	float _TYMean;
-	float _TA;
-	float _TB;
-	float _TAB;
-	float _TAA;
-	float _TBB;
-
-	// lead corelation
+	bool _isLine;
+	bool _isPos;
+	RollingCorrelation<C_CORRELATION_SIZE> _detector;
+	Point _start;
+	Point _end;
+	Line _lastLine;
+	int _num;
 };
 

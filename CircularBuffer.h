@@ -90,11 +90,9 @@ public:
 	{
 		if (isFull())
 		{
-			TP("FULL");
 			_e->add(E_BUFFER_OVERFLOW, __LINE__);
 			return;
 		}
-		TP("INC");
 		_size++;
 
 		int toRemove = _start;
@@ -140,6 +138,20 @@ public:
 		}
 
 		return _buffer[toRemove];
+	}
+
+	T get(int i)
+	{
+		if (i >= _size)
+		{
+			return T();
+		}
+		int index = _end + i;
+		if (index >= Size)
+		{
+			index -= _size;
+		}
+		return _buffer[index];
 	}
 
 private:

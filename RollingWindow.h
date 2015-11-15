@@ -53,7 +53,12 @@ public:
 
 	int getSize()
 	{
-		_window.size();
+		return _window.size();
+	}
+
+	T get(int i)
+	{
+		return _window.get(i);
 	}
 
 private:
