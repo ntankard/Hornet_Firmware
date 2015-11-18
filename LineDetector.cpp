@@ -10,7 +10,7 @@ bool LineDetector::newPoint(Point p)
 {
 	_detector.newPoint(p);
 	_num++;
-	float cor = _detector.getCorrelation();
+	double cor = _detector.getCorrelation();
 	if (!_isLine)
 	{
 		if (abs(cor) >= C_THRESHOLD)

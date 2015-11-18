@@ -13,7 +13,7 @@ Point::Point()
 
 //-----------------------------------------------------------------------------------------------------------------------------
 
-void Point::setPolar(float angle, float distance)
+void Point::setPolar(double angle, double distance)
 {
 	_angle = angle;
 	_distance = distance;
@@ -25,21 +25,21 @@ void Point::setPolar(float angle, float distance)
 
 //-----------------------------------------------------------------------------------------------------------------------------
 
-float Point::getAngle() const //returns a copy of _angle
+double Point::getAngle() const //returns a copy of _angle
 {
 	return _angle;
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------
 
-float Point::getDistance() const  //returns a copy of _distance
+double Point::getDistance() const  //returns a copy of _distance
 {
 	return _distance;
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------
 
-float Point::getX(int i) const  //returns a copy of _coorX
+double Point::getX(int i) const  //returns a copy of _coorX
 {
 	if (i == 0)
 	{
@@ -50,7 +50,7 @@ float Point::getX(int i) const  //returns a copy of _coorX
 
 //-----------------------------------------------------------------------------------------------------------------------------
 
-float Point::getY(int i) const  //returns a copy of coorY
+double Point::getY(int i) const  //returns a copy of coorY
 {
 	if (i == 0)
 	{

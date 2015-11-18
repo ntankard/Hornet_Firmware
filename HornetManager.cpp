@@ -94,6 +94,7 @@ void HornetManager::run()
 	// catch exeption
 	if (_e.isError())
 	{
+		COM_SERIAL.println("ERROR");
 		if (_state != Armed)
 		{
 			int line = _e.getError();

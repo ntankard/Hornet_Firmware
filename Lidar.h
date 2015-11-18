@@ -7,7 +7,7 @@
 #include "CONFIG.h"
 #include "MessageBuffer.h"
 #include "CollisionAvoidance.h"
-//#include "LidarNavigation.h"
+#include "LidarNavigation.h"
 
 #ifdef USE_LIDAR
 
@@ -16,7 +16,7 @@ class Lidar : public Runnable
 public:
 	Lidar(volatile Error* e);
 
-	int getNORegisters(){ return 2; }
+	int getNORegisters(){ return 6; }
 	volatile MessageBuffer_Passer* getRegister()
 	{ 
 		if (_registerRead == 0)
@@ -24,9 +24,15 @@ public:
 			_registerRead++;
 			return &_lastLidarRegister;
 		}
+		else if (_registerRead == 1)
+		{
+			_registerRead++;
+			return _avoidance.getRegister();
+		}
 		else
 		{
-			return _avoidance.getRegister();
+			_registerRead++;
+			return _nav.getNextRegister();
 		}
 		return &_lastLidarRegister; 
 	}
@@ -52,11 +58,12 @@ private:
 	MessageBuffer<MB_LAST_LIDAR, 2> _lastLidarRegister;
 
 	LidarComs _lidarComs;
-	//LidarNavigation _nav;
+	LidarNavigation _nav;
 
 	CollisionAvoidance _avoidance;
 
 	int _lastAngle;
+	int _readCount;
 	
 };
 

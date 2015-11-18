@@ -11,6 +11,7 @@
 #include <Servo.h>
 #include "Config.h"
 #include "HornetManager.h"
+#include "HardwareSerial.h"
 
 HornetManager hornetManager;
 
@@ -25,7 +26,7 @@ void setup()
 	digitalWrite(38, HIGH);
 
 	// setup debug serial (also primary coms if XBee is off)
-	Serial.begin(153600);
+	Serial.begin(115200);
 	Serial.clearWriteError();
 	Serial.flush();
 	while (Serial.available()!=0)

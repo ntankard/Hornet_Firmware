@@ -2,6 +2,8 @@
 
 #ifdef USE_LIDAR
 
+//@TODO app data erase to change buffer size
+
 // packets headers
 #define RPLIDAR_CMD_SYNC_BYTE 0xA5
 #define RPLIDAR_ANS_SYNC_BYTE1 0xA5
@@ -41,6 +43,8 @@ LidarComs::LidarComs(volatile Error* e)
 
 	_totalReceived = 0;
 	_missed = 0;
+
+	_maxBuffer = 0;
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------
@@ -77,6 +81,10 @@ bool LidarComs::run()
 {
 	// check for buffer overflow
 	int bufferSize = C_LIDAR_SERIAL.available();
+	if (bufferSize >= _maxBuffer)
+	{
+		_maxBuffer = bufferSize;
+	}
 	//TP("BUFFER :" + (String)bufferSize);
 	if (bufferSize >= 250)
 	{
@@ -164,11 +172,11 @@ bool LidarComs::processScan(uint8_t newByte)
 
 		// dump and extra packets
 		int loop = C_LIDAR_SERIAL.available();
-		int packets = loop / 10;
-
-		if (packets > 10)
+		int packets = loop / 5;
+		//TP("M:" + (String)packets);
+		if (packets > C_MAX_LIDAR_BUFFER)
 		{
-			int toRemove = packets - 5;
+			int toRemove = packets - C_MAX_LIDAR_BUFFER;
 			_missed += toRemove;
 
 			for (int i = 0; i < (toRemove * 5); i++)

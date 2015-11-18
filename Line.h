@@ -7,10 +7,12 @@ class Line
 public:
 	Line();
 	void setPoints(Point start, Point end);
-	float getAngle();
+	double getAngle();
+	Point getStart(){ return _start; }
+	Point getEnd(){ return _end; }
 private:
 	Point _start;
 	Point _end;
-	float _angle;
+	double _angle;
 };
 

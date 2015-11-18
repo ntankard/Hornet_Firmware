@@ -14,18 +14,19 @@ bool AnchorDetector::newPoint(Point p)
 		Line toTest = _lineDetector.getLast();
 		if (_count != 0)
 		{
-			float a = _last.getAngle();
-			float b = toTest.getAngle();
+			double a = _last.getAngle();
+			double b = toTest.getAngle();
 
 			a += 180;
 			b += 180;
-			float dif = abs(a - b);
+			double dif = abs(a - b);
 
 			if (dif > C_MIN_ANGLE && dif < C_MAX_ANGLE)
 			{
 				// new ancor
 				_lastAnchor.setLines(_last, toTest);
 				found = true;
+
 			}
 		}
 

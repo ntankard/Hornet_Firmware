@@ -56,14 +56,14 @@ public:
 
 	}
 
-	float getCorrelation()
+	double getCorrelation()
 	{
 		if (!_points.isFull())
 		{
 			return  0; 
 		}
-		float c1 = getC(0);
-		float c2 = getC(1);
+		double c1 = getC(0);
+		double c2 = getC(1);
 		if (abs(c1) > abs(c2))
 		{
 			return c1;
@@ -81,33 +81,33 @@ public:
 
 private:
 
-	float getAB(int i)
+	double getAB(int i)
 	{
 		return _yx[i] - ((_XMean[i] * _YMean[i]) / _points.getSize());
 	}
 
-	float getAA(int i)
+	double getAA(int i)
 	{
 		return _xx[i] - ((_XMean[i] * _XMean[i]) / _points.getSize());
 	}
 
-	float getBB(int i)
+	double getBB(int i)
 	{
 		return _yy[i] - ((_YMean[i] * _YMean[i]) / _points.getSize());
 	}
 
-	float getC(int i)
+	double getC(int i)
 	{
 		return getAB(i) / sqrt(getAA(i)*getBB(i));
 	}
 
 	RollingWindow<Point, Size> _points;
 
-	float _XMean[2];
-	float _YMean[2];
-	float _yx[2];
-	float _xx[2];
-	float _yy[2];
+	double _XMean[2];
+	double _YMean[2];
+	double _yx[2];
+	double _xx[2];
+	double _yy[2];
 
 	volatile Error *_e;
 };

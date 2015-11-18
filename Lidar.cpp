@@ -2,11 +2,11 @@
 #include "TimeOut.h"
 #ifdef USE_LIDAR
 
-Lidar::Lidar(volatile Error* e) :_lidarComs(e)
+Lidar::Lidar(volatile Error* e) :_lidarComs(e), _nav(e)
 {
 	_lastAngle = 0;
 	_registerRead = 0;
-
+	_readCount = 0;
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------
@@ -84,7 +84,7 @@ bool Lidar::start()
 	}
 
 	// Lidar checks completed, start scan
-	_lidarComs.sendRequest(Scan);
+	_lidarComs.sendRequest(Force_Scan);
 	return true;
 }
 
@@ -107,6 +107,9 @@ bool Lidar::run()
 			angle = angle - 360;
 		}
 
+		//TP("Angle :" + (String)angle);
+		//TP("Distance :" + (String)distance);
+
 		// store for base stattion
 		_lastLidarRegister.getData()[0] = angle * 90;
 		_lastLidarRegister.getData()[1] = distance;
@@ -115,16 +118,19 @@ bool Lidar::run()
 		{
 			// process colision avoidance 
 			_avoidance.newPoint(angle, distance);
-			//_nav.processLidarData(angle, distance);
-		}
+			_nav.processLidarData(angle, distance);
 
-		if (_lastAngle > 300 && angle < 20 && _lastAngle > angle)
+		}
+		
+		if (_lastAngle > 300 && angle < 20 && _lastAngle > angle && _readCount > 20)
 		{
 			_avoidance.endOfSweep();
-			//_nav.EOSweep(0,0,0);
+			_readCount = 0;
+			_nav.endOfSweep();
 		}
 
 		_lastAngle = angle;
+		_readCount++;
 
 		return true;
 	}

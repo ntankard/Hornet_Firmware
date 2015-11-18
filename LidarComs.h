@@ -96,6 +96,8 @@ private:
 	
 	bool processIncomingData();
 
+	int _maxBuffer;
+
 };
 
 #endif

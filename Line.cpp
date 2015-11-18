@@ -14,7 +14,7 @@ void Line::setPoints(Point start, Point end)
 	_angle = atan2(end.getX(0) - start.getX(0), end.getY(0) - start.getY(0)) * (180.0 / PI);
 }
 
-float Line::getAngle()
+double Line::getAngle()
 {
 	return _angle;
 }

@@ -66,6 +66,7 @@
 #if COM_MODE == SERIAL
 	#define COM_SERIAL		Serial
 	#define C_COM_SEND_RATE 1
+#define THROTTLE_COMS
 #endif
 
 //-----------------------------------------------------------------------------------------------------------------------------
@@ -75,6 +76,7 @@
 #define C_ERROR_BUFFER 10
 
 #define C_MIN_LINE_POINTS 10
+#define C_MAX_LIDAR_BUFFER 10
 
 #define L_LINE_OF_BEST_FIT 1
 #define L_POINT_TO_POINT 2
@@ -96,7 +98,7 @@
 #define L_PATTERN_DEFINITION L_LINE_OF_BEST_FIT
 
 #define LA_MOUNT_OFFSET		60.0
-#define LA_SAFTEY_RADIUS	1500.0
+#define LA_SAFTEY_RADIUS	2000.0
 #define LA_MIN_RADIUS		500.0
 
 //-----------------------------------------------------------------------------------------------------------------------------
@@ -132,7 +134,7 @@
 
 #define INDICATOR_PRI	1
 #define COM_PRI			5
-#define GYRO_PRI		20
+#define GYRO_PRI		0
 #define FLIGHT_PRI		1
 #define LIDAR_PRI		1
 
@@ -205,14 +207,19 @@
 #define MB_AVOID			104
 
 // outbound
-#define MB_OUTBOUND_COUTN		7		// must match the numebr of packets!!
-#define MB_OUTBOUND_OFFSET		1		// must match the lowest ID
+#define MB_OUTBOUND_COUTN		11		// must match the numebr of packets!!
+#define MB_OUTBOUND_OFFSET		11		// must match the lowest ID
 
-#define MB_ROLL_PITCH_YAW		1
-#define MB_STATUS				2
-#define MB_LAST_LIDAR			3
-#define MB_COMPENSATOR_VECTOR	4
-#define MB_JOY_VECTOR			5
-#define MB_TOTAL_VECTOR			6
-#define MB_SCHEDULAR_MONITOR	7
+#define MB_ROLL_PITCH_YAW		11
+#define MB_STATUS				12
+#define MB_LAST_LIDAR			13
+#define MB_COMPENSATOR_VECTOR	14
+#define MB_JOY_VECTOR			15
+#define MB_TOTAL_VECTOR			16
+#define MB_SCHEDULAR_MONITOR	17
+#define MB_ANCHOR_1				18
+#define MB_ANCHOR_2				19
+#define MB_ANCHOR_3				20
+#define MB_ANCHOR_4				21
+
 
