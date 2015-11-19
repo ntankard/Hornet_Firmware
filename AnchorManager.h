@@ -5,16 +5,18 @@
 #include "Error.h"
 #include "AnchorDetector.h"
 
-
+/**
+* \class	AnchorManager
+*
+* \brief	Mange the lifecyle of anchors (in progress)
+*/
 class AnchorManager
 {
 public:
 	AnchorManager(volatile Error* e);
 	volatile MessageBuffer_Passer* getNextRegister();
-
 	void newPoint(Point p);
 
-	~AnchorManager();
 private:
 
 	volatile MessageBuffer_Passer* _anchors[4];

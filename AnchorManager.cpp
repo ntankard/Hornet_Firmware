@@ -11,6 +11,8 @@ AnchorManager::AnchorManager(volatile Error* e) :_anchorDetector(e)
 	_registerAccsessed = 0;
 }
 
+//-----------------------------------------------------------------------------------------------------------------------------
+
 volatile MessageBuffer_Passer* AnchorManager::getNextRegister()
 {
 	volatile MessageBuffer_Passer* toReturn = _anchors[_registerAccsessed];
@@ -24,15 +26,15 @@ volatile MessageBuffer_Passer* AnchorManager::getNextRegister()
 	return toReturn;
 }
 
+//-----------------------------------------------------------------------------------------------------------------------------
+
 void AnchorManager::newPoint(Point p)
 {
 	if (_anchorDetector.newPoint(p))
 	{
 		Anchor a = _anchorDetector.getLast();
 		Point p = a.getAnchorPoint();
-		//_anchor_1
-		//_anchor_1.getData()[0] = p.getAngle() * 90;
-	//	_anchor_1.getData()[1] = p.getDistance();
+
 		_anchor_1.getData()[0] = a.getStart().getStart().getAngle() * 90;
 		_anchor_1.getData()[1] = a.getStart().getStart().getDistance();
 
@@ -45,7 +47,4 @@ void AnchorManager::newPoint(Point p)
 		_anchor_4.getData()[0] = a.getEnd().getEnd().getAngle() * 90;
 		_anchor_4.getData()[1] = a.getEnd().getEnd().getDistance();
 	}
-}
-AnchorManager::~AnchorManager()
-{
 }

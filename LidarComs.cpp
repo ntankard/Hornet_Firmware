@@ -145,8 +145,6 @@ bool LidarComs::run()
 			}
 			else
 			{
-				//TP((String)_requestType);
-				//_e->add(E_PACKET_CORRUPTION, __LINE__);
 				return false;
 			}
 		}

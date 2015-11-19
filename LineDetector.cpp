@@ -6,6 +6,8 @@ LineDetector::LineDetector(volatile Error *e) : _detector(e)
 	_isLine = false;
 }
 
+//-----------------------------------------------------------------------------------------------------------------------------
+
 bool LineDetector::newPoint(Point p)
 {
 	_detector.newPoint(p);
@@ -50,6 +52,8 @@ bool LineDetector::newPoint(Point p)
 	}
 	return false;
 }
+
+//-----------------------------------------------------------------------------------------------------------------------------
 
 Line LineDetector::getLast()
 {

@@ -11,12 +11,30 @@ Lidar::Lidar(volatile Error* e) :_lidarComs(e), _nav(e)
 
 //-----------------------------------------------------------------------------------------------------------------------------
 
+volatile MessageBuffer_Passer* Lidar::getRegister()
+{
+	if (_registerRead == 0)
+	{
+		_registerRead++;
+		return &_lastLidarRegister;
+	}
+	else if (_registerRead == 1)
+	{
+		_registerRead++;
+		return _avoidance.getRegister();
+	}
+	else
+	{
+		_registerRead++;
+		return _nav.getNextRegister();
+	}
+	return &_lastLidarRegister;
+}
+
+//-----------------------------------------------------------------------------------------------------------------------------
+
 bool Lidar::start()
 {
-	// Activate motor
-	/*pinMode(C_LIDAR_MOTOCTL, OUTPUT);
-	analogWrite(C_LIDAR_MOTOCTL, 255);*/
-
 	// Reset
 	_lidarComs.sendRequest(Reset);
 	_lidarComs.run();
@@ -43,7 +61,6 @@ bool Lidar::start()
 			DEBUG_PRINTLN("LIDAR Status:     " + (String)theHealthPacket.data.status);
 			if (theHealthPacket.data.error_code != 0 || theHealthPacket.data.status != 0)
 			{
-				//analogWrite(C_LIDAR_MOTOCTL, 0);
 				return false;
 			}
 
@@ -51,7 +68,6 @@ bool Lidar::start()
 		}
 		if (timeOut.hasTimeOut())
 		{
-			//analogWrite(C_LIDAR_MOTOCTL, 0);
 			return false;
 		}
 	}
@@ -71,14 +87,12 @@ bool Lidar::start()
 			DEBUG_PRINTLN("LIDAR Model:            " + (String)theInfoPacket.data.model);
 			if (theInfoPacket.data.firmware_version != 1 || theInfoPacket.data.hardware_version != 206 || theInfoPacket.data.model != 0)
 			{
-				//analogWrite(C_LIDAR_MOTOCTL, 0);
 				return false;
 			}
 			break;
 		}
 		if (timeOut.hasTimeOut())
 		{
-			//analogWrite(C_LIDAR_MOTOCTL, 0);
 			return false;
 		}
 	}
@@ -107,9 +121,6 @@ bool Lidar::run()
 			angle = angle - 360;
 		}
 
-		//TP("Angle :" + (String)angle);
-		//TP("Distance :" + (String)distance);
-
 		// store for base stattion
 		_lastLidarRegister.getData()[0] = angle * 90;
 		_lastLidarRegister.getData()[1] = distance;
@@ -122,6 +133,7 @@ bool Lidar::run()
 
 		}
 		
+		// look for end of sweep (sometime the LIDAR will go back on angles eg 352 -> 2 -> 359
 		if (_lastAngle > 300 && angle < 20 && _lastAngle > angle && _readCount > 20)
 		{
 			_avoidance.endOfSweep();

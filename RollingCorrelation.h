@@ -4,6 +4,13 @@
 #include "Point.h"
 #include "Arduino.h"
 
+/**
+* \class	RollingCorrelation
+*
+* \brief	Conduct a corelation caculate based on a rolling window (each time one is added one is removed)
+*
+* \note		Viertical lines will corupt the corelation value so the original point and the 45 shift version of the point are used to corect for this
+*/
 template<int Size>
 class RollingCorrelation
 {
@@ -23,6 +30,9 @@ public:
 		}
 	}
 
+	/**
+	* \brief	Add a new point and remove one from the end, update the corelation value
+	*/
 	void newPoint(Point p)
 	{
 		Point removed;
@@ -82,21 +92,19 @@ public:
 
 private:
 
+	// each component of the equasion
 	double getAB(int i)
 	{
 		return _yx[i] - ((_XMean[i] * _YMean[i]) / _points.getSize());
 	}
-
 	double getAA(int i)
 	{
 		return _xx[i] - ((_XMean[i] * _XMean[i]) / _points.getSize());
 	}
-
 	double getBB(int i)
 	{
 		return _yy[i] - ((_YMean[i] * _YMean[i]) / _points.getSize());
 	}
-
 	double getC(int i)
 	{
 		return getAB(i) / sqrt(getAA(i)*getBB(i));
@@ -104,6 +112,7 @@ private:
 
 	RollingWindow<Point, Size> _points;
 
+	// parts of the equasion
 	double _XMean[2];
 	double _YMean[2];
 	double _yx[2];

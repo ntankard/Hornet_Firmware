@@ -33,7 +33,7 @@
 #define COM_MODE			SERIAL
 
 // is there an external receiver attached to the system?
-#define FLIGHT_MODE			JOYSTICK
+#define FLIGHT_MODE			EXTERNAL
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // ---------------------------------------------------- BOARD FEATURES --------------------------------------------------------
@@ -64,6 +64,10 @@
 #define LA_MOUNT_OFFSET		60.0		// angle of the LIDAR when mounted to the drone
 #define LA_SAFTEY_RADIUS	2000.0		// the maximum radius used to consider objects for colision avoidance
 #define LA_MIN_RADIUS		500.0		// the radius of the drone (used to ognor the feet of the drone)
+
+#define C_CORRELATION_SIZE	10
+#define C_THRESHOLD			0.95
+#define C_MIN_SIZE			10
 
 // DO NOT CHANGE ANYTHING BELOW HERE
 
@@ -128,7 +132,7 @@
 // default thread priorities
 #define INDICATOR_PRI	1
 #define COM_PRI			5
-#define GYRO_PRI		0
+#define GYRO_PRI		0		// The position system cant run if this is enabeld, to much pacekt loss causing an overflow
 #define FLIGHT_PRI		1
 #define LIDAR_PRI		1
 

@@ -7,6 +7,8 @@ Anchor::Anchor()
 	_isInvert = false;
 }
 
+//-----------------------------------------------------------------------------------------------------------------------------
+
 void Anchor::setLines(Line start, Line end)
 {
 	_start = start;
@@ -21,6 +23,8 @@ void Anchor::setLines(Line start, Line end)
 		_isInvert = true;
 	}
 }
+
+//-----------------------------------------------------------------------------------------------------------------------------
 
 Point Anchor::getAnchorPoint()
 {

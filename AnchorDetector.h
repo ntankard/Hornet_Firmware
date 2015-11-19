@@ -7,6 +7,11 @@
 #define C_MIN_ANGLE 80.0
 #define C_MAX_ANGLE 100.0
 
+/**
+* \class	AnchorDetector
+*
+* \brief	Looks for anchors by finding multiple lines and looking for there relation
+*/
 class AnchorDetector
 {
 public:

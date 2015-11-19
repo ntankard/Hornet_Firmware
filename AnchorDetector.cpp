@@ -6,6 +6,8 @@ AnchorDetector::AnchorDetector(volatile Error *e) : _lineDetector(e)
 	_count = 0;
 }
 
+//-----------------------------------------------------------------------------------------------------------------------------
+
 bool AnchorDetector::newPoint(Point p)
 {
 	bool found = false;
@@ -35,6 +37,8 @@ bool AnchorDetector::newPoint(Point p)
 	}
 	return found;
 }
+
+//-----------------------------------------------------------------------------------------------------------------------------
 
 Anchor AnchorDetector::getLast()
 {

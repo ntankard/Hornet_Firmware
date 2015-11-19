@@ -11,59 +11,51 @@
 
 #ifdef USE_LIDAR
 
+/**
+* \class	Lidar
+*
+* \brief	Manage the operations of a RPLIDAR device
+*/
 class Lidar : public Runnable
 {
 public:
 	Lidar(volatile Error* e);
 
+	// standard runnable methods
 	int getNORegisters(){ return 6; }
-	volatile MessageBuffer_Passer* getRegister()
-	{ 
-		if (_registerRead == 0)
-		{
-			_registerRead++;
-			return &_lastLidarRegister;
-		}
-		else if (_registerRead == 1)
-		{
-			_registerRead++;
-			return _avoidance.getRegister();
-		}
-		else
-		{
-			_registerRead++;
-			return _nav.getNextRegister();
-		}
-		return &_lastLidarRegister; 
-	}
+	volatile MessageBuffer_Passer* getRegister();
 	void addRegister(volatile MessageBuffer_Passer* newRegister){}
-
 	bool start();
 	bool run();
 
+	// packet loss monitoring
 	int getTotalCount(){ return _lidarComs.getTotalCount(); }
 	int getMissed(){ return _lidarComs.getMissed(); }
 	void setTotalCount(int toSet){ _lidarComs.setTotalCount(toSet); }
 	void setMissed(int toSet){ _lidarComs.setMissed(toSet); }
 
-
-
-	/*bool start();
-	int run();
-	volatile MessageBuffer_Passer* getMessage()volatile { return _toSend; }*/
-
 private:
 
-	int _registerRead;
-	MessageBuffer<MB_LAST_LIDAR, 2> _lastLidarRegister;
-
+	/** \brief	The object used to comunicate with the LIDAR */
 	LidarComs _lidarComs;
+
+	/** \brief	The object used to cacualte position from the LIDAR data */
 	LidarNavigation _nav;
 
+	/** \brief	The object used to cacualte avoidance vectors from the LIDAR data */
 	CollisionAvoidance _avoidance;
 
+	/** \brief	The angle of the last lidar point */
 	int _lastAngle;
+
+	/** \brief	Track the number of points read */
 	int _readCount;
+
+	/** \brief	Track the number of registers read by getRegister() */
+	int _registerRead;
+
+	/** \brief	The last read lidar point in POLAR form */
+	MessageBuffer<MB_LAST_LIDAR, 2> _lastLidarRegister;
 	
 };
 
