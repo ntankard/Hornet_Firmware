@@ -3,6 +3,7 @@
 #include "Runnable.h"
 #include "Error.h"
 #include "MessageBuffer.h"
+#include "Arduino.h"
 
 #ifdef USE_RBG_INDICATOR
 

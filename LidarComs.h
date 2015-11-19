@@ -8,8 +8,6 @@
 #include "Error.h"
 #include "CONFIG.h"
 
-
-
 enum RequestType{ Scan = 0, Force_Scan = 1, Get_Info = 2, Get_Health = 3, Reset = 4,None =5 };
 
 union InfoPacket
@@ -57,47 +55,168 @@ union DataPacket
 	} data;
 };
 
-
+/**
+* \class	LidarComs
+*
+* \brief	Manages comunications with an RPLIDAR
+*/
 class LidarComs
 {
 public:
+
 	LidarComs(volatile Error* e);
+
+	/**
+	* \brief	Sends a request to the device
+	*
+	* \param	packet	The request to send
+	*/
 	void sendRequest(RequestType packet);
+
+	/**
+	* \brief	Process any incoming data
+	*
+	* \return	True if a full packet was received
+	*/
 	bool run();
+
+	/**
+	* \brief	Has atleast one data packet being received
+	*
+	* \return	True if a data pacekt has been received
+	*/
 	bool getIsDone(){ return (!(_dataCount == 0)); }
+
+	/**
+	* \brief	Get the last received info packet
+	*
+	* \return	The info packet
+	*/
 	InfoPacket getLastInfoPacket(){ return _lastInfoPacket; }
+
+	/**
+	* \brief	Get the last received health packet
+	*
+	* \return	The health packet
+	*/
 	HealthPacket getLastHealthPacket(){ return _lastHealthPacket; }
+
+	/**
+	* \brief	Get the last received data packet
+	*
+	* \return	The data packet
+	*/
 	DataPacket getLastDataPacket(){ _dataCount--; return _lastDataPacket; }
+
+	/**
+	* \brief	How many packets have been received?
+	*
+	* \return	The number of packets received
+	*/
 	int getDataCount(){ return _dataCount; }
 
+	/**
+	* \brief	Get the number of packets received
+	*
+	* \return	The number of packets received
+	*/
 	int getTotalCount(){ return _totalReceived; }
+
+	/**
+	* \brief	Get the number of missed packets
+	*
+	* \return	The number of missed packets
+	*/
 	int getMissed(){ return _missed; }
+
+	/**
+	* \brief	Reset the send count
+	*/
 	void setTotalCount(int toSet){ _totalReceived = toSet; }
+
+	/**
+	* \brief	Reset the send count
+	*/
 	void setMissed(int toSet){ _missed = toSet; }
 
 private:
 
+	/**
+	* \brief	Build part of a data packet
+	*
+	* \author	Nicholas
+	* \date	1/08/2015
+	*
+	* \param	newByte	the byte to process
+
+	* \return	true if the packet is complete
+	*/
 	bool processScan(uint8_t newByte);
+
+	/**
+	* \brief	Build part of a info packet
+	*
+	* \author	Nicholas
+	* \date	1/08/2015
+	*
+	* \param	newByte	the byte to process
+
+	* \return	true if the packet is complete
+	*/
 	bool processInfo(uint8_t newByte);
+
+	/**
+	* \brief	Build part of a health packet
+	*
+	* \author	Nicholas
+	* \date	1/08/2015
+	*
+	* \param	newByte	the byte to process
+	*
+	* \return	true if the packet is complete
+	*/
 	bool processHealth(uint8_t newByte);
 
-	volatile Error* _e;
-	RequestType _requestType;
-	bool _descriptorReceived;
-	int _readCount;
-	InfoPacket _lastInfoPacket;
-	HealthPacket _lastHealthPacket;
-	DataPacket _lastDataPacket;
-	DataPacket _buildDataPacket;
-	int _dataCount;
-
-	int _totalReceived;
-	int _missed;
-	
+	/**
+	* \brief	Build part of a packet
+	*
+	* \return	true if the packet is complete
+	*/
 	bool processIncomingData();
 
-	int _maxBuffer;
+	/** \brief	The shared error object */
+	volatile Error* _e;
 
+	/** \brief	 The current outstanding request */
+	RequestType _requestType;
+
+	/** \brief	Has the descriptor been reveid yet? */
+	bool _descriptorReceived;
+
+	/** \brief	The number of packets received */
+	int _readCount;
+
+	/** \brief	The last info packet */
+	InfoPacket _lastInfoPacket;
+
+	/** \brief	The last health packet */
+	HealthPacket _lastHealthPacket;
+
+	/** \brief	The last data packet */
+	DataPacket _lastDataPacket;
+
+	/** \brief	The pending data packet */
+	DataPacket _buildDataPacket;
+
+	/** \brief	The number of bytes read */
+	int _dataCount;
+
+	/** \brief	The number of packets received (for loss tracking) */
+	int _totalReceived;
+
+	/** \brief	The number of packets missed (for loss tracking) */
+	int _missed;
+	int _maxBuffer;
 };
 
 #endif

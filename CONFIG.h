@@ -1,9 +1,12 @@
 #pragma once
-#include <Arduino.h>
+
+#include "Arduino.h"
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // ------------------------------------------------------ BASE TYPES ----------------------------------------------------------
 // ----------------------------------------------------------------------------------------------------------------------------
+
+// do not change thease
 
 #define ENABLE	1
 #define DISABLE 2
@@ -11,17 +14,26 @@
 #define XBEE	1
 #define SERIAL	2
 
+#define JOYSTICK	1
+#define EXTERNAL	2
+
 //-----------------------------------------------------------------------------------------------------------------------------
 // ----------------------------------------------------- BUILD CONFIG ---------------------------------------------------------
 // ----------------------------------------------------------------------------------------------------------------------------
 
+// If this is enabled debug statments and test statments will print
 #define DEBUG_BUILD			ENABLE
 
+// swich on or off any component in the system
 #define ENABLE_INDICATOR	ENABLE
 #define ENABLE_GYRO			ENABLE
 #define	ENABLE_LIDAR		ENABLE
 
+// is the systme conected via USB(SERIAL) or wirlesslee(XBEE)? (Needs to be in XBEE mode for remote flight)
 #define COM_MODE			SERIAL
+
+// is there an external receiver attached to the system?
+#define FLIGHT_MODE			JOYSTICK
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // ---------------------------------------------------- BOARD FEATURES --------------------------------------------------------
@@ -29,9 +41,9 @@
 
 #if DEBUG_BUILD == ENABLE
 
-#define DEBUG_PRINT(x) Serial.print(x)
-#define DEBUG_PRINTLN(x) Serial.println(x)
-#define TP(message) Serial.println(message);
+#define DEBUG_PRINT(x) Serial.print(x)			// if DEBUG_BUILD is not enabled thease will be removed automaticy but will not cause an error
+#define DEBUG_PRINTLN(x) Serial.println(x)		// if DEBUG_BUILD is not enabled thease will be removed automaticy but will not cause an error
+#define TP(message) Serial.println(message);	// if DEBUG_BUILD is not enabled any TP in the code will cause an error, use for testing code that you intend to remove
 
 #else
 
@@ -41,11 +53,25 @@
 #endif
 
 //-----------------------------------------------------------------------------------------------------------------------------
+// --------------------------------------------------- GENERAL SETTINGS -------------------------------------------------------
+// ----------------------------------------------------------------------------------------------------------------------------
+
+#define C_ERROR_BUFFER 10				// maximum number of recordable errors
+
+#define C_MIN_LINE_POINTS 10			// minimum number of points in a line
+#define C_MAX_LIDAR_BUFFER 10			// maximum number of buffers lidar packets befor they are discarded
+
+#define LA_MOUNT_OFFSET		60.0		// angle of the LIDAR when mounted to the drone
+#define LA_SAFTEY_RADIUS	2000.0		// the maximum radius used to consider objects for colision avoidance
+#define LA_MIN_RADIUS		500.0		// the radius of the drone (used to ognor the feet of the drone)
+
+// DO NOT CHANGE ANYTHING BELOW HERE
+
+//-----------------------------------------------------------------------------------------------------------------------------
 // ------------------------------------------------------ COMPONENTS ----------------------------------------------------------
 // ----------------------------------------------------------------------------------------------------------------------------
 
 #if ENABLE_INDICATOR == ENABLE
-	//#define USE_DM_INDICATOR
 	#define USE_RBG_INDICATOR
 #endif
 
@@ -68,38 +94,6 @@
 	#define C_COM_SEND_RATE 1
 #define THROTTLE_COMS
 #endif
-
-//-----------------------------------------------------------------------------------------------------------------------------
-// --------------------------------------------------- GENERAL SETTINGS -------------------------------------------------------
-// ----------------------------------------------------------------------------------------------------------------------------
-
-#define C_ERROR_BUFFER 10
-
-#define C_MIN_LINE_POINTS 10
-#define C_MAX_LIDAR_BUFFER 10
-
-#define L_LINE_OF_BEST_FIT 1
-#define L_POINT_TO_POINT 2
-#define L_END_TO_POINT 3
-#define L_START_TO_POINT 4
-
-//----------------------------------------Feature recognition values-----------------------------------------------------------
-#define L_LINE_TO_LINE_OFFSET 5			// point to point max angle
-#define L_POINTS_IN_PATTERN 10
-#define L_PATTERNS_IN_CORNER_FEATURE 2	
-#define L_PATTERN_RANGE_IN_FEATURE 50		// max distance between deature
-#define L_FEATURE_CORNER_ANGLE_TOLERANCE 5	// degree varience on the corner
-#define L_PATTERNS_STORED 10				
-#define L_FEATURES_STORED 30
-#define L_FEATURE_RANGE_TOLERANCE 5			// shift between sweeps
-#define L_FEATURE_LIFE 5					// not find befor die
-#define L_FEATURE_OCCURANCES 3				// befor ancor
-#define L_ANCHORS_STORED 10			
-#define L_PATTERN_DEFINITION L_LINE_OF_BEST_FIT
-
-#define LA_MOUNT_OFFSET		60.0
-#define LA_SAFTEY_RADIUS	2000.0
-#define LA_MIN_RADIUS		500.0
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // ----------------------------------------------------- ERROR CODES ----------------------------------------------------------
@@ -131,7 +125,7 @@
 // ----------------------------------------------------- STATE SETTINGS -------------------------------------------------------
 // ----------------------------------------------------------------------------------------------------------------------------
 
-
+// default thread priorities
 #define INDICATOR_PRI	1
 #define COM_PRI			5
 #define GYRO_PRI		0

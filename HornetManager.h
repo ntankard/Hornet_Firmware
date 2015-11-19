@@ -9,11 +9,18 @@
 
 enum State{ Init = 0, Connect = 1, Idle =2,TakeOff=3,Flight=4,Land=5,Emergency=6,Crash=7};
 
+/**
+* \class	HornetManager
+*
+* \brief	A light weight manager class to store and manage the hornet firmware
+*/
 class HornetManager
 {
 public:
 
 	HornetManager();
+
+	// standard runnable methods
 	void start();
 	void run();
 

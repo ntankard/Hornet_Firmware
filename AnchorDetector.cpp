@@ -1,5 +1,5 @@
 #include "AnchorDetector.h"
-
+#include "Arduino.h"
 
 AnchorDetector::AnchorDetector(volatile Error *e) : _lineDetector(e)
 {

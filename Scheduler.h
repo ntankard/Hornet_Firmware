@@ -67,18 +67,30 @@ public:
 	*/
 	bool run();
 
+
+	/**
+	* \brief	Reset the monitoring variables
+	*/
 	void resetCount();
 
-
 private:
+
+	/** \brief	The shared error object */
 	volatile Error *_e;
+
+	/** \brief	All of the thread (runnable classes) */
 	Thread_Settings _threads[C_SCHEDULER_THREAD_NUM];
+
+	/** \brief	How many threads have been registerd (used to ensure no missing threads when the system starts) */
 	int _setCount;
-	//int _runCount[C_SCHEDULER_THREAD_NUM];
-	//int _currentThread;
+
+	/** \brief	Track what order the threads should run in (high priority runs more offen) */
 	PriorityManager<C_SCHEDULER_THREAD_NUM> _currentThreadI;
 
+	/** \brief	The number of times each thread has run (for proformance monitoring) */
 	volatile MessageBuffer<MB_SCHEDULAR_MONITOR, C_SCHEDULER_THREAD_NUM> _schedularRegister;
+
+	/** \brief	Real time measuring for above */
 	int _threadCount[C_SCHEDULER_THREAD_NUM];
 };
 

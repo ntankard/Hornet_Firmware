@@ -7,11 +7,16 @@
 #include "MPU6050.h"
 #include "MessageBuffer.h"
 
+/**
+* \brief	Manages a MPU gyroscope
+*/
 class Gyro : public Runnable
 {
 public:
 
 	Gyro();
+
+	// tandard runnabel methods
 	bool start();
 	int getNORegisters();
 	volatile MessageBuffer_Passer* getRegister();

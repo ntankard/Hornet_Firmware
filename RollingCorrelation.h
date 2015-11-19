@@ -2,6 +2,7 @@
 
 #include "RollingWindow.h"
 #include "Point.h"
+#include "Arduino.h"
 
 template<int Size>
 class RollingCorrelation

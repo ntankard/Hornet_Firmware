@@ -6,11 +6,9 @@
 ComsDecoder::ComsDecoder(volatile Error *e)
 {
 	_e = e;
-
 	_registerAccsessed = 0;
 
 	int addCount = 0;
-
 	_registers[MB_JOY_THROTTLE - MB_INBOUND_OFFSET] = &_throttleJoyRegister;
 	addCount++;
 	_registers[MB_JOY_XY - MB_INBOUND_OFFSET] = &_XYJoyRegister;
@@ -75,12 +73,12 @@ bool ComsDecoder::processMessage(uint8_t *data, uint8_t dataLength, uint8_t chec
 
 void ComsDecoder::sendFailure()
 {
-	//@TODO this
+	//@TODO monitor this
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------
 
 void ComsDecoder::receiveFailure()
 {
-	//@TODO this
+	//@TODO monitor this
 }
