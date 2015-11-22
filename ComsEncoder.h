@@ -15,7 +15,7 @@ class ComsEncoder:public Runnable
 public:
 
 	/**
-	* \brief	Default constructor.
+	* \brief	Default constructor
 	*
 	* \param	e		The shared error object
 	*/
@@ -29,7 +29,7 @@ public:
 	bool run();
 
 	/**
-	* \brief	Get the number of messages sent for preformance tracking
+	* \brief	Get the number of messages sent for performance tracking
 	*
 	* \return	The number of messages sent
 	*/
@@ -51,7 +51,7 @@ private:
 	/** \brief	The shared error object */
 	volatile Error *_e;
 
-	/** \brief	An empty message buffer to put in place untill the real ones are attached */
+	/** \brief	An empty message buffer to put in place until the real ones are attached */
 	MessageBuffer<0, 1> _empty[MB_OUTBOUND_COUTN];
 
 	/** \brief	A list of all internal messages */
@@ -60,7 +60,7 @@ private:
 	/** \brief	Track what messages have been added */
 	bool _internalRegisters_addCount[MB_OUTBOUND_COUTN];
 
-	/** \brief	Track wich message to send */
+	/** \brief	Track which message to send */
 	int _sendId;
 
 	/** \brief	Timer to limit sending */

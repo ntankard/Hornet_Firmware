@@ -6,7 +6,7 @@
 // ------------------------------------------------------ BASE TYPES ----------------------------------------------------------
 // ----------------------------------------------------------------------------------------------------------------------------
 
-// do not change thease
+// do not change these
 
 #define ENABLE	1
 #define DISABLE 2
@@ -21,15 +21,15 @@
 // ----------------------------------------------------- BUILD CONFIG ---------------------------------------------------------
 // ----------------------------------------------------------------------------------------------------------------------------
 
-// If this is enabled debug statments and test statments will print
+// If this is enabled, debug statements and test statements will print
 #define DEBUG_BUILD			ENABLE
 
-// swich on or off any component in the system
+// switch on or off any component in the system
 #define ENABLE_INDICATOR	ENABLE
 #define ENABLE_GYRO			ENABLE
 #define	ENABLE_LIDAR		ENABLE
 
-// is the systme conected via USB(SERIAL) or wirlesslee(XBEE)? (Needs to be in XBEE mode for remote flight)
+// is the system conected via USB(SERIAL) or wirelessly(XBEE)? (Needs to be in XBEE mode for remote flight)
 #define COM_MODE			SERIAL
 
 // is there an external receiver attached to the system?
@@ -41,9 +41,9 @@
 
 #if DEBUG_BUILD == ENABLE
 
-#define DEBUG_PRINT(x) Serial.print(x)			// if DEBUG_BUILD is not enabled thease will be removed automaticy but will not cause an error
-#define DEBUG_PRINTLN(x) Serial.println(x)		// if DEBUG_BUILD is not enabled thease will be removed automaticy but will not cause an error
-#define TP(message) Serial.println(message);	// if DEBUG_BUILD is not enabled any TP in the code will cause an error, use for testing code that you intend to remove
+#define DEBUG_PRINT(x) Serial.print(x)			// if DEBUG_BUILD is not enabled, these will be removed automatically but will not cause an error
+#define DEBUG_PRINTLN(x) Serial.println(x)		// if DEBUG_BUILD is not enabled, these will be removed automatically but will not cause an error
+#define TP(message) Serial.println(message);	// if DEBUG_BUILD is not enabled, any TP in the code will cause an error, use for testing code that you intend to remove
 
 #else
 
@@ -59,11 +59,11 @@
 #define C_ERROR_BUFFER 10				// maximum number of recordable errors
 
 #define C_MIN_LINE_POINTS 10			// minimum number of points in a line
-#define C_MAX_LIDAR_BUFFER 10			// maximum number of buffers lidar packets befor they are discarded
+#define C_MAX_LIDAR_BUFFER 10			// maximum number of buffers lidar packets before they are discarded
 
 #define LA_MOUNT_OFFSET		60.0		// angle of the LIDAR when mounted to the drone
-#define LA_SAFTEY_RADIUS	2000.0		// the maximum radius used to consider objects for colision avoidance
-#define LA_MIN_RADIUS		500.0		// the radius of the drone (used to ognor the feet of the drone)
+#define LA_SAFTEY_RADIUS	2000.0		// the maximum radius (mm) used to consider objects for collision avoidance
+#define LA_MIN_RADIUS		500.0		// the radius (mm) of the drone (used to ignore the landing gear feet of the drone)
 
 #define C_CORRELATION_SIZE	10
 #define C_THRESHOLD			0.95
@@ -132,7 +132,7 @@
 // default thread priorities
 #define INDICATOR_PRI	1
 #define COM_PRI			5
-#define GYRO_PRI		0		// The position system cant run if this is enabeld, to much pacekt loss causing an overflow
+#define GYRO_PRI		0		// The position system can't run if this is enabled, too much pacekt loss causing an overflow
 #define FLIGHT_PRI		1
 #define LIDAR_PRI		1
 
@@ -172,7 +172,7 @@
 #define RBG_RED 51
 #define RBG_BLUE 49
 
-// APM conections
+// APM connections
 #define C_APM_ROLL		10
 #define C_APM_PITCH		11
 #define C_APM_THROTTLE	12
@@ -195,7 +195,7 @@
 // ----------------------------------------------------------------------------------------------------------------------------
 
 // inbound
-#define MB_INBOUND_COUNT	5		// must match the numebr of packets!!
+#define MB_INBOUND_COUNT	5		// must match the number of packets!!
 #define MB_INBOUND_OFFSET	100		// must match the lowest ID
 
 #define MB_JOY_XY			100
@@ -205,7 +205,7 @@
 #define MB_AVOID			104
 
 // outbound
-#define MB_OUTBOUND_COUTN		11		// must match the numebr of packets!!
+#define MB_OUTBOUND_COUTN		11		// must match the number of packets!!
 #define MB_OUTBOUND_OFFSET		11		// must match the lowest ID
 
 #define MB_ROLL_PITCH_YAW		11

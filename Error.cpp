@@ -11,7 +11,7 @@ void Error::add(uint8_t code, uint8_t  line) volatile
 {
 	if (_errors >= (C_ERROR_BUFFER ))
 	{
-		// no more room (were in big troble)
+		// no more room (we're in big trouble)
 		return;
 	}
 

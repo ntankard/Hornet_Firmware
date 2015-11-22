@@ -25,7 +25,7 @@ bool AnchorDetector::newPoint(Point p)
 
 			if (dif > C_MIN_ANGLE && dif < C_MAX_ANGLE)
 			{
-				// new ancor
+				// new anchor
 				_lastAnchor.setLines(_last, toTest);
 				found = true;
 

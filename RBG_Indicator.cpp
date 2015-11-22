@@ -134,7 +134,7 @@ void Indicator::safeOff()
 
 void Indicator::lightOn(int setting)
 {
-	// asume that settings are valid as they are gate checked by setParam
+	// assume that settings are valid as they are gate checked by setParam
 	digitalWrite(LIGHT_PINS[0], SETIINGS[setting][0]);
 	digitalWrite(LIGHT_PINS[1], SETIINGS[setting][1]);
 }

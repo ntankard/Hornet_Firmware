@@ -25,7 +25,7 @@ test(CircularBuffer_Manager_Size)
 
 	assertFalse(e->isError());
 
-	// check to see that you cant remove from an empty buffer
+	// check to see that you can't remove from an empty buffer
 	assertEqual(_testBuffer.remove(), 0);
 	assertTrue(e->isError());
 	delete e;
@@ -47,7 +47,7 @@ test(CircularBuffer_Manager_Size)
 	assertTrue(_testBuffer.isFull());
 	assertEqual(_testBuffer.size(), BufferSize);
 
-	// check that you get an error if you add to many
+	// check that you get an error if you add too many
 	assertEqual(_testBuffer.add(),0);
 	assertTrue(e->isError());
 }
@@ -71,7 +71,7 @@ test(CircularBuffer_Manager_Rotation)
 		assertFalse(e->isError());
 	}
 
-	// roatat ehte buffer and check that it behavs properly
+	// rotate the buffer and check that it behaves properly
 	int addIndex = ToAdd;
 	int removeIndex = 0;
 

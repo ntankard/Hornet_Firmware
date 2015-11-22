@@ -49,7 +49,7 @@ test(CircularBuffer_Rotation)
 		assertEqual(_testBuffer.size(), i + 1);
 	}
 
-	// roatat ehte buffer and check that it behavs properly
+	// rotate the buffer and check that it behaves properly
 	int propperValue = 0;
 
 	for (int i = 0; i < 100; i++)

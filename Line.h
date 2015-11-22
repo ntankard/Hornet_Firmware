@@ -5,7 +5,7 @@
 /**
 * \class	Line
 *
-* \brief	A representation of a straignt line in the lidar data
+* \brief	A representation of a straight line in the lidar data
 */
 class Line
 {
@@ -24,7 +24,7 @@ private:
 	/** \brief	The last point in the line */
 	Point _end;
 
-	/** \brief	The angle of the line relative tothe Y axis */
+	/** \brief	The angle of the line relative to the Y axis */
 	double _angle;
 };
 

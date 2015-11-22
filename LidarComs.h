@@ -58,7 +58,7 @@ union DataPacket
 /**
 * \class	LidarComs
 *
-* \brief	Manages comunications with an RPLIDAR
+* \brief	Manages communications with a RPLIDAR
 */
 class LidarComs
 {
@@ -144,9 +144,6 @@ private:
 	/**
 	* \brief	Build part of a data packet
 	*
-	* \author	Nicholas
-	* \date	1/08/2015
-	*
 	* \param	newByte	the byte to process
 
 	* \return	true if the packet is complete
@@ -154,10 +151,7 @@ private:
 	bool processScan(uint8_t newByte);
 
 	/**
-	* \brief	Build part of a info packet
-	*
-	* \author	Nicholas
-	* \date	1/08/2015
+	* \brief	Build part of an info packet
 	*
 	* \param	newByte	the byte to process
 
@@ -167,9 +161,6 @@ private:
 
 	/**
 	* \brief	Build part of a health packet
-	*
-	* \author	Nicholas
-	* \date	1/08/2015
 	*
 	* \param	newByte	the byte to process
 	*
@@ -190,7 +181,7 @@ private:
 	/** \brief	 The current outstanding request */
 	RequestType _requestType;
 
-	/** \brief	Has the descriptor been reveid yet? */
+	/** \brief	Has the descriptor been received yet? */
 	bool _descriptorReceived;
 
 	/** \brief	The number of packets received */

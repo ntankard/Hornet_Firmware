@@ -7,9 +7,9 @@
 /**
 * \class	RollingCorrelation
 *
-* \brief	Conduct a corelation caculate based on a rolling window (each time one is added one is removed)
+* \brief	Conduct a correlation calculate based on a rolling window (each time one is added one is removed)
 *
-* \note		Viertical lines will corupt the corelation value so the original point and the 45 shift version of the point are used to corect for this
+* \note		Vertical lines will corrupt the correlation value so the original point and the 45 shift version of the point are used to correct for this
 */
 template<int Size>
 class RollingCorrelation
@@ -31,7 +31,7 @@ public:
 	}
 
 	/**
-	* \brief	Add a new point and remove one from the end, update the corelation value
+	* \brief	Add a new point and remove one from the end, update the correlation value
 	*/
 	void newPoint(Point p)
 	{
@@ -92,7 +92,7 @@ public:
 
 private:
 
-	// each component of the equasion
+	// each component of the equation
 	double getAB(int i)
 	{
 		return _yx[i] - ((_XMean[i] * _YMean[i]) / _points.getSize());
@@ -112,7 +112,7 @@ private:
 
 	RollingWindow<Point, Size> _points;
 
-	// parts of the equasion
+	// parts of the equation
 	double _XMean[2];
 	double _YMean[2];
 	double _yx[2];

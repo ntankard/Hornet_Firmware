@@ -77,7 +77,7 @@ bool Lidar::start()
 	_lidarComs.sendRequest(Get_Info);
 	while (true)
 	{
-		// wait for the responce
+		// wait for the response
 		_lidarComs.run();
 		if (_lidarComs.getIsDone())
 		{
@@ -127,13 +127,13 @@ bool Lidar::run()
 
 		if (distance > LA_MIN_RADIUS)
 		{
-			// process colision avoidance 
+			// process collision avoidance 
 			_avoidance.newPoint(angle, distance);
 			_nav.processLidarData(angle, distance);
 
 		}
 		
-		// look for end of sweep (sometime the LIDAR will go back on angles eg 352 -> 2 -> 359
+		// look for end of sweep (sometime the LIDAR will go back on angles eg. 352 -> 2 -> 359
 		if (_lastAngle > 300 && angle < 20 && _lastAngle > angle && _readCount > 20)
 		{
 			_avoidance.endOfSweep();

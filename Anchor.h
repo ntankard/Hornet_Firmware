@@ -6,7 +6,7 @@
 /**
 * \class	Anchor
 *
-* \brief	A solid point in the LIDAR data to get position from, baesd on the interncection of 2 features
+* \brief	A solid point in the LIDAR data to get the position from, based on the intersection of 2 features
 */
 class Anchor
 {
@@ -17,7 +17,7 @@ public:
 	Line getEnd(){ return _end; }
 
 	/**
-	* \brief	Gets the solid point at the intercection between 2 anchors
+	* \brief	Gets the solid point at the intersection between 2 anchors
 	*
 	* \return	The point at the center
 	*/

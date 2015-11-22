@@ -21,7 +21,7 @@ void setup()
 {
 	
 
-	// turn on one of the pins to act as a refrence for a logic converter to the XBee
+	// turn on one of the pins to act as a reference for a logic converter to the XBee
 	pinMode(38, OUTPUT);
 	digitalWrite(38, HIGH);
 
@@ -56,7 +56,7 @@ void setup()
 	}
 #endif
 
-	// setupd I2C coms for accseleromiter
+	// setup I2C coms for accelerometer
 	delay(500);
 	Wire.begin();	
 

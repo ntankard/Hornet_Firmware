@@ -8,30 +8,21 @@ class TimeOut
 public:
 
 	/**
-	* \brief	Default constructor.
-	*
-	* \author	Nicholas
-	* \date	1/08/2015
+	* \brief	Default constructor
 	*/
 	TimeOut();
 
 	/**
-	* \brief	Start a new timout measure
+	* \brief	Start a new timeout measure
 	*
-	* \author	Nicholas
-	* \date	1/08/2015
-	*
-	* \param	duration	The time to wait befor a timeout event
+	* \param	duration	The time to wait before a timeout event
 	*/
 	void start(unsigned long duration);
 
 	/**
 	* \fn	bool Error::isError();
 	*
-	* \brief	Had more than duration time pasts since the call of start
-	*
-	* \author	Nicholas
-	* \date	1/08/2015
+	* \brief	Has more than duration time pass since the call of start
 	*
 	* \return	true if a timeout occured
 	*/
@@ -42,10 +33,10 @@ private:
 	/** \brief	The system time when the timout measure started */
 	volatile unsigned long _startTime;
 
-	/** \brief	THe duration befor a timeout event */
+	/** \brief	THe duration before a timeout event */
 	volatile unsigned long _duration;
 
-	/** \brief	Has the time exceded the duration? */
+	/** \brief	Has the time exceeded the duration? */
 	bool _isTimeout;
 
 };

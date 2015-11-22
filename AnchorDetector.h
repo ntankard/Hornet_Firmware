@@ -10,7 +10,7 @@
 /**
 * \class	AnchorDetector
 *
-* \brief	Looks for anchors by finding multiple lines and looking for there relation
+* \brief	Looks for anchors by finding multiple lines and looking for their relation
 */
 class AnchorDetector
 {

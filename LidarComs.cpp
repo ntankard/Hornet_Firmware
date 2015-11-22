@@ -24,7 +24,7 @@ byte RPLIDAR_CMDS[] = { RPLIDAR_CMD_SCAN,
 						RPLIDAR_CMD_RESET
 };
 
-// packet responces (see above)
+// packet responses (see above)
 const uint8_t DESCRIPTOR_RESPONSE[4][7] = { { RPLIDAR_ANS_SYNC_BYTE1, RPLIDAR_ANS_SYNC_BYTE2, 0x05, 0x00, 0x00, 0x40, 0x81 },
 											{ RPLIDAR_ANS_SYNC_BYTE1, RPLIDAR_ANS_SYNC_BYTE2, 0x05, 0x00, 0x00, 0x40, 0x81 },
 											{ RPLIDAR_ANS_SYNC_BYTE1, RPLIDAR_ANS_SYNC_BYTE2, 0x14, 0x00, 0x00, 0x00, 0x04 },
@@ -57,19 +57,19 @@ void LidarComs::sendRequest(RequestType packet)
 		_e->add(E_INDEX_OUT_BOUNDS, __LINE__);
 	}
 
-	// clear all inbound messages to prevent furure errors
+	// clear all inbound messages to prevent future errors
 	while (C_LIDAR_SERIAL.available())
 	{
 		char c = C_LIDAR_SERIAL.read();
 	}
 
-	// send the pacekt
+	// send the packet
 	C_LIDAR_SERIAL.flush();
 	C_LIDAR_SERIAL.write(RPLIDAR_CMD_SYNC_BYTE);
 	C_LIDAR_SERIAL.write(RPLIDAR_CMDS[packet]);
 	_requestType = packet;
 
-	// resent pacekt responce
+	// resent packet response
 	_dataCount = 0;
 	_descriptorReceived = false;
 	_readCount = 0;

@@ -218,7 +218,7 @@ test(DoublyLinkedNodeIterator_DroppingNodes)
 
 	DoublyLinkedNodeIterator<Point> iter(n1);
 
-	//lets delete node 5 and go to the end then go back twice which should place us on node 5 (which has been removed)
+	//let's delete node 5 and go to the end then go back twice which should place us on node 5 (which has been removed)
 	iter--;
 	n5.dropNode();
 	for (iter++; iter != iter.rightEnd(); iter++) //go to the right side

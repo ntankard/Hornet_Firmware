@@ -24,36 +24,36 @@ class Scheduler
 public:
 
 	/**
-	* \brief	Default constructor.
+	* \brief	Default constructor
 	*/
 	Scheduler(volatile Error *e);
 
 	/**
-	* \brief	Constctor for the MPU6050
+	* \brief	Constructor for the MPU6050
 	*
 	* \param	ID				The ID of the thread
 	* \param	theRunnable		The thread
 	*
-	* \throw	E_SETUP_ERROR	If the thread is null or its atempting ot overwight anotehr thread
+	* \throw	E_SETUP_ERROR	If the thread is null or it's attempting to overwrite another thread
 	*/
 	void addRunable(int ID, Runnable *theRunnable);
 
 	/**
-	* \brief	Solidifys the scedular after all runables are added
+	* \brief	Solidifies the scheduler after all runnables are added
 	*
 	* \return	true if all threads are acounted for
 	*/
 	bool finish();
 
 	/**
-	* \brief	Solidifys the scedular after all runables are added
+	* \brief	Solidifies the scheduler after all runnables are added
 	*
-	* \return	true if all threads are acounted for
+	* \return	true if all threads are accounted for
 	*/
 	bool startAll();
 
 	/**
-	* \brief	Set the priority of a spesific thread
+	* \brief	Set the priority of a specific thread
 	*
 	* \param	ID				The ID of the thread
 	* \param	p				The priority to set
@@ -63,7 +63,7 @@ public:
 	void setPriority(int ID, int p);
 
 	/**
-	* \brief	Exicute each thread at its priority
+	* \brief	Execute each thread at its priority
 	*/
 	bool run();
 
@@ -81,16 +81,16 @@ private:
 	/** \brief	All of the thread (runnable classes) */
 	Thread_Settings _threads[C_SCHEDULER_THREAD_NUM];
 
-	/** \brief	How many threads have been registerd (used to ensure no missing threads when the system starts) */
+	/** \brief	How many threads have been registered (used to ensure no missing threads when the system starts) */
 	int _setCount;
 
-	/** \brief	Track what order the threads should run in (high priority runs more offen) */
+	/** \brief	Track what order the threads should run in (high priority runs more often) */
 	PriorityManager<C_SCHEDULER_THREAD_NUM> _currentThreadI;
 
-	/** \brief	The number of times each thread has run (for proformance monitoring) */
+	/** \brief	The number of times each thread has run (for performance monitoring) */
 	volatile MessageBuffer<MB_SCHEDULAR_MONITOR, C_SCHEDULER_THREAD_NUM> _schedularRegister;
 
-	/** \brief	Real time measuring for above */
+	/** \brief	Real time measuring for the above */
 	int _threadCount[C_SCHEDULER_THREAD_NUM];
 };
 

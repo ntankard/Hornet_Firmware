@@ -63,7 +63,7 @@ test(Scheduler_ValidPopulate)
 	Scheduler toTest(&e);
 	TestRunnable tests[C_SCHEDULER_THREAD_NUM];
 
-	// test that everything starts corectly
+	// test that everything starts correctly
 	assertFalse(e.isError());
 	for (int i = 0; i < C_SCHEDULER_THREAD_NUM; i++)
 	{
@@ -71,7 +71,7 @@ test(Scheduler_ValidPopulate)
 		assertEqual(tests[i].startCount, 0);
 	}
 
-	// test that you can add to the scedulare corectly
+	// test that you can add to the scheduler corectly
 	for (int i = 0; i < C_SCHEDULER_THREAD_NUM; i++)
 	{
 		toTest.addRunable(i, &tests[i]);
@@ -80,7 +80,7 @@ test(Scheduler_ValidPopulate)
 	}
 	assertFalse(e.isError());
 
-	// test that you can finalize and start a full scedualr
+	// test that you can finalize and start a full scheduler
 	assertTrue(toTest.finish());
 	assertTrue(toTest.startAll());
 	assertFalse(e.isError());
@@ -108,7 +108,7 @@ test(Scheduler_BadPopulate)
 		assertEqual(tests[i].startCount, 0);
 	}
 
-	// test that you can add to the scedulare corectly and attempting to add twice throws an error
+	// test that you can add to the scheduler correctly and attempting to add twice throws an error
 	for (int i = 0; i < C_SCHEDULER_THREAD_NUM; i++)
 	{
 		toTest.addRunable(i, &tests[i]);
@@ -122,7 +122,7 @@ test(Scheduler_BadPopulate)
 	}
 	assertFalse(e.isError());
 
-	// test that you cant add invalid scedualres (over)
+	// test that you can't add invalid scheduler (over)
 	for (int i = C_SCHEDULER_THREAD_NUM; i < C_SCHEDULER_THREAD_NUM + 10; i++)
 	{
 		toTest.addRunable(i, &tests[0]);
@@ -131,7 +131,7 @@ test(Scheduler_BadPopulate)
 		assertFalse(e.isError());
 	}
 
-	// test that you cant add invalid scedualres (over)
+	// test that you can't add invalid scheduler (over)
 	for (int i = -1; i >-10; i--)
 	{
 		toTest.addRunable(i, &tests[0]);
@@ -140,7 +140,7 @@ test(Scheduler_BadPopulate)
 		assertFalse(e.isError());
 	}
 
-	// test that you can finalize and start a full scedualr
+	// test that you can finalize and start a full scheduler
 	assertTrue(toTest.finish());
 	assertTrue(toTest.startAll());
 	assertFalse(e.isError());
@@ -163,7 +163,7 @@ test(Scheduler_Run)
 	Scheduler toTest(&e);
 	TestRunnable tests[C_SCHEDULER_THREAD_NUM];
 
-	// test that everything starts corectly
+	// test that everything starts correctly
 	assertFalse(e.isError());
 	for (int i = 0; i < C_SCHEDULER_THREAD_NUM; i++)
 	{
@@ -171,7 +171,7 @@ test(Scheduler_Run)
 		assertEqual(tests[i].startCount, 0);
 	}
 
-	// test that you can add to the scedulare corectly and attempting to add twice throws an error
+	// test that you can add to the scheduler correctly and attempting to add twice throws an error
 	for (int i = 0; i < C_SCHEDULER_THREAD_NUM; i++)
 	{
 		toTest.addRunable(i, &tests[i]);
@@ -181,7 +181,7 @@ test(Scheduler_Run)
 	}
 	assertFalse(e.isError());
 
-	// test that you can finalize and start a full scedualr
+	// test that you can finalize and start a full scheduler
 	assertTrue(toTest.finish());
 	assertTrue(toTest.startAll());
 	assertFalse(e.isError());
@@ -208,7 +208,7 @@ test(Scheduler_Run)
 		tests[i].runCount = 0;
 	}
 
-	// check that everything runs in parelr if on the same 
+	// check that everything runs in parallel if on the same 
 	for (int i = 0; i < C_SCHEDULER_THREAD_NUM; i++)
 	{
 		toTest.setPriority(i, 1);
@@ -222,7 +222,7 @@ test(Scheduler_Run)
 		}
 	}
 
-	// check that things can run at difrent priorities
+	// check that things can run at different priorities
 	//@TODO
 	
 }

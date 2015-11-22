@@ -36,16 +36,16 @@ public:
 
 private:
 
-	/** \brief	The object used to comunicate with the LIDAR */
+	/** \brief	The object used to communicate with the LIDAR */
 	LidarComs _lidarComs;
 
-	/** \brief	The object used to cacualte position from the LIDAR data */
+	/** \brief	The object used to calculate the position from the LIDAR data */
 	LidarNavigation _nav;
 
-	/** \brief	The object used to cacualte avoidance vectors from the LIDAR data */
+	/** \brief	The object used to calculate the avoidance vectors from the LIDAR data */
 	CollisionAvoidance _avoidance;
 
-	/** \brief	The angle of the last lidar point */
+	/** \brief	The angle of the last LIDAR point */
 	int _lastAngle;
 
 	/** \brief	Track the number of points read */

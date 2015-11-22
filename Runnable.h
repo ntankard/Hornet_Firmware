@@ -11,7 +11,7 @@ class Runnable
 public:
 
 	/**
-	* \brief	How many registers dose this runnable object have?
+	* \brief	How many registers does this runnable object have?
 	*
 	* \return	The number of runnable objecs
 	*/
@@ -25,21 +25,21 @@ public:
 	virtual volatile MessageBuffer_Passer* getRegister() = 0;
 
 	/**
-	* \brief	Passes a link to a register owned by antoehr object, if the runnable needs data from that register then this poitner should be stored
+	* \brief	Passes a link to a register owned by another object, if the runnable needs data from that register then this pointer should be stored
 	*
 	* \param	newRegister	The register to add
 	*/
 	virtual void addRegister(volatile MessageBuffer_Passer* newRegister) = 0;
 
 	/**
-	* \brief	Preform all thread start procedures
+	* \brief	Perform all thread start procedures
 	*
-	* \return	True if the thread started sucsesfuly
+	* \return	True if the thread started successfuly
 	*/
 	virtual bool start()  = 0;
 
 	/**
-	* \brief	Exicute one loop of the thread
+	* \brief	Execute one loop of the thread
 	*
 	* \return	True if the value of a register was changed
 	*/

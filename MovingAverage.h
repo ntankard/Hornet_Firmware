@@ -14,7 +14,7 @@ class MovingAverage
 public:
 
 	/**
-	* \brief	Default constructor.
+	* \brief	Default constructor
 	*
 	* \param	e	The shared error object
 	*/
@@ -66,10 +66,10 @@ private:
 	/** \brief	The Window */
 	CircularBuffer<T, Size> _window;
 
-	/** \brief	The sum of all elemnts int the wondow */
+	/** \brief	The sum of all elemnts int the window */
 	T _sum;
 
-	/** \brief	The systems error object */
+	/** \brief	The system's error object */
 	volatile Error *_e;
 };
 

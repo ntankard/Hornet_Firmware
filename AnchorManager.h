@@ -8,7 +8,7 @@
 /**
 * \class	AnchorManager
 *
-* \brief	Mange the lifecyle of anchors (in progress)
+* \brief	Manage the lifecyle of anchors (in progress)
 */
 class AnchorManager
 {

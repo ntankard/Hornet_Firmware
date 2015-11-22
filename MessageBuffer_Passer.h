@@ -3,7 +3,7 @@
 #include <stdint.h>
 
 /**
-* \brief	A generic way of passing short arrays of variouse sizes
+* \brief	A generic way of passing short arrays of various sizes
 */
 class MessageBuffer_Passer
 {

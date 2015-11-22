@@ -36,13 +36,13 @@ private:
 	/** \brief	Rolling count of sent packets used to check for packet loss */
 	uint8_t _sendCount;
 
-	/** \brief	Number of packets send (used to monitor transmition rate) */
+	/** \brief	Number of packets sent (used to monitor transmission rate) */
 	int _totalSend;
 
 	/** \brief	The number of bytes read for the current packet */
 	int _readCount;
 
-	/** \brief	The real time caculated checksum */
+	/** \brief	The real time calculated checksum */
 	uint8_t _checkSum;
 
 	/** \brief	The partial message */

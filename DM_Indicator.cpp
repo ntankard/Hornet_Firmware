@@ -147,7 +147,7 @@ void Indicator::safeOff()
 
 void Indicator::lightOn(int setting_1, int setting_2)
 {
-	// asume that settings are valid as they are gate checked by setParam
+	// assume that settings are valid as they are gate checked by setParam
 
 	digitalWrite(ROWS[setting_1%(NUM_ROWS-1)], ROW_ON);
 	digitalWrite(COLUMNS[setting_1 / (NUM_ROWS - 1)], COLUMNS_ON);

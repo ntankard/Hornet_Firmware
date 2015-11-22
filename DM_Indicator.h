@@ -25,7 +25,7 @@ class Indicator : public Runnable
 public:
 
 	/**
-	* \brief	Default constructor.
+	* \brief	Default constructor
 	*
 	* \param	e	The shared error object
 	*/
@@ -44,35 +44,26 @@ public:
 
 	/**
 	* \brief	Turn on (and reset) the indicator
-	*
-	* \author	Nicholas
-	* \date	1/08/2015
 	*/
 	void on();
 
 	/**
 	* \brief	Turn off the indicator
-	*
-	* \author	Nicholas
-	* \date	1/08/2015
 	*/
 	void off();
 
 	/**
 	* \brief	Set the display properties
 	*
-	* \author	Nicholas
-	* \date	1/08/2015
-	*
 	* \param	setting_1	First light on
 	* \param	setting_2	Second light on
-	* \param	blinks		How many times to blink (eg blink 3 times then a gap)
+	* \param	blinks		How many times to blink (eg. blink 3 times then a gap)
 	* \param	rate		How fast to blink
 	*/
 	void setDisplay(int setting_1, int setting_2, int blinks, int rate);
 
 	/**
-	* \brief	Reasses the indicator and make and needed harddware changed
+	* \brief	Reassess the indicator and make any needed hardware changes
 	*
 	* \return	0 (never passes a message)
 	*/
@@ -80,12 +71,12 @@ public:
 
 
 	/**
-	* \brief	Swich on the safe light (a light thats not effected by the otehr blinking lights)
+	* \brief	Switch on the safe light (a light that's not affected by the other blinking lights)
 	*/
 	void safeOn();
 
 	/**
-	* \brief	Swich off the safe light (a light thats not effected by the otehr blinking lights)
+	* \brief	Switch off the safe light (a light that's not affected by the other blinking lights)
 	*/
 	void safeOff();
 
@@ -112,7 +103,7 @@ private:
 	/** \brief	Is the indicator on */
 	bool _isOn;
 
-	/** \brief	How many times to blink (eg blink 3 times then a gap) */
+	/** \brief	How many times to blink (eg. blink 3 times then a gap) */
 	int _blinks;
 
 	/** \brief	How fast to blink */

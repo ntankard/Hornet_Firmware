@@ -15,10 +15,7 @@ public:
 	/**
 	* \fn	CircularBuffer_Manager::CircularBuffer()
 	*
-	* \brief	Default constructor.
-	*
-	* \author	Nicholas
-	* \date	1/08/2015
+	* \brief	Default constructor
 	*/
 	CircularBuffer(volatile Error *e)
 	{
@@ -31,12 +28,9 @@ public:
 	/**
 	* \fn	bool CircularBuffer::isEmpty()
 	*
-	* \brief	Query if this object is empty.
+	* \brief	Query if this object is empty
 	*
-	* \author	Nicholas
-	* \date	1/08/2015
-	*
-	* \return	true if empty, false if not.
+	* \return	true if empty, false if not
 	*/
 	bool isEmpty()
 	{
@@ -50,12 +44,9 @@ public:
 	/**
 	* \fn	bool CircularBuffer::isFull()
 	*
-	* \brief	Query if this object is full.
+	* \brief	Query if this object is full
 	*
-	* \author	Nicholas
-	* \date	1/08/2015
-	*
-	* \return	true if full, false if not.
+	* \return	true if full, false if not
 	*/
 	bool isFull()
 	{
@@ -78,9 +69,6 @@ public:
 
 	/**
 	* \brief	Adds a object to the buffer
-	*
-	* \author	Nicholas
-	* \date	1/08/2015
 	*
 	* \param	toAdd	The object to add
 	*
@@ -110,9 +98,6 @@ public:
 	* \fn	int CircularBuffer_Manager::remove(Error *e)
 	*
 	* \brief	Removes an object from the buffer
-	*
-	* \author	Nicholas
-	* \date	1/08/2015
 	*
 	* \throw	E_ILLEGAL_ACCESS	If full
 	*
@@ -162,7 +147,7 @@ private:
 	/** \brief	The index to remove from. */
 	int _end;
 
-	/** \brief	The systems error object */
+	/** \brief	The system's error object */
 	volatile Error *_e;
 
 	/** \brief	The number of objects in the buffer */

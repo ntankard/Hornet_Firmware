@@ -13,7 +13,7 @@ HornetManager::HornetManager() :_scheduler(&_e), _indicator(&_e), _comsEncoder(&
 
 void HornetManager::start()
 {
-	// link all scedual objects
+	// link all schedual objects
 	_scheduler.addRunable(C_SCHEDULER_INDICATOR_THREAD, &_indicator);
 	_scheduler.addRunable(C_SCHEDULER_COMENCODER_THREAD, &_comsEncoder);
 	_scheduler.addRunable(C_SCHEDULER_GYRO_THREAD, &_gyro);
@@ -91,7 +91,7 @@ void HornetManager::run()
 		break;
 	}
 
-	// catch exeption
+	// catch exception
 	if (_e.isError())
 	{
 		if (_state != Armed)

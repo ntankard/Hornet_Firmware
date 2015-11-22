@@ -7,7 +7,7 @@
 /**
 * \class	LineDetector
 *
-* \brief	Cacualte what parts of the LIDAR data are part of a straight line
+* \brief	Calculate what parts of the LIDAR data are part of a straight line
 */
 class LineDetector
 {
@@ -24,7 +24,7 @@ private:
 	/** \brief	Is the current section of data part of an ongoing line? */
 	bool _isLine;
 
-	/** \brief	Is the corelation positive? */
+	/** \brief	Is the correlation positive? */
 	bool _isPos;
 	RollingCorrelation<C_CORRELATION_SIZE> _detector;
 
@@ -35,7 +35,7 @@ private:
 	/** \brief	The last sucsesful line */
 	Line _lastLine;
 
-	/** \brief	THe number of points in the line */
+	/** \brief	The number of points in the line */
 	int _num;
 };
 

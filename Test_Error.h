@@ -9,7 +9,7 @@ test(Error_Regular)
 {
 	Error toTest;
 
-	// test that its built corectly
+	// test that it's built corectly
 	assertFalse(toTest.isError());
 
 	// test that you can add error corectly
@@ -37,7 +37,7 @@ test(Error_Overflow)
 	// test that its built corectly
 	assertFalse(toTest.isError());
 
-	// test that you can add error corectly
+	// test that you can add error correctly
 	for (uint8_t i = 0; i < (C_ERROR_BUFFER * 2); i++)
 	{
 		toTest.add(i, 0);

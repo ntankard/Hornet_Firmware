@@ -6,10 +6,7 @@
  *
  * \brief	Manages the indexing of a circular buffer
  * 			
- *			This object is used to manage a circular buffer were the buffer itself needs to be stored externaly
- *
- * \author	Nicholas
- * \date	1/08/2015
+ *			This object is used to manage a circular buffer where the buffer itself needs to be stored externally
  *
  * \tparam	Size	Size of the buffer
  */
@@ -19,7 +16,7 @@ class CircularBuffer_Manager
 public:
 
 	/**
-	 * \brief	Default constructor.
+	 * \brief	Default constructor
 	 *
 	 * \param	e	The shared error object
 	 */
@@ -32,7 +29,7 @@ public:
 	}
 
 	/**
-	* \brief	Default constructor.
+	* \brief	Default constructor
 	*/
 	CircularBuffer_Manager()
 	{
@@ -42,7 +39,7 @@ public:
 	}
 
 	/**
-	* \brief	Sets the shared error obect (this lets a default contructor exist)
+	* \brief	Sets the shared error object (this lets a default contructor exist)
 	*
 	* \param	e	The shared error object
 	*/
@@ -54,12 +51,9 @@ public:
 	/**
 	 * \fn	bool CircularBuffer_Manager::isEmpty()
 	 *
-	 * \brief	Query if this object is empty.
+	 * \brief	Query if this object is empty
 	 *
-	 * \author	Nicholas
-	 * \date	1/08/2015
-	 *
-	 * \return	true if empty, false if not.
+	 * \return	true if empty, false if not
 	 */
 	bool isEmpty()
 	{
@@ -73,12 +67,9 @@ public:
 	/**
 	 * \fn	bool CircularBuffer_Manager::isFull()
 	 *
-	 * \brief	Query if this object is full.
+	 * \brief	Query if this object is full
 	 *
-	 * \author	Nicholas
-	 * \date	1/08/2015
-	 *
-	 * \return	true if full, false if not.
+	 * \return	true if full, false if not
 	 */
 	bool isFull()
 	{
@@ -103,9 +94,6 @@ public:
 	 * \fn	int CircularBuffer_Manager::add(Error *e)
 	 *
 	 * \brief	Adds a object to the buffer
-	 *
-	 * \author	Nicholas
-	 * \date	1/08/2015
 	 *
 	 * \throw	E_ILLEGAL_ACCESS	If full
 	 *
@@ -139,9 +127,6 @@ public:
 	 *
 	 * \brief	Removes an object from the buffer
 	 *
-	 * \author	Nicholas
-	 * \date	1/08/2015
-	 *
 	 * \throw	E_ILLEGAL_ACCESS	If full
 	 *
 	 * \return	The index of the object to remove
@@ -172,13 +157,13 @@ public:
 
 private:
 
-	/** \brief	The index to add to. */
+	/** \brief	The index to add to */
 	int _start;
 
-	/** \brief	The index to remove from. */
+	/** \brief	The index to remove from */
 	int _end;
 
-	/** \brief	The systems error object */
+	/** \brief	The system's error object */
 	volatile Error *_e;
 
 	/** \brief	The number of objects in the buffer */

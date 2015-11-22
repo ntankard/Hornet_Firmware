@@ -3,7 +3,7 @@
 #include "CircularBuffer.h"
 
 /**
-* \brief	A Rollwing window buffer
+* \brief	A Rolling window buffer
 *
 * \tparam	T		The type of the object
 * \tparam	Size	Size of the Window
@@ -14,7 +14,7 @@ class RollingWindow
 public:
 
 	/**
-	* \brief	Default constructor.
+	* \brief	Default constructor
 	*
 	* \param	e	The shared error object
 	*/

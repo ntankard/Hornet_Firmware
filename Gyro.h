@@ -16,7 +16,7 @@ public:
 
 	Gyro();
 
-	// tandard runnabel methods
+	// standard runnable methods
 	bool start();
 	int getNORegisters();
 	volatile MessageBuffer_Passer* getRegister();

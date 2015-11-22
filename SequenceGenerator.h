@@ -15,19 +15,19 @@
 
 
 /**
-* \brief	Generates a sequence of pulses (see ablove)
+* \brief	Generates a sequence of pulses (see above)
 */
 class SequenceGenerator
 {
 public:
 
 	/**
-	* \brief	Default constructor.
+	* \brief	Default constructor
 	*/
 	SequenceGenerator();
 
 	/**
-	* \brief	Sets the paramiters for the pulse
+	* \brief	Sets the parameters for the pulse
 	*
 	* \param	rate			The time between changes
 	* \param	blinks			How many high periods per pulse set
@@ -66,7 +66,7 @@ private:
 	bool runSequence();
 
 	/**
-	* \brief	Reset all variable used in the pulse
+	* \brief	Reset all variables used in the pulse
 	*/
 	void reset();
 
@@ -76,7 +76,7 @@ private:
 	/** \brief	How fast to blink */
 	unsigned long _rate;
 
-	/** \brief	How many times to blink (eg blink 3 times then a gap) */
+	/** \brief	How many times to blink (eg. blink 3 times then a gap) */
 	unsigned _blinks;
 
 	/** \brief	How long should the gap be */
@@ -85,10 +85,10 @@ private:
 	/** \brief	are the lights on or off? */
 	bool _isHigh;
 
-	/** \brief	Is in the indicator in a bag between blinks*/
+	/** \brief	Is the indicator in a bag between blinks*/
 	bool _isBreak;
 
-	/** \brief	how many blanks have alredy orcured (since the last break)*/
+	/** \brief	how many blinks have already occurred (since the last break)*/
 	unsigned _doneBlinks;
 };
 

@@ -20,7 +20,7 @@ public:
 	{
 		struct
 		{
-			uint8_t dump;	// needed to acoutn for arduino DUE page size (i think)
+			uint8_t dump;	// needed to account for arduino DUE page size (i think)
 			uint8_t length;
 			uint8_t count;
 			uint8_t ID;

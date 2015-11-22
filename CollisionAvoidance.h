@@ -7,7 +7,7 @@
 /**
 * \class	CollisionAvoidance
 *
-* \brief	Cacualte the diferntion the drone shopuld travel to avoid obsiticals based on LIDAR data
+* \brief	Calculate the direction that the drone should travel to avoid obstacles based on LIDAR data
 */
 class CollisionAvoidance
 {
@@ -15,7 +15,7 @@ public:
 	CollisionAvoidance();
 
 	/**
-	* \brief	Add a new points, the compensation vector will not change untill after endOfSweep() is called
+	* \brief	Add a new point, the compensation vector will not change until after endOfSweep() is called
 	*/
 	void newPoint(double angle, double distance);
 
@@ -28,10 +28,10 @@ public:
 	virtual volatile MessageBuffer_Passer* getRegister(){ return &_CompensatorRegister; }
 private:
 
-	/** \brief	The sum of the xComponents of points in the safty circle */
+	/** \brief	The sum of the xComponents of points in the safety limit */
 	double _xComp;
 
-	/** \brief	The sum of the yComponents of points in the safty circle */
+	/** \brief	The sum of the yComponents of points in the safety limit */
 	double _yComp;
 
 	/** \brief	The closest point */

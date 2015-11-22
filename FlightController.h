@@ -8,7 +8,7 @@
 enum FlightState{ Disarmed = 0, Arming = 1, Armed = 2, Disarming = 3};
 
 /**
-* \brief	Forward fliught sommands on to the stabalizer
+* \brief	Forward flight commands onto the stabilizer
 */
 class FlightController : public Runnable
 {
@@ -34,7 +34,7 @@ public:
 	bool run();
 
 	/**
-	* \brief	Gets the current state of the contoler
+	* \brief	Gets the current state of the controller
 	*/
 	FlightState getState(){ return _state; }
 
@@ -53,7 +53,7 @@ private:
 	FlightState _state;
 	TimeOut _armTime;
 
-	// conections to the stabalizer
+	// connections to the stabilizer
 	Servo _roll;
 	Servo _pitch;
 	Servo _yaw;
@@ -66,10 +66,10 @@ private:
 	volatile MessageBuffer_Passer* _ArmDisarmRegister;
 	volatile MessageBuffer_Passer* _AvoidRegister;
 
-	// flight safty input
+	// flight safety input
 	volatile MessageBuffer_Passer* _CompensationVector;
 
-	// controle settings monitor
+	// control settings monitor
 	volatile MessageBuffer<MB_JOY_VECTOR, 2> _JoyVector;
 	volatile MessageBuffer<MB_TOTAL_VECTOR, 2> _TotalVector;
 
